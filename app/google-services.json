@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "795332692275",
+    "project_id": "catsy-28b85",
+    "storage_bucket": "catsy-28b85.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795332692275:android:c58a62accf256491d3d646",
+        "android_client_info": {
+          "package_name": "com.sunsetrebel.catsy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795332692275-va7r4nlji4qq8bpl10dior3d5nk182cs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBtdwK0-Nwml4Xa5wnbwk9zlNVwtWoTDyA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795332692275-va7r4nlji4qq8bpl10dior3d5nk182cs.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

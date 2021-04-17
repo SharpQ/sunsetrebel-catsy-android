@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Catsy</string>
+    <string name="registration_title">HI, KITTY-KITTY-CAT!</string>
+    <string name="registration_subtitle">Create new account</string>
+    <string name="registration_hint_user_name">Full Name</string>
+    <string name="registration_hint_email">Email</string>
+    <string name="registration_hint_password">Password</string>
+    <string name="registration_hint_phone">Phone</string>
+    <string name="registration_button_register">Register</string>
+    <string name="registration_text_already_registered">Already in our club?</string>
+    <string name="login_subtitle">Log in to your account</string>
+    <string name="login_button_login">Login</string>
+    <string name="login_text_not_registered">Wanna join our club? Click it!</string>
+    <string name="main_button_logout">Logout, BITCH!</string>
+</resources>
