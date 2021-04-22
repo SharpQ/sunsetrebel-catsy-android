@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "795332692275-pgp88ieab61s9r4bkliomo8a3fib4b0g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sunsetrebel.catsy",
+            "certificate_hash": "da6254a564f4306dd6c11708ca3f0977deefa0a7"
+          }
+        },
+        {
           "client_id": "795332692275-va7r4nlji4qq8bpl10dior3d5nk182cs.apps.googleusercontent.com",
           "client_type": 3
         }
