@@ -3,6 +3,7 @@ package com.sunsetrebel;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
@@ -34,7 +35,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.location_map);
         mapFragment.getMapAsync(this);
 
 
@@ -64,6 +65,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 return;
             }
             mMap.setMyLocationEnabled(true);}*/
+
+
+
         //First Event
         LatLng FirstEvent = new LatLng(50.442914, 30.512982);
         mMap.addMarker(new MarkerOptions().position(FirstEvent).title("Open air cinema at 19:00"));
@@ -94,7 +98,47 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 }
+class MyLocationLayerActivity extends AppCompatActivity
+        implements GoogleMap.OnMyLocationButtonClickListener,
+        GoogleMap.OnMyLocationClickListener,
+        OnMapReadyCallback {
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_maps);
+
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.location_map);
+        mapFragment.getMapAsync(this);
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(GoogleMap map) {
+        // TODO: Before enabling the My Location layer, you must request
+        // location permission from the user. This sample does not include
+        // a request for location permission.
+        map.setMyLocationEnabled(true);
+        map.setOnMyLocationButtonClickListener(this);
+        map.setOnMyLocationClickListener(this);
+    }
+
+    @Override
+    public void onMyLocationClick(@NonNull Location location) {
+        Toast.makeText(this, "Current location:\n" + location, Toast.LENGTH_LONG)
+                .show();
+    }
+
+    @Override
+    public boolean onMyLocationButtonClick() {
+        Toast.makeText(this, "MyLocation button clicked", Toast.LENGTH_SHORT)
+                .show();
+        // Return false so that we don't consume the event and the default behavior still occurs
+        // (the camera animates to the user's current position).
+        return false;
+    }
+}
 //https://developers.google.com/maps/documentation/android-sdk/location?hl=ru
 /*
 class MyLocationLayerActivity extends AppCompatActivity

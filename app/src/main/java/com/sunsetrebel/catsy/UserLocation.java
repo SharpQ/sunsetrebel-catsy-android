@@ -23,7 +23,7 @@ class MyLocationLayerActivity extends AppCompatActivity
         setContentView(R.layout.activity_maps);
 
         SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+              (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.location_map);
         mapFragment.getMapAsync(this);
     }
 
