@@ -1,14 +1,18 @@
 package com.sunsetrebel.catsy;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.text.Html;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -22,14 +26,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.util.Objects;
+public class Onboarding extends AppCompatActivity {
 
-public class Registration extends AppCompatActivity {
-    EditText mFullName, mEmail, mPassword, mPhone;
-    Button mRegisterBtn;
+    private LinearLayout mDotLayout;
+    ViewPager mSlideViewPager;
+    SliderAdapter sliderAdapter;
+    Button mToRegisterBtn;
+    Button mToLoginBtn;
     Button mGoogleAuthBtn;
     FirebaseAuth fAuth;
-    ProgressBar progressBar;
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
 
@@ -45,69 +50,71 @@ public class Registration extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registration);
+        setContentView(R.layout.activity_onboarding);
         createGoogleAuthRequest();
         fAuth = FirebaseAuth.getInstance();
 
-        mFullName = findViewById(R.id.editFullName);
-        mEmail = findViewById(R.id.editUserEmail);
-        mPassword = findViewById(R.id.editUserPassword);
-        mPhone = findViewById(R.id.editUserPhone);
-        mRegisterBtn = findViewById(R.id.buttonRegister);
-        progressBar = findViewById(R.id.progressBarRegister);
-        mGoogleAuthBtn = findViewById(R.id.buttonRegisterGoogle);
+        mSlideViewPager = (ViewPager) findViewById(R.id.slideViewPager);
+        mDotLayout = (LinearLayout) findViewById(R.id.dotsLayout);
+        mToRegisterBtn = findViewById(R.id.buttonGoToRegister);
+        mToLoginBtn = findViewById(R.id.buttonGoToLogin);
+        mGoogleAuthBtn = findViewById(R.id.buttonGoToGoogle);
 
-        mGoogleAuthBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signInGoogle();
-            }
+        sliderAdapter = new SliderAdapter(this);
+        mSlideViewPager.setAdapter(sliderAdapter);
+        addDotsIndicator(0);
+        mSlideViewPager.addOnPageChangeListener(viewListener);
+
+        mToRegisterBtn.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), Registration.class));
+            finish();
         });
 
-        if (fAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), Tutorial.class));
+        mToLoginBtn.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), Login.class));
             finish();
-        }
+        });
 
-        mRegisterBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String email = mEmail.getText().toString().trim();
-                String password = mPassword.getText().toString().trim();
-
-                if (TextUtils.isEmpty(email)) {
-                    mEmail.setError("Please enter email");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(password)) {
-                    mEmail.setError("Please enter password");
-                    return;
-                }
-
-                if (password.length() < 6) {
-                    mPassword.setError("Please enter password more than 6 characters");
-                    return;
-                }
-
-                progressBar.setVisibility(View.VISIBLE);
-
-                // FIREBASE REGISTRATION BELOW
-                fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(Registration.this, "Thanks for the registration!", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(getApplicationContext(), Tutorial.class));
-                        } else {
-                            Toast.makeText(Registration.this, "Sorry, some error occurred :(" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                });
-            }
+        mGoogleAuthBtn.setOnClickListener(v -> {
+            signInGoogle();
         });
     }
+
+    public void addDotsIndicator(int position) {
+        TextView[] mDots = new TextView[2];
+        mDotLayout.removeAllViews();
+
+        for (int i = 0; i< mDots.length; i++) {
+            mDots[i] = new TextView(this);
+            mDots[i].setText(Html.fromHtml("&#8226;"));
+            mDots[i].setTextSize(35);
+            mDots[i].setGravity(View.TEXT_ALIGNMENT_CENTER);
+            mDots[i].setTextColor(getResources().getColor(R.color.purple_200));
+            mDotLayout.addView(mDots[i]);
+        }
+
+        if (mDots.length > 0) {
+            mDots[position].setTextColor(getResources().getColor(R.color.teal_200));
+        }
+    }
+
+    ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+            addDotsIndicator(position);
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    };
 
     private void createGoogleAuthRequest() {
         // Configure Google Sign In
@@ -139,7 +146,7 @@ public class Registration extends AppCompatActivity {
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Toast.makeText(Registration.this, "ERROR:" + e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(Onboarding.this, "ERROR:" + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -155,7 +162,7 @@ public class Registration extends AppCompatActivity {
                             FirebaseUser user = fAuth.getCurrentUser();
                             startActivity(new Intent(getApplicationContext(), Tutorial.class));
                         } else {
-                            Toast.makeText(Registration.this, "Google authentication failed!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Onboarding.this, "Google authentication failed!", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

@@ -11,4 +11,7 @@
     <string name="login_button_login">Login</string>
     <string name="main_button_logout">Logout, BITCH!</string>
     <string name="title_activity_maps">Map</string>
+    <string name="text_slide_1">Wonderful journey!</string>
+    <string name="text_slide_2">Fine experience!</string>
+    <string name="tutorial_button_skip">Skip Tutorial</string>
 </resources>
