@@ -30,12 +30,7 @@
 
         <activity
             android:name="com.sunsetrebel.MapsActivity"
-            android:label="@string/title_activity_maps">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="@string/title_activity_maps" />
         <activity android:name=".Login" />
         <activity android:name=".Registration" />
         <activity android:name=".Onboarding">
@@ -44,7 +39,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Tutorial"/>
+        <activity android:name=".Tutorial" />
 
         <meta-data
             android:name="preloaded_fonts"
