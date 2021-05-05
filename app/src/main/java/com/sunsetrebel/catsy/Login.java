@@ -20,8 +20,9 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.sunsetrebel.MapsActivity;
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
     private EditText mEmail, mPassword;
@@ -47,10 +48,10 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         firebaseAuth.createGoogleAuthRequestGetInstance(getApplicationContext());
         firebaseAuth.InitializeFacebookSdk(getApplicationContext());
-        fAuth = FirebaseAuth.getFAuth();
+        fAuth = firebaseAuth.getFAuth();
         CallbackManager mCallbackManager = CallbackManager.Factory.create();
 
-        mEmail = findViewById(R.id.editUserEmail);
+        mEmail = findViewById(R.id.editUserEmailOrPhone);
         mPassword = findViewById(R.id.editUserPassword);
         progressBar = findViewById(R.id.progressBarLogin);
         mLoginBtn = findViewById(R.id.buttonLogin);
@@ -90,12 +91,19 @@ public class Login extends AppCompatActivity {
         );
 
         mLoginBtn.setOnClickListener(v -> {
-            String email = mEmail.getText().toString().trim();
+            boolean isOTPregistration = false;
+            String emailOrPhone = mEmail.getText().toString().trim();
             String password = mPassword.getText().toString().trim();
 
-            if (TextUtils.isEmpty(email)) {
+            if (TextUtils.isEmpty(emailOrPhone)) {
                 mEmail.setError("Please enter email");
                 return;
+            } else {
+                if(isEmail(emailOrPhone)) {
+                    isOTPregistration = false;
+                } else if (isPhone(emailOrPhone)) {
+                    isOTPregistration = true;
+                }
             }
 
             if (TextUtils.isEmpty(password)) {
@@ -109,17 +117,38 @@ public class Login extends AppCompatActivity {
             }
 
             progressBar.setVisibility(View.VISIBLE);
-
-            // BELOW FIREBASE USER AUTHORIZATION
-            fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                if (task.isSuccessful()){
-                    startActivity(new Intent(getApplicationContext(), Tutorial.class));
-                } else {
-                    Toast.makeText(Login.this, "Sorry, login failed!", Toast.LENGTH_SHORT).show();
-                    progressBar.setVisibility(View.GONE);
-                }
-            });
+            if (isOTPregistration) {
+                Intent intent = new Intent(getApplicationContext(), VerifyPhone.class);
+                intent.putExtra("phoneNumber", emailOrPhone);
+                startActivity(intent);
+            } else {
+                // BELOW FIREBASE USER AUTHORIZATION
+                fAuth.signInWithEmailAndPassword(emailOrPhone, password).addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        startActivity(new Intent(getApplicationContext(), Tutorial.class));
+                    } else {
+                        Toast.makeText(Login.this, "Sorry, login failed!", Toast.LENGTH_SHORT).show();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
+            }
         });
+    }
+
+    public static boolean isEmail(String text) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern p = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher m = p.matcher(text);
+        return m.matches();
+    }
+
+    public static boolean isPhone(String text) {
+        if(!TextUtils.isEmpty(text)){
+            text = text.substring(1);
+            return TextUtils.isDigitsOnly(text);
+        } else{
+            return false;
+        }
     }
 
     @Override
@@ -135,7 +164,7 @@ public class Login extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        FirebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
+                        firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                     } else {
                         Toast.makeText(getApplicationContext(), "Google authentication failed!", Toast.LENGTH_SHORT).show();
@@ -149,7 +178,7 @@ public class Login extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        FirebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
+                        firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                     } else {
                         Toast.makeText(getApplicationContext(), "Facebook authentication failed!", Toast.LENGTH_SHORT).show();
