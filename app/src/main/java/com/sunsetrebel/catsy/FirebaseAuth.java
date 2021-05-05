@@ -3,7 +3,7 @@ package com.sunsetrebel.catsy;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
-
+import com.facebook.FacebookSdk;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -33,6 +33,10 @@ public class FirebaseAuth {
 
     public void signOutFirebase() {
         com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+    }
+
+    public void InitializeFacebookSdk(android.content.Context context) {
+        FacebookSdk.sdkInitialize(context);
     }
 
     public boolean checkCurrentUser() {

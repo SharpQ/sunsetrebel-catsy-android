@@ -17,14 +17,14 @@ import com.sunsetrebel.MapsActivity;
 public class Onboarding extends AppCompatActivity {
 
     private LinearLayout mDotLayout;
-    ViewPager mSlideViewPager;
-    SliderAdapter sliderAdapter;
-    Button mToRegisterBtn;
-    Button mToLoginBtn;
-    Button mGoogleAuthBtn;
+    private ViewPager mSlideViewPager;
+    private SliderAdapter sliderAdapter;
+    private Button mToRegisterBtn;
+    private Button mToLoginBtn;
+    private Button mGoogleAuthBtn;
     private int RC_SIGN_IN;
-    com.google.firebase.auth.FirebaseAuth fAuth;
-    FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private com.google.firebase.auth.FirebaseAuth fAuth;
+    private final FirebaseAuth firebaseAuth = new FirebaseAuth();
 
     @Override
     protected void onStart() {
@@ -82,10 +82,7 @@ public class Onboarding extends AppCompatActivity {
             mDots[i].setTextColor(getResources().getColor(R.color.purple_200));
             mDotLayout.addView(mDots[i]);
         }
-
-        if (mDots.length > 0) {
-            mDots[position].setTextColor(getResources().getColor(R.color.teal_200));
-        }
+        mDots[position].setTextColor(getResources().getColor(R.color.teal_200));
     }
 
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {

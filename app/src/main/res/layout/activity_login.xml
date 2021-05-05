@@ -89,11 +89,28 @@
         android:backgroundTint="#00BCD4"
         android:fontFamily="@font/audiowide"
         android:text="@string/google_authentication"
-        app:layout_constraintBottom_toTopOf="@+id/editUserEmail"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textLoginTitle"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.05" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/buttonLoginFacebook"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="#4867AA"
+        android:fontFamily="@font/audiowide"
+        android:text="@string/facebook_authentication"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginGoogle"
+        app:layout_constraintVertical_bias="0.05" />
 
     <ProgressBar
         android:id="@+id/progressBarLogin"

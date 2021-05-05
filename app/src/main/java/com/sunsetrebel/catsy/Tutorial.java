@@ -6,9 +6,9 @@ import android.widget.Button;
 import com.sunsetrebel.MapsActivity;
 
 public class Tutorial extends AppCompatActivity {
-    Button mSkipBtn;
-    Button mSignOut;
-    FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private Button mSkipBtn;
+    private Button mSignOut;
+    private final FirebaseAuth firebaseAuth = new FirebaseAuth();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

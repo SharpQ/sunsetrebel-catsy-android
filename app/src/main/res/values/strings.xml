@@ -2,6 +2,8 @@
     <string name="app_name">Catsy</string>
     <string name="registration_title">Create account</string>
     <string name="google_authentication">Continue with Google</string>
+    <string name="facebook_authentication">Continue with Facebook</string>
+    <string name="apple_authentication">Continue with Apple</string>
     <string name="registration_hint_user_name">Full Name</string>
     <string name="registration_hint_email">Email</string>
     <string name="registration_hint_password">Password</string>

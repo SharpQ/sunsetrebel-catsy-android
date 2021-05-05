@@ -8,20 +8,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.sunsetrebel.MapsActivity;
 import java.util.Objects;
 
 public class Registration extends AppCompatActivity {
-    EditText mFullName, mEmail, mPassword, mPhone;
-    Button mRegisterBtn;
-    Button mGoogleAuthBtn;
-    ProgressBar progressBar;
+    private EditText mFullName, mEmail, mPassword, mPhone;
+    private Button mRegisterBtn;
+    private Button mGoogleAuthBtn;
+    private LoginButton mFacebookAuthBtn;
+    private ProgressBar progressBar;
     private int RC_SIGN_IN;
-    com.google.firebase.auth.FirebaseAuth fAuth;
-    FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private com.google.firebase.auth.FirebaseAuth fAuth;
+    private final FirebaseAuth firebaseAuth = new FirebaseAuth();
 
     @Override
     protected void onStart() {
@@ -36,7 +44,9 @@ public class Registration extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
         firebaseAuth.createGoogleAuthRequestGetInstance(getApplicationContext());
+        firebaseAuth.InitializeFacebookSdk(getApplicationContext());
         fAuth = FirebaseAuth.getFAuth();
+        CallbackManager mCallbackManager = CallbackManager.Factory.create();
 
         mFullName = findViewById(R.id.editFullName);
         mEmail = findViewById(R.id.editUserEmail);
@@ -45,6 +55,25 @@ public class Registration extends AppCompatActivity {
         mRegisterBtn = findViewById(R.id.buttonRegister);
         progressBar = findViewById(R.id.progressBarRegister);
         mGoogleAuthBtn = findViewById(R.id.buttonRegisterGoogle);
+        mFacebookAuthBtn = findViewById(R.id.buttonRegisterFacebook);
+        mFacebookAuthBtn.setReadPermissions("email", "public_profile");
+
+        mFacebookAuthBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                firebaseAuthWithFacebook(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
 
         mGoogleAuthBtn.setOnClickListener(v -> {
                     RC_SIGN_IN = FirebaseAuth.getRCSignIn();
@@ -108,6 +137,20 @@ public class Registration extends AppCompatActivity {
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                     } else {
                         Toast.makeText(getApplicationContext(), "Google authentication failed!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    private void firebaseAuthWithFacebook(AccessToken token) {
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        fAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        FirebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
+                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Facebook authentication failed!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
