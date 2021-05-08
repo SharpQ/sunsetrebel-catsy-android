@@ -30,6 +30,7 @@ public class VerifyPhone extends AppCompatActivity {
     private String phoneNumber;
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private String systemVerificationCode;
+    private boolean isTutorialNextPage;
     private final FirebaseAuth firebaseAuth = new FirebaseAuth();
 
     @Override
@@ -44,6 +45,7 @@ public class VerifyPhone extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
 
         phoneNumber = getIntent().getStringExtra("phoneNumber");
+        isTutorialNextPage = getIntent().getBooleanExtra("isTutorialNextPage", false);
         sendVerificationCodeToUser(phoneNumber);
         verifyBtn.setOnClickListener(v -> {
             String code = inputCode.getText().toString();
@@ -98,7 +100,13 @@ public class VerifyPhone extends AppCompatActivity {
     private void signInUserByCredentials(PhoneAuthCredential credential){
         fAuth.signInWithCredential(credential).addOnCompleteListener(VerifyPhone.this, task -> {
             if(task.isSuccessful()){
-                Intent intent = new Intent(getApplicationContext(), Tutorial.class);
+                Intent intent;
+                if (isTutorialNextPage) {
+                    intent = new Intent(getApplicationContext(), Tutorial.class);
+                }
+                else {
+                    intent = new Intent(getApplicationContext(), MapsActivity.class);
+                }
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else {

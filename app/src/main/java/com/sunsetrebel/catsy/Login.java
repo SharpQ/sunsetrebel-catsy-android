@@ -31,7 +31,9 @@ public class Login extends AppCompatActivity {
     private LoginButton mFacebookAuthBtn;
     private ProgressBar progressBar;
     private int RC_SIGN_IN;
+    private boolean isGoogleAuth = false;
     private com.google.firebase.auth.FirebaseAuth fAuth;
+    private CallbackManager mCallbackManager;
     private final FirebaseAuth firebaseAuth = new FirebaseAuth();
 
     @Override
@@ -49,7 +51,7 @@ public class Login extends AppCompatActivity {
         firebaseAuth.createGoogleAuthRequestGetInstance(getApplicationContext());
         firebaseAuth.InitializeFacebookSdk(getApplicationContext());
         fAuth = firebaseAuth.getFAuth();
-        CallbackManager mCallbackManager = CallbackManager.Factory.create();
+        mCallbackManager = CallbackManager.Factory.create();
 
         mEmail = findViewById(R.id.editUserEmailOrPhone);
         mPassword = findViewById(R.id.editUserPassword);
@@ -57,7 +59,6 @@ public class Login extends AppCompatActivity {
         mLoginBtn = findViewById(R.id.buttonLogin);
         mGoogleAuthBtn = findViewById(R.id.buttonLoginGoogle);
         mFacebookAuthBtn = findViewById(R.id.buttonLoginFacebook);
-        mFacebookAuthBtn.setReadPermissions("email", "public_profile");
 
         mFacebookAuthBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -80,6 +81,7 @@ public class Login extends AppCompatActivity {
             RC_SIGN_IN = FirebaseAuth.getRCSignIn();
             Intent signInIntent = firebaseAuth.signInGoogle(getApplicationContext());
             startActivityForResult(signInIntent, RC_SIGN_IN);
+            isGoogleAuth = true;
             }
         );
 
@@ -120,6 +122,7 @@ public class Login extends AppCompatActivity {
             if (isOTPregistration) {
                 Intent intent = new Intent(getApplicationContext(), VerifyPhone.class);
                 intent.putExtra("phoneNumber", emailOrPhone);
+                intent.putExtra("isTutorialNextPage", false);
                 startActivity(intent);
             } else {
                 // BELOW FIREBASE USER AUTHORIZATION
@@ -153,9 +156,12 @@ public class Login extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        GoogleSignInAccount account = firebaseAuth.onFirebaseResponse(requestCode, data);
-        firebaseAuthWithGoogle(account.getIdToken());
+        if (isGoogleAuth) {
+            GoogleSignInAccount account = firebaseAuth.onFirebaseResponse(requestCode, data);
+            firebaseAuthWithGoogle(account.getIdToken());
+        }
     }
 
     private void firebaseAuthWithGoogle(String idToken) {

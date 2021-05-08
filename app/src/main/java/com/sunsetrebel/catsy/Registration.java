@@ -30,7 +30,9 @@ public class Registration extends AppCompatActivity {
     private LoginButton mFacebookAuthBtn;
     private ProgressBar progressBar;
     private int RC_SIGN_IN;
+    private boolean isGoogleAuth = false;
     private com.google.firebase.auth.FirebaseAuth fAuth;
+    private CallbackManager mCallbackManager;
     private final FirebaseAuth firebaseAuth = new FirebaseAuth();
 
     @Override
@@ -38,6 +40,7 @@ public class Registration extends AppCompatActivity {
         super.onStart();
         if(firebaseAuth.checkCurrentUser()) {
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            finish();
         }
     }
 
@@ -48,7 +51,7 @@ public class Registration extends AppCompatActivity {
         firebaseAuth.createGoogleAuthRequestGetInstance(getApplicationContext());
         firebaseAuth.InitializeFacebookSdk(getApplicationContext());
         fAuth = firebaseAuth.getFAuth();
-        CallbackManager mCallbackManager = CallbackManager.Factory.create();
+        mCallbackManager = CallbackManager.Factory.create();
 
         mFullName = findViewById(R.id.editFullName);
         mEmailOrPhone = findViewById(R.id.editUserEmailOrPhone);
@@ -57,7 +60,6 @@ public class Registration extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBarRegister);
         mGoogleAuthBtn = findViewById(R.id.buttonRegisterGoogle);
         mFacebookAuthBtn = findViewById(R.id.buttonRegisterFacebook);
-        mFacebookAuthBtn.setReadPermissions("email", "public_profile");
 
         mFacebookAuthBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -80,13 +82,9 @@ public class Registration extends AppCompatActivity {
                     RC_SIGN_IN = FirebaseAuth.getRCSignIn();
                     Intent signInIntent = firebaseAuth.signInGoogle(getApplicationContext());
                     startActivityForResult(signInIntent, RC_SIGN_IN);
+                    isGoogleAuth = true;
                 }
         );
-
-        if (fAuth.getCurrentUser() != null) {
-            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-            finish();
-        }
 
         mRegisterBtn.setOnClickListener(v -> {
             boolean isOTPregistration = false;
@@ -119,6 +117,7 @@ public class Registration extends AppCompatActivity {
             if (isOTPregistration) {
                 Intent intent = new Intent(getApplicationContext(), VerifyPhone.class);
                 intent.putExtra("phoneNumber", emailOrPhone);
+                intent.putExtra("isTutorialNextPage", true);
                 startActivity(intent);
             } else {
                 // FIREBASE REGISTRATION BELOW
@@ -152,9 +151,12 @@ public class Registration extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        GoogleSignInAccount account = firebaseAuth.onFirebaseResponse(requestCode, data);
-        firebaseAuthWithGoogle(account.getIdToken());
+        if (isGoogleAuth) {
+            GoogleSignInAccount account = firebaseAuth.onFirebaseResponse(requestCode, data);
+            firebaseAuthWithGoogle(account.getIdToken());
+        }
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -164,7 +166,7 @@ public class Registration extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
-                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        startActivity(new Intent(getApplicationContext(), Tutorial.class));
                     } else {
                         Toast.makeText(getApplicationContext(), "Google authentication failed!", Toast.LENGTH_SHORT).show();
                     }
@@ -178,7 +180,7 @@ public class Registration extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
-                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        startActivity(new Intent(getApplicationContext(), Tutorial.class));
                     } else {
                         Toast.makeText(getApplicationContext(), "Facebook authentication failed!", Toast.LENGTH_SHORT).show();
                     }
