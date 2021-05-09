@@ -20,19 +20,15 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.sunsetrebel.MapsActivity;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Registration extends AppCompatActivity {
-    private EditText mFullName, mEmailOrPhone, mPassword;
+    private EditText mFullName, mEmail, mPassword, mPhone;
     private Button mRegisterBtn;
     private Button mGoogleAuthBtn;
     private LoginButton mFacebookAuthBtn;
     private ProgressBar progressBar;
     private int RC_SIGN_IN;
-    private boolean isGoogleAuth = false;
     private com.google.firebase.auth.FirebaseAuth fAuth;
-    private CallbackManager mCallbackManager;
     private final FirebaseAuth firebaseAuth = new FirebaseAuth();
 
     @Override
@@ -40,7 +36,6 @@ public class Registration extends AppCompatActivity {
         super.onStart();
         if(firebaseAuth.checkCurrentUser()) {
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-            finish();
         }
     }
 
@@ -50,16 +45,18 @@ public class Registration extends AppCompatActivity {
         setContentView(R.layout.activity_registration);
         firebaseAuth.createGoogleAuthRequestGetInstance(getApplicationContext());
         firebaseAuth.InitializeFacebookSdk(getApplicationContext());
-        fAuth = firebaseAuth.getFAuth();
-        mCallbackManager = CallbackManager.Factory.create();
+        fAuth = FirebaseAuth.getFAuth();
+        CallbackManager mCallbackManager = CallbackManager.Factory.create();
 
         mFullName = findViewById(R.id.editFullName);
-        mEmailOrPhone = findViewById(R.id.editUserEmailOrPhone);
+        mEmail = findViewById(R.id.editUserEmail);
         mPassword = findViewById(R.id.editUserPassword);
+        mPhone = findViewById(R.id.editUserPhone);
         mRegisterBtn = findViewById(R.id.buttonRegister);
         progressBar = findViewById(R.id.progressBarRegister);
         mGoogleAuthBtn = findViewById(R.id.buttonRegisterGoogle);
         mFacebookAuthBtn = findViewById(R.id.buttonRegisterFacebook);
+        mFacebookAuthBtn.setReadPermissions("email", "public_profile");
 
         mFacebookAuthBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -82,28 +79,25 @@ public class Registration extends AppCompatActivity {
                     RC_SIGN_IN = FirebaseAuth.getRCSignIn();
                     Intent signInIntent = firebaseAuth.signInGoogle(getApplicationContext());
                     startActivityForResult(signInIntent, RC_SIGN_IN);
-                    isGoogleAuth = true;
                 }
         );
 
+        if (fAuth.getCurrentUser() != null) {
+            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            finish();
+        }
+
         mRegisterBtn.setOnClickListener(v -> {
-            boolean isOTPregistration = false;
-            String emailOrPhone = mEmailOrPhone.getText().toString().trim();
+            String email = mEmail.getText().toString().trim();
             String password = mPassword.getText().toString().trim();
 
-            if (TextUtils.isEmpty(emailOrPhone)) {
-                mEmailOrPhone.setError("Please enter email or phone");
+            if (TextUtils.isEmpty(email)) {
+                mEmail.setError("Please enter email");
                 return;
-            } else {
-                if(isEmail(emailOrPhone)) {
-                    isOTPregistration = false;
-                } else if (isPhone(emailOrPhone)) {
-                    isOTPregistration = true;
-                }
             }
 
             if (TextUtils.isEmpty(password)) {
-                mEmailOrPhone.setError("Please enter password");
+                mEmail.setError("Please enter password");
                 return;
             }
 
@@ -114,49 +108,23 @@ public class Registration extends AppCompatActivity {
 
             progressBar.setVisibility(View.VISIBLE);
 
-            if (isOTPregistration) {
-                Intent intent = new Intent(getApplicationContext(), VerifyPhone.class);
-                intent.putExtra("phoneNumber", emailOrPhone);
-                intent.putExtra("isTutorialNextPage", true);
-                startActivity(intent);
-            } else {
-                // FIREBASE REGISTRATION BELOW
-                fAuth.createUserWithEmailAndPassword(emailOrPhone, password).addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        startActivity(new Intent(getApplicationContext(), Tutorial.class));
-                    } else {
-                        Toast.makeText(Registration.this, "Sorry, some error occurred :(" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
-            }
+            // FIREBASE REGISTRATION BELOW
+            fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    startActivity(new Intent(getApplicationContext(), Tutorial.class));
+                } else {
+                    Toast.makeText(Registration.this, "Sorry, some error occurred :(" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
         });
-    }
-
-    public static boolean isEmail(String text) {
-        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
-        Pattern p = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
-        Matcher m = p.matcher(text);
-        return m.matches();
-    }
-
-    public static boolean isPhone(String text) {
-        if(!TextUtils.isEmpty(text)){
-            text = text.substring(1);
-            return TextUtils.isDigitsOnly(text);
-        } else{
-            return false;
-        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
-        if (isGoogleAuth) {
-            GoogleSignInAccount account = firebaseAuth.onFirebaseResponse(requestCode, data);
-            firebaseAuthWithGoogle(account.getIdToken());
-        }
+        GoogleSignInAccount account = firebaseAuth.onFirebaseResponse(requestCode, data);
+        firebaseAuthWithGoogle(account.getIdToken());
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -165,8 +133,8 @@ public class Registration extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
-                        startActivity(new Intent(getApplicationContext(), Tutorial.class));
+                        FirebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
+                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                     } else {
                         Toast.makeText(getApplicationContext(), "Google authentication failed!", Toast.LENGTH_SHORT).show();
                     }
@@ -179,8 +147,8 @@ public class Registration extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
-                        startActivity(new Intent(getApplicationContext(), Tutorial.class));
+                        FirebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
+                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                     } else {
                         Toast.makeText(getApplicationContext(), "Facebook authentication failed!", Toast.LENGTH_SHORT).show();
                     }

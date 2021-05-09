@@ -5,18 +5,16 @@
     <string name="facebook_authentication">Continue with Facebook</string>
     <string name="apple_authentication">Continue with Apple</string>
     <string name="registration_hint_user_name">Full Name</string>
-    <string name="registration_hint_email_or_phone">Email or Phone</string>
+    <string name="registration_hint_email">Email</string>
     <string name="registration_hint_password">Password</string>
     <string name="registration_hint_phone">Phone</string>
-    <string name="verify_number_hint_code">SMS code</string>
     <string name="registration_button_register">Register</string>
-    <string name="verify_button_verify">Verify</string>
     <string name="login_title">Sign in</string>
-    <string name="verify_phone_title">Verify phone</string>
     <string name="login_button_login">Login</string>
     <string name="main_button_logout">Logout, BITCH!</string>
     <string name="title_activity_maps">Map</string>
     <string name="text_slide_1">Wonderful journey!</string>
     <string name="text_slide_2">Fine experience!</string>
     <string name="tutorial_button_skip">Skip Tutorial</string>
+    <string name="permission_required_toast">Location permission is required.</string>
 </resources>

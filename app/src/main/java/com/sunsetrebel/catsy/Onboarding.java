@@ -39,10 +39,10 @@ public class Onboarding extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
         firebaseAuth.createGoogleAuthRequestGetInstance(getApplicationContext());
-        fAuth = firebaseAuth.getFAuth();
+        fAuth = FirebaseAuth.getFAuth();
 
-        mSlideViewPager = findViewById(R.id.slideViewPager);
-        mDotLayout = findViewById(R.id.dotsLayout);
+        mSlideViewPager = (ViewPager) findViewById(R.id.slideViewPager);
+        mDotLayout = (LinearLayout) findViewById(R.id.dotsLayout);
         mToRegisterBtn = findViewById(R.id.buttonGoToRegister);
         mToLoginBtn = findViewById(R.id.buttonGoToLogin);
         mGoogleAuthBtn = findViewById(R.id.buttonGoToGoogle);
@@ -116,7 +116,7 @@ public class Onboarding extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
+                        FirebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                     } else {
                         Toast.makeText(getApplicationContext(), "Google authentication failed!", Toast.LENGTH_SHORT).show();

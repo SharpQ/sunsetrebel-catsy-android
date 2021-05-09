@@ -3,12 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
 
     <fragment
-        android:id="@+id/location_map"
+        android:id="@+id/google_map"
         class="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,90 +17,115 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="-33dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="0dp"
         android:layout_marginEnd="-1dp"
         android:layout_marginBottom="0dp" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/AddEvent"
-        android:layout_width="105dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="495dp"
-        android:layout_marginEnd="35dp"
-        android:layout_marginBottom="5dp"
-        android:clickable="true"
-        android:contentDescription="TODO"
-        android:src="@drawable/ic_cat_add_40" />
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
+        android:id="@+id/bottom_buttons_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="2dp"
-        android:background="?attr/colorPrimary"
+        android:layout_marginBottom="-19dp"
+        android:background="@drawable/rounded_corners"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="102dp"
-        android:layout_height="70dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="696dp"
-        android:layout_marginEnd="304dp"
-        android:tint="#4E0C81"
-        app:srcCompat="@android:drawable/ic_dialog_map" />
 
     <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="97dp"
-        android:layout_height="70dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
+        android:id="@+id/settings_button"
+        android:layout_width="70dp"
+        android:layout_height="62dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="699dp"
-        android:layout_marginEnd="205dp"
-        android:layout_marginBottom="4dp"
-        android:tint="#4E0C81"
-        app:srcCompat="@android:drawable/ic_menu_month" />
+        android:layout_marginStart="309dp"
+
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/rounded_corners_border"
+        android:src="@android:drawable/ic_menu_manage" />
 
     <ImageButton
-        android:id="@+id/imageButton5"
-        android:layout_width="92dp"
-        android:layout_height="74dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
+        android:id="@+id/events_button"
+        android:layout_width="70dp"
+        android:layout_height="62dp"
+        android:layout_alignParentStart="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="695dp"
-        android:layout_marginEnd="110dp"
-        android:layout_marginBottom="4dp"
-        android:tint="#4E0C81"
-        app:srcCompat="@android:drawable/stat_notify_chat" />
+        android:layout_marginStart="118dp"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/rounded_corners_border"
+        android:src="@android:drawable/ic_dialog_dialer" />
 
     <ImageButton
-        android:id="@+id/imageButton6"
-        android:layout_width="105dp"
-        android:layout_height="72dp"
+        android:id="@+id/messages_button"
+        android:layout_width="70dp"
+        android:layout_height="62dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="219dp"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/rounded_corners_border"
+        android:src="@android:drawable/ic_dialog_email" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayoutCustomView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/textViewTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/textViewOtherDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <SearchView
+        android:layout_width="390dp"
+        android:layout_height="39dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_corners_border" />
+
+    <ImageButton
+        android:id="@+id/map_button"
+        android:layout_width="70dp"
+        android:layout_height="62dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/rounded_corners_border"
+        android:src="@android:drawable/ic_dialog_map" />
+
+    <ImageButton
+        android:id="@+id/filter_button"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="698dp"
-        android:layout_marginEnd="3dp"
-        android:layout_marginBottom="4dp"
-        android:backgroundTint="#7433EC"
-        android:tint="#4E0C81"
-        app:srcCompat="@drawable/ic_cat_add_40" />
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="11dp"
+        android:background="@drawable/rounded_corners_border"
+        android:src="?attr/actionModeSelectAllDrawable" />
 
+    <ImageButton
+        android:id="@+id/add_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="319dp"
+        android:layout_marginBottom="125dp"
+        android:background="@drawable/rounded_corners"
+        android:src="@drawable/ic_cat_add_40" />
 
 </RelativeLayout>
+
 
