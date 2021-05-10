@@ -40,11 +40,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textRegisterTitle"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
+        app:layout_constraintVertical_bias="0.15" />
 
     <EditText
-        android:id="@+id/editUserEmail"
+        android:id="@+id/editUserEmailOrPhone"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -52,7 +52,7 @@
         android:autofillHints=""
         android:ems="10"
         android:fontFamily="@font/audiowide"
-        android:hint="@string/registration_hint_email"
+        android:hint="@string/registration_hint_email_or_phone"
         android:inputType="textEmailSubject"
         android:textAlignment="textStart"
         android:textColor="#03A9F4"
@@ -84,29 +84,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserEmail"
-        app:layout_constraintVertical_bias="0.07" />
-
-    <EditText
-        android:id="@+id/editUserPhone"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:fontFamily="@font/audiowide"
-        android:hint="@string/registration_hint_phone"
-        android:inputType="none|number|phone"
-        android:textAlignment="textStart"
-        android:textColor="#03A9F4"
-        android:textColorHint="#03A9F4"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editUserEmailOrPhone"
         app:layout_constraintVertical_bias="0.07" />
 
     <Button
@@ -121,8 +99,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserPhone"
-        app:layout_constraintVertical_bias="0.8" />
+        app:layout_constraintTop_toBottomOf="@+id/editUserPassword"
+        app:layout_constraintVertical_bias="0.9" />
 
     <Button
         android:id="@+id/buttonRegisterGoogle"
@@ -165,6 +143,6 @@
         app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserPhone"
+        app:layout_constraintTop_toBottomOf="@+id/editUserPassword"
         app:layout_constraintVertical_bias="0.5" />
 </androidx.constraintlayout.widget.ConstraintLayout>

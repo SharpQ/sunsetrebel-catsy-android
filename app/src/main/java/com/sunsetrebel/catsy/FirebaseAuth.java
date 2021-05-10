@@ -17,18 +17,18 @@ public class FirebaseAuth {
     private android.content.Context context;
     private static com.google.firebase.auth.FirebaseAuth fAuth;
     private final static int RC_SIGN_IN = 123;
-    private static FirebaseUser user;
+    private FirebaseUser user;
 
     public static int getRCSignIn() {
         return RC_SIGN_IN;
     }
 
-    public static com.google.firebase.auth.FirebaseAuth getFAuth() {
+    public com.google.firebase.auth.FirebaseAuth getFAuth() {
         return fAuth;
     }
 
-    public static void setFirebaseUser(FirebaseUser user) {
-        FirebaseAuth.user = user;
+    public void setFirebaseUser(FirebaseUser user) {
+        this.user = user;
     }
 
     public void signOutFirebase() {
