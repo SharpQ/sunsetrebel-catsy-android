@@ -178,13 +178,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         //Event examples
         LatLng FirstEvent = new LatLng(50.436404, 30.369498);
-        googleMap.addMarker(new MarkerOptions().position(FirstEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_blue_40)).title("Open air cinema at 19:00"));
+        googleMap.addMarker(new MarkerOptions().position(FirstEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_bright_40)).title("Open air cinema at 19:00"));
 
         LatLng SecondEvent = new LatLng(50.449, 30.512850);
-        googleMap.addMarker(new MarkerOptions().position(SecondEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_blue_40)).title("Guitar night at 20:00"));
+        googleMap.addMarker(new MarkerOptions().position(SecondEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_bright_40)).title("Guitar night at 20:00"));
 
         LatLng ThirdEvent = new LatLng(50.391566, 30.481428);
-        googleMap.addMarker(new MarkerOptions().position(ThirdEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_blue_40)).title("Mozzy birthday celebration at 09:00"));
+        googleMap.addMarker(new MarkerOptions().position(ThirdEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_bright_40)).title("Mozzy birthday celebration at 09:00"));
         LatLng mountainView = new LatLng(37.4, -122.1);
 
     }
@@ -218,7 +218,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                LatLng latLng = null;
+                try {
+                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                } catch (Exception e) {
+                    latLng = new LatLng(50.436404, 30.369498);
+                }
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
                 mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_location_sample_35)).title("Current location"));
             }
