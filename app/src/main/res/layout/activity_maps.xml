@@ -123,8 +123,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginStart="319dp"
         android:layout_marginBottom="125dp"
-        android:background="@drawable/rounded_corners"
-        android:src="@drawable/ic_cat_add_40" />
+   android:background="@drawable/rounded_button"
+        android:src="@drawable/ic_cat_add_custom_40" />
 
 </RelativeLayout>
 
