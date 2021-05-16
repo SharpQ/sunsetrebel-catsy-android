@@ -71,7 +71,7 @@ public class Onboarding extends AppCompatActivity {
     }
 
     public void addDotsIndicator(int position) {
-        TextView[] mDots = new TextView[2];
+        TextView[] mDots = new TextView[3];
         mDotLayout.removeAllViews();
 
         for (int i = 0; i< mDots.length; i++) {
@@ -79,10 +79,10 @@ public class Onboarding extends AppCompatActivity {
             mDots[i].setText(Html.fromHtml("&#8226;"));
             mDots[i].setTextSize(35);
             mDots[i].setGravity(View.TEXT_ALIGNMENT_CENTER);
-            mDots[i].setTextColor(getResources().getColor(R.color.purple_200));
+            mDots[i].setTextColor(getResources().getColor(R.color.primaryLightColor));
             mDotLayout.addView(mDots[i]);
         }
-        mDots[position].setTextColor(getResources().getColor(R.color.teal_200));
+        mDots[position].setTextColor(getResources().getColor(R.color.primaryTextColor));
     }
 
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
