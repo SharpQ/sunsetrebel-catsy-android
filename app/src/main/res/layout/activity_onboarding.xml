@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/simple_gradient"
+    android:background="@drawable/background_general"
     tools:context=".Onboarding">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/slideViewPager"
         android:layout_width="match_parent"
         android:layout_height="490dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,16 +40,16 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/purple_500"
+        android:backgroundTint="@color/primaryLightColor"
+        android:textColor="@color/primaryTextColor"
         android:fontFamily="@font/audiowide"
         android:text="@string/registration_button_register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/slideViewPager"
-        app:layout_constraintVertical_bias="0" />
+        app:layout_constraintVertical_bias="0.05" />
 
     <Button
         android:id="@+id/buttonGoToGoogle"
@@ -55,7 +57,8 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:backgroundTint="#00BCD4"
+        android:backgroundTint="@color/primaryLightColor"
+        android:textColor="@color/primaryTextColor"
         android:fontFamily="@font/audiowide"
         android:text="@string/google_authentication"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -70,7 +73,8 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/purple_500"
+        android:backgroundTint="@color/primaryLightColor"
+        android:textColor="@color/primaryTextColor"
         android:fontFamily="@font/audiowide"
         android:text="@string/login_button_login"
         app:layout_constraintBottom_toBottomOf="parent"

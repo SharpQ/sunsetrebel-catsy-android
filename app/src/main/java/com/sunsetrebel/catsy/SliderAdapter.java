@@ -21,13 +21,15 @@ public class SliderAdapter extends PagerAdapter {
     }
 
     public int[] slideImages = {
-            R.drawable.the_meetup,
-            R.drawable.joint_image
+            R.drawable.christina_unsplash,
+            R.drawable.bez_nazvan,
+            R.drawable.the_meetup
     };
 
     public int[] slideTitles = {
             R.string.text_slide_1,
-            R.string.text_slide_2
+            R.string.text_slide_2,
+            R.string.text_slide_3
         };
 
     @Override

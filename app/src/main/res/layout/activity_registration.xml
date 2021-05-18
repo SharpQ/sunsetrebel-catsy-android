@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/simple_gradient"
+    android:background="@drawable/background_general"
     tools:context=".Registration">
 
     <TextView
@@ -14,13 +14,51 @@
         android:fontFamily="@font/audiowide"
         android:text="@string/registration_title"
         android:textAlignment="center"
-        android:textColor="#E91E63"
+        android:textColor="@color/primaryTextColor"
         android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.03" />
+
+    <ImageView
+        android:id="@+id/slideImageEmail"
+        android:visibility="invisible"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:contentDescription="@string/registration_hint_email"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/switchRegister"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
+        app:layout_constraintVertical_bias="0.07"
+        app:srcCompat="@drawable/ic_baseline_mark_email_read_24" />
+
+    <ImageView
+        android:id="@+id/slideImagePhone"
+        android:visibility="visible"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:contentDescription="@string/registration_hint_phone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/switchRegister"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
+        app:layout_constraintVertical_bias="0.07"
+        app:srcCompat="@drawable/ic_baseline_phone_iphone_24" />
 
     <EditText
         android:id="@+id/editFullName"
@@ -34,17 +72,21 @@
         android:hint="@string/registration_hint_user_name"
         android:inputType="textPersonName"
         android:textAlignment="textStart"
-        android:textColor="#03A9F4"
-        android:textColorHint="#03A9F4"
-        android:textSize="15sp"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHighlight="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor"
+        android:textColorLink="@color/primaryTextColor"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintTop_toBottomOf="@+id/switchRegister"
+        app:layout_constraintVertical_bias="0.1" />
 
     <EditText
-        android:id="@+id/editUserEmailOrPhone"
+        android:id="@+id/editUserEmail"
+        android:enabled="false"
+        android:visibility="invisible"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -52,18 +94,68 @@
         android:autofillHints=""
         android:ems="10"
         android:fontFamily="@font/audiowide"
-        android:hint="@string/registration_hint_email_or_phone"
+        android:hint="@string/registration_hint_email"
         android:inputType="textEmailSubject"
         android:textAlignment="textStart"
-        android:textColor="#03A9F4"
-        android:textColorHint="#03A9F4"
-        android:textSize="15sp"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHighlight="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor"
+        android:textColorLink="@color/primaryTextColor"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editFullName"
         app:layout_constraintVertical_bias="0.07" />
+
+    <LinearLayout
+        android:id="@+id/linearEditPhone"
+        android:enabled="true"
+        android:visibility="visible"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editFullName"
+        app:layout_constraintVertical_bias="0.07"
+        android:orientation="horizontal">
+
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/countryCodeDDL"
+            app:ccp_autoDetectCountry="true"
+            app:ccp_showArrow="false"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:ccp_textSize="20sp"
+            app:ccp_contentColor="@color/primaryTextColor"
+            app:ccpDialog_allowSearch="true"
+            app:ccpDialog_backgroundColor="@color/primaryDarkColor"
+            app:ccpDialog_textColor="@color/primaryTextColor"
+            app:ccpDialog_showTitle="false"/>
+
+        <EditText
+            android:id="@+id/editUserPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:ems="10"
+            android:fontFamily="@font/audiowide"
+            android:hint="@string/registration_hint_phone"
+            android:inputType="phone"
+            android:textAlignment="textStart"
+            android:textColor="@color/primaryTextColor"
+            android:textColorHighlight="@color/primaryTextColor"
+            android:textColorHint="@color/primaryTextColor"
+            android:textColorLink="@color/primaryTextColor"
+            android:textCursorDrawable="@color/primaryLightColor"
+            android:textSize="16sp"
+            app:layout_constraintStart_toEndOf="@+id/countryCodeDDL"/>
+    </LinearLayout>
 
     <EditText
         android:id="@+id/editUserPassword"
@@ -77,14 +169,16 @@
         android:hint="@string/registration_hint_password"
         android:inputType="none|textPassword"
         android:textAlignment="textStart"
-        android:textColor="#03A9F4"
-        android:textColorHint="#03A9F4"
-        android:textSize="15sp"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHighlight="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor"
+        android:textColorLink="@color/primaryTextColor"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserEmailOrPhone"
+        app:layout_constraintTop_toBottomOf="@+id/editUserEmail"
         app:layout_constraintVertical_bias="0.07" />
 
     <Button
@@ -93,9 +187,10 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/purple_500"
+        android:backgroundTint="@color/primaryLightColor"
         android:fontFamily="@font/audiowide"
         android:text="@string/registration_button_register"
+        android:textColor="@color/primaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,9 +203,10 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:backgroundTint="#00BCD4"
+        android:backgroundTint="@color/primaryLightColor"
         android:fontFamily="@font/audiowide"
         android:text="@string/google_authentication"
+        android:textColor="@color/primaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +222,7 @@
         android:backgroundTint="#4867AA"
         android:fontFamily="@font/audiowide"
         android:text="@string/facebook_authentication"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/primaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -137,6 +233,7 @@
     <ProgressBar
         android:id="@+id/progressBarRegister"
         style="?android:attr/progressBarStyle"
+        android:indeterminateDrawable="@drawable/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="invisible"
@@ -145,4 +242,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editUserPassword"
         app:layout_constraintVertical_bias="0.5" />
+
+    <Switch
+        android:id="@+id/switchRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:checked="false"
+        android:track="@drawable/track_selector"
+        android:thumb="@drawable/ic_baseline_brightness_1_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
+        app:layout_constraintVertical_bias="0.07"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
