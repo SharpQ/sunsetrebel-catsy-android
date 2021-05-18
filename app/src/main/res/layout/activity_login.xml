@@ -22,8 +22,48 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.03" />
 
+    <ImageView
+        android:id="@+id/slideImageEmail"
+        android:visibility="invisible"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:contentDescription="@string/registration_hint_email"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/switchLogin"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginFacebook"
+        app:layout_constraintVertical_bias="0.1"
+        app:srcCompat="@drawable/ic_baseline_mark_email_read_24" />
+
+    <ImageView
+        android:id="@+id/slideImagePhone"
+        android:visibility="visible"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="10dp"
+        android:contentDescription="@string/registration_hint_phone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/switchLogin"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginFacebook"
+        app:layout_constraintVertical_bias="0.1"
+        app:srcCompat="@drawable/ic_baseline_phone_iphone_24" />
+
     <EditText
-        android:id="@+id/editUserEmailOrPhone"
+        android:id="@+id/editUserEmail"
+        android:enabled="false"
+        android:visibility="invisible"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -31,7 +71,7 @@
         android:autofillHints=""
         android:ems="10"
         android:fontFamily="@font/audiowide"
-        android:hint="@string/registration_hint_email_or_phone"
+        android:hint="@string/registration_hint_email"
         android:inputType="textEmailSubject"
         android:textAlignment="textStart"
         android:textColor="@color/primaryTextColor"
@@ -43,8 +83,34 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonLoginFacebook"
-        app:layout_constraintVertical_bias="0.15" />
+        app:layout_constraintTop_toBottomOf="@+id/switchLogin"
+        app:layout_constraintVertical_bias="0.1" />
+
+    <EditText
+        android:id="@+id/editUserPhone"
+        android:enabled="true"
+        android:visibility="visible"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:autofillHints=""
+        android:ems="10"
+        android:fontFamily="@font/audiowide"
+        android:hint="@string/registration_hint_phone"
+        android:inputType="phone"
+        android:textAlignment="textStart"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHighlight="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor"
+        android:textColorLink="@color/primaryTextColor"
+        android:textCursorDrawable="@color/primaryLightColor"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switchLogin"
+        app:layout_constraintVertical_bias="0.1" />
 
     <EditText
         android:id="@+id/editUserPassword"
@@ -67,7 +133,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserEmailOrPhone"
+        app:layout_constraintTop_toBottomOf="@+id/editUserEmail"
         app:layout_constraintVertical_bias="0.1" />
 
     <Button
@@ -130,5 +196,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editUserPassword" />
+
+    <Switch
+        android:id="@+id/switchLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:checked="false"
+        android:track="@drawable/track_selector"
+        android:thumb="@drawable/ic_baseline_brightness_1_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLoginFacebook"
+        app:layout_constraintVertical_bias="0.1"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

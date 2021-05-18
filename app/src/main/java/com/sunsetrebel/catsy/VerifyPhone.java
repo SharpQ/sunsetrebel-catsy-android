@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -26,12 +27,14 @@ import java.util.concurrent.TimeUnit;
 public class VerifyPhone extends AppCompatActivity {
     private Button verifyBtn;
     private EditText inputCode;
+    private TextView textVerifyPhoneDescription;
     private ProgressBar progressBar;
     private String phoneNumber;
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private String systemVerificationCode;
     private boolean isTutorialNextPage;
     private final FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private String verifyDescription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +45,13 @@ public class VerifyPhone extends AppCompatActivity {
         verifyBtn = findViewById(R.id.buttonVerify);
         inputCode = findViewById(R.id.editSmsCode);
         progressBar = findViewById(R.id.progressBarVerify);
+        textVerifyPhoneDescription = findViewById(R.id.textVerifyPhoneDescription);
         progressBar.setVisibility(View.GONE);
 
+
         phoneNumber = getIntent().getStringExtra("phoneNumber");
+        verifyDescription = getResources().getString(R.string.verify_phone_description) + phoneNumber;
+        textVerifyPhoneDescription.setText(verifyDescription);
         isTutorialNextPage = getIntent().getBooleanExtra("isTutorialNextPage", false);
         sendVerificationCodeToUser(phoneNumber);
         verifyBtn.setOnClickListener(v -> {

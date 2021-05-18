@@ -22,6 +22,21 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.03" />
 
+    <TextView
+        android:id="@+id/textVerifyPhoneDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/audiowide"
+        android:text="@string/verify_phone_description"
+        android:textAlignment="center"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textVerifyPhoneTitle"
+        app:layout_constraintVertical_bias="0.2" />
+
     <EditText
         android:id="@+id/editSmsCode"
         android:layout_width="0dp"
@@ -42,8 +57,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textVerifyPhoneTitle"
-        app:layout_constraintVertical_bias="0.4" />
+        app:layout_constraintTop_toBottomOf="@+id/textVerifyPhoneDescription"
+        app:layout_constraintVertical_bias="0.2" />
 
     <ProgressBar
         android:id="@+id/progressBarVerify"
