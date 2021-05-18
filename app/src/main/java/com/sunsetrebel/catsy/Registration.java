@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.hbb20.CountryCodePicker;
 import com.sunsetrebel.MapsActivity;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -31,6 +33,7 @@ public class Registration extends AppCompatActivity {
     private EditText mFullName, mEmail, mPhone, mPassword;
     private ImageView slideImageEmail;
     private ImageView slideImagePhone;
+    private LinearLayout countryAndPhone;
     private Switch switchRegister;
     private Button mRegisterBtn;
     private Button mGoogleAuthBtn;
@@ -43,6 +46,7 @@ public class Registration extends AppCompatActivity {
     private final FirebaseAuth firebaseAuth = new FirebaseAuth();
     private Activity mActivity;
     private boolean isOTPregistration = true;
+    private CountryCodePicker ccp;
 
     @Override
     protected void onStart() {
@@ -74,25 +78,15 @@ public class Registration extends AppCompatActivity {
         switchRegister = findViewById(R.id.switchRegister);
         slideImageEmail = findViewById(R.id.slideImageEmail);
         slideImagePhone = findViewById(R.id.slideImagePhone);
+        ccp = findViewById(R.id.countryCodeDDL);
+        countryAndPhone = findViewById(R.id.linearEditPhone);
 
         switchRegister.setOnClickListener(v -> {
             if (mEmail.getVisibility() == View.VISIBLE)
             {
-                isOTPregistration = true;
-                mEmail.setVisibility(View.INVISIBLE);
-                mEmail.setEnabled(false);
-                slideImageEmail.setVisibility(View.INVISIBLE);
-                mPhone.setVisibility(View.VISIBLE);
-                mPhone.setEnabled(true);
-                slideImagePhone.setVisibility(View.VISIBLE);
+                setUIStatePhone();
             } else {
-                isOTPregistration = false;
-                mEmail.setVisibility(View.VISIBLE);
-                mEmail.setEnabled(true);
-                slideImageEmail.setVisibility(View.VISIBLE);
-                mPhone.setVisibility(View.INVISIBLE);
-                mPhone.setEnabled(false);
-                slideImagePhone.setVisibility(View.INVISIBLE);
+                setUIStateEmail();
             }
         });
 
@@ -110,6 +104,7 @@ public class Registration extends AppCompatActivity {
             @Override
             public void onError(FacebookException error) {
                 restartActivity(mActivity);
+                setUIStatePhone();
                 Toast.makeText(getApplicationContext(), "Facebook authentication failed!", Toast.LENGTH_SHORT).show();
             }
         });
@@ -124,6 +119,7 @@ public class Registration extends AppCompatActivity {
 
         mRegisterBtn.setOnClickListener(v -> {
             String email = mEmail.getText().toString().trim();
+            String countryCode = ccp.getSelectedCountryCode();
             String phone = mPhone.getText().toString().trim();
             String password = mPassword.getText().toString().trim();
 
@@ -156,12 +152,15 @@ public class Registration extends AppCompatActivity {
             }
 
             progressBar.setVisibility(View.VISIBLE);
+            phone = "+" + countryCode + phone;
 
             if (isOTPregistration) {
                 Intent intent = new Intent(getApplicationContext(), VerifyPhone.class);
                 intent.putExtra("phoneNumber", phone);
                 intent.putExtra("isTutorialNextPage", true);
                 startActivity(intent);
+                setUIStatePhone();
+                progressBar.setVisibility(View.GONE);
             } else {
                 fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -170,6 +169,7 @@ public class Registration extends AppCompatActivity {
                     } else {
                         progressBar.setVisibility(View.GONE);
                         restartActivity(mActivity);
+                        setUIStatePhone();
                         Toast.makeText(Registration.this, "Email authentication failed!" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -186,7 +186,6 @@ public class Registration extends AppCompatActivity {
 
     private boolean checkPhoneFormat(String text) {
         if(!TextUtils.isEmpty(text)){
-            text = text.substring(1);
             return TextUtils.isDigitsOnly(text);
         } else {
             return false;
@@ -216,6 +215,7 @@ public class Registration extends AppCompatActivity {
                         finish();
                     } else {
                         restartActivity(mActivity);
+                        setUIStatePhone();
                         Toast.makeText(getApplicationContext(), "Google authentication failed!", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -232,12 +232,35 @@ public class Registration extends AppCompatActivity {
                         finish();
                     } else {
                         restartActivity(mActivity);
+                        setUIStatePhone();
                         Toast.makeText(getApplicationContext(), "Facebook authentication failed!", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private static void restartActivity(Activity activity) {
+    private void restartActivity(Activity activity) {
         activity.recreate();
+    }
+
+    private void setUIStateEmail() {
+        isOTPregistration = false;
+        mEmail.setVisibility(View.VISIBLE);
+        mEmail.setEnabled(true);
+        slideImageEmail.setVisibility(View.VISIBLE);
+        countryAndPhone.setVisibility(View.INVISIBLE);
+        countryAndPhone.setEnabled(false);
+        slideImagePhone.setVisibility(View.INVISIBLE);
+        switchRegister.setChecked(true);
+    }
+
+    private void setUIStatePhone() {
+        isOTPregistration = true;
+        mEmail.setVisibility(View.INVISIBLE);
+        mEmail.setEnabled(false);
+        slideImageEmail.setVisibility(View.INVISIBLE);
+        countryAndPhone.setVisibility(View.VISIBLE);
+        countryAndPhone.setEnabled(true);
+        slideImagePhone.setVisibility(View.VISIBLE);
+        switchRegister.setChecked(false);
     }
 }

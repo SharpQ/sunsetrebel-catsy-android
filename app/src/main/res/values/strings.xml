@@ -11,9 +11,10 @@
     <string name="verify_number_hint_code">SMS code</string>
     <string name="registration_button_register">Register</string>
     <string name="verify_button_verify">Verify</string>
+    <string name="verify_button_resent">Resent code</string>
     <string name="login_title">Sign in</string>
     <string name="verify_phone_title">Verify phone</string>
-    <string name="verify_phone_description">Verification code sent to: </string>
+    <string name="verify_phone_description">Verification code sent to:\n</string>
     <string name="login_button_login">Login</string>
     <string name="main_button_logout">Logout, BITCH!</string>
     <string name="title_activity_maps">Map</string>
