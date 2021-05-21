@@ -3,13 +3,13 @@ package com.sunsetrebel;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -26,23 +26,19 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.sunsetrebel.catsy.EventsList;
 import com.sunsetrebel.catsy.R;
 
 import android.location.Location;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
-import com.sunsetrebel.catsy.PopUpWindow;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -53,13 +49,22 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
 
     private static final String TAG = "MapsActivity";
+    ImageButton events_button;
     private GoogleMap mMap;
     private Geocoder geocoder;
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     FusedLocationProviderClient fusedLocationProviderClient;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Top and navigation bar transparency
+     /*   getWindow().setStatusBarColor(Color.parseColor("#20111111"));
+        getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }*/
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -70,6 +75,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         ImageButton mBottton = findViewById(R.id.add_button);
+        events_button = findViewById(R.id.events_button);
+        events_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent (MapsActivity.this, EventsList.class);
+                startActivity(intent);
+            }
+        });
 
         try {
             assert mapFragment.getView() != null;
@@ -151,16 +164,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
 
-        // Add a marker at Taj Mahal and move the camera
-//        LatLng latLng = new LatLng(27.1751, 78.0421);
-//        MarkerOptions markerOptions = new MarkerOptions()
-//                                            .position(latLng)
-//                                            .title("Taj Mahal")
-//                                            .snippet("Wonder of the world!");
-//        mMap.addMarker(markerOptions);
-//        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 16);
-//        mMap.animateCamera(cameraUpdate);
-
         try {
             List<Address> addresses = geocoder.getFromLocationName("Current location", 1);
             if (addresses.size() > 0) {
@@ -178,13 +181,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         //Event examples
         LatLng FirstEvent = new LatLng(50.436404, 30.369498);
-        googleMap.addMarker(new MarkerOptions().position(FirstEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_bright_40)).title("Open air cinema at 19:00"));
+        googleMap.addMarker(new MarkerOptions().position(FirstEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_blue_40)).title("Open air cinema at 19:00"));
 
         LatLng SecondEvent = new LatLng(50.449, 30.512850);
-        googleMap.addMarker(new MarkerOptions().position(SecondEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_bright_40)).title("Guitar night at 20:00"));
+        googleMap.addMarker(new MarkerOptions().position(SecondEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_blue_40)).title("Guitar night at 20:00"));
 
         LatLng ThirdEvent = new LatLng(50.391566, 30.481428);
-        googleMap.addMarker(new MarkerOptions().position(ThirdEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_bright_40)).title("Mozzy birthday celebration at 09:00"));
+        googleMap.addMarker(new MarkerOptions().position(ThirdEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_blue_40)).title("Mozzy birthday celebration at 09:00"));
         LatLng mountainView = new LatLng(37.4, -122.1);
 
     }
@@ -221,11 +224,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 LatLng latLng = null;
                 try {
                     latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
                 } catch (Exception e) {
                     latLng = new LatLng(50.436404, 30.369498);
                 }
+
+                List<Address> addresses = null;
+                try {
+                    addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Address address = addresses.get(0);
+                    String streetAddress = address.getAddressLine(0);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
-                mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_location_sample_35)).title("Current location"));
+                mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_location_sample_35)).title(streetAddress));
             }
         });
     }
