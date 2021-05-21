@@ -22,7 +22,7 @@
         <activity
             android:name=".EventsList"
             android:label="@string/title_activity_events_list"
-            android:theme="@style/splashScreenTheme.NoActionBar"></activity>
+            android:theme="@style/splashScreenTheme"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -51,7 +51,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EventList" />
+
         <activity android:name=".Tutorial" />
 
         <uses-library
