@@ -3,12 +3,15 @@ package com.sunsetrebel.catsy;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -20,18 +23,25 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.sunsetrebel.MapsActivity;
 
+import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class VerifyPhone extends AppCompatActivity {
-    private Button verifyBtn;
+    private Button verifyBtn, resentCodeBtn;
     private EditText inputCode;
+    private TextView textVerifyPhoneDescription, textResetCountdown;
     private ProgressBar progressBar;
     private String phoneNumber;
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private String systemVerificationCode;
     private boolean isTutorialNextPage;
     private final FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private String verifyDescription;
+    private static final long START_TIME_IN_MILLIS = 60000;
+    private CountDownTimer mCountDownTimer;
+    private boolean mTimerRunning = false;
+    private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +52,25 @@ public class VerifyPhone extends AppCompatActivity {
         verifyBtn = findViewById(R.id.buttonVerify);
         inputCode = findViewById(R.id.editSmsCode);
         progressBar = findViewById(R.id.progressBarVerify);
+        textVerifyPhoneDescription = findViewById(R.id.textVerifyPhoneDescription);
+        textResetCountdown = findViewById(R.id.textResetCountdown);
+        resentCodeBtn = findViewById(R.id.buttonResentCode);
         progressBar.setVisibility(View.GONE);
 
         phoneNumber = getIntent().getStringExtra("phoneNumber");
+        verifyDescription = getResources().getString(R.string.verify_phone_description) + phoneNumber;
+        textVerifyPhoneDescription.setText(verifyDescription);
         isTutorialNextPage = getIntent().getBooleanExtra("isTutorialNextPage", false);
         sendVerificationCodeToUser(phoneNumber);
+
+        resentCodeBtn.setOnClickListener(v -> {
+            textResetCountdown.setVisibility(View.VISIBLE);
+            resentCodeBtn.setEnabled(false);
+            resentCodeBtn.setAlpha(0.25f);
+            startTimer();
+            sendVerificationCodeToUser(phoneNumber);
+        });
+
         verifyBtn.setOnClickListener(v -> {
             String code = inputCode.getText().toString();
             if (code.isEmpty() || code.length() <6) {
@@ -57,6 +81,8 @@ public class VerifyPhone extends AppCompatActivity {
             progressBar.setVisibility(View.VISIBLE);
             verifyCode(code);
         });
+
+        updateCountDownText();
     }
 
     private void sendVerificationCodeToUser(String phoneNumber) {
@@ -94,7 +120,9 @@ public class VerifyPhone extends AppCompatActivity {
 
     private void verifyCode(String userInputCode) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(systemVerificationCode, userInputCode);
-        signInUserByCredentials(credential);
+        if (credential != null) {
+            signInUserByCredentials(credential);
+        }
     }
 
     private void signInUserByCredentials(PhoneAuthCredential credential){
@@ -113,5 +141,31 @@ public class VerifyPhone extends AppCompatActivity {
                 Toast.makeText(VerifyPhone.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void startTimer() {
+        mCountDownTimer = new CountDownTimer(mTimeLeftInMillis, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                mTimeLeftInMillis = millisUntilFinished;
+                updateCountDownText();
+            }
+
+            @Override
+            public void onFinish() {
+                mTimerRunning = false;
+                textResetCountdown.setVisibility(View.INVISIBLE);
+                resentCodeBtn.setEnabled(true);
+                resentCodeBtn.setAlpha(1f);
+                mTimeLeftInMillis = START_TIME_IN_MILLIS;
+            }
+        }.start();
+        mTimerRunning = true;
+    }
+
+    private void updateCountDownText() {
+        int seconds = (int) (mTimeLeftInMillis) / 1000 % 60;
+        String timeLeftFormatted = String.format(Locale.getDefault(), ":%02d", seconds);
+        textResetCountdown.setText(timeLeftFormatted);
     }
 }

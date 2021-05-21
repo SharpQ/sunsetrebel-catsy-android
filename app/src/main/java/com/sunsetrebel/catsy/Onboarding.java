@@ -1,6 +1,7 @@
 package com.sunsetrebel.catsy;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -25,12 +26,14 @@ public class Onboarding extends AppCompatActivity {
     private int RC_SIGN_IN;
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private final FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private Activity mActivity;
 
     @Override
     protected void onStart() {
         super.onStart();
         if(firebaseAuth.checkCurrentUser()) {
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            finish();
         }
     }
 
@@ -38,6 +41,7 @@ public class Onboarding extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
+        mActivity = Onboarding.this;
         firebaseAuth.createGoogleAuthRequestGetInstance(getApplicationContext());
         fAuth = firebaseAuth.getFAuth();
 
@@ -54,12 +58,10 @@ public class Onboarding extends AppCompatActivity {
 
         mToRegisterBtn.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), Registration.class));
-            finish();
         });
 
         mToLoginBtn.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), Login.class));
-            finish();
         });
 
         mGoogleAuthBtn.setOnClickListener(v -> {
@@ -71,7 +73,7 @@ public class Onboarding extends AppCompatActivity {
     }
 
     public void addDotsIndicator(int position) {
-        TextView[] mDots = new TextView[2];
+        TextView[] mDots = new TextView[3];
         mDotLayout.removeAllViews();
 
         for (int i = 0; i< mDots.length; i++) {
@@ -79,10 +81,10 @@ public class Onboarding extends AppCompatActivity {
             mDots[i].setText(Html.fromHtml("&#8226;"));
             mDots[i].setTextSize(35);
             mDots[i].setGravity(View.TEXT_ALIGNMENT_CENTER);
-            mDots[i].setTextColor(getResources().getColor(R.color.purple_200));
+            mDots[i].setTextColor(getResources().getColor(R.color.primaryLightColor));
             mDotLayout.addView(mDots[i]);
         }
-        mDots[position].setTextColor(getResources().getColor(R.color.teal_200));
+        mDots[position].setTextColor(getResources().getColor(R.color.primaryTextColor));
     }
 
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
@@ -107,7 +109,9 @@ public class Onboarding extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         GoogleSignInAccount account = firebaseAuth.onFirebaseResponse(requestCode, data);
-        firebaseAuthWithGoogle(account.getIdToken());
+        if (account != null) {
+            firebaseAuthWithGoogle(account.getIdToken());
+        }
     }
 
     private void firebaseAuthWithGoogle(String idToken) {
@@ -118,9 +122,15 @@ public class Onboarding extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
                         firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        finish();
                     } else {
+                        restartActivity(mActivity);
                         Toast.makeText(getApplicationContext(), "Google authentication failed!", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    private static void restartActivity(Activity activity) {
+        activity.recreate();
     }
 }
