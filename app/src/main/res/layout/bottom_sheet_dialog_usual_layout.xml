@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/hot_event">
+    android:background="@drawable/usual_event">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,15 +17,16 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/anita_kick"
+            android:src="@drawable/ic_cat_add_custom_40"
             android:layout_margin="8dp"/>
 
         <TextView
+            android:id="@+id/W"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:padding="8dp"
-            android:text="Night museum" />
+            android:text="Witch sabbath" />
     </LinearLayout>
 
     <LinearLayout
@@ -47,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:padding="8dp"
-            android:text="20:00      22.07.2021" />
+            android:text="22:00      12.09.2021" />
 
     </LinearLayout>
 
@@ -117,7 +118,7 @@
             android:layout_height="47dp"
             android:layout_gravity="center_vertical"
             android:padding="8dp"
-            android:text="You will have much fun if you join us! " />
+            android:text="Lots of sexy witches will you see." />
     </LinearLayout>
 
     <Button

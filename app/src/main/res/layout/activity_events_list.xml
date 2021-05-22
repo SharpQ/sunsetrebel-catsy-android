@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/buttonshape"
+    android:background="@drawable/city_image_background"
     tools:context=".EventsList">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -62,7 +62,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="23dp"
             android:layout_marginBottom="49dp"
-            android:background="@drawable/rounded_corners_border"
+            android:background="@drawable/rounded_corners"
             android:src="@android:drawable/ic_dialog_map" />
         <ImageButton
             android:id="@+id/settings_button"
@@ -73,7 +73,7 @@
             android:layout_marginStart="315dp"
 
             android:layout_marginBottom="49dp"
-            android:background="@drawable/rounded_corners_border"
+            android:background="@drawable/rounded_corners"
             android:src="@android:drawable/ic_menu_manage" />
 
 
@@ -85,7 +85,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="115dp"
             android:layout_marginBottom="49dp"
-            android:background="@drawable/rounded_corners_border"
+            android:background="@drawable/rounded_corners"
             android:src="@android:drawable/ic_dialog_dialer" />
 
         <ImageButton
@@ -96,7 +96,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginStart="217dp"
             android:layout_marginBottom="49dp"
-            android:background="@drawable/rounded_corners_border"
+            android:background="@drawable/rounded_corners"
             android:src="@android:drawable/ic_dialog_email" />
 
 
@@ -117,6 +117,10 @@
                     <ImageView
                         android:layout_width="match_parent"
                         android:layout_height="260dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="0dp"
+                        android:layout_marginBottom="0dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/city_image_background" />
 
@@ -185,17 +189,50 @@
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
 
+                    <TextView
+                        android:id="@+id/hottest_text"
+                        android:layout_width="187dp"
+                        android:layout_height="100dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="134dp"
+                        android:layout_marginBottom="2dp"
+                        android:fontFamily="@font/audiowide"
+                        android:text="HOTTEST"
+                        android:textColor="@color/colorAccent"
+                        android:textSize="24sp" />
+
+                    <ImageView
+                        android:id="@+id/imageView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="172dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="96dp"
+                        android:layout_marginBottom="1dp"
+                        app:srcCompat="@drawable/ic_fire_icon_40" />
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="172dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="277dp"
+                        android:layout_marginBottom="1dp"
+                        app:srcCompat="@drawable/ic_fire_icon_40" />
+
                 </RelativeLayout>
 
                 <androidx.cardview.widget.CardView
-                    android:id="@+id/cardView"
+                    android:id="@+id/cardView_example_1"
                     android:layout_width="match_parent"
                     android:layout_height="131dp"
                     android:layout_marginLeft="8dp"
                     android:layout_marginTop="-44dp"
                     android:layout_marginRight="8dp"
-                    android:background="@drawable/rounded_corners"
-                    android:backgroundTint="#4a148c"
+                    android:background="@drawable/hot_event"
+                    android:backgroundTint="#F44336"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     app:cardCornerRadius="4dp"
@@ -218,8 +255,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/calibri"
-                                android:text="Event "
+                                android:text="Night museum"
                                 android:textColor="#000000"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -228,7 +266,7 @@
                                 android:layout_marginTop="4dp"
                                 android:layout_marginBottom="4dp"
                                 android:fontFamily="@font/calibri"
-                                android:text="Event type"
+                                android:text="Tour"
                                 android:textColor="#4b4b4b"
                                 android:textStyle="bold" />
 
@@ -236,8 +274,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/calibri"
-                                android:text="12.12.21"
-                                android:textColor="#8a8a8a" />
+                                android:text="22.07.21 at 20:00"
+                                android:textColor="@color/teal_200" />
 
                         </LinearLayout>
 
@@ -252,10 +290,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/calibri"
-                                android:text="Kiev"
+                                android:text="Kiev, Podol"
                                 android:textAlignment="textEnd"
                                 android:textColor="#f5a622"
-                                android:textSize="24sp"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -264,25 +302,29 @@
                                 android:layout_marginTop="4dp"
                                 android:layout_marginBottom="4dp"
                                 android:fontFamily="@font/calibri"
-                                android:text="3.30 Hour"
+                                android:text="Anita S."
                                 android:textAlignment="textEnd"
-                                android:textColor="#b3b3b3" />
+                                android:textColor="@color/teal_200"
+                                android:textSize="18sp" />
                         </LinearLayout>
                     </LinearLayout>
 
                     <ImageView
                         android:id="@+id/imageView3"
-                        android:layout_width="272dp"
-                        android:layout_height="84dp"
-                        android:src="@drawable/ic_cat_blue_40" />
+                        android:layout_width="380dp"
+                        android:layout_height="71dp"
+                        android:src="@drawable/anita_kick" />
 
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_example_2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
+                    android:background="@drawable/rounded_corners_border"
+                    android:backgroundTint="#9574BA"
                     android:clickable="true"
                     android:foreground="?android:attr/selectableItemBackground"
                     app:cardCornerRadius="4dp"
@@ -305,8 +347,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/calibri"
-                                android:text="10:00AM - 2:00PM"
+                                android:text="Witch sabbath"
                                 android:textColor="#000000"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -315,7 +358,7 @@
                                 android:layout_marginTop="4dp"
                                 android:layout_marginBottom="4dp"
                                 android:fontFamily="@font/calibri"
-                                android:text="Red Bus service"
+                                android:text="Party"
                                 android:textColor="#4b4b4b"
                                 android:textStyle="bold" />
 
@@ -323,8 +366,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/calibri"
-                                android:text="A/C Sleeper (2+2)"
-                                android:textColor="#8a8a8a" />
+                                android:text="12.09.21 at 22:00"
+                                android:textColor="@color/teal_200" />
 
                         </LinearLayout>
 
@@ -339,10 +382,10 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/calibri"
-                                android:text="$560.00"
+                                android:text="Kiev, NAU"
                                 android:textAlignment="textEnd"
                                 android:textColor="#f5a622"
-                                android:textSize="24sp"
+                                android:textSize="18sp"
                                 android:textStyle="bold" />
 
                             <TextView
@@ -351,90 +394,10 @@
                                 android:layout_marginTop="4dp"
                                 android:layout_marginBottom="4dp"
                                 android:fontFamily="@font/calibri"
-                                android:text="4 Hour"
+                                android:text="Yoda"
                                 android:textAlignment="textEnd"
-                                android:textColor="#b3b3b3" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="4dp"
-                    app:cardUseCompatPadding="true"
-                    app:contentPadding="16dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:weightSum="100">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="60"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/calibri"
-                                android:text="12:15PM - 3:30PM"
-                                android:textColor="#000000"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginBottom="4dp"
-                                android:fontFamily="@font/calibri"
-                                android:text="Start service"
-                                android:textColor="#4b4b4b"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/calibri"
-                                android:text="A/C Sleeper (2+2)"
-                                android:textColor="#8a8a8a" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="match_parent"
-                            android:layout_weight="40"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/calibri"
-                                android:text="$450.00"
-                                android:textAlignment="textEnd"
-                                android:textColor="#f5a622"
-                                android:textSize="24sp"
-                                android:textStyle="bold" />
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:layout_marginBottom="4dp"
-                                android:fontFamily="@font/calibri"
-                                android:text="3.15 Hour"
-                                android:textAlignment="textEnd"
-                                android:textColor="#b3b3b3" />
+                                android:textColor="@color/teal_200"
+                                android:textSize="18sp" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -461,7 +424,7 @@
         android:layout_height="35dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="551dp"
         android:layout_marginLeft="512dp"
         android:background="@drawable/rounded_corners"
