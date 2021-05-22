@@ -55,16 +55,49 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     FusedLocationProviderClient fusedLocationProviderClient;
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        }
+    }
 
+    private void hideSystemUI() {
+        // Enables regular immersive mode.
+        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
+        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE
+                        // Set the content to appear under the system bars so that the
+                        // content doesn't resize when the system bars hide and show.
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+                        // Hide the nav bar and status bar
+                      //  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                     //   | View.SYSTEM_UI_FLAG_FULLSCREEN)
+        ;}
+        // Shows the system bars by removing all the flags
+// except for the ones that make the content appear under the system bars.
+    private void showSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Top and navigation bar transparency
-     /*   getWindow().setStatusBarColor(Color.parseColor("#20111111"));
-        getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
+
+       getWindow().setStatusBarColor(Color.parseColor("#20111111"));
+       getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }*/
+        }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -145,11 +178,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Log.e(TAG, "Can't find style. Error: ", e);
         }
         mMap = googleMap;
+        //Google maps default buttons disabling
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.setOnMapLongClickListener(this);
         mMap.setOnMarkerDragListener(this);
         mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setRotateGesturesEnabled(false);
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             enableUserLocation();
@@ -295,140 +330,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 enableUserLocation();
                 zoomToUserLocation();
             } else {
-                //We can show a dialog that permission is not granted...
+                Log.e(TAG, "Permission is not granted. Please, try again. ");
             }
         }
     }
 }
-
-
-
-
-/*
-public class MapsActivity extends AppCompatActivity {
-    SupportMapFragment supportMapFragment;
-    FusedLocationProviderClient client;
-
-    private static final String TAG = MapsActivity.class.getSimpleName();
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
-
-        // Get the SupportMapFragment and register for the callback
-        // when the map is ready for use.
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getSupportFragmentManager()
-                        .findFragmentById(R.id.google_map);
-        //assign variable
-        supportMapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.google_map);
-        //Initialize fuze location
-        client = LocationServices.getFusedLocationProviderClient(this);
-
-        //Check permission
-        if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            //When permission granted
-            //Call method
-            getCurrentLocation();
-        }
-        else {
-            //When permission denied
-            //Request permission
-            ActivityCompat.requestPermissions(MapsActivity.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},44);
-        }
-        ImageButton mBottton = findViewById(R.id.add_button);
-        mBottton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showBottomSheetDialog();
-            }
-
-            private void showBottomSheetDialog() {
-
-                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MapsActivity.this);
-                bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
-
-                LinearLayout copy = bottomSheetDialog.findViewById(R.id.copyLinearLayout);
-                LinearLayout share = bottomSheetDialog.findViewById(R.id.shareLinearLayout);
-                // LinearLayout upload = bottomSheetDialog.findViewById(R.id.uploadLinearLayout);
-                LinearLayout download = bottomSheetDialog.findViewById(R.id.download);
-                LinearLayout delete = bottomSheetDialog.findViewById(R.id.delete);
-
-                bottomSheetDialog.show();
-            }
-        });
-    }
-
-    private void getCurrentLocation(){
-        //Initialize task location
-        @SuppressLint("MissingPermission") Task<Location> task = client.getLastLocation();
-        task.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null)
-                {
-                    //Sync map
-                    supportMapFragment.getMapAsync(new OnMapReadyCallback() {
-
-                        @Override
-                        public void onMapReady(GoogleMap googleMap) {
-                            try {
-                                // Customise the styling of the base map using a JSON object defined
-                                // in a raw resource file.
-                                boolean success = googleMap.setMapStyle(
-                                        MapStyleOptions.loadRawResourceStyle(
-                                                getApplicationContext(), R.raw.google_style));
-
-                                if (!success) {
-                                    Log.e(TAG, "Style parsing failed.");
-                                }
-                            } catch (Resources.NotFoundException e) {
-                                Log.e(TAG, "Can't find style. Error: ", e);
-                            }
-                            //Initialize lat lng
-                            LatLng latLng = new LatLng(location.getLatitude(),location.getLongitude());
-                            
-                            //Create marker options
-                            MarkerOptions options = new MarkerOptions().position(latLng).flat(false).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_location_sample_35)).title("Current location");
-                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));
-                            googleMap.addMarker(options);
-                            googleMap.getUiSettings().setMapToolbarEnabled(false);
-                            googleMap.getUiSettings().setCompassEnabled(false);
-
-
-                            //Event examples
-                            LatLng FirstEvent = new LatLng(50.436404, 30.369498);
-                            googleMap.addMarker(new MarkerOptions().position(FirstEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_dark_40)).title("Open air cinema at 19:00"));
-
-                            LatLng SecondEvent = new LatLng(50.449, 30.512850);
-                            googleMap.addMarker(new MarkerOptions().position(SecondEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_dark_40)).title("Guitar night at 20:00"));
-
-                            LatLng ThirdEvent = new LatLng(50.391566, 30.481428);
-                            googleMap.addMarker(new MarkerOptions().position(ThirdEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_bright_40)).title("Mozzy birthday celebration at 09:00"));
-                            LatLng mountainView = new LatLng(37.4, -122.1);
-                        }
-                    });
-                }
-
-            }
-        });
-    }
-
-   // @Override
-    public void onRequestPermissionResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
-        if (requestCode == 44){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                //When permission granted
-                //Call method
-                getCurrentLocation();
-            }
-        }
-    }
-
-}
-
-*/

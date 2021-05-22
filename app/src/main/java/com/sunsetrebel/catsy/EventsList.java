@@ -39,7 +39,8 @@ public class EventsList extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        CardView mBottton = findViewById(R.id.cardView);
+        //CardView examples
+        CardView mBottton = findViewById(R.id.cardView_example_1);
         mBottton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,6 +59,29 @@ public class EventsList extends AppCompatActivity {
                 LinearLayout delete = bottomSheetDialog.findViewById(R.id.delete);
 
                 bottomSheetDialog.show();
+            }
+
+        });
+
+        CardView mBottton_usual = findViewById(R.id.cardView_example_2);
+        mBottton_usual.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v1) {
+                showBottomSheetDialogUsual();
+            }
+
+            private void showBottomSheetDialogUsual() {
+
+                final BottomSheetDialog bottomSheetDialog2 = new BottomSheetDialog(EventsList.this);
+                bottomSheetDialog2.setContentView(R.layout.bottom_sheet_dialog_usual_layout);
+
+                LinearLayout copy = bottomSheetDialog2.findViewById(R.id.copyLinearLayout);
+                LinearLayout share = bottomSheetDialog2.findViewById(R.id.shareLinearLayout);
+                // LinearLayout upload = bottomSheetDialog.findViewById(R.id.uploadLinearLayout);
+                LinearLayout download = bottomSheetDialog2.findViewById(R.id.download);
+                LinearLayout delete = bottomSheetDialog2.findViewById(R.id.delete);
+
+                bottomSheetDialog2.show();
             }
 
         });
