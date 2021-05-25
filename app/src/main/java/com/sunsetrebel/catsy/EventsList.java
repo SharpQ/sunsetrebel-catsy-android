@@ -31,16 +31,22 @@ public class EventsList extends AppCompatActivity {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN, WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
         }
-        map_button = findViewById(R.id.map_button);
-        map_button.setOnClickListener(new View.OnClickListener() {
+        LinearLayout switch_map;
+        // ImageButton mBottton = findViewById(R.id.add_button);
+        // events_button = findViewById(R.id.events_button);
+        switch_map = findViewById(R.id.switch_map);
+        switch_map = findViewById(R.id.switch_map);
+        switch_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent (EventsList.this, MapsActivity.class);
-                startActivity(intent);
+           //Map button finishes listview activity and comes back to the map
+           //     Intent intent = new Intent (EventsList.this, MapsActivity.class);
+           //   startActivity(intent);
+                finish();
             }
         });
         //CardView examples
-        CardView mBottton = findViewById(R.id.cardView_example_1);
+    /*    CardView mBottton = findViewById(R.id.cardView_example_1);
         mBottton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,8 +67,8 @@ public class EventsList extends AppCompatActivity {
                 bottomSheetDialog.show();
             }
 
-        });
-
+        });*/
+/*
         CardView mBottton_usual = findViewById(R.id.cardView_example_2);
         mBottton_usual.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +90,6 @@ public class EventsList extends AppCompatActivity {
                 bottomSheetDialog2.show();
             }
 
-        });
+        });*/
     }
 }

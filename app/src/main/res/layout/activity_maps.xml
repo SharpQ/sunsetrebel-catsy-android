@@ -13,18 +13,6 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
 
-    <!--<androidx.appcompat.widget.Toolbar
-        android:id="@+id/bottom_buttons_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="-19dp"
-        android:background="@drawable/rounded_corners"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />-->
-
     <fragment
         android:id="@+id/google_map"
         class="com.google.android.gms.maps.SupportMapFragment"
@@ -38,41 +26,6 @@
         android:layout_marginTop="0dp"
         android:layout_marginEnd="-1dp"
         android:layout_marginBottom="-2dp" />
-
-    <ImageButton
-        android:id="@+id/settings_button"
-        android:layout_width="70dp"
-        android:layout_height="62dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="315dp"
-
-        android:layout_marginBottom="49dp"
-        android:background="@drawable/rounded_corners"
-        android:src="@android:drawable/ic_menu_manage" />
-
-
-    <ImageButton
-        android:id="@+id/events_button"
-        android:layout_width="70dp"
-        android:layout_height="62dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="115dp"
-        android:layout_marginBottom="49dp"
-        android:background="@drawable/rounded_corners"
-        android:src="@android:drawable/ic_dialog_dialer" />
-
-    <ImageButton
-        android:id="@+id/messages_button"
-        android:layout_width="70dp"
-        android:layout_height="62dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="217dp"
-        android:layout_marginBottom="49dp"
-        android:background="@drawable/rounded_corners"
-        android:src="@android:drawable/ic_dialog_email" />
 
     <LinearLayout
         android:id="@+id/linearLayoutCustomView"
@@ -90,48 +43,215 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <SearchView
-        android:layout_width="390dp"
-        android:layout_height="39dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:alpha="0.75"
-        android:background="@drawable/rounded_corners" />
 
-    <ImageButton
-        android:id="@+id/map_button"
-        android:layout_width="70dp"
-        android:layout_height="62dp"
+    <LinearLayout
+        android:id="@+id/linearLayoutSearchView"
+        android:layout_width="329dp"
+        android:layout_height="108dp"
         android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="23dp"
-        android:layout_marginBottom="49dp"
-        android:background="@drawable/rounded_corners"
-        android:src="@android:drawable/ic_dialog_map" />
+        android:layout_alignParentTop="true"
+        android:layout_gravity="bottom|center_horizontal|fill_horizontal"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:gravity="fill_horizontal"
+        android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/filter_button"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        <SearchView
+            android:id="@+id/map_searchview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:alpha="0.75"
+            android:background="@drawable/rounded_corners"
+            android:focusable="auto"
+            android:gravity="center|fill_horizontal"
+            android:orientation="horizontal" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutFilterButton"
+        android:layout_width="56dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="11dp"
-        android:background="@drawable/rounded_corners"
-        android:src="?attr/actionModeSelectAllDrawable" />
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="6dp"
+        app:tabRippleColor="@null"
+        android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/add_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="320dp"
-        android:layout_marginBottom="159dp"
-        android:background="@drawable/rounded_button"
-        android:src="@drawable/ic_cat_add_custom_40" />
+        <ImageView
+            android:id="@+id/map_filter"
+            android:layout_width="match_parent"
+            android:layout_height="39dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="3dp"
+            android:background="@drawable/rounded_corners"
+            android:padding="9dp"
+            app:tabRippleColor="@null"
+            android:src="@drawable/ic_filter_24" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/toolbar_map_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_alignBottom="@id/google_map"
+        android:orientation="horizontal"
+        android:layout_marginStart="1dp"
+        android:layout_marginBottom="50dp"
+
+        android:showDividers="end">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/toolbar_shape"
+            app:popupTheme="@style/AppTheme"
+            android:alpha="0.9"
+           >
+
+            <LinearLayout
+                android:id="@+id/switch_map"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:divider="@android:drawable/ic_dialog_map"
+                android:dividerPadding="8dp"
+                android:orientation="horizontal"
+                app:tabRippleColor="@null"
+                android:showDividers="end">
+
+                <TextView
+                    android:id="@+id/map_switch"
+                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:drawablePadding="8dp"
+                    android:gravity="fill_horizontal"
+                    android:paddingLeft="24dp"
+                    app:tabRippleColor="@null"
+
+                    android:textAllCaps="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/switch_list"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:divider="@drawable/ic_eventlist_40"
+                android:dividerPadding="8dp"
+                android:orientation="horizontal"
+                android:showDividers="end"
+                app:tabBackground="@drawable/toolbar_shape">
+
+                <TextView
+                    android:id="@+id/list_switch"
+                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/toolbar_shape"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="16dp"
+                    android:textAllCaps="true"
+                    app:tabBackground="@android:color/transparent" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/switch_create_event"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:divider="@drawable/ic_cat_add_button_40"
+                android:dividerPadding="8dp"
+                android:orientation="horizontal"
+                android:showDividers="end">
+
+                <TextView
+                    android:id="@+id/create_event"
+                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/toolbar_shape"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="16dp"
+
+                    android:textAllCaps="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:divider="@android:drawable/ic_dialog_email"
+                android:dividerPadding="8dp"
+                android:orientation="horizontal"
+                android:showDividers="end">
+
+                <TextView
+                    android:id="@+id/messages"
+                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/toolbar_shape"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="16dp"
+
+                    android:textAllCaps="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/switch_profile"
+                android:layout_width="wrap_content"
+                android:layout_height="?attr/actionBarSize"
+                android:divider="@drawable/ic_profile_icon_40"
+                android:dividerPadding="8dp"
+                android:orientation="horizontal"
+                android:showDividers="end">
+
+                <TextView
+                    android:id="@+id/profile_menu"
+                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/toolbar_shape"
+                    android:drawablePadding="8dp"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="25dp"
+                    android:paddingRight="16dp"
+                    android:textAllCaps="true" />
+
+            </LinearLayout>
+
+            <TextView
+
+                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/toolbar_shape"
+                android:drawablePadding="8dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="35dp"
+
+                android:textAllCaps="true" />
+        </androidx.appcompat.widget.Toolbar>
+    </LinearLayout>
 </RelativeLayout>
 
 
