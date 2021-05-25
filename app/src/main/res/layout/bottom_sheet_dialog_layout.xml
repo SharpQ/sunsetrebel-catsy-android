@@ -17,7 +17,7 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:src="@drawable/anita_example"
+            android:src="@drawable/ic_profile_icon_40"
             android:layout_margin="8dp"/>
 
         <TextView
@@ -110,7 +110,7 @@
             android:layout_width="24dp"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:src="@drawable/ic_cat_add_button_40" />
+            android:src="@drawable/ic_add_40" />
 
         <TextView
             android:layout_width="331dp"

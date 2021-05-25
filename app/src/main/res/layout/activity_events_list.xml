@@ -64,7 +64,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
-            android:alpha="0.55"
+            android:alpha="0.85"
             android:background="@drawable/seachview_rounded_corners"
             android:focusable="auto"
             android:gravity="center|fill_horizontal"
@@ -125,7 +125,7 @@
                 android:id="@+id/eventlist_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
-                android:divider="@drawable/ic_filter_40"
+                android:divider="@drawable/ic_filter_icon_40"
                 android:dividerPadding="10dp"
                 android:orientation="horizontal"
                 android:showDividers="beginning"
@@ -180,7 +180,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@android:drawable/ic_dialog_map"
-                android:dividerPadding="8dp"
+                android:dividerPadding="6dp"
+                android:padding="5dp"
                 android:orientation="horizontal"
                 app:tabRippleColor="@null"
                 android:showDividers="end">
@@ -190,10 +191,10 @@
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
+                    android:background="?attr/selectableItemBackground"
                     android:drawablePadding="8dp"
                     android:gravity="fill_horizontal"
-                    android:paddingLeft="24dp"
+                    android:paddingLeft="15dp"
                     app:tabRippleColor="@null"
 
                     android:textAllCaps="true" />
@@ -205,7 +206,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/ic_eventlist_40"
-                android:dividerPadding="8dp"
+                android:dividerPadding="3dp"
+                android:padding="5dp"
                 android:orientation="horizontal"
                 android:showDividers="end"
                 app:tabBackground="@drawable/toolbar_shape">
@@ -218,7 +220,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="25dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true"
                     app:tabBackground="@android:color/transparent" />
@@ -229,8 +231,9 @@
                 android:id="@+id/switch_create_event"
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
-                android:divider="@drawable/ic_cat_add_button_40"
+                android:divider="@drawable/ic_add_40"
                 android:dividerPadding="8dp"
+                android:padding="2dp"
                 android:orientation="horizontal"
                 android:showDividers="end">
 
@@ -242,7 +245,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="20dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -253,7 +256,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@android:drawable/ic_dialog_email"
-                android:dividerPadding="8dp"
+                android:dividerPadding="5dp"
+                android:padding="4dp"
                 android:orientation="horizontal"
                 android:showDividers="end">
 
@@ -265,7 +269,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="25dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -276,8 +280,9 @@
                 android:id="@+id/switch_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
-                android:divider="@drawable/ic_profile_icon_40"
-                android:dividerPadding="8dp"
+                android:divider="@drawable/ic_cat_profile"
+                android:dividerPadding="5dp"
+                android:padding="4dp"
                 android:orientation="horizontal"
                 android:showDividers="end">
 
@@ -287,9 +292,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/toolbar_shape"
-                    android:drawablePadding="8dp"
+                    android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="25dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true" />
 

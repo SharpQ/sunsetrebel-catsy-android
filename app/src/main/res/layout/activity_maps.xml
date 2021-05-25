@@ -46,13 +46,13 @@
 
     <LinearLayout
         android:id="@+id/linearLayoutSearchView"
-        android:layout_width="329dp"
-        android:layout_height="108dp"
+        android:layout_width="310dp"
+        android:layout_height="118dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_gravity="bottom|center_horizontal|fill_horizontal"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         android:gravity="fill_horizontal"
         android:orientation="vertical">
 
@@ -78,10 +78,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="6dp"
-        app:tabRippleColor="@null"
-        android:orientation="vertical">
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="15dp"
+        android:orientation="vertical"
+        app:tabRippleColor="@null">
 
         <ImageView
             android:id="@+id/map_filter"
@@ -93,8 +93,8 @@
             android:layout_marginEnd="3dp"
             android:background="@drawable/rounded_corners"
             android:padding="9dp"
-            app:tabRippleColor="@null"
-            android:src="@drawable/ic_filter_24" />
+            android:src="@drawable/ic_filter_icon_40"
+            app:tabRippleColor="@null" />
     </LinearLayout>
 
     <LinearLayout
@@ -114,7 +114,7 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:background="@drawable/toolbar_shape"
+            android:background="@color/primaryColor"
             app:popupTheme="@style/AppTheme"
             android:alpha="0.9"
            >
@@ -124,7 +124,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@android:drawable/ic_dialog_map"
-                android:dividerPadding="8dp"
+                android:dividerPadding="6dp"
+                android:padding="5dp"
                 android:orientation="horizontal"
                 app:tabRippleColor="@null"
                 android:showDividers="end">
@@ -137,7 +138,7 @@
                     android:background="?attr/selectableItemBackground"
                     android:drawablePadding="8dp"
                     android:gravity="fill_horizontal"
-                    android:paddingLeft="24dp"
+                    android:paddingLeft="15dp"
                     app:tabRippleColor="@null"
 
                     android:textAllCaps="true" />
@@ -149,7 +150,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/ic_eventlist_40"
-                android:dividerPadding="8dp"
+                android:dividerPadding="3dp"
+                android:padding="5dp"
                 android:orientation="horizontal"
                 android:showDividers="end"
                 app:tabBackground="@drawable/toolbar_shape">
@@ -162,7 +164,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="25dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true"
                     app:tabBackground="@android:color/transparent" />
@@ -173,8 +175,9 @@
                 android:id="@+id/switch_create_event"
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
-                android:divider="@drawable/ic_cat_add_button_40"
+                android:divider="@drawable/ic_add_40"
                 android:dividerPadding="8dp"
+                android:padding="2dp"
                 android:orientation="horizontal"
                 android:showDividers="end">
 
@@ -186,7 +189,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="20dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -197,7 +200,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@android:drawable/ic_dialog_email"
-                android:dividerPadding="8dp"
+                android:dividerPadding="5dp"
+                android:padding="4dp"
                 android:orientation="horizontal"
                 android:showDividers="end">
 
@@ -209,7 +213,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="25dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -220,8 +224,9 @@
                 android:id="@+id/switch_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
-                android:divider="@drawable/ic_profile_icon_40"
-                android:dividerPadding="8dp"
+                android:divider="@drawable/ic_cat_profile"
+                android:dividerPadding="5dp"
+                android:padding="4dp"
                 android:orientation="horizontal"
                 android:showDividers="end">
 
@@ -231,9 +236,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/toolbar_shape"
-                    android:drawablePadding="8dp"
+                    android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="25dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true" />
 
