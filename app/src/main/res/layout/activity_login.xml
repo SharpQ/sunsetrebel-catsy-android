@@ -60,19 +60,16 @@
         app:layout_constraintVertical_bias="0.1"
         app:srcCompat="@drawable/ic_baseline_phone_iphone_24" />
 
-    <EditText
-        android:id="@+id/editUserEmail"
-        android:enabled="false"
-        android:visibility="invisible"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayoutUserEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:autofillHints=""
-        android:ems="10"
+        android:enabled="false"
         android:fontFamily="@font/audiowide"
         android:hint="@string/registration_hint_email"
-        android:inputType="textEmailSubject"
         android:textAlignment="textStart"
         android:textColor="@color/primaryTextColor"
         android:textColorHighlight="@color/primaryTextColor"
@@ -80,11 +77,26 @@
         android:textColorLink="@color/primaryTextColor"
         android:textCursorDrawable="@color/primaryLightColor"
         android:textSize="16sp"
+        app:errorTextColor="@color/red_error"
+        app:boxStrokeErrorColor="@color/red_error"
+        app:errorIconTint="@color/red_error"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/switchLogin"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintVertical_bias="0.1">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputEditUserEmail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/audiowide"
+            app:boxBackgroundColor="@color/black_half_transparent"
+            android:background="@color/black_half_transparent"
+            android:ems="10"
+            android:inputType="textEmailSubject" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:id="@+id/linearEditPhone"
@@ -107,22 +119,22 @@
             app:ccp_showArrow="false"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:gravity="center"
             app:ccp_textSize="20sp"
+            android:background="@color/black_half_transparent"
             app:ccp_contentColor="@color/primaryTextColor"
             app:ccpDialog_allowSearch="true"
             app:ccpDialog_backgroundColor="@color/primaryDarkColor"
             app:ccpDialog_textColor="@color/primaryTextColor"
             app:ccpDialog_showTitle="false"/>
 
-        <EditText
-            android:id="@+id/editUserPhone"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLayoutUserPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:autofillHints=""
-            android:ems="10"
             android:fontFamily="@font/audiowide"
             android:hint="@string/registration_hint_phone"
-            android:inputType="phone"
             android:textAlignment="textStart"
             android:textColor="@color/primaryTextColor"
             android:textColorHighlight="@color/primaryTextColor"
@@ -130,33 +142,58 @@
             android:textColorLink="@color/primaryTextColor"
             android:textCursorDrawable="@color/primaryLightColor"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@+id/countryCodeDDL"/>
+            app:errorTextColor="@color/red_error"
+            app:boxStrokeErrorColor="@color/red_error"
+            app:errorIconTint="@color/red_error"
+            app:layout_constraintStart_toEndOf="@+id/countryCodeDDL">
+
+            <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputEditUserPhone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/audiowide"
+            app:boxBackgroundColor="@color/black_half_transparent"
+            android:background="@color/black_half_transparent"
+            android:ems="10"
+            android:inputType="phone" />
+        </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
 
-    <EditText
-        android:id="@+id/editUserPassword"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/inputLayoutUserPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:autofillHints=""
-        android:ems="10"
         android:fontFamily="@font/audiowide"
         android:hint="@string/registration_hint_password"
-        android:inputType="none|textPassword"
         android:textAlignment="textStart"
         android:textColor="@color/primaryTextColor"
         android:textColorHighlight="@color/primaryTextColor"
         android:textColorHint="@color/primaryTextColor"
         android:textColorLink="@color/primaryTextColor"
         android:textSize="16sp"
+        app:errorTextColor="@color/red_error"
+        app:boxStrokeErrorColor="@color/red_error"
+        app:errorIconTint="@color/red_error"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserEmail"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserEmail"
+        app:layout_constraintVertical_bias="0.1"
+        app:passwordToggleEnabled="true">
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/inputEditUserPassword"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="@font/audiowide"
+            app:boxBackgroundColor="@color/black_half_transparent"
+            android:background="@color/black_half_transparent"
+            android:ems="10"
+            android:inputType="none|textPassword" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/buttonLogin"
@@ -171,7 +208,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserPassword"
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserPassword"
         app:layout_constraintVertical_bias="0.9" />
 
     <Button
@@ -210,14 +247,14 @@
     <ProgressBar
         android:id="@+id/progressBarLogin"
         style="?android:attr/progressBarStyle"
-        android:indeterminateDrawable="@drawable/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:indeterminateDrawable="@drawable/progress_bar"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUserPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserPassword" />
 
     <Switch
         android:id="@+id/switchLogin"

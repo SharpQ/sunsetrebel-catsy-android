@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,6 +17,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -29,7 +32,8 @@ import java.util.concurrent.TimeUnit;
 
 public class VerifyPhone extends AppCompatActivity {
     private Button verifyBtn, resentCodeBtn;
-    private EditText inputCode;
+    private TextInputLayout inputLayoutCode;
+    private TextInputEditText inputEditCode;
     private TextView textVerifyPhoneDescription, textResetCountdown;
     private ProgressBar progressBar;
     private String phoneNumber;
@@ -37,6 +41,7 @@ public class VerifyPhone extends AppCompatActivity {
     private String systemVerificationCode;
     private boolean isTutorialNextPage;
     private final FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private Activity mActivity;
     private String verifyDescription;
     private static final long START_TIME_IN_MILLIS = 60000;
     private CountDownTimer mCountDownTimer;
@@ -47,10 +52,12 @@ public class VerifyPhone extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
+        mActivity = VerifyPhone.this;
         fAuth = firebaseAuth.getFAuth();
 
         verifyBtn = findViewById(R.id.buttonVerify);
-        inputCode = findViewById(R.id.editSmsCode);
+        inputLayoutCode = findViewById(R.id.inputLayoutSmsCode);
+        inputEditCode = findViewById(R.id.inputEditSmsCode);
         progressBar = findViewById(R.id.progressBarVerify);
         textVerifyPhoneDescription = findViewById(R.id.textVerifyPhoneDescription);
         textResetCountdown = findViewById(R.id.textResetCountdown);
@@ -72,10 +79,10 @@ public class VerifyPhone extends AppCompatActivity {
         });
 
         verifyBtn.setOnClickListener(v -> {
-            String code = inputCode.getText().toString();
+            String code = inputEditCode.getText().toString();
             if (code.isEmpty() || code.length() <6) {
-                inputCode.setError("Please enter valid code");
-                inputCode.requestFocus();
+                inputLayoutCode.setError("Please enter valid code");
+                inputEditCode.requestFocus();
                 return;
             }
             progressBar.setVisibility(View.VISIBLE);
@@ -96,7 +103,7 @@ public class VerifyPhone extends AppCompatActivity {
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
             super.onCodeSent(s, forceResendingToken);
@@ -104,16 +111,16 @@ public class VerifyPhone extends AppCompatActivity {
         }
 
         @Override
-        public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+        public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
             String code = phoneAuthCredential.getSmsCode();
-            if(code!=null) {
+            if (code != null) {
                 progressBar.setVisibility(View.VISIBLE);
                 verifyCode(code);
             }
         }
 
         @Override
-        public void onVerificationFailed(@NonNull FirebaseException e) {
+        public void onVerificationFailed(FirebaseException e) {
             Toast.makeText(VerifyPhone.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     };
@@ -127,7 +134,7 @@ public class VerifyPhone extends AppCompatActivity {
 
     private void signInUserByCredentials(PhoneAuthCredential credential){
         fAuth.signInWithCredential(credential).addOnCompleteListener(VerifyPhone.this, task -> {
-            if(task.isSuccessful()){
+            if (task.isSuccessful()){
                 Intent intent;
                 if (isTutorialNextPage) {
                     intent = new Intent(getApplicationContext(), Tutorial.class);
@@ -138,7 +145,7 @@ public class VerifyPhone extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else {
-                Toast.makeText(VerifyPhone.this, Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(VerifyPhone.this, "OTP authentication failed!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -167,5 +174,9 @@ public class VerifyPhone extends AppCompatActivity {
         int seconds = (int) (mTimeLeftInMillis) / 1000 % 60;
         String timeLeftFormatted = String.format(Locale.getDefault(), ":%02d", seconds);
         textResetCountdown.setText(timeLeftFormatted);
+    }
+
+    private void restartActivity(Activity activity) {
+        activity.recreate();
     }
 }

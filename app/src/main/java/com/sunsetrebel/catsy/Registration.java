@@ -20,6 +20,8 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -30,7 +32,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Registration extends AppCompatActivity {
-    private EditText mFullName, mEmail, mPhone, mPassword;
+    private TextInputLayout mLayoutFullName, mLayoutEmail, mLayoutPhone, mLayoutPassword;
+    private TextInputEditText mEditFullName, mEditEmail, mEditPhone, mEditPassword;
     private ImageView slideImageEmail;
     private ImageView slideImagePhone;
     private LinearLayout countryAndPhone;
@@ -67,10 +70,14 @@ public class Registration extends AppCompatActivity {
         fAuth = firebaseAuth.getFAuth();
         mCallbackManager = CallbackManager.Factory.create();
 
-        mFullName = findViewById(R.id.editFullName);
-        mEmail = findViewById(R.id.editUserEmail);
-        mPhone = findViewById(R.id.editUserPhone);
-        mPassword = findViewById(R.id.editUserPassword);
+        mLayoutFullName = findViewById(R.id.inputLayoutUserFullName);
+        mEditFullName = findViewById(R.id.inputEditUserFullName);
+        mLayoutEmail = findViewById(R.id.inputLayoutUserEmail);
+        mEditEmail = findViewById(R.id.inputEditUserEmail);
+        mLayoutPhone = findViewById(R.id.inputLayoutUserPhone);
+        mEditPhone = findViewById(R.id.inputEditUserPhone);
+        mLayoutPassword = findViewById(R.id.inputLayoutUserPassword);
+        mEditPassword = findViewById(R.id.inputEditUserPassword);
         mRegisterBtn = findViewById(R.id.buttonRegister);
         progressBar = findViewById(R.id.progressBarRegister);
         mGoogleAuthBtn = findViewById(R.id.buttonRegisterGoogle);
@@ -82,7 +89,7 @@ public class Registration extends AppCompatActivity {
         countryAndPhone = findViewById(R.id.linearEditPhone);
 
         switchRegister.setOnClickListener(v -> {
-            if (mEmail.getVisibility() == View.VISIBLE)
+            if (mLayoutEmail.getVisibility() == View.VISIBLE)
             {
                 setUIStatePhone();
             } else {
@@ -118,36 +125,42 @@ public class Registration extends AppCompatActivity {
         );
 
         mRegisterBtn.setOnClickListener(v -> {
-            String email = mEmail.getText().toString().trim();
+            String email = mEditEmail.getText().toString().trim();
             String countryCode = ccp.getSelectedCountryCode();
-            String phone = mPhone.getText().toString().trim();
-            String password = mPassword.getText().toString().trim();
+            String phone = mEditPhone.getText().toString().trim();
+            String password = mEditPassword.getText().toString().trim();
+            String fullName = mEditFullName.getText().toString().trim();
 
             if (isOTPregistration) {
                 if (TextUtils.isEmpty(phone)) {
-                    mPhone.setError("Please enter phone");
+                    mEditPhone.setError("Please enter phone");
                     return;
                 } else if (!checkPhoneFormat(phone)) {
-                    mPhone.setError("Phone is incorrect");
+                    mEditPhone.setError("Phone is incorrect");
                     return;
                 }
             } else {
                 if (TextUtils.isEmpty(email)) {
-                    mEmail.setError("Please enter email");
+                    mLayoutEmail.setError("Please enter email");
                     return;
                 } else if (!checkEmailFormat(email)) {
-                    mEmail.setError("Email is incorrect");
+                    mLayoutEmail.setError("Email is incorrect");
                     return;
                 }
             }
 
             if (TextUtils.isEmpty(password)) {
-                mPassword.setError("Please enter password");
+                mLayoutPassword.setError("Please enter password");
                 return;
             }
 
             if (password.length() < 6) {
-                mPassword.setError("Please enter password more than 6 characters");
+                mLayoutPassword.setError("Please enter password more than 6 characters");
+                return;
+            }
+
+            if (TextUtils.isEmpty(fullName)) {
+                mLayoutFullName.setError("Please enter your full name");
                 return;
             }
 
@@ -244,8 +257,8 @@ public class Registration extends AppCompatActivity {
 
     private void setUIStateEmail() {
         isOTPregistration = false;
-        mEmail.setVisibility(View.VISIBLE);
-        mEmail.setEnabled(true);
+        mLayoutEmail.setVisibility(View.VISIBLE);
+        mLayoutEmail.setEnabled(true);
         slideImageEmail.setVisibility(View.VISIBLE);
         countryAndPhone.setVisibility(View.INVISIBLE);
         countryAndPhone.setEnabled(false);
@@ -255,8 +268,8 @@ public class Registration extends AppCompatActivity {
 
     private void setUIStatePhone() {
         isOTPregistration = true;
-        mEmail.setVisibility(View.INVISIBLE);
-        mEmail.setEnabled(false);
+        mLayoutEmail.setVisibility(View.INVISIBLE);
+        mLayoutEmail.setEnabled(false);
         slideImageEmail.setVisibility(View.INVISIBLE);
         countryAndPhone.setVisibility(View.VISIBLE);
         countryAndPhone.setEnabled(true);
