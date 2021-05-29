@@ -44,67 +44,63 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayoutSearchView"
         android:layout_width="310dp"
         android:layout_height="118dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|center_horizontal|fill_horizontal"
         android:layout_marginStart="15dp"
         android:layout_marginTop="0dp"
+        android:layout_marginEnd="15dp"
         android:gravity="fill_horizontal"
         android:orientation="vertical">
 
+
         <SearchView
-            android:id="@+id/map_searchview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="40dp"
-            android:alpha="0.75"
+            android:layout_width="316dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="32dp"
+            android:alpha="0.7"
             android:background="@drawable/rounded_corners"
-            android:focusable="auto"
-            android:gravity="center|fill_horizontal"
-            android:orientation="horizontal" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearLayoutFilterButton"
-        android:layout_width="56dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="15dp"
-        android:orientation="vertical"
-        app:tabRippleColor="@null">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/map_filter"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/map_filter"
-            android:layout_width="match_parent"
-            android:layout_height="39dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="40dp"
-            android:layout_marginEnd="3dp"
+            android:layout_marginStart="300dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/rounded_corners"
             android:padding="9dp"
             android:src="@drawable/ic_filter_icon_40"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.972"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.645"
             app:tabRippleColor="@null" />
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar_map_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="155dp"
         android:layout_alignBottom="@id/google_map"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="1dp"
         android:orientation="horizontal"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="50dp"
 
         android:showDividers="end">
 
@@ -114,10 +110,15 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:background="@color/primaryColor"
-            app:popupTheme="@style/AppTheme"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="50dp"
             android:alpha="0.9"
-           >
+            android:background="@color/primaryColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/AppTheme">
 
             <LinearLayout
                 android:id="@+id/switch_map"
@@ -125,10 +126,10 @@
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@android:drawable/ic_dialog_map"
                 android:dividerPadding="6dp"
-                android:padding="5dp"
                 android:orientation="horizontal"
-                app:tabRippleColor="@null"
-                android:showDividers="end">
+                android:padding="5dp"
+                android:showDividers="end"
+                app:tabRippleColor="@null">
 
                 <TextView
                     android:id="@+id/map_switch"
@@ -138,10 +139,10 @@
                     android:background="?attr/selectableItemBackground"
                     android:drawablePadding="8dp"
                     android:gravity="fill_horizontal"
-                    android:paddingLeft="15dp"
-                    app:tabRippleColor="@null"
+                    android:paddingLeft="14dp"
+                    android:textAllCaps="true"
 
-                    android:textAllCaps="true" />
+                    app:tabRippleColor="@null" />
 
             </LinearLayout>
 
@@ -151,8 +152,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/ic_eventlist_40"
                 android:dividerPadding="3dp"
-                android:padding="5dp"
                 android:orientation="horizontal"
+                android:padding="5dp"
                 android:showDividers="end"
                 app:tabBackground="@drawable/toolbar_shape">
 
@@ -177,8 +178,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/ic_add_40"
                 android:dividerPadding="8dp"
-                android:padding="2dp"
                 android:orientation="horizontal"
+                android:padding="2dp"
                 android:showDividers="end">
 
                 <TextView
@@ -201,8 +202,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@android:drawable/ic_dialog_email"
                 android:dividerPadding="5dp"
-                android:padding="4dp"
                 android:orientation="horizontal"
+                android:padding="4dp"
                 android:showDividers="end">
 
                 <TextView
@@ -226,8 +227,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/ic_cat_profile"
                 android:dividerPadding="5dp"
-                android:padding="4dp"
                 android:orientation="horizontal"
+                android:padding="4dp"
                 android:showDividers="end">
 
                 <TextView
@@ -256,7 +257,7 @@
 
                 android:textAllCaps="true" />
         </androidx.appcompat.widget.Toolbar>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>
 
 

@@ -44,7 +44,7 @@
     </LinearLayout>
 
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayoutSearchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,12 +63,18 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:alpha="0.85"
             android:background="@drawable/seachview_rounded_corners"
             android:focusable="auto"
             android:gravity="center|fill_horizontal"
-            android:orientation="horizontal" />
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -76,10 +82,15 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:background="@color/primaryColor"
-            app:popupTheme="@style/AppTheme"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="30dp"
             android:alpha="0.9"
-            >
+            android:background="@color/primaryColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/map_searchview"
+            app:popupTheme="@style/AppTheme">
 
 
             <LinearLayout
@@ -87,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/ic_sort_arrows_40"
-                android:dividerPadding="8dp"
+                android:dividerPadding="9dp"
                 android:orientation="horizontal"
                 android:showDividers="beginning"
                 app:tabRippleColor="@null">
@@ -101,14 +112,15 @@
                     android:drawablePadding="5dp"
                     android:fontFamily="@font/audiowide"
                     android:gravity="center|start|left"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="1dp"
                     android:paddingRight="16dp"
                     android:text="Sort by"
                     android:textAllCaps="true"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     app:tabBackground="@android:color/transparent" />
 
             </LinearLayout>
+
             <TextView
                 android:id="@+id/adb"
                 style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
@@ -126,7 +138,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/ic_filter_icon_40"
-                android:dividerPadding="10dp"
+                android:dividerPadding="9dp"
                 android:orientation="horizontal"
                 android:showDividers="beginning"
                 app:tabBackground="@drawable/toolbar_shape">
@@ -144,16 +156,16 @@
                     android:paddingRight="16dp"
                     android:text="Filter"
                     android:textAllCaps="true"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     app:tabBackground="@android:color/transparent" />
 
             </LinearLayout>
         </androidx.appcompat.widget.Toolbar>
 
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar_map_switch"
         android:layout_width="wrap_content"
         android:layout_height="?attr/actionBarSize"
@@ -170,10 +182,13 @@
             android:layout_height="match_parent"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
-            android:background="@color/primaryColor"
-            app:popupTheme="@style/AppTheme"
             android:alpha="0.9"
-            >
+            android:background="@color/primaryColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:popupTheme="@style/AppTheme">
 
             <LinearLayout
                 android:id="@+id/switch_map"
@@ -181,10 +196,10 @@
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@android:drawable/ic_dialog_map"
                 android:dividerPadding="6dp"
-                android:padding="5dp"
                 android:orientation="horizontal"
-                app:tabRippleColor="@null"
-                android:showDividers="end">
+                android:padding="5dp"
+                android:showDividers="end"
+                app:tabRippleColor="@null">
 
                 <TextView
                     android:id="@+id/map_switch"
@@ -195,9 +210,9 @@
                     android:drawablePadding="8dp"
                     android:gravity="fill_horizontal"
                     android:paddingLeft="15dp"
-                    app:tabRippleColor="@null"
+                    android:textAllCaps="true"
 
-                    android:textAllCaps="true" />
+                    app:tabRippleColor="@null" />
 
             </LinearLayout>
 
@@ -207,8 +222,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/ic_eventlist_40"
                 android:dividerPadding="3dp"
-                android:padding="5dp"
                 android:orientation="horizontal"
+                android:padding="5dp"
                 android:showDividers="end"
                 app:tabBackground="@drawable/toolbar_shape">
 
@@ -233,8 +248,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/ic_add_40"
                 android:dividerPadding="8dp"
-                android:padding="2dp"
                 android:orientation="horizontal"
+                android:padding="2dp"
                 android:showDividers="end">
 
                 <TextView
@@ -257,8 +272,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@android:drawable/ic_dialog_email"
                 android:dividerPadding="5dp"
-                android:padding="4dp"
                 android:orientation="horizontal"
+                android:padding="4dp"
                 android:showDividers="end">
 
                 <TextView
@@ -282,8 +297,8 @@
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/ic_cat_profile"
                 android:dividerPadding="5dp"
-                android:padding="4dp"
                 android:orientation="horizontal"
+                android:padding="4dp"
                 android:showDividers="end">
 
                 <TextView
@@ -312,7 +327,5 @@
 
                 android:textAllCaps="true" />
         </androidx.appcompat.widget.Toolbar>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>
-
-
