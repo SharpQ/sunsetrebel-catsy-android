@@ -19,10 +19,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/splashScreenTheme">
-        <activity
-            android:name=".EventsList"
-            android:label="@string/title_activity_events_list"
-            android:theme="@style/splashScreenTheme"></activity>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -51,8 +47,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".Tutorial" />
+        <activity
+            android:name=".EventsList"
+            android:label="@string/title_activity_events_list"
+            android:theme="@style/splashScreenTheme" />
 
         <uses-library
             android:name="org.apache.http.legacy"
