@@ -167,19 +167,19 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar_map_switch"
-        android:layout_width="wrap_content"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignBottom="@id/list_background"
-        android:orientation="horizontal"
         android:layout_marginStart="0dp"
         android:layout_marginBottom="1dp"
+        android:orientation="horizontal"
 
         android:showDividers="end">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/search_toolbar"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:alpha="0.9"
@@ -189,6 +189,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:popupTheme="@style/AppTheme">
+
+            <TextView
+                android:id="@+id/empty"
+                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="8dp"
+                android:gravity="fill_horizontal"
+                android:paddingLeft="15dp"
+                android:textAllCaps="true"
+
+                app:tabRippleColor="@null" />
 
             <LinearLayout
                 android:id="@+id/switch_map"
@@ -209,7 +222,7 @@
                     android:background="?attr/selectableItemBackground"
                     android:drawablePadding="8dp"
                     android:gravity="fill_horizontal"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="5dp"
                     android:textAllCaps="true"
 
                     app:tabRippleColor="@null" />
@@ -235,7 +248,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="5dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true"
                     app:tabBackground="@android:color/transparent" />
@@ -260,7 +273,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="5dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -284,7 +297,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="5dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -309,23 +322,13 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="5dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true" />
 
             </LinearLayout>
 
-            <TextView
 
-                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/toolbar_shape"
-                android:drawablePadding="8dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="35dp"
-
-                android:textAllCaps="true" />
         </androidx.appcompat.widget.Toolbar>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>

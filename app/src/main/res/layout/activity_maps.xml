@@ -16,8 +16,8 @@
     <fragment
         android:id="@+id/google_map"
         class="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="412dp"
-        android:layout_height="660dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -25,7 +25,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="-1dp"
-        android:layout_marginBottom="-2dp" />
+        android:layout_marginBottom="-3dp" />
 
     <LinearLayout
         android:id="@+id/linearLayoutCustomView"
@@ -60,7 +60,7 @@
 
 
         <SearchView
-            android:layout_width="316dp"
+            android:layout_width="300dp"
             android:layout_height="40dp"
             android:layout_marginTop="60dp"
             android:layout_marginEnd="16dp"
@@ -69,6 +69,7 @@
             android:background="@drawable/rounded_corners"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/map_filter"
+            app:layout_constraintHorizontal_bias="0.25"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -107,18 +108,35 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
+            android:layout_height="64dp"
+            android:layout_alignParentStart="false"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="50dp"
             android:layout_marginBottom="50dp"
             android:alpha="0.9"
             android:background="@color/primaryColor"
+
+            android:gravity="center|fill_vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.555"
             app:popupTheme="@style/AppTheme">
+
+            <TextView
+                android:id="@+id/empty"
+                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                android:layout_width="30dp"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="8dp"
+                android:gravity="fill_horizontal"
+                android:paddingLeft="5dp"
+                android:textAllCaps="true"
+
+                app:tabRippleColor="@null" />
 
             <LinearLayout
                 android:id="@+id/switch_map"
@@ -139,7 +157,7 @@
                     android:background="?attr/selectableItemBackground"
                     android:drawablePadding="8dp"
                     android:gravity="fill_horizontal"
-                    android:paddingLeft="14dp"
+                    android:paddingLeft="5dp"
                     android:textAllCaps="true"
 
                     app:tabRippleColor="@null" />
@@ -165,7 +183,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="5dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true"
                     app:tabBackground="@android:color/transparent" />
@@ -190,7 +208,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="5dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -214,7 +232,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="5dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -239,23 +257,13 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
+                    android:paddingLeft="5dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true" />
 
             </LinearLayout>
 
-            <TextView
 
-                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/toolbar_shape"
-                android:drawablePadding="8dp"
-                android:gravity="center_vertical"
-                android:paddingLeft="35dp"
-
-                android:textAllCaps="true" />
         </androidx.appcompat.widget.Toolbar>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>
