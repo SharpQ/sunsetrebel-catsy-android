@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@drawable/rounded_corners"
+    android:background="@drawable/ui_rounded_corners"
     android:scaleType = "centerCrop"
 
     app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="5dp"
             android:alpha="0.85"
-            android:background="@drawable/seachview_rounded_corners"
+            android:background="@drawable/ui_seachview_rounded_corners"
             android:focusable="auto"
             android:gravity="center|fill_horizontal"
             android:orientation="horizontal" />
@@ -97,7 +97,7 @@
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
+                    android:background="@drawable/ui_toolbar_shape"
                     android:drawablePadding="5dp"
                     android:fontFamily="@font/audiowide"
                     android:gravity="center|start|left"
@@ -129,14 +129,14 @@
                 android:dividerPadding="10dp"
                 android:orientation="horizontal"
                 android:showDividers="beginning"
-                app:tabBackground="@drawable/toolbar_shape">
+                app:tabBackground="@drawable/ui_toolbar_shape">
 
                 <TextView
                     android:id="@+id/eventlist_filter_text"
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
+                    android:background="@drawable/ui_toolbar_shape"
                     android:drawablePadding="5dp"
                     android:fontFamily="@font/audiowide"
                     android:gravity="center|start|left"
@@ -210,14 +210,14 @@
                 android:padding="5dp"
                 android:orientation="horizontal"
                 android:showDividers="end"
-                app:tabBackground="@drawable/toolbar_shape">
+                app:tabBackground="@drawable/ui_toolbar_shape">
 
                 <TextView
                     android:id="@+id/list_switch"
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
+                    android:background="@drawable/ui_toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="15dp"
@@ -242,7 +242,7 @@
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
+                    android:background="@drawable/ui_toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="15dp"
@@ -266,7 +266,7 @@
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
+                    android:background="@drawable/ui_toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="15dp"
@@ -291,7 +291,7 @@
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
+                    android:background="@drawable/ui_toolbar_shape"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
                     android:paddingLeft="15dp"
@@ -305,7 +305,7 @@
                 style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/toolbar_shape"
+                android:background="@drawable/ui_toolbar_shape"
                 android:drawablePadding="8dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="35dp"

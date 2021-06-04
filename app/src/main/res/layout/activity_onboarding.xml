@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_general"
+    android:background="@drawable/im_background_general"
     tools:context=".Onboarding">
 
     <androidx.viewpager.widget.ViewPager
@@ -48,8 +48,8 @@
     <Button
         android:id="@+id/buttonGoToGoogle"
         style="@style/GoogleButton"
-        android:drawableLeft="@drawable/google_icon_32p"
-        android:drawableRight="@drawable/google_icon_32p"
+        android:drawableLeft="@drawable/ic_google_icon_32p"
+        android:drawableRight="@drawable/ic_google_icon_32p"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
