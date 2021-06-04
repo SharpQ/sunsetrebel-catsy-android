@@ -26,8 +26,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.sunsetrebel.adapter.PostagemAdapter;
 import com.sunsetrebel.catsy.EventsList;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.model.Postagem;
 
 import android.location.Location;
 import android.util.Log;
@@ -41,8 +43,11 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -118,6 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(intent);
                switch_list.clearAnimation();
             }
+
         });
 
         try {
@@ -277,7 +283,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     e.printStackTrace();
                 }
                 Address address = addresses.get(0);
-                    String streetAddress = address.getAddressLine(0);
+                String streetAddress = address.getAddressLine(0);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
                 mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_location_sample_35)).title(streetAddress));
             }

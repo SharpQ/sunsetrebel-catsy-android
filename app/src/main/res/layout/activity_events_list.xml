@@ -13,7 +13,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_background"
         android:layout_width="412dp"
         android:layout_height="660dp"
@@ -22,10 +22,10 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginTop="110dp"
         android:layout_marginEnd="-1dp"
-        android:layout_marginBottom="-2dp"
-        android:background="@color/white"/>
+        android:layout_marginBottom="55dp"
+        android:background="@color/white" />
 
     <LinearLayout
         android:id="@+id/linearLayoutCustomView"
@@ -171,7 +171,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/list_background"
         android:layout_marginStart="0dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="-50dp"
         android:orientation="horizontal"
 
         android:showDividers="end">
@@ -193,14 +193,13 @@
             <TextView
                 android:id="@+id/empty"
                 style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                android:layout_width="30dp"
+                android:layout_width="10dp"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackground"
                 android:drawablePadding="8dp"
                 android:gravity="fill_horizontal"
-                android:paddingLeft="15dp"
+                android:paddingLeft="10dp"
                 android:textAllCaps="true"
-
                 app:tabRippleColor="@null" />
 
             <LinearLayout
@@ -248,7 +247,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true"
                     app:tabBackground="@android:color/transparent" />
@@ -273,7 +272,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -297,7 +296,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -322,12 +321,25 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true" />
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/empty_right"
+                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                android:layout_width="35dp"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="8dp"
+                android:gravity="fill_horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="20dp"
+                android:textAllCaps="true"
+
+                app:tabRippleColor="@null" />
 
         </androidx.appcompat.widget.Toolbar>
     </androidx.constraintlayout.widget.ConstraintLayout>

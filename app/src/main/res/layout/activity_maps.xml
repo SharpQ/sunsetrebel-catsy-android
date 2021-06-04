@@ -46,8 +46,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayoutSearchView"
-        android:layout_width="310dp"
-        android:layout_height="118dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -60,11 +60,11 @@
 
 
         <SearchView
-            android:layout_width="300dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="60dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="32dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginEnd="82dp"
+            android:layout_marginBottom="30dp"
             android:alpha="0.7"
             android:background="@drawable/rounded_corners"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -75,21 +75,20 @@
 
         <ImageView
             android:id="@+id/map_filter"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="300dp"
-            android:layout_marginTop="10dp"
             android:background="@drawable/rounded_corners"
             android:padding="9dp"
             android:src="@drawable/ic_filter_icon_40"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.972"
+            app:layout_constraintHorizontal_bias="0.941"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.645"
+            app:layout_constraintVertical_bias="0.625"
             app:tabRippleColor="@null" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -107,8 +106,8 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentStart="false"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="50dp"
@@ -128,12 +127,12 @@
             <TextView
                 android:id="@+id/empty"
                 style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                android:layout_width="30dp"
+                android:layout_width="10dp"
                 android:layout_height="match_parent"
                 android:background="?attr/selectableItemBackground"
-                android:drawablePadding="8dp"
+                android:drawablePadding="12dp"
                 android:gravity="fill_horizontal"
-                android:paddingLeft="5dp"
+                android:paddingLeft="15dp"
                 android:textAllCaps="true"
 
                 app:tabRippleColor="@null" />
@@ -183,7 +182,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true"
                     app:tabBackground="@android:color/transparent" />
@@ -208,7 +207,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -232,7 +231,7 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="8dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
 
                     android:textAllCaps="true" />
@@ -257,13 +256,25 @@
                     android:background="@drawable/toolbar_shape"
                     android:drawablePadding="15dp"
                     android:gravity="center_vertical"
-                    android:paddingLeft="5dp"
+                    android:paddingLeft="15dp"
                     android:paddingRight="16dp"
                     android:textAllCaps="true" />
 
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/empty_right"
+                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
+                android:layout_width="35dp"
+                android:layout_height="match_parent"
+                android:background="?attr/selectableItemBackground"
+                android:drawablePadding="8dp"
+                android:gravity="fill_horizontal"
+                android:paddingLeft="10dp"
+                android:paddingRight="24dp"
+                android:textAllCaps="true"
 
+                app:tabRippleColor="@null" />
         </androidx.appcompat.widget.Toolbar>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </RelativeLayout>
