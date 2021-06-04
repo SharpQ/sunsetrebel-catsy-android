@@ -17,6 +17,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -27,6 +28,8 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.hbb20.CountryCodePicker;
 import com.sunsetrebel.MapsActivity;
+
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,13 +37,10 @@ import java.util.regex.Pattern;
 public class Registration extends AppCompatActivity {
     private TextInputLayout mLayoutFullName, mLayoutEmail, mLayoutPhone, mLayoutPassword;
     private TextInputEditText mEditFullName, mEditEmail, mEditPhone, mEditPassword;
-    private ImageView slideImageEmail;
-    private ImageView slideImagePhone;
+    private ImageView slideImageEmail, slideImagePhone;
     private LinearLayout countryAndPhone;
     private Switch switchRegister;
-    private Button mRegisterBtn;
-    private Button mGoogleAuthBtn;
-    private LoginButton mFacebookAuthBtn;
+    private Button mRegisterBtn, mGoogleAuthBtn, mFacebookAuthBtn;
     private ProgressBar progressBar;
     private int RC_SIGN_IN;
     private boolean isGoogleAuth = false;
@@ -97,7 +97,11 @@ public class Registration extends AppCompatActivity {
             }
         });
 
-        mFacebookAuthBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        mFacebookAuthBtn.setOnClickListener(v -> {
+            LoginManager.getInstance().logInWithReadPermissions(Registration.this, Arrays.asList("public_profile", "email"));
+        });
+
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 firebaseAuthWithFacebook(loginResult.getAccessToken());
