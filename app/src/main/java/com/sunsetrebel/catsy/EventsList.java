@@ -30,7 +30,6 @@ import java.util.List;
 public class EventsList extends AppCompatActivity {
     ImageButton map_button;
     private RecyclerView recyclerPostagem;
-    // Criando uma lista de postagens conforme model
     private List<Postagem> postagens = new ArrayList<>();
 
 
@@ -63,66 +62,16 @@ public class EventsList extends AppCompatActivity {
 
         PostagemAdapter adapter = new PostagemAdapter(postagens);
         recyclerPostagem.setAdapter(adapter);
-        LinearLayout switch_map;
-        // ImageButton mBottton = findViewById(R.id.add_button);
-        // events_button = findViewById(R.id.events_button);
-        switch_map = findViewById(R.id.switch_map);
-        switch_map = findViewById(R.id.switch_map);
-        switch_map.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab;
+        fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-           //Map button finishes listview activity and comes back to the map
-           //     Intent intent = new Intent (EventsList.this, MapsActivity.class);
-           //   startActivity(intent);
                 finish();
             }
         });
-        //CardView examples
-    /*    CardView mBottton = findViewById(R.id.cardView_example_1);
-        mBottton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showBottomSheetDialog();
-            }
 
-            private void showBottomSheetDialog() {
-
-                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(EventsList.this);
-                bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
-
-                LinearLayout copy = bottomSheetDialog.findViewById(R.id.copyLinearLayout);
-                LinearLayout share = bottomSheetDialog.findViewById(R.id.shareLinearLayout);
-                // LinearLayout upload = bottomSheetDialog.findViewById(R.id.uploadLinearLayout);
-                LinearLayout download = bottomSheetDialog.findViewById(R.id.download);
-                LinearLayout delete = bottomSheetDialog.findViewById(R.id.delete);
-
-                bottomSheetDialog.show();
-            }
-
-        });*/
-/*
-        CardView mBottton_usual = findViewById(R.id.cardView_example_2);
-        mBottton_usual.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v1) {
-                showBottomSheetDialogUsual();
-            }
-
-            private void showBottomSheetDialogUsual() {
-
-                final BottomSheetDialog bottomSheetDialog2 = new BottomSheetDialog(EventsList.this);
-                bottomSheetDialog2.setContentView(R.layout.bottom_sheet_dialog_usual_layout);
-
-                LinearLayout copy = bottomSheetDialog2.findViewById(R.id.copyLinearLayout);
-                LinearLayout share = bottomSheetDialog2.findViewById(R.id.shareLinearLayout);
-                // LinearLayout upload = bottomSheetDialog.findViewById(R.id.uploadLinearLayout);
-                LinearLayout download = bottomSheetDialog2.findViewById(R.id.download);
-                LinearLayout delete = bottomSheetDialog2.findViewById(R.id.delete);
-
-                bottomSheetDialog2.show();
-            }
-
-        });*/
     }
 
     public void prepararPostagens() {
@@ -130,30 +79,40 @@ public class EventsList extends AppCompatActivity {
                 "Kiev flight trip",
                 "Tomorrow at 20:00",
                 "Kiev, Podol",
+                "Waiting for you!",
                 "Sonya",
-                R.drawable.imagem1);
+                R.drawable.imagem1,
+                R.drawable.ic_cat_bright
+               );
         this.postagens.add(post);
 
         post = new Postagem(
                 "Downtown excurtion",
                 "20.06.2021 at 13:00",
                 "Kiev, Maidan",
+                "You will see Kiev",
                 "Valentin",
-                R.drawable.imagem2);
+                R.drawable.imagem2,
+                R.drawable.ic_cat_profile);
         this.postagens.add(post);
 
         post = new Postagem("Paris in Kiev afterparty",
                 "Today at 19:00",
                 "Kiev, France Q",
+                "Come to Paris quarter",
                 "Joseph",
-                R.drawable.imagem3);
+                R.drawable.imagem3,
+                R.drawable.ic_catsy_icon
+        );
         this.postagens.add(post);
 
         post = new Postagem("Masha forest survive",
                 "30.06.2021 at 10:00",
                 "Kiev, Bilychi",
+                "1 knife - 1 life",
                 "Masha",
-                R.drawable.imagem4);
+                R.drawable.imagem4,
+                R.drawable.ic_cat_dark_40);
         this.postagens.add(post);
 
     }

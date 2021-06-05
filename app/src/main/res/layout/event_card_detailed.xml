@@ -137,10 +137,10 @@
             android:lines="10"
             android:maxWidth="10dip"
             android:maxLines="10"
-            android:text="\n First line \n Second line \n Third line"
+            android:text="Event description"
             android:textColor="@color/black"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/imageView9"
+            app:layout_constraintBottom_toTopOf="@+id/event_creator_photo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
@@ -165,6 +165,7 @@
             android:id="@+id/card_like_button"
             android:layout_width="38dp"
             android:layout_height="41dp"
+            android:layout_marginStart="1dp"
             android:layout_marginTop="43dp"
             android:layout_marginEnd="4dp"
             android:layout_marginBottom="5dp"
@@ -194,6 +195,7 @@
             android:id="@+id/card_context_button"
             android:layout_width="38dp"
             android:layout_height="41dp"
+            android:layout_marginStart="10dp"
             android:layout_marginBottom="5dp"
             android:background="@color/primaryTextColor"
             android:scaleType="fitStart"
@@ -205,24 +207,24 @@
             app:srcCompat="@drawable/ic_context_menu_black_40" />
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/event_creator_photo"
             android:layout_width="33dp"
             android:layout_height="31dp"
-            android:layout_marginStart="6dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="1dp"
             android:layout_marginEnd="210dp"
             android:layout_marginBottom="13dp"
+            android:src="@drawable/ic_cat_location_sample_35"
             app:layout_constraintBottom_toTopOf="@+id/card_context_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
-            app:layout_constraintTop_toBottomOf="@+id/card_event_detail_description"
-            android:src="@drawable/ic_cat_location_sample_35" />
+            app:layout_constraintTop_toBottomOf="@+id/card_event_detail_description" />
 
         <TextView
             android:id="@+id/event_creator_name"
             android:layout_width="194dp"
             android:layout_height="30dp"
-            android:layout_marginStart="2dp"
+            android:layout_marginStart="5dp"
             android:layout_marginTop="2dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="13dp"
@@ -231,7 +233,7 @@
             android:textColor="@color/black"
             app:layout_constraintBottom_toTopOf="@+id/card_like_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView9"
+            app:layout_constraintStart_toEndOf="@+id/event_creator_photo"
             app:layout_constraintTop_toBottomOf="@+id/card_event_detail_description" />
 
 

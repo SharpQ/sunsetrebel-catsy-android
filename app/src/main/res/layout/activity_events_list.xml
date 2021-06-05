@@ -24,7 +24,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="110dp"
         android:layout_marginEnd="-1dp"
-        android:layout_marginBottom="55dp"
+        android:layout_marginBottom="10dp"
         android:background="@color/white" />
 
     <LinearLayout
@@ -165,182 +165,41 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/toolbar_map_switch"
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/list_background"
-        android:layout_marginStart="0dp"
-        android:layout_marginBottom="-50dp"
-        android:orientation="horizontal"
+        android:layout_height="match_parent"
+        android:layout_marginTop="500dp"
+        android:layout_marginBottom="0dp"
+        >
 
-        android:showDividers="end">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/search_toolbar"
+        <com.google.android.material.bottomappbar.BottomAppBar
+            android:id="@+id/bottomAppBar"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:alpha="0.9"
-            android:background="@color/primaryColor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:popupTheme="@style/AppTheme">
+            android:layout_height="wrap_content"
+            app:fabCradleMargin="20dp"
+            app:fabCradleVerticalOffset="10dp"
+            app:fabCradleRoundedCornerRadius="20dp"
+            android:layout_gravity="bottom">
 
-            <TextView
-                android:id="@+id/empty"
-                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                android:layout_width="5dp"
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottomNavigationView"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackground"
-                android:drawablePadding="8dp"
-                android:gravity="fill_horizontal"
-                android:paddingLeft="10dp"
-                android:textAllCaps="true"
-                app:tabRippleColor="@null" />
+                android:layout_marginEnd="16dp"
+                android:background="@android:color/transparent"
+                app:menu="@menu/bottom_nav_menu" />
 
-            <LinearLayout
-                android:id="@+id/switch_map"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:divider="@android:drawable/ic_dialog_map"
-                android:dividerPadding="6dp"
-                android:orientation="horizontal"
-                android:padding="5dp"
-                android:showDividers="end"
-                app:tabRippleColor="@null">
+        </com.google.android.material.bottomappbar.BottomAppBar>
 
-                <TextView
-                    android:id="@+id/map_switch"
-                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackground"
-                    android:drawablePadding="8dp"
-                    android:gravity="fill_horizontal"
-                    android:paddingLeft="5dp"
-                    android:textAllCaps="true"
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_add"
+            app:layout_anchor="@id/bottomAppBar" />
 
-                    app:tabRippleColor="@null" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/switch_list"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:divider="@drawable/ic_eventlist_40"
-                android:dividerPadding="3dp"
-                android:orientation="horizontal"
-                android:padding="5dp"
-                android:showDividers="end"
-                app:tabBackground="@drawable/toolbar_shape">
-
-                <TextView
-                    android:id="@+id/list_switch"
-                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="16dp"
-                    android:textAllCaps="true"
-                    app:tabBackground="@android:color/transparent" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/switch_create_event"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:divider="@drawable/ic_add_40"
-                android:dividerPadding="8dp"
-                android:orientation="horizontal"
-                android:padding="2dp"
-                android:showDividers="end">
-
-                <TextView
-                    android:id="@+id/create_event"
-                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="16dp"
-
-                    android:textAllCaps="true" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:divider="@android:drawable/ic_dialog_email"
-                android:dividerPadding="5dp"
-                android:orientation="horizontal"
-                android:padding="4dp"
-                android:showDividers="end">
-
-                <TextView
-                    android:id="@+id/messages"
-                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
-                    android:drawablePadding="8dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="16dp"
-
-                    android:textAllCaps="true" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/switch_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="?attr/actionBarSize"
-                android:divider="@drawable/ic_cat_profile"
-                android:dividerPadding="5dp"
-                android:orientation="horizontal"
-                android:padding="4dp"
-                android:showDividers="end">
-
-                <TextView
-                    android:id="@+id/profile_menu"
-                    style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/toolbar_shape"
-                    android:drawablePadding="15dp"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="16dp"
-                    android:textAllCaps="true" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/empty_right"
-                style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-                android:layout_width="35dp"
-                android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackground"
-                android:drawablePadding="8dp"
-                android:gravity="fill_horizontal"
-                android:paddingLeft="10dp"
-                android:paddingRight="20dp"
-                android:textAllCaps="true"
-
-                app:tabRippleColor="@null" />
-
-        </androidx.appcompat.widget.Toolbar>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </RelativeLayout>

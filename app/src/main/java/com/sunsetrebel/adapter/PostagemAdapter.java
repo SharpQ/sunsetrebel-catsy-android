@@ -32,8 +32,10 @@ public class PostagemAdapter extends RecyclerView.Adapter<PostagemAdapter.MyView
         holder.textNome.setText(postagem.getNome());
         holder.textPostagem.setText(postagem.getPostagem());
         holder.textHorario.setText(postagem.getHorario());
+        holder.textEventDescription.setText(postagem.get_event_description());
         holder.textEventCreatorName.setText(postagem.get_event_creator_name());
         holder.imagemPostagem.setImageResource(postagem.getImagem());
+        holder.EventCreatorPhotoPostagem.setImageResource(postagem.get_event_creator_photo());
     }
 
     @Override
@@ -45,8 +47,10 @@ public class PostagemAdapter extends RecyclerView.Adapter<PostagemAdapter.MyView
         private TextView textNome;
         private TextView textPostagem;
         private TextView textHorario;
+        private TextView textEventDescription;
         private TextView textEventCreatorName;
         private ImageView imagemPostagem;
+        private ImageView EventCreatorPhotoPostagem;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -54,8 +58,10 @@ public class PostagemAdapter extends RecyclerView.Adapter<PostagemAdapter.MyView
             textNome = itemView.findViewById(R.id.card_event_name);
             textPostagem = itemView.findViewById(R.id.card_event_date);
             textHorario = itemView.findViewById(R.id.card_event_location);
+            textEventDescription = itemView.findViewById(R.id.card_event_detail_description);
             textEventCreatorName = itemView.findViewById(R.id.event_creator_name);
             imagemPostagem = itemView.findViewById(R.id.card_event_icon);
+            EventCreatorPhotoPostagem = itemView.findViewById(R.id.event_creator_photo);
         }
     }
 }
