@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.15"
-        app:srcCompat="@drawable/christina_unsplash" />
+        app:srcCompat="@drawable/im_cat_onboard" />
 
     <TextView
         android:id="@+id/slideText"

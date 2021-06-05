@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@drawable/rounded_corners"
+    android:background="@drawable/ui_rounded_corners"
     android:scaleType = "centerCrop"
 
     app:layout_constraintEnd_toEndOf="parent"

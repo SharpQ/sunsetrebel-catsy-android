@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--BUTTONS-->
+    <style name="DefaultButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:backgroundTint">@color/primaryLightColor</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:fontFamily">@font/audiowide</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:drawableLeft">@drawable/im_cat_hearts_32p</item>
+        <item name="android:drawableRight">@drawable/im_cat_hearts_32p</item>
+    </style>
+
+    <style name="FacebookButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:backgroundTint">#4867AA</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:fontFamily">@font/audiowide</item>
+        <item name="android:text">@string/facebook_authentication</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:drawableLeft">@drawable/com_facebook_button_icon</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="GoogleButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:backgroundTint">@color/googleBtnColor</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:fontFamily">@font/audiowide</item>
+        <item name="android:text">@string/google_authentication</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:drawableLeft">@drawable/ic_google_logo</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+</resources>
