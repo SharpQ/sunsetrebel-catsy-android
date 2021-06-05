@@ -26,8 +26,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.sunsetrebel.adapter.PostagemAdapter;
 import com.sunsetrebel.catsy.EventsList;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.model.Postagem;
 
 import android.location.Location;
 import android.util.Log;
@@ -41,8 +44,11 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -92,6 +98,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
       //Top and navigation bar transparency
 
+
+
        getWindow().setStatusBarColor(Color.parseColor("#20111111"));
        getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -107,17 +115,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        LinearLayout switch_list;
-       // ImageButton mBottton = findViewById(R.id.add_button);
-       // events_button = findViewById(R.id.events_button);
-        switch_list = findViewById(R.id.switch_list);
-        switch_list.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab;
+        fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent (MapsActivity.this, EventsList.class);
                 startActivity(intent);
-               switch_list.clearAnimation();
+               fab.clearAnimation();
             }
+
         });
 
         try {
@@ -131,7 +138,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
+/*
         LinearLayout create_event;
         create_event = findViewById(R.id.switch_create_event);
         create_event.setOnClickListener(new View.OnClickListener() {
@@ -155,7 +162,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 bottomSheetDialog.show();
             }
 
-        });
+        });*/
     }
 
     /**
@@ -277,7 +284,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     e.printStackTrace();
                 }
                 Address address = addresses.get(0);
-                    String streetAddress = address.getAddressLine(0);
+                String streetAddress = address.getAddressLine(0);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
                 mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_location_sample_35)).title(streetAddress));
             }
