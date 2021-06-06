@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,9 +20,9 @@ public class SliderAdapter extends PagerAdapter {
     }
 
     public int[] slideImages = {
-            R.drawable.christina_unsplash,
-            R.drawable.bez_nazvan,
-            R.drawable.the_meetup
+            R.drawable.im_cat_onboard,
+            R.drawable.im_cats_onboard,
+            R.drawable.im_meetup_onboard
     };
 
     public int[] slideTitles = {

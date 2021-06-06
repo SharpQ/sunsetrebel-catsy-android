@@ -4,13 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_general"
+    android:background="@drawable/im_background_general"
     tools:context=".Onboarding">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/slideViewPager"
         android:layout_width="match_parent"
-        android:layout_height="490dp"
+        android:layout_height="470dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,13 +37,7 @@
 
     <Button
         android:id="@+id/buttonGoToRegister"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/primaryLightColor"
-        android:textColor="@color/primaryTextColor"
-        android:fontFamily="@font/audiowide"
+        style="@style/DefaultButton"
         android:text="@string/registration_button_register"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -53,14 +47,9 @@
 
     <Button
         android:id="@+id/buttonGoToGoogle"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/primaryLightColor"
-        android:textColor="@color/primaryTextColor"
-        android:fontFamily="@font/audiowide"
-        android:text="@string/google_authentication"
+        style="@style/GoogleButton"
+        android:drawableLeft="@drawable/ic_google_icon_32p"
+        android:drawableRight="@drawable/ic_google_icon_32p"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,13 +58,7 @@
 
     <Button
         android:id="@+id/buttonGoToLogin"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/primaryLightColor"
-        android:textColor="@color/primaryTextColor"
-        android:fontFamily="@font/audiowide"
+        style="@style/DefaultButton"
         android:text="@string/login_button_login"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

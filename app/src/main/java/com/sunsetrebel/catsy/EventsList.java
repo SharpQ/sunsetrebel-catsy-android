@@ -43,29 +43,16 @@ public class EventsList extends AppCompatActivity {
         }
 
         recyclerPostagem = findViewById(R.id.list_background);
-
-        // Definir layout
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerPostagem.setLayoutManager(layoutManager);
-
-        // Configuração HORIZONTAL da aplicação
-        // LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
-        // layoutManager1.setOrientation(LinearLayout.HORIZONTAL);
-        // recyclerPostagem.setLayoutManager(layoutManager1);
-
-        // Configuração GRID da aplicação
-        // RecyclerView.LayoutManager layoutManager3 = new GridLayoutManager(this, 2);
-        // recyclerPostagem.setLayoutManager(layoutManager3);
-
-        // Definir o adapter
         this.prepararPostagens();
-
         PostagemAdapter adapter = new PostagemAdapter(postagens);
         recyclerPostagem.setAdapter(adapter);
-        FloatingActionButton fab;
-        fab = findViewById(R.id.fab);
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        LinearLayout switch_map;
+        switch_map = findViewById(R.id.switch_map);
+        switch_map = findViewById(R.id.switch_map);
+        switch_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -82,7 +69,7 @@ public class EventsList extends AppCompatActivity {
                 "Waiting for you!",
                 "Sonya",
                 R.drawable.imagem1,
-                R.drawable.ic_cat_bright
+                R.drawable.im_cat_onboard
                );
         this.postagens.add(post);
 
@@ -93,7 +80,7 @@ public class EventsList extends AppCompatActivity {
                 "You will see Kiev",
                 "Valentin",
                 R.drawable.imagem2,
-                R.drawable.ic_cat_profile);
+                R.drawable.ic_cat_add_custom_40);
         this.postagens.add(post);
 
         post = new Postagem("Paris in Kiev afterparty",
@@ -102,7 +89,7 @@ public class EventsList extends AppCompatActivity {
                 "Come to Paris quarter",
                 "Joseph",
                 R.drawable.imagem3,
-                R.drawable.ic_catsy_icon
+                R.drawable.im_cat_hearts_32p
         );
         this.postagens.add(post);
 
@@ -112,7 +99,7 @@ public class EventsList extends AppCompatActivity {
                 "1 knife - 1 life",
                 "Masha",
                 R.drawable.imagem4,
-                R.drawable.ic_cat_dark_40);
+                R.drawable.ic_cat_blue_40);
         this.postagens.add(post);
 
     }

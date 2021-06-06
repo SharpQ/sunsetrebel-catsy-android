@@ -18,6 +18,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -29,19 +30,17 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.hbb20.CountryCodePicker;
 import com.sunsetrebel.MapsActivity;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Login extends AppCompatActivity {
     private TextInputLayout mLayoutEmail, mLayoutPhone, mLayoutPassword;
     private TextInputEditText mEditEmail, mEditPhone, mEditPassword;
-    private ImageView slideImageEmail;
-    private ImageView slideImagePhone;
+    private ImageView slideImageEmail, slideImagePhone;
     private LinearLayout countryAndPhone;
     private Switch switchLogin;
-    private Button mLoginBtn;
-    private Button mGoogleAuthBtn;
-    private LoginButton mFacebookAuthBtn;
+    private Button mLoginBtn, mGoogleAuthBtn, mFacebookAuthBtn;
     private ProgressBar progressBar;
     private int RC_SIGN_IN;
     private boolean isGoogleAuth = false;
@@ -96,7 +95,11 @@ public class Login extends AppCompatActivity {
             }
         });
 
-        mFacebookAuthBtn.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
+        mFacebookAuthBtn.setOnClickListener(v -> {
+            LoginManager.getInstance().logInWithReadPermissions(Login.this, Arrays.asList("public_profile", "email"));
+        });
+
+        LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 firebaseAuthWithFacebook(loginResult.getAccessToken());

@@ -26,11 +26,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sunsetrebel.adapter.PostagemAdapter;
 import com.sunsetrebel.catsy.EventsList;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.model.Postagem;
 
 import android.location.Location;
 import android.util.Log;
@@ -44,11 +41,8 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -61,7 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     FusedLocationProviderClient fusedLocationProviderClient;
 
-   @Override
+    @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
@@ -81,11 +75,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-                        // Hide the nav bar and status bar
-                      //  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                     //   | View.SYSTEM_UI_FLAG_FULLSCREEN)
+        // Hide the nav bar and status bar
+        //  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        //   | View.SYSTEM_UI_FLAG_FULLSCREEN)
         ;}
-        // Shows the system bars by removing all the flags
+    // Shows the system bars by removing all the flags
 // except for the ones that make the content appear under the system bars.
     private void showSystemUI() {
         View decorView = getWindow().getDecorView();
@@ -96,12 +90,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-      //Top and navigation bar transparency
+        //Top and navigation bar transparency
 
-
-
-       getWindow().setStatusBarColor(Color.parseColor("#20111111"));
-       getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
+        getWindow().setStatusBarColor(Color.parseColor("#20111111"));
+        getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -115,16 +107,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        FloatingActionButton fab;
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        LinearLayout switch_list;
+        // ImageButton mBottton = findViewById(R.id.add_button);
+        // events_button = findViewById(R.id.events_button);
+        switch_list = findViewById(R.id.switch_list);
+        switch_list.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent (MapsActivity.this, EventsList.class);
                 startActivity(intent);
-               fab.clearAnimation();
+                switch_list.clearAnimation();
             }
-
         });
 
         try {
@@ -138,7 +131,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-/*
+
         LinearLayout create_event;
         create_event = findViewById(R.id.switch_create_event);
         create_event.setOnClickListener(new View.OnClickListener() {
@@ -162,7 +155,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 bottomSheetDialog.show();
             }
 
-        });*/
+        });
     }
 
     /**
