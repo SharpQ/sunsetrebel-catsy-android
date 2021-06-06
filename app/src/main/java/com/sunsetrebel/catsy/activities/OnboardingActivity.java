@@ -45,7 +45,7 @@ public class OnboardingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_onboarding);
         mActivity = OnboardingActivity.this;
         firebaseAuthService.createGoogleAuthRequestGetInstance(getApplicationContext());
-        fAuth = firebaseAuthService.getFAuth();
+        fAuth = firebaseAuthService.getInstance();
 
         mSlideViewPager = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);

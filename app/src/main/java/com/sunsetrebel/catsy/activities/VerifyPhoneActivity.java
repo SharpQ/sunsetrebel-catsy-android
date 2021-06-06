@@ -21,6 +21,7 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -31,13 +32,12 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     private TextInputEditText inputEditCode;
     private TextView textVerifyPhoneDescription, textResetCountdown;
     private ProgressBar progressBar;
-    private String phoneNumber;
+    private String phoneNumber, fullName, systemVerificationCode, verifyDescription;
     private com.google.firebase.auth.FirebaseAuth fAuth;
-    private String systemVerificationCode;
     private boolean isTutorialNextPage;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
+    private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
     private Activity mActivity;
-    private String verifyDescription;
     private static final long START_TIME_IN_MILLIS = 60000;
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning = false;
@@ -48,7 +48,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
         mActivity = VerifyPhoneActivity.this;
-        fAuth = firebaseAuthService.getFAuth();
+        fAuth = firebaseAuthService.getInstance();
 
         verifyBtn = findViewById(R.id.buttonVerify);
         inputLayoutCode = findViewById(R.id.inputLayoutSmsCode);
@@ -60,6 +60,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         progressBar.setVisibility(View.GONE);
 
         phoneNumber = getIntent().getStringExtra("phoneNumber");
+        fullName = getIntent().getStringExtra("fullName");
         verifyDescription = getResources().getString(R.string.verify_phone_description) + phoneNumber;
         textVerifyPhoneDescription.setText(verifyDescription);
         isTutorialNextPage = getIntent().getBooleanExtra("isTutorialNextPage", false);
@@ -130,6 +131,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     private void signInUserByCredentials(PhoneAuthCredential credential){
         fAuth.signInWithCredential(credential).addOnCompleteListener(VerifyPhoneActivity.this, task -> {
             if (task.isSuccessful()){
+                firebaseFirestoreService.createNewUserByPhone(fAuth.getCurrentUser().getUid(), fullName, phoneNumber);
                 Intent intent;
                 if (isTutorialNextPage) {
                     intent = new Intent(getApplicationContext(), TutorialActivity.class);

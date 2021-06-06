@@ -16,7 +16,7 @@ import com.sunsetrebel.catsy.R;
 public class FirebaseAuthService {
     private GoogleSignInClient mGoogleSignInClient;
     private android.content.Context context;
-    private static com.google.firebase.auth.FirebaseAuth fAuth;
+    private com.google.firebase.auth.FirebaseAuth fAuth;
     private final static int RC_SIGN_IN = 123;
     private FirebaseUser user;
 
@@ -24,8 +24,8 @@ public class FirebaseAuthService {
         return RC_SIGN_IN;
     }
 
-    public com.google.firebase.auth.FirebaseAuth getFAuth() {
-        return fAuth;
+    public com.google.firebase.auth.FirebaseAuth getInstance() {
+        return fAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
     }
 
     public void setFirebaseUser(FirebaseUser user) {
@@ -60,7 +60,6 @@ public class FirebaseAuthService {
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
-        fAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
     }
 
     public Intent signInGoogle(Context context) {

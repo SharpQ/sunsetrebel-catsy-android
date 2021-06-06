@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         mActivity = LoginActivity.this;
         firebaseAuthService.createGoogleAuthRequestGetInstance(getApplicationContext());
         firebaseAuthService.InitializeFacebookSdk(getApplicationContext());
-        fAuth = firebaseAuthService.getFAuth();
+        fAuth = firebaseAuthService.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
 
         mLayoutEmail = findViewById(R.id.inputLayoutUserEmail);
