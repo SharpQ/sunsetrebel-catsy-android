@@ -1,14 +1,16 @@
-package com.sunsetrebel.catsy;
+package com.sunsetrebel.catsy.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import com.sunsetrebel.MapsActivity;
 
-public class Tutorial extends AppCompatActivity {
+import com.sunsetrebel.catsy.utils.FirebaseAuthService;
+import com.sunsetrebel.catsy.R;
+
+public class TutorialActivity extends AppCompatActivity {
     private Button mSkipBtn;
     private Button mSignOut;
-    private final FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +26,8 @@ public class Tutorial extends AppCompatActivity {
         });
 
         mSignOut.setOnClickListener(v -> {
-            firebaseAuth.signOutFirebase();
-            startActivity(new Intent(getApplicationContext(), Login.class));
+            firebaseAuthService.signOutFirebase();
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             finish();
         });
     }

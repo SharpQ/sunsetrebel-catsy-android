@@ -1,4 +1,4 @@
-package com.sunsetrebel.catsy;
+package com.sunsetrebel.catsy.activities;
 
 import android.annotation.SuppressLint;
 import android.location.Location;
@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.sunsetrebel.catsy.R;
 
 class MyLocationLayerActivity extends AppCompatActivity
         implements GoogleMap.OnMyLocationButtonClickListener,

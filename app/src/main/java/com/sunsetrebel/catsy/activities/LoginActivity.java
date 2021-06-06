@@ -1,4 +1,4 @@
-package com.sunsetrebel.catsy;
+package com.sunsetrebel.catsy.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -20,7 +19,6 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -28,13 +26,14 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.hbb20.CountryCodePicker;
-import com.sunsetrebel.MapsActivity;
+import com.sunsetrebel.catsy.utils.FirebaseAuthService;
+import com.sunsetrebel.catsy.R;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Login extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private TextInputLayout mLayoutEmail, mLayoutPhone, mLayoutPassword;
     private TextInputEditText mEditEmail, mEditPhone, mEditPassword;
     private ImageView slideImageEmail, slideImagePhone;
@@ -46,7 +45,7 @@ public class Login extends AppCompatActivity {
     private boolean isGoogleAuth = false;
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private CallbackManager mCallbackManager;
-    private final FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
     private Activity mActivity;
     private boolean isOTPregistration = true;
     private CountryCodePicker ccp;
@@ -54,7 +53,7 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(firebaseAuth.checkCurrentUser()) {
+        if(firebaseAuthService.checkCurrentUser()) {
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
             finish();
         }
@@ -64,10 +63,10 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        mActivity = Login.this;
-        firebaseAuth.createGoogleAuthRequestGetInstance(getApplicationContext());
-        firebaseAuth.InitializeFacebookSdk(getApplicationContext());
-        fAuth = firebaseAuth.getFAuth();
+        mActivity = LoginActivity.this;
+        firebaseAuthService.createGoogleAuthRequestGetInstance(getApplicationContext());
+        firebaseAuthService.InitializeFacebookSdk(getApplicationContext());
+        fAuth = firebaseAuthService.getFAuth();
         mCallbackManager = CallbackManager.Factory.create();
 
         mLayoutEmail = findViewById(R.id.inputLayoutUserEmail);
@@ -96,7 +95,7 @@ public class Login extends AppCompatActivity {
         });
 
         mFacebookAuthBtn.setOnClickListener(v -> {
-            LoginManager.getInstance().logInWithReadPermissions(Login.this, Arrays.asList("public_profile", "email"));
+            LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email"));
         });
 
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -119,8 +118,8 @@ public class Login extends AppCompatActivity {
         });
 
         mGoogleAuthBtn.setOnClickListener(v -> {
-            RC_SIGN_IN = FirebaseAuth.getRCSignIn();
-            Intent signInIntent = firebaseAuth.signInGoogle(getApplicationContext());
+            RC_SIGN_IN = FirebaseAuthService.getRCSignIn();
+            Intent signInIntent = firebaseAuthService.signInGoogle(getApplicationContext());
             startActivityForResult(signInIntent, RC_SIGN_IN);
             isGoogleAuth = true;
             }
@@ -133,30 +132,16 @@ public class Login extends AppCompatActivity {
             String password = mEditPassword.getText().toString().trim();
 
             if (isOTPregistration) {
-                if (TextUtils.isEmpty(phone)) {
-                    mEditPhone.setError("Please enter phone");
-                    return;
-                } else if (!checkPhoneFormat(phone)) {
-                    mEditPhone.setError("Phone is incorrect");
+                if(!validatePhone(phone)) {
                     return;
                 }
             } else {
-                if (TextUtils.isEmpty(email)) {
-                    mLayoutEmail.setError("Please enter email");
-                    return;
-                } else if (!checkEmailFormat(email)) {
-                    mLayoutEmail.setError("Email is incorrect");
+                if(!validateEmail(email)) {
                     return;
                 }
             }
 
-            if (TextUtils.isEmpty(password)) {
-                mLayoutPassword.setError("Please enter password");
-                return;
-            }
-
-            if (password.length() < 6) {
-                mLayoutPassword.setError("Please enter password more than 6 characters");
+            if(!validatePassword(password)) {
                 return;
             }
 
@@ -164,7 +149,7 @@ public class Login extends AppCompatActivity {
             phone = "+" + countryCode + phone;
 
             if (isOTPregistration) {
-                Intent intent = new Intent(getApplicationContext(), VerifyPhone.class);
+                Intent intent = new Intent(getApplicationContext(), VerifyPhoneActivity.class);
                 intent.putExtra("phoneNumber", phone);
                 intent.putExtra("isTutorialNextPage", false);
                 startActivity(intent);
@@ -179,11 +164,44 @@ public class Login extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         restartActivity(mActivity);
                         setUIStatePhone();
-                        Toast.makeText(Login.this, "Email authentication failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Email authentication failed!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         });
+    }
+
+    private boolean validateEmail(String email) {
+        if (TextUtils.isEmpty(email)) {
+            mLayoutEmail.setError("Please enter email");
+            return false;
+        } else if (!checkEmailFormat(email)) {
+            mLayoutEmail.setError("Email is incorrect");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validatePhone(String phone) {
+        if (TextUtils.isEmpty(phone)) {
+            mEditPhone.setError("Please enter phone");
+            return false;
+        } else if (!checkPhoneFormat(phone)) {
+            mEditPhone.setError("Phone is incorrect");
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validatePassword(String password) {
+        if (TextUtils.isEmpty(password)) {
+            mLayoutPassword.setError("Please enter password");
+            return false;
+        } else if (password.length() < 6) {
+            mLayoutPassword.setError("Please enter password more than 6 characters");
+            return false;
+        }
+        return true;
     }
 
     private boolean checkEmailFormat(String text) {
@@ -206,7 +224,7 @@ public class Login extends AppCompatActivity {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
         if (isGoogleAuth) {
-            GoogleSignInAccount account = firebaseAuth.onFirebaseResponse(requestCode, data);
+            GoogleSignInAccount account = firebaseAuthService.onFirebaseResponse(requestCode, data);
             if (account != null) {
                 firebaseAuthWithGoogle(account.getIdToken());
             }
@@ -219,7 +237,7 @@ public class Login extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                         finish();
                     } else {
@@ -236,7 +254,7 @@ public class Login extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                         finish();
                     } else {

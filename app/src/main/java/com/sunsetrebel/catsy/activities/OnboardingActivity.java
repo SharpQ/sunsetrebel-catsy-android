@@ -1,4 +1,4 @@
-package com.sunsetrebel.catsy;
+package com.sunsetrebel.catsy.activities;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import android.app.Activity;
@@ -13,9 +13,11 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.sunsetrebel.MapsActivity;
+import com.sunsetrebel.catsy.utils.FirebaseAuthService;
+import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.adapters.SliderAdapter;
 
-public class Onboarding extends AppCompatActivity {
+public class OnboardingActivity extends AppCompatActivity {
 
     private LinearLayout mDotLayout;
     private ViewPager mSlideViewPager;
@@ -25,13 +27,13 @@ public class Onboarding extends AppCompatActivity {
     private Button mGoogleAuthBtn;
     private int RC_SIGN_IN;
     private com.google.firebase.auth.FirebaseAuth fAuth;
-    private final FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
     private Activity mActivity;
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(firebaseAuth.checkCurrentUser()) {
+        if(firebaseAuthService.checkCurrentUser()) {
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
             finish();
         }
@@ -41,9 +43,9 @@ public class Onboarding extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onboarding);
-        mActivity = Onboarding.this;
-        firebaseAuth.createGoogleAuthRequestGetInstance(getApplicationContext());
-        fAuth = firebaseAuth.getFAuth();
+        mActivity = OnboardingActivity.this;
+        firebaseAuthService.createGoogleAuthRequestGetInstance(getApplicationContext());
+        fAuth = firebaseAuthService.getFAuth();
 
         mSlideViewPager = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);
@@ -57,16 +59,16 @@ public class Onboarding extends AppCompatActivity {
         mSlideViewPager.addOnPageChangeListener(viewListener);
 
         mToRegisterBtn.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), Registration.class));
+            startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
         });
 
         mToLoginBtn.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), Login.class));
+            startActivity(new Intent(getApplicationContext(), LoginActivity.class));
         });
 
         mGoogleAuthBtn.setOnClickListener(v -> {
-                    RC_SIGN_IN = FirebaseAuth.getRCSignIn();
-                    Intent signInIntent = firebaseAuth.signInGoogle(getApplicationContext());
+                    RC_SIGN_IN = FirebaseAuthService.getRCSignIn();
+                    Intent signInIntent = firebaseAuthService.signInGoogle(getApplicationContext());
                     startActivityForResult(signInIntent, RC_SIGN_IN);
                 }
         );
@@ -108,7 +110,7 @@ public class Onboarding extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        GoogleSignInAccount account = firebaseAuth.onFirebaseResponse(requestCode, data);
+        GoogleSignInAccount account = firebaseAuthService.onFirebaseResponse(requestCode, data);
         if (account != null) {
             firebaseAuthWithGoogle(account.getIdToken());
         }
@@ -120,7 +122,7 @@ public class Onboarding extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuth.setFirebaseUser(fAuth.getCurrentUser());
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                         finish();
                     } else {

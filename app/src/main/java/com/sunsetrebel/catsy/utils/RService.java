@@ -1,8 +1,8 @@
-package com.sunsetrebel;
+package com.sunsetrebel.catsy.utils;
 
 
-public final class R {
-    public R() {
+public final class RService {
+    public RService() {
         throw new RuntimeException("Stub!");
     }
 

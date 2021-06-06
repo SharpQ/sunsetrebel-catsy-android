@@ -1,4 +1,4 @@
-package com.sunsetrebel.catsy;
+package com.sunsetrebel.catsy.utils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,8 +11,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.sunsetrebel.catsy.R;
 
-public class FirebaseAuth {
+public class FirebaseAuthService {
     private GoogleSignInClient mGoogleSignInClient;
     private android.content.Context context;
     private static com.google.firebase.auth.FirebaseAuth fAuth;

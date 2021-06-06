@@ -1,4 +1,4 @@
-package com.sunsetrebel;
+package com.sunsetrebel.catsy.utils;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -15,7 +15,7 @@ import android.widget.Toast;
 /**
  * Utility class for access to runtime permissions.
  */
-public abstract class PermissionUtils {
+public abstract class RequestPermissionService {
 
     /**
      * Requests the fine location permission. If a rationale with an additional explanation should
@@ -25,7 +25,7 @@ public abstract class PermissionUtils {
                                          String permission, boolean finishActivity) {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
             // Display a dialog with rationale.
-            PermissionUtils.RationaleDialog.newInstance(requestId, finishActivity)
+            RequestPermissionService.RationaleDialog.newInstance(requestId, finishActivity)
                     .show(activity.getSupportFragmentManager(), "dialog");
         } else {
             // Location permission has not been granted yet, request it.
@@ -86,7 +86,7 @@ public abstract class PermissionUtils {
         public void onDismiss(DialogInterface dialog) {
             super.onDismiss(dialog);
             if (finishActivity) {
-                Toast.makeText(getActivity(), R.string.permission_required_toast,
+                Toast.makeText(getActivity(), RService.string.permission_required_toast,
                         Toast.LENGTH_SHORT).show();
                 getActivity().finish();
             }
@@ -158,7 +158,7 @@ public abstract class PermissionUtils {
             super.onDismiss(dialog);
             if (finishActivity) {
                 Toast.makeText(getActivity(),
-                        R.string.permission_required_toast,
+                        RService.string.permission_required_toast,
                         Toast.LENGTH_SHORT)
                         .show();
                 getActivity().finish();

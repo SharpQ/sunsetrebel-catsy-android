@@ -1,36 +1,31 @@
-package com.sunsetrebel.catsy;
+package com.sunsetrebel.catsy.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.sunsetrebel.MapsActivity;
+import com.sunsetrebel.catsy.utils.FirebaseAuthService;
+import com.sunsetrebel.catsy.R;
 
 import java.util.Locale;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
-public class VerifyPhone extends AppCompatActivity {
+public class VerifyPhoneActivity extends AppCompatActivity {
     private Button verifyBtn, resentCodeBtn;
     private TextInputLayout inputLayoutCode;
     private TextInputEditText inputEditCode;
@@ -40,7 +35,7 @@ public class VerifyPhone extends AppCompatActivity {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private String systemVerificationCode;
     private boolean isTutorialNextPage;
-    private final FirebaseAuth firebaseAuth = new FirebaseAuth();
+    private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
     private Activity mActivity;
     private String verifyDescription;
     private static final long START_TIME_IN_MILLIS = 60000;
@@ -52,8 +47,8 @@ public class VerifyPhone extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
-        mActivity = VerifyPhone.this;
-        fAuth = firebaseAuth.getFAuth();
+        mActivity = VerifyPhoneActivity.this;
+        fAuth = firebaseAuthService.getFAuth();
 
         verifyBtn = findViewById(R.id.buttonVerify);
         inputLayoutCode = findViewById(R.id.inputLayoutSmsCode);
@@ -121,7 +116,7 @@ public class VerifyPhone extends AppCompatActivity {
 
         @Override
         public void onVerificationFailed(FirebaseException e) {
-            Toast.makeText(VerifyPhone.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(VerifyPhoneActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -133,11 +128,11 @@ public class VerifyPhone extends AppCompatActivity {
     }
 
     private void signInUserByCredentials(PhoneAuthCredential credential){
-        fAuth.signInWithCredential(credential).addOnCompleteListener(VerifyPhone.this, task -> {
+        fAuth.signInWithCredential(credential).addOnCompleteListener(VerifyPhoneActivity.this, task -> {
             if (task.isSuccessful()){
                 Intent intent;
                 if (isTutorialNextPage) {
-                    intent = new Intent(getApplicationContext(), Tutorial.class);
+                    intent = new Intent(getApplicationContext(), TutorialActivity.class);
                 }
                 else {
                     intent = new Intent(getApplicationContext(), MapsActivity.class);
@@ -145,7 +140,7 @@ public class VerifyPhone extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else {
-                Toast.makeText(VerifyPhone.this, "OTP authentication failed!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VerifyPhoneActivity.this, "OTP authentication failed!", Toast.LENGTH_SHORT).show();
             }
         });
     }

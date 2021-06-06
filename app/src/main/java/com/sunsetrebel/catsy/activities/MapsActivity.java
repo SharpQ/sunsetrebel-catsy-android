@@ -1,4 +1,4 @@
-package com.sunsetrebel;
+package com.sunsetrebel.catsy.activities;
 
 import androidx.core.app.ActivityCompat;
 
@@ -25,12 +25,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.sunsetrebel.adapter.PostagemAdapter;
-import com.sunsetrebel.catsy.EventsList;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.model.Postagem;
 
 import android.location.Location;
 import android.util.Log;
@@ -39,16 +35,12 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -120,7 +112,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent (MapsActivity.this, EventsList.class);
+                Intent intent = new Intent (MapsActivity.this, EventsListActivity.class);
                 startActivity(intent);
                fab.clearAnimation();
             }

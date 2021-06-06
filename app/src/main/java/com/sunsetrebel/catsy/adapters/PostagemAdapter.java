@@ -1,4 +1,4 @@
-package com.sunsetrebel.adapter;
+package com.sunsetrebel.catsy.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -6,7 +6,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.sunsetrebel.model.Postagem;
+import com.sunsetrebel.catsy.models.Postagem;
 
 import java.util.List;
 import com.sunsetrebel.catsy.R;

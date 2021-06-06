@@ -1,33 +1,25 @@
-package com.sunsetrebel.catsy;
+package com.sunsetrebel.catsy.activities;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.sunsetrebel.MapsActivity;
-import com.sunsetrebel.adapter.PostagemAdapter;
-import com.sunsetrebel.model.Postagem;
-
+import com.sunsetrebel.catsy.adapters.PostagemAdapter;
+import com.sunsetrebel.catsy.models.Postagem;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.sunsetrebel.catsy.R;
 
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventsList extends AppCompatActivity {
+public class EventsListActivity extends AppCompatActivity {
     ImageButton map_button;
     private RecyclerView recyclerPostagem;
     private List<Postagem> postagens = new ArrayList<>();

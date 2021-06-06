@@ -1,4 +1,4 @@
-package com.sunsetrebel.model;
+package com.sunsetrebel.catsy.models;
 
 
 public class Postagem {

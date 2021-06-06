@@ -1,11 +1,13 @@
-package com.sunsetrebel.catsy;
+package com.sunsetrebel.catsy.ui;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.WindowManager;
-import  com.sunsetrebel.MapsActivity;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.sunsetrebel.catsy.R;
 
 public class PopUpWindow extends AppCompatActivity {
 
