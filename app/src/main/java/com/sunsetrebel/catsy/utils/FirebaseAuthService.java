@@ -1,0 +1,89 @@
+package com.sunsetrebel.catsy.utils;
+
+import android.content.Context;
+import android.content.Intent;
+import android.widget.Toast;
+import com.facebook.FacebookSdk;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.sunsetrebel.catsy.R;
+
+public class FirebaseAuthService {
+    private GoogleSignInClient mGoogleSignInClient;
+    private android.content.Context context;
+    private static com.google.firebase.auth.FirebaseAuth fAuth;
+    private final static int RC_SIGN_IN = 123;
+    private FirebaseUser user;
+
+    public static int getRCSignIn() {
+        return RC_SIGN_IN;
+    }
+
+    public com.google.firebase.auth.FirebaseAuth getFAuth() {
+        return fAuth;
+    }
+
+    public void setFirebaseUser(FirebaseUser user) {
+        this.user = user;
+    }
+
+    public void signOutFirebase() {
+        com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
+    }
+
+    public void InitializeFacebookSdk(android.content.Context context) {
+        FacebookSdk.sdkInitialize(context);
+    }
+
+    public boolean checkCurrentUser() {
+        //context - current page getApplicationContext()
+        //c - activity class to move if user logged
+        user = fAuth.getCurrentUser();
+        if (user != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public void createGoogleAuthRequestGetInstance(android.content.Context context) {
+        // Configure Google Sign In
+        GoogleSignInOptions gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(context.getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+
+        // Build a GoogleSignInClient with the options specified by gso.
+        mGoogleSignInClient = GoogleSignIn.getClient(context, gso);
+        fAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
+    }
+
+    public Intent signInGoogle(Context context) {
+        //context - current page getApplicationContext()
+        //c - activity class to move if user logged
+        this.context = context;
+        return mGoogleSignInClient.getSignInIntent();
+    }
+
+
+    public GoogleSignInAccount onFirebaseResponse(int requestCode, Intent data) {
+        GoogleSignInAccount account = null;
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                account = task.getResult(ApiException.class);
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+        return account;
+    }
+}

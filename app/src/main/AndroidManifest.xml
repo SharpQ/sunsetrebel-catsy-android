@@ -34,22 +34,22 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".VerifyPhone" />
+        <activity android:name=".activities.VerifyPhoneActivity" />
         <activity
-            android:name="com.sunsetrebel.MapsActivity"
+            android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps" />
-        <activity android:name=".Login" />
-        <activity android:name=".Registration" />
-        <activity android:name=".Onboarding">
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.RegistrationActivity" />
+        <activity android:name=".activities.OnboardingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Tutorial" />
+        <activity android:name=".activities.TutorialActivity" />
         <activity
-            android:name=".EventsList"
+            android:name=".activities.EventsListActivity"
             android:label="@string/title_activity_events_list"
             android:theme="@style/splashScreenTheme" />
 
@@ -61,7 +61,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <receiver android:name=".VerifyPhone"
+        <receiver android:name=".activities.VerifyPhoneActivity"
             android:permission="android.permission.BROADCAST_SMS">
             <intent-filter android:priority="1000">
                 <action android:name="android.intent.action.PHONE_STATE" />
