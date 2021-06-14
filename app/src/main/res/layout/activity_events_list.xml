@@ -12,6 +12,15 @@
 
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:padding="16dp"
+        android:id="@+id/info_tv"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_background"
@@ -108,7 +117,7 @@
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/ui_toolbar_shape"
+                    android:background="@color/primaryColor"
                     android:drawablePadding="5dp"
                     android:fontFamily="@font/audiowide"
                     android:gravity="center|start|left"
@@ -141,14 +150,14 @@
                 android:dividerPadding="9dp"
                 android:orientation="horizontal"
                 android:showDividers="beginning"
-                app:tabBackground="@drawable/ui_toolbar_shape">
+                app:tabBackground="@color/primaryColor">
 
                 <TextView
                     android:id="@+id/eventlist_filter_text"
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@drawable/ui_toolbar_shape"
+                    android:background="@color/primaryColor"
                     android:drawablePadding="5dp"
                     android:fontFamily="@font/audiowide"
                     android:gravity="center|start|left"

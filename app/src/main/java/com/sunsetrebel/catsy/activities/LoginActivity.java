@@ -95,7 +95,10 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mFacebookAuthBtn.setOnClickListener(v -> {
+
             LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email"));
+
+
         });
 
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {

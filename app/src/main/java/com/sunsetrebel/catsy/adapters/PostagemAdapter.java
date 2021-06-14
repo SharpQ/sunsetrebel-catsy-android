@@ -29,12 +29,12 @@ public class PostagemAdapter extends RecyclerView.Adapter<PostagemAdapter.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Postagem postagem = postagens.get(position);
-        holder.textNome.setText(postagem.getNome());
-        holder.textPostagem.setText(postagem.getPostagem());
-        holder.textHorario.setText(postagem.getHorario());
+        holder.textName.setText(postagem.getName());
+        holder.textDate.setText(postagem.getDate());
+        holder.textLocation.setText(postagem.getLocation());
         holder.textEventDescription.setText(postagem.get_event_description());
         holder.textEventCreatorName.setText(postagem.get_event_creator_name());
-        holder.imagemPostagem.setImageResource(postagem.getImagem());
+        holder.imageEventIcon.setImageResource(postagem.getEvent_image());
         holder.EventCreatorPhotoPostagem.setImageResource(postagem.get_event_creator_photo());
     }
 
@@ -44,23 +44,23 @@ public class PostagemAdapter extends RecyclerView.Adapter<PostagemAdapter.MyView
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        private TextView textNome;
-        private TextView textPostagem;
-        private TextView textHorario;
+        private TextView textName;
+        private TextView textDate;
+        private TextView textLocation;
         private TextView textEventDescription;
         private TextView textEventCreatorName;
-        private ImageView imagemPostagem;
+        private ImageView imageEventIcon;
         private ImageView EventCreatorPhotoPostagem;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            textNome = itemView.findViewById(R.id.card_event_name);
-            textPostagem = itemView.findViewById(R.id.card_event_date);
-            textHorario = itemView.findViewById(R.id.card_event_location);
+            textName = itemView.findViewById(R.id.card_event_name);
+            textDate = itemView.findViewById(R.id.card_event_date);
+            textLocation = itemView.findViewById(R.id.card_event_location);
             textEventDescription = itemView.findViewById(R.id.card_event_detail_description);
             textEventCreatorName = itemView.findViewById(R.id.event_creator_name);
-            imagemPostagem = itemView.findViewById(R.id.card_event_icon);
+            imageEventIcon = itemView.findViewById(R.id.card_event_icon);
             EventCreatorPhotoPostagem = itemView.findViewById(R.id.event_creator_photo);
         }
     }

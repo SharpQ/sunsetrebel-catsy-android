@@ -3,10 +3,13 @@ package com.sunsetrebel.catsy.activities;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -27,33 +30,49 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.adapters.PostagemAdapter;
+import com.sunsetrebel.catsy.models.Postagem;
 
 import android.location.Location;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
 
     private static final String TAG = "MapsActivity";
-    ImageButton events_button;
     private GoogleMap mMap;
     private Geocoder geocoder;
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     FusedLocationProviderClient fusedLocationProviderClient;
+    //Event input dialog data
+    TextView infoTv;
+    private List<Postagem> postagens = new ArrayList<>();
+    private RecyclerView recyclerPostagem;
 
-   @Override
+    @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
@@ -73,11 +92,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
-                        // Hide the nav bar and status bar
-                      //  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                     //   | View.SYSTEM_UI_FLAG_FULLSCREEN)
-        ;}
-        // Shows the system bars by removing all the flags
+        // Hide the nav bar and status bar
+        //  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+        //   | View.SYSTEM_UI_FLAG_FULLSCREEN)
+        ;
+    }
+
+    // Shows the system bars by removing all the flags
 // except for the ones that make the content appear under the system bars.
     private void showSystemUI() {
         View decorView = getWindow().getDecorView();
@@ -86,14 +107,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-      //Top and navigation bar transparency
+        //Top and navigation bar transparency
 
 
-
-       getWindow().setStatusBarColor(Color.parseColor("#20111111"));
-       getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
+        getWindow().setStatusBarColor(Color.parseColor("#20111111"));
+        getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -107,14 +128,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         geocoder = new Geocoder(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        FloatingActionButton fab;
-        fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        ImageView MapFilter;
+        MapFilter = findViewById(R.id.map_filter);
+        MapFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent (MapsActivity.this, EventsListActivity.class);
+                Intent intent = new Intent(MapsActivity.this, EventsListActivity.class);
                 startActivity(intent);
-               fab.clearAnimation();
+                MapFilter.clearAnimation();
             }
 
         });
@@ -130,32 +151,86 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-/*
-        LinearLayout create_event;
-        create_event = findViewById(R.id.switch_create_event);
-        create_event.setOnClickListener(new View.OnClickListener() {
+
+        //Event creation dialog opening
+        FloatingActionButton fab;
+        fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);
+        infoTv = findViewById(R.id.info_tv);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCustomDialog();
+            }
+        });
+        recyclerPostagem = findViewById(R.id.list_background);
+        // Definir layout
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+/*        recyclerPostagem.setLayoutManager(layoutManager);
+        this.prepararPostagens();
+        PostagemAdapter adapter = new PostagemAdapter(postagens);
+        recyclerPostagem.setAdapter(adapter);*/
+    }
+
+
+    //Function to display the custom dialog.
+    void showCustomDialog() {
+        final Dialog dialog = new Dialog(MapsActivity.this);
+        //We have added a title in the custom layout. So let's disable the default title.
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
+        dialog.setCancelable(true);
+        //Mention the name of the layout of your custom dialog.
+        dialog.setContentView(R.layout.event_create_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.ui_rounded_corners);
+        //Initializing the views of the dialog.
+        final EditText textName = dialog.findViewById(R.id.card_event_name);
+        final EditText textDate = dialog.findViewById(R.id.card_event_date);
+        final EditText  textLocation = dialog.findViewById(R.id.card_event_location);
+        final EditText  textEventDescription = dialog.findViewById(R.id.card_event_detail_description);
+        final EditText textEventCreatorName = dialog.findViewById(R.id.event_creator_name);
+        final CheckBox termsCb = dialog.findViewById(R.id.terms_cb);
+        Button submitButton = dialog.findViewById(R.id.submit_button);
+
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showBottomSheetDialog();
-
+                String name = textName.getText().toString();
+                String date = textDate.getText().toString();
+                String location = textLocation.getText().toString();
+                String event_description = textEventDescription.getText().toString();
+                String event_creator_name = textEventCreatorName.getText().toString();
+                Boolean hasAccepted = termsCb.isChecked();
+               // populateInfoTv(name, age, hasAccepted);
+                dialog.dismiss();
+                prepararPostagens();
             }
+        });
 
-            private void showBottomSheetDialog() {
+        dialog.show();
 
-                final BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MapsActivity.this);
-                bottomSheetDialog.setContentView(R.layout.bottom_sheet_dialog_layout);
-
-                LinearLayout copy = bottomSheetDialog.findViewById(R.id.copyLinearLayout);
-                LinearLayout share = bottomSheetDialog.findViewById(R.id.shareLinearLayout);
-                // LinearLayout upload = bottomSheetDialog.findViewById(R.id.uploadLinearLayout);
-                LinearLayout download = bottomSheetDialog.findViewById(R.id.download);
-                LinearLayout delete = bottomSheetDialog.findViewById(R.id.delete);
-
-                bottomSheetDialog.show();
-            }
-
-        });*/
     }
+
+    public void prepararPostagens() {
+        Postagem post = new Postagem(
+
+        );
+        this.postagens.add(post);}
+
+    void populateInfoTv(String name, String age, Boolean hasAcceptedTerms) {
+        infoTv.setVisibility(View.VISIBLE);
+        String acceptedText = "have";
+        if (!hasAcceptedTerms) {
+            acceptedText = "have not";
+        }
+        infoTv.setText(String.format(getString(R.string.info), name, age, acceptedText));
+    }
+
+
+
+
 
     /**
      * Manipulates the map once available.

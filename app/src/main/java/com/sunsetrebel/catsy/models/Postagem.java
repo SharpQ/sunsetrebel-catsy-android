@@ -3,49 +3,49 @@ package com.sunsetrebel.catsy.models;
 
 public class Postagem {
 
-    private String nome;
-    private String postagem;
-    private String horario;
+    private String name;
+    private String date;
+    private String location;
     private String event_description;
     private String event_creator_name;
     private int event_creator_photo;
-    private int imagem;
+    private int event_image;
 
     public Postagem() {
     }
 
-    public Postagem(String nome, String postagem, String horario, String event_description, String event_creator_name, int imagem, int event_creator_photo) {
-        this.nome = nome;
-        this.postagem = postagem;
-        this.horario = horario;
+    public Postagem(String name, String date, String location, String event_description, String event_creator_name, int event_image, int event_creator_photo) {
+        this.name = name;
+        this.date = date;
+        this.location = location;
         this.event_description = event_description;
         this.event_creator_name = event_creator_name;
         this.event_creator_photo = event_creator_photo;
-        this.imagem = imagem;
+        this.event_image = event_image;
     }
 
-    public String getNome() {
-        return nome;
+    public String getName() {
+        return name;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getPostagem() {
-        return postagem;
+    public String getDate() {
+        return date;
     }
 
-    public void setPostagem(String postagem) {
-        this.postagem = postagem;
+    public void setDate(String date) {
+        this.date = date;
     }
 
-    public String getHorario() {
-        return horario;
+    public String getLocation() {
+        return location;
     }
 
-    public void setHorario(String horario) {
-        this.horario = horario;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String get_event_description() {
@@ -61,15 +61,15 @@ public class Postagem {
     }
 
     public void set_event_creator_name(String event_creator_name) {
-        this.horario = event_creator_name;
+        this.location = event_creator_name;
     }
 
-    public int getImagem() {
-        return imagem;
+    public int getEvent_image() {
+        return event_image;
     }
 
-    public void setImagem(int imagem) {
-        this.imagem = imagem;
+    public void setEvent_image(int event_image) {
+        this.event_image = event_image;
     }
 
     public int get_event_creator_photo() {

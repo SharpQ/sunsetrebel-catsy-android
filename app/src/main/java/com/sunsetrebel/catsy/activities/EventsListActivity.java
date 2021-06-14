@@ -1,9 +1,12 @@
 package com.sunsetrebel.catsy.activities;
 
+import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.protobuf.DescriptorProtos;
 import com.sunsetrebel.catsy.adapters.PostagemAdapter;
 import com.sunsetrebel.catsy.models.Postagem;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,16 +17,24 @@ import com.sunsetrebel.catsy.R;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.sunsetrebel.catsy.utils.RService.attr.onClick;
+import static com.sunsetrebel.catsy.utils.RService.attr.previewImage;
 
 public class EventsListActivity extends AppCompatActivity {
     ImageButton map_button;
     private RecyclerView recyclerPostagem;
     private List<Postagem> postagens = new ArrayList<>();
-
+    TextView infoTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +65,23 @@ public class EventsListActivity extends AppCompatActivity {
 
         PostagemAdapter adapter = new PostagemAdapter(postagens);
         recyclerPostagem.setAdapter(adapter);
+
+        //Event creation dialog opening
         FloatingActionButton fab;
         fab = findViewById(R.id.fab);
         fab = findViewById(R.id.fab);
+        infoTv = findViewById(R.id.info_tv);
+
         fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showCustomDialog();
+            }
+        });
+        LinearLayout EventlistFilter;
+        EventlistFilter = findViewById(R.id.eventlist_filter);
+        EventlistFilter = findViewById(R.id.eventlist_filter);
+        EventlistFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
@@ -65,6 +89,60 @@ public class EventsListActivity extends AppCompatActivity {
         });
 
     }
+
+    //Function to display the custom dialog.
+    void showCustomDialog() {
+        final Dialog dialog = new Dialog(EventsListActivity.this);
+        //We have added a title in the custom layout. So let's disable the default title.
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
+        dialog.setCancelable(true);
+        //Mention the name of the layout of your custom dialog.
+        dialog.setContentView(R.layout.event_create_dialog);
+        dialog.getWindow().setBackgroundDrawableResource(R.drawable.ui_rounded_corners);
+        //Initializing the views of the dialog.
+        final EditText textName = dialog.findViewById(R.id.card_event_name);
+        final EditText textDate = dialog.findViewById(R.id.card_event_date);
+        final EditText  textLocation = dialog.findViewById(R.id.card_event_location);
+        final EditText  textEventDescription = dialog.findViewById(R.id.card_event_detail_description);
+        final EditText textEventCreatorName = dialog.findViewById(R.id.event_creator_name);
+        final CheckBox termsCb = dialog.findViewById(R.id.terms_cb);
+        Button submitButton = dialog.findViewById(R.id.submit_button);
+
+
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = textName.getText().toString();
+                String date = textDate.getText().toString();
+                String location = textLocation.getText().toString();
+                String event_description = textEventDescription.getText().toString();
+                String event_creator_name = textEventCreatorName.getText().toString();
+                int event_image = 1;
+                int event_creator_photo = 1;
+                Boolean hasAccepted = termsCb.isChecked();
+                // populateInfoTv(name, age, hasAccepted);
+                dialog.dismiss();
+               addPostagens(name, date, location, event_description, event_creator_name, event_image, event_creator_photo);
+            }
+        });
+
+        dialog.show();
+
+    }
+
+    public void addPostagens(String name, String date, String location, String event_description, String event_creator_name, 
+                             int event_image, int event_creator_photo) {
+        Postagem post = new Postagem(
+                "Kiev flight trip",
+                "Tomorrow at 20:00",
+                "Kiev, Podol",
+                "Waiting for you!",
+                "Sonya",
+                R.drawable.imagem1,
+                R.drawable.ic_cat_bright
+        );
+        this.postagens.add(post);}
 
     public void prepararPostagens() {
         Postagem post = new Postagem(

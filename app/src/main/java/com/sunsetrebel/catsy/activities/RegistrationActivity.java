@@ -35,6 +35,9 @@ import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import com.sunsetrebel.catsy.activities.MapsActivity;
+
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -105,7 +108,9 @@ public class RegistrationActivity extends AppCompatActivity {
         });
 
         mFacebookAuthBtn.setOnClickListener(v -> {
+
             LoginManager.getInstance().logInWithReadPermissions(RegistrationActivity.this, Arrays.asList("public_profile", "email"));
+
         });
 
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
