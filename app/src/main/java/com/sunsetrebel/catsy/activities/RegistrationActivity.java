@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,11 +25,22 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
+<<<<<<<< HEAD:app/src/main/java/com/sunsetrebel/catsy/activities/RegistrationActivity.java
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+========
+import com.sunsetrebel.MapsActivity;
+
+import java.util.Arrays;
+>>>>>>>> 603dde2e105ea5a15823b47b47c96e749c1fde25:app/src/main/java/com/sunsetrebel/catsy/Registration.java
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -46,9 +58,11 @@ public class RegistrationActivity extends AppCompatActivity {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private CallbackManager mCallbackManager;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
+    private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
     private Activity mActivity;
     private boolean isOTPregistration = true;
     private CountryCodePicker ccp;
+    private String userID;
 
     @Override
     protected void onStart() {
@@ -66,7 +80,7 @@ public class RegistrationActivity extends AppCompatActivity {
         mActivity = RegistrationActivity.this;
         firebaseAuthService.createGoogleAuthRequestGetInstance(getApplicationContext());
         firebaseAuthService.InitializeFacebookSdk(getApplicationContext());
-        fAuth = firebaseAuthService.getFAuth();
+        fAuth = firebaseAuthService.getInstance();
         mCallbackManager = CallbackManager.Factory.create();
 
         mLayoutFullName = findViewById(R.id.inputLayoutUserFullName);
@@ -97,7 +111,11 @@ public class RegistrationActivity extends AppCompatActivity {
         });
 
         mFacebookAuthBtn.setOnClickListener(v -> {
+<<<<<<<< HEAD:app/src/main/java/com/sunsetrebel/catsy/activities/RegistrationActivity.java
             LoginManager.getInstance().logInWithReadPermissions(RegistrationActivity.this, Arrays.asList("public_profile", "email"));
+========
+            LoginManager.getInstance().logInWithReadPermissions(Registration.this, Arrays.asList("public_profile", "email"));
+>>>>>>>> 603dde2e105ea5a15823b47b47c96e749c1fde25:app/src/main/java/com/sunsetrebel/catsy/Registration.java
         });
 
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -153,11 +171,12 @@ public class RegistrationActivity extends AppCompatActivity {
             }
 
             progressBar.setVisibility(View.VISIBLE);
-            phone = "+" + countryCode + phone;
+            String phoneWithCountryCode = "+" + countryCode + phone;
 
             if (isOTPregistration) {
                 Intent intent = new Intent(getApplicationContext(), VerifyPhoneActivity.class);
-                intent.putExtra("phoneNumber", phone);
+                intent.putExtra("phoneNumber", phoneWithCountryCode);
+                intent.putExtra("fullName", fullName);
                 intent.putExtra("isTutorialNextPage", true);
                 startActivity(intent);
                 setUIStatePhone();
@@ -165,6 +184,7 @@ public class RegistrationActivity extends AppCompatActivity {
             } else {
                 fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        firebaseFirestoreService.createNewUserByEmail(fAuth.getCurrentUser().getUid(), fullName, email);
                         startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
                         finish();
                     } else {
