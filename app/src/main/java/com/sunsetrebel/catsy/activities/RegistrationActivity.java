@@ -28,7 +28,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
-<<<<<<<< HEAD:app/src/main/java/com/sunsetrebel/catsy/activities/RegistrationActivity.java
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
@@ -36,11 +35,9 @@ import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-========
-import com.sunsetrebel.MapsActivity;
+import com.sunsetrebel.catsy.activities.MapsActivity;
 
 import java.util.Arrays;
->>>>>>>> 603dde2e105ea5a15823b47b47c96e749c1fde25:app/src/main/java/com/sunsetrebel/catsy/Registration.java
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -111,11 +108,9 @@ public class RegistrationActivity extends AppCompatActivity {
         });
 
         mFacebookAuthBtn.setOnClickListener(v -> {
-<<<<<<<< HEAD:app/src/main/java/com/sunsetrebel/catsy/activities/RegistrationActivity.java
+
             LoginManager.getInstance().logInWithReadPermissions(RegistrationActivity.this, Arrays.asList("public_profile", "email"));
-========
-            LoginManager.getInstance().logInWithReadPermissions(Registration.this, Arrays.asList("public_profile", "email"));
->>>>>>>> 603dde2e105ea5a15823b47b47c96e749c1fde25:app/src/main/java/com/sunsetrebel/catsy/Registration.java
+
         });
 
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {

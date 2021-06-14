@@ -95,11 +95,10 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mFacebookAuthBtn.setOnClickListener(v -> {
-<<<<<<<< HEAD:app/src/main/java/com/sunsetrebel/catsy/activities/LoginActivity.java
+
             LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email"));
-========
-            LoginManager.getInstance().logInWithReadPermissions(Login.this, Arrays.asList("public_profile", "email"));
->>>>>>>> 603dde2e105ea5a15823b47b47c96e749c1fde25:app/src/main/java/com/sunsetrebel/catsy/Login.java
+
+
         });
 
         LoginManager.getInstance().registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
