@@ -16,6 +16,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.SliderAdapter;
+import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 
 public class OnboardingActivity extends AppCompatActivity {
 
@@ -28,6 +29,7 @@ public class OnboardingActivity extends AppCompatActivity {
     private int RC_SIGN_IN;
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
+    private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
     private Activity mActivity;
 
     @Override
@@ -123,6 +125,12 @@ public class OnboardingActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
+                        firebaseFirestoreService.getUserInFirestore(value -> {
+                            if(!value) {
+                                firebaseFirestoreService.createNewUserByGoogle(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
+                                        fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
+                            }
+                        }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                         finish();
                     } else {
