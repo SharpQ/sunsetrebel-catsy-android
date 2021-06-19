@@ -131,7 +131,12 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     private void signInUserByCredentials(PhoneAuthCredential credential){
         fAuth.signInWithCredential(credential).addOnCompleteListener(VerifyPhoneActivity.this, task -> {
             if (task.isSuccessful()){
-                firebaseFirestoreService.createNewUserByPhone(fAuth.getCurrentUser().getUid(), fullName, phoneNumber);
+                firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
+                firebaseFirestoreService.getUserInFirestore(value -> {
+                    if(!value) {
+                        firebaseFirestoreService.createNewUserByPhone(fAuth.getCurrentUser().getUid(), fullName, phoneNumber);
+                    }
+                }, fAuth.getCurrentUser().getUid());
                 Intent intent;
                 if (isTutorialNextPage) {
                     intent = new Intent(getApplicationContext(), TutorialActivity.class);

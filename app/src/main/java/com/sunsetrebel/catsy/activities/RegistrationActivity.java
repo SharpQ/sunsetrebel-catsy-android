@@ -1,5 +1,4 @@
 package com.sunsetrebel.catsy.activities;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -13,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
+import androidx.appcompat.app.AppCompatActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -25,18 +25,10 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.hbb20.CountryCodePicker;
-import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import com.sunsetrebel.catsy.activities.MapsActivity;
-
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -157,7 +149,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 }
             }
 
-            if(!validatePassword(password)) {
+            if(!isOTPregistration && !validatePassword(password)) {
                 return;
             }
 
@@ -179,7 +171,12 @@ public class RegistrationActivity extends AppCompatActivity {
             } else {
                 fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        firebaseFirestoreService.createNewUserByEmail(fAuth.getCurrentUser().getUid(), fullName, email);
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
+                        firebaseFirestoreService.getUserInFirestore(value -> {
+                            if(!value) {
+                                firebaseFirestoreService.createNewUserByEmail(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail());
+                            }
+                        }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
                         finish();
                     } else {
@@ -268,6 +265,12 @@ public class RegistrationActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
+                        firebaseFirestoreService.getUserInFirestore(value -> {
+                            if(!value) {
+                                firebaseFirestoreService.createNewUserByGoogle(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
+                                        fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
+                            }
+                        }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
                         finish();
                     } else {
@@ -285,6 +288,12 @@ public class RegistrationActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
+                        firebaseFirestoreService.getUserInFirestore(value -> {
+                            if(!value) {
+                                firebaseFirestoreService.createNewUserByFacebook(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
+                                        fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
+                            }
+                        }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
                         finish();
                     } else {
@@ -303,6 +312,8 @@ public class RegistrationActivity extends AppCompatActivity {
         isOTPregistration = false;
         mLayoutEmail.setVisibility(View.VISIBLE);
         mLayoutEmail.setEnabled(true);
+        mLayoutPassword.setVisibility(View.VISIBLE);
+        mLayoutPassword.setEnabled(true);
         slideImageEmail.setVisibility(View.VISIBLE);
         countryAndPhone.setVisibility(View.INVISIBLE);
         countryAndPhone.setEnabled(false);
@@ -314,6 +325,8 @@ public class RegistrationActivity extends AppCompatActivity {
         isOTPregistration = true;
         mLayoutEmail.setVisibility(View.INVISIBLE);
         mLayoutEmail.setEnabled(false);
+        mLayoutPassword.setVisibility(View.INVISIBLE);
+        mLayoutPassword.setEnabled(false);
         slideImageEmail.setVisibility(View.INVISIBLE);
         countryAndPhone.setVisibility(View.VISIBLE);
         countryAndPhone.setEnabled(true);
