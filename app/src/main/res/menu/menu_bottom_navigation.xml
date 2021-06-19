@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <item
+        android:id="@+id/menu_map"
+        android:icon="@drawable/ic_map"
+        android:title="Map"
+        />
+
+    <item
+        android:id="@+id/menu_event_list"
+        android:icon="@drawable/book"
+        android:title="Events"
+        />
+
+    <item
+        android:id="@+id/menu_add_event"
+        android:icon="@drawable/ic_add"
+        android:title="New event" />
+
+    <item
+        android:id="@+id/menu_message"
+        android:icon="@drawable/ic_message"
+        android:title="Messages" />
+
+    <item
+        android:id="@+id/menu_account"
+        android:icon="@drawable/ic_user"
+        android:title="Account" />
+</menu>

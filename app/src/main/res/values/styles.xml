@@ -40,4 +40,20 @@
         <item name="android:drawableLeft">@drawable/ic_google_logo</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <style name="DialogTheme" parent="android:Theme.Dialog">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <!-- No backgrounds, titles or window float -->
+        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+    </style>
+
+    <style name="CustomText">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/audiowide</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
 </resources>
