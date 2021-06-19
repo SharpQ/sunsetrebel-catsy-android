@@ -12,11 +12,11 @@ import androidx.fragment.app.Fragment;
 
 import com.sunsetrebel.catsy.R;
 
-public class HomeFragment extends Fragment {
+public class HomeActivity extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_camera,container,false);
+        return inflater.inflate(R.layout.activity_home,container,false);
     }
 }

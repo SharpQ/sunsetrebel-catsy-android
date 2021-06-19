@@ -1,5 +1,6 @@
 package com.sunsetrebel.catsy.activities;
 
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 
 import android.Manifest;
@@ -9,7 +10,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
@@ -30,13 +30,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.adapters.PostagemAdapter;
-import com.sunsetrebel.catsy.models.Postagem;
+import com.sunsetrebel.catsy.fragments.AccountFragment;
+import com.sunsetrebel.catsy.fragments.AddEventFragment;
+import com.sunsetrebel.catsy.fragments.EventListFragment;
+import com.sunsetrebel.catsy.models.AddEvent;
 
 import android.location.Location;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -44,20 +44,26 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import nl.joery.animatedbottombar.AnimatedBottomBar;
+
+
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
@@ -69,8 +75,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FusedLocationProviderClient fusedLocationProviderClient;
     //Event input dialog data
     TextView infoTv;
-    private List<Postagem> postagens = new ArrayList<>();
+    private List<AddEvent> postagens = new ArrayList<>();
     private RecyclerView recyclerPostagem;
+    private static final String TAGG = MapsActivity.class.getSimpleName();
+    AnimatedBottomBar animatedBottomBar;
+    FragmentManager fragmentManager;
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -91,7 +100,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         // content doesn't resize when the system bars hide and show.
                         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
         // Hide the nav bar and status bar
         //  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
         //   | View.SYSTEM_UI_FLAG_FULLSCREEN)
@@ -102,9 +112,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 // except for the ones that make the content appear under the system bars.
     private void showSystemUI() {
         View decorView = getWindow().getDecorView();
+
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
     }
 
@@ -113,8 +124,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //Top and navigation bar transparency
 
 
-        getWindow().setStatusBarColor(Color.parseColor("#20111111"));
-        getWindow().setNavigationBarColor(Color.parseColor("#20111111"));
+        getWindow().setStatusBarColor(Color.parseColor("#00000000"));
+        getWindow().setNavigationBarColor(Color.parseColor("#00000000"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -154,23 +165,67 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         //Event creation dialog opening
         FloatingActionButton fab;
-        fab = findViewById(R.id.fab);
-        fab = findViewById(R.id.fab);
+       /* fab = findViewById(R.id.fab);
+        fab = findViewById(R.id.fab);*/
         infoTv = findViewById(R.id.info_tv);
 
-        fab.setOnClickListener(new View.OnClickListener() {
+/*        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showCustomDialog();
             }
-        });
+        });*/
         recyclerPostagem = findViewById(R.id.list_background);
         // Definir layout
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 /*        recyclerPostagem.setLayoutManager(layoutManager);
         this.prepararPostagens();
-        PostagemAdapter adapter = new PostagemAdapter(postagens);
+        AddEventAdapter adapter = new AddEventAdapter(postagens);
         recyclerPostagem.setAdapter(adapter);*/
+        setTitle("Example 1");
+
+        animatedBottomBar = findViewById(R.id.animatedBottomBar);
+
+        if (savedInstanceState == null) {
+            animatedBottomBar.selectTabById(R.id.menu_map, true);
+            fragmentManager = getSupportFragmentManager();
+            HomeActivity homeActivity = new HomeActivity();
+            fragmentManager.beginTransaction().replace(R.id.fragment_container, homeActivity)
+                    .commit();
+        }
+
+        animatedBottomBar.setOnTabSelectListener(new AnimatedBottomBar.OnTabSelectListener() {
+            @Override
+            public void onTabSelected(int lastIndex, @Nullable AnimatedBottomBar.Tab lastTab, int newIndex, @NotNull AnimatedBottomBar.Tab newTab) {
+                Fragment fragment = null;
+                switch (newTab.getId()) {
+                    case R.id.menu_map:
+                        fragment = new HomeActivity();
+                        break;
+                    case R.id.menu_event_list:
+                        fragment = new EventListFragment();
+                        break;
+                    case R.id.menu_add_event:
+                        fragment = new AddEventFragment();
+                        break;
+                    case R.id.menu_message:
+                        fragment = new AccountFragment();
+                        break;
+                    case R.id.menu_account:
+                        fragment = new AccountFragment();
+                        break;
+                }
+
+                if (fragment != null) {
+                    fragmentManager = getSupportFragmentManager();
+                    fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
+                            .commit();
+                } else {
+                    Log.e(TAGG, "Error in creating Fragment");
+                }
+            }
+        });
+
     }
 
 
@@ -189,9 +244,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final EditText textDate = dialog.findViewById(R.id.card_event_date);
         final EditText  textLocation = dialog.findViewById(R.id.card_event_location);
         final EditText  textEventDescription = dialog.findViewById(R.id.card_event_detail_description);
-        final EditText textEventCreatorName = dialog.findViewById(R.id.event_creator_name);
+        final EditText textEventCreatorName = dialog.findViewById(R.id.event_type);
         final CheckBox termsCb = dialog.findViewById(R.id.terms_cb);
         Button submitButton = dialog.findViewById(R.id.submit_button);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this , R.style.DialogTheme);
+
 
 
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -214,7 +271,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void prepararPostagens() {
-        Postagem post = new Postagem(
+        AddEvent post = new AddEvent(
 
         );
         this.postagens.add(post);}
@@ -285,7 +342,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Address address = addresses.get(0);
                 LatLng curr_location = new LatLng(address.getLatitude(), address.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions()
-                        .position(curr_location).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_location_sample_35))
+                        .position(curr_location).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35))
                         .title(address.getLocality());
                 mMap.addMarker(markerOptions);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(curr_location, 12));
@@ -296,13 +353,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         //Event examples
         LatLng FirstEvent = new LatLng(50.436404, 30.369498);
-        googleMap.addMarker(new MarkerOptions().position(FirstEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_blue_40)).title("Open air cinema at 19:00"));
+        googleMap.addMarker(new MarkerOptions().position(FirstEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_blue_40)).title("Open air cinema at 19:00"));
 
         LatLng SecondEvent = new LatLng(50.449, 30.512850);
-        googleMap.addMarker(new MarkerOptions().position(SecondEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_blue_40)).title("Guitar night at 20:00"));
+        googleMap.addMarker(new MarkerOptions().position(SecondEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_blue_40)).title("Guitar night at 20:00"));
 
         LatLng ThirdEvent = new LatLng(50.391566, 30.481428);
-        googleMap.addMarker(new MarkerOptions().position(ThirdEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_blue_40)).title("Mozzy birthday celebration at 09:00"));
+        googleMap.addMarker(new MarkerOptions().position(ThirdEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_blue_40)).title("Mozzy birthday celebration at 09:00"));
         LatLng mountainView = new LatLng(37.4, -122.1);
 
     }
@@ -353,7 +410,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 Address address = addresses.get(0);
                 String streetAddress = address.getAddressLine(0);
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
-                mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_cat_location_sample_35)).title(streetAddress));
+                mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)).title(streetAddress));
             }
         });
     }

@@ -6,15 +6,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.sunsetrebel.catsy.models.Postagem;
+import com.sunsetrebel.catsy.models.AddEvent;
 
 import java.util.List;
 import com.sunsetrebel.catsy.R;
 
-public class PostagemAdapter extends RecyclerView.Adapter<PostagemAdapter.MyViewHolder> {
-    private List<Postagem> postagens;
+public class AddEventAdapter extends RecyclerView.Adapter<AddEventAdapter.MyViewHolder> {
+    private List<AddEvent> postagens;
 
-    public PostagemAdapter(List<Postagem> listaPostagens) {
+    public AddEventAdapter(List<AddEvent> listaPostagens) {
         this.postagens = listaPostagens;
     }
 
@@ -28,14 +28,14 @@ public class PostagemAdapter extends RecyclerView.Adapter<PostagemAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Postagem postagem = postagens.get(position);
-        holder.textName.setText(postagem.getName());
-        holder.textDate.setText(postagem.getDate());
-        holder.textLocation.setText(postagem.getLocation());
-        holder.textEventDescription.setText(postagem.get_event_description());
-        holder.textEventCreatorName.setText(postagem.get_event_creator_name());
-        holder.imageEventIcon.setImageResource(postagem.getEvent_image());
-        holder.EventCreatorPhotoPostagem.setImageResource(postagem.get_event_creator_photo());
+        AddEvent addEvent = postagens.get(position);
+        holder.textName.setText(addEvent.getName());
+        holder.textDate.setText(addEvent.getDate());
+        holder.textLocation.setText(addEvent.getLocation());
+        holder.textEventDescription.setText(addEvent.get_event_description());
+        holder.textEventCreatorName.setText(addEvent.get_event_creator_name());
+        holder.imageEventIcon.setImageResource(addEvent.getEvent_image());
+        holder.EventCreatorPhotoPostagem.setImageResource(addEvent.get_event_creator_photo());
     }
 
     @Override
@@ -59,7 +59,7 @@ public class PostagemAdapter extends RecyclerView.Adapter<PostagemAdapter.MyView
             textDate = itemView.findViewById(R.id.card_event_date);
             textLocation = itemView.findViewById(R.id.card_event_location);
             textEventDescription = itemView.findViewById(R.id.card_event_detail_description);
-            textEventCreatorName = itemView.findViewById(R.id.event_creator_name);
+            textEventCreatorName = itemView.findViewById(R.id.event_type);
             imageEventIcon = itemView.findViewById(R.id.card_event_icon);
             EventCreatorPhotoPostagem = itemView.findViewById(R.id.event_creator_photo);
         }

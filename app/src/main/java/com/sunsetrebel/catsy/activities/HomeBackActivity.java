@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.sunsetrebel.catsy.R;
 
-public class cameraActivity extends AppCompatActivity {
+public class HomeBackActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_camera);
+        setContentView(R.layout.activity_home);
     }
 }

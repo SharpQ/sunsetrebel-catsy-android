@@ -1,14 +1,12 @@
 package com.sunsetrebel.catsy.activities;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.protobuf.DescriptorProtos;
-import com.sunsetrebel.catsy.adapters.PostagemAdapter;
-import com.sunsetrebel.catsy.models.Postagem;
+import com.sunsetrebel.catsy.adapters.AddEventAdapter;
+import com.sunsetrebel.catsy.models.AddEvent;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,13 +25,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.sunsetrebel.catsy.utils.RService.attr.onClick;
-import static com.sunsetrebel.catsy.utils.RService.attr.previewImage;
-
 public class EventsListActivity extends AppCompatActivity {
     ImageButton map_button;
     private RecyclerView recyclerPostagem;
-    private List<Postagem> postagens = new ArrayList<>();
+    private List<AddEvent> postagens = new ArrayList<>();
     TextView infoTv;
 
     @Override
@@ -63,30 +58,20 @@ public class EventsListActivity extends AppCompatActivity {
         // Definir o adapter
         this.prepararPostagens();
 
-        PostagemAdapter adapter = new PostagemAdapter(postagens);
+        AddEventAdapter adapter = new AddEventAdapter(postagens);
         recyclerPostagem.setAdapter(adapter);
 
         //Event creation dialog opening
-        FloatingActionButton fab;
-        fab = findViewById(R.id.fab);
-        fab = findViewById(R.id.fab);
-        infoTv = findViewById(R.id.info_tv);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showCustomDialog();
-            }
-        });
         LinearLayout EventlistFilter;
         EventlistFilter = findViewById(R.id.eventlist_filter);
         EventlistFilter = findViewById(R.id.eventlist_filter);
         EventlistFilter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                showCustomDialog();
             }
         });
+
 
     }
 
@@ -105,9 +90,11 @@ public class EventsListActivity extends AppCompatActivity {
         final EditText textDate = dialog.findViewById(R.id.card_event_date);
         final EditText  textLocation = dialog.findViewById(R.id.card_event_location);
         final EditText  textEventDescription = dialog.findViewById(R.id.card_event_detail_description);
-        final EditText textEventCreatorName = dialog.findViewById(R.id.event_creator_name);
+        final EditText textEventCreatorName = dialog.findViewById(R.id.event_type);
         final CheckBox termsCb = dialog.findViewById(R.id.terms_cb);
         Button submitButton = dialog.findViewById(R.id.submit_button);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this , R.style.DialogTheme);
+
 
 
         submitButton.setOnClickListener(new View.OnClickListener() {
@@ -133,56 +120,56 @@ public class EventsListActivity extends AppCompatActivity {
 
     public void addPostagens(String name, String date, String location, String event_description, String event_creator_name, 
                              int event_image, int event_creator_photo) {
-        Postagem post = new Postagem(
+        AddEvent post = new AddEvent(
                 "Kiev flight trip",
                 "Tomorrow at 20:00",
                 "Kiev, Podol",
                 "Waiting for you!",
                 "Sonya",
-                R.drawable.imagem1,
-                R.drawable.ic_cat_bright
+                R.drawable.im_event_icon_example_1,
+                R.drawable.im_cat_bright
         );
         this.postagens.add(post);}
 
     public void prepararPostagens() {
-        Postagem post = new Postagem(
+        AddEvent post = new AddEvent(
                 "Kiev flight trip",
                 "Tomorrow at 20:00",
                 "Kiev, Podol",
                 "Waiting for you!",
                 "Sonya",
-                R.drawable.imagem1,
-                R.drawable.ic_cat_bright
+                R.drawable.im_event_icon_example_1,
+                R.drawable.im_cat_bright
                );
         this.postagens.add(post);
 
-        post = new Postagem(
+        post = new AddEvent(
                 "Downtown excurtion",
                 "20.06.2021 at 13:00",
                 "Kiev, Maidan",
                 "You will see Kiev",
                 "Valentin",
-                R.drawable.imagem2,
-                R.drawable.ic_cat_profile);
+                R.drawable.im_event_icon_example_2,
+                R.drawable.im_cat_profile);
         this.postagens.add(post);
 
-        post = new Postagem("Paris in Kiev afterparty",
+        post = new AddEvent("Paris in Kiev afterparty",
                 "Today at 19:00",
                 "Kiev, France Q",
                 "Come to Paris quarter",
                 "Joseph",
-                R.drawable.imagem3,
+                R.drawable.im_event_icon_example_3,
                 R.drawable.ic_catsy_icon
         );
         this.postagens.add(post);
 
-        post = new Postagem("Masha forest survive",
+        post = new AddEvent("Masha forest survive",
                 "30.06.2021 at 10:00",
                 "Kiev, Bilychi",
                 "1 knife - 1 life",
                 "Masha",
-                R.drawable.imagem4,
-                R.drawable.ic_cat_dark_40);
+                R.drawable.im_event_icon_example_4,
+                R.drawable.im_cat_dark_40);
         this.postagens.add(post);
 
     }

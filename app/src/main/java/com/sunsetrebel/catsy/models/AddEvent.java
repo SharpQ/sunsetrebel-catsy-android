@@ -1,7 +1,7 @@
 package com.sunsetrebel.catsy.models;
 
 
-public class Postagem {
+public class AddEvent {
 
     private String name;
     private String date;
@@ -11,10 +11,10 @@ public class Postagem {
     private int event_creator_photo;
     private int event_image;
 
-    public Postagem() {
+    public AddEvent() {
     }
 
-    public Postagem(String name, String date, String location, String event_description, String event_creator_name, int event_image, int event_creator_photo) {
+    public AddEvent(String name, String date, String location, String event_description, String event_creator_name, int event_image, int event_creator_photo) {
         this.name = name;
         this.date = date;
         this.location = location;
