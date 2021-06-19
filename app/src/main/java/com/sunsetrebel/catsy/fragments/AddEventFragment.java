@@ -50,7 +50,6 @@ public class AddEventFragment extends  Fragment{
                 String location = textLocation.getText().toString();
                 String event_description = textEventDescription.getText().toString();
                 String event_creator_name = textEventCreatorName.getText().toString();
-                Boolean hasAccepted = termsCb.isChecked();
                 // populateInfoTv(name, age, hasAccepted);
                 prepararPostagens();
             }
