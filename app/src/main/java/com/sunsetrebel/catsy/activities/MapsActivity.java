@@ -81,13 +81,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     AnimatedBottomBar animatedBottomBar;
     FragmentManager fragmentManager;
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            hideSystemUI();
-        }
-    }
 
     private void hideSystemUI() {
         // Enables regular immersive mode.
@@ -133,6 +126,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        hideSystemUI();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.google_map);
