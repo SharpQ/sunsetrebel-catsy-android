@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class FirebaseFirestoreService {
     private FirebaseFirestore fStore = null;
     private DocumentReference documentReference = null;
-    private boolean isUserExists;
 
 //    public enum AuthTypes {
 //        PHONE,
@@ -45,9 +44,7 @@ public class FirebaseFirestoreService {
         user.put("email", email);
         user.put("phone", null);
         user.put("profileImg", null);
-        documentReference.set(user).addOnSuccessListener(aVoid -> {
-            Log.d("INFO", "User profile created! UserID: " + userID);
-        });
+        documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
     }
 
     public void createNewUserByPhone(String userID, String fullName, String phone){
@@ -58,9 +55,7 @@ public class FirebaseFirestoreService {
         user.put("email", null);
         user.put("phone", phone);
         user.put("profileImg", null);
-        documentReference.set(user).addOnSuccessListener(aVoid -> {
-            Log.d("INFO", "User profile created! UserID: " + userID);
-        });
+        documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
     }
 
     public void createNewUserByFacebook(String userID, String fullName, String email, String phone, String profileUrl){
@@ -71,9 +66,7 @@ public class FirebaseFirestoreService {
         user.put("email", email);
         user.put("phone", phone);
         user.put("profileImg", profileUrl);
-        documentReference.set(user).addOnSuccessListener(aVoid -> {
-            Log.d("INFO", "User profile created! UserID: " + userID);
-        });
+        documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
     }
 
     public void createNewUserByGoogle(String userID, String fullName, String email, String phone, String profileUrl){
@@ -84,9 +77,21 @@ public class FirebaseFirestoreService {
         user.put("email", email);
         user.put("phone", phone);
         user.put("profileImg", profileUrl);
-        documentReference.set(user).addOnSuccessListener(aVoid -> {
-            Log.d("INFO", "User profile created! UserID: " + userID);
-        });
+        documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
+    }
+
+    public void createNewEvent(String userID, String eventName, String eventLocation, String eventDate, String eventType, String eventDescr){
+        fStore = getInstance();
+        String eventId = fStore.collection("eventList").document().getId();
+        documentReference = fStore.collection("eventList").document(eventId);
+        Map<String, Object> event = new HashMap<>();
+        event.put("eventName", eventName);
+        event.put("eventLocation", eventLocation);
+        event.put("eventDate", eventDate);
+        event.put("eventType", eventType);
+        event.put("eventDescr", eventDescr);
+        event.put("userId", userID);
+        documentReference.set(event).addOnSuccessListener(aVoid -> Log.d("INFO", "New event created! EventId: " + eventId));
     }
 
     public void getUserInFirestore(FirebaseCallback firebaseCallback, String userId){

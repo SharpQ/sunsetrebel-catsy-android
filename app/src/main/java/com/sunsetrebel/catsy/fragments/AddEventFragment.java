@@ -1,31 +1,36 @@
 package com.sunsetrebel.catsy.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Button;
+import android.widget.EditText;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.RecyclerView;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.AddEvent;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-
+import com.sunsetrebel.catsy.utils.FirebaseAuthService;
+import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class AddEventFragment extends  Fragment{
+public class AddEventFragment extends Fragment {
     private RecyclerView recyclerPostagem;
+    private com.google.firebase.auth.FirebaseAuth fAuth;
+    private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
+    private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
     private List<AddEvent> postagens = new ArrayList<>();
+    EditText eventName, eventLocation, eventDate, eventType, eventDescr;
+    Button submitButton;
+
     public AddEventFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,30 +38,40 @@ public class AddEventFragment extends  Fragment{
 
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_event, container, false);
+        fAuth = firebaseAuthService.getInstance();
 
         //Initializing the views of the dialog.
-        final EditText textName = v.findViewById(R.id.card_event_name);
-        final EditText textDate = v.findViewById(R.id.card_event_date);
-        final EditText  textLocation = v.findViewById(R.id.card_event_location);
-        final EditText  textEventDescription = v.findViewById(R.id.card_event_detail_description);
-        final EditText textEventCreatorName = v.findViewById(R.id.event_type);
-        final CheckBox termsCb = v.findViewById(R.id.terms_cb);
-        Button submitButton = v.findViewById(R.id.submit_button);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = textName.getText().toString();
-                String date = textDate.getText().toString();
-                String location = textLocation.getText().toString();
-                String event_description = textEventDescription.getText().toString();
-                String event_creator_name = textEventCreatorName.getText().toString();
-                // populateInfoTv(name, age, hasAccepted);
-                prepararPostagens();
+        eventName = v.findViewById(R.id.card_event_name);
+        eventLocation = v.findViewById(R.id.card_event_location);
+        eventDate = v.findViewById(R.id.card_event_date);
+        eventType = v.findViewById(R.id.event_type);
+        eventDescr = v.findViewById(R.id.card_event_detail_description);
+        submitButton = v.findViewById(R.id.submit_button);
+
+        submitButton.setOnClickListener(v1 -> {
+            String eventNameValue = eventName.getText().toString().trim();
+            String eventLocationValue = eventLocation.getText().toString().trim();
+            String eventDateValue = eventDate.getText().toString().trim();
+            String eventTypeValue = eventType.getText().toString().trim();
+            String eventDescrValue = eventDescr.getText().toString().trim();
+            // populateInfoTv(name, age, hasAccepted);
+            if (TextUtils.isEmpty(eventNameValue) || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventDateValue) || TextUtils.isEmpty(eventTypeValue) || TextUtils.isEmpty(eventDescrValue)) {
+                return;
             }
+            prepararPostagens();
+            firebaseFirestoreService.createNewEvent(fAuth.getCurrentUser().getUid(), eventNameValue, eventLocationValue, eventDateValue, eventTypeValue, eventDescrValue);
+            clearInputFiels();
         });
 
-
         return v;
+    }
+
+    private void clearInputFiels() {
+        eventName.getText().clear();
+        eventLocation.getText().clear();
+        eventDate.getText().clear();
+        eventType.getText().clear();
+        eventDescr.getText().clear();
     }
 
     public void addPostagens(String name, String date, String location, String event_description, String event_creator_name,
@@ -112,6 +127,5 @@ public class AddEventFragment extends  Fragment{
                 R.drawable.im_event_icon_example_4,
                 R.drawable.im_cat_dark_40);
         this.postagens.add(post);
-
     }
 }
