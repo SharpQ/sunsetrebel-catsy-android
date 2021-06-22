@@ -18,7 +18,7 @@
     <item
         android:id="@+id/menu_add_event"
         android:icon="@drawable/ic_add"
-        android:title="New event" />
+        android:title="Create" />
 
     <item
         android:id="@+id/menu_message"
