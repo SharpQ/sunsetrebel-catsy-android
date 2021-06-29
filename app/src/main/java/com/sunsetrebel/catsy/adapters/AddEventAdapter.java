@@ -6,15 +6,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
-import com.sunsetrebel.catsy.models.AddEvent;
+import com.sunsetrebel.catsy.models.AddEventModel;
 
 import java.util.List;
 import com.sunsetrebel.catsy.R;
 
 public class AddEventAdapter extends RecyclerView.Adapter<AddEventAdapter.MyViewHolder> {
-    private List<AddEvent> postagens;
+    private List<AddEventModel> postagens;
 
-    public AddEventAdapter(List<AddEvent> listaPostagens) {
+    public AddEventAdapter(List<AddEventModel> listaPostagens) {
         this.postagens = listaPostagens;
     }
 
@@ -28,14 +28,14 @@ public class AddEventAdapter extends RecyclerView.Adapter<AddEventAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        AddEvent addEvent = postagens.get(position);
-        holder.textName.setText(addEvent.getName());
-        holder.textDate.setText(addEvent.getDate());
-        holder.textLocation.setText(addEvent.getLocation());
-        holder.textEventDescription.setText(addEvent.get_event_description());
-        holder.textEventCreatorName.setText(addEvent.get_event_creator_name());
-        holder.imageEventIcon.setImageResource(addEvent.getEvent_image());
-        holder.EventCreatorPhotoPostagem.setImageResource(addEvent.get_event_creator_photo());
+        AddEventModel addEventModel = postagens.get(position);
+        holder.textName.setText(addEventModel.getName());
+        holder.textDate.setText(addEventModel.getDate());
+        holder.textLocation.setText(addEventModel.getLocation());
+        holder.textEventDescription.setText(addEventModel.get_event_description());
+        holder.textEventCreatorName.setText(addEventModel.get_event_creator_name());
+        holder.imageEventIcon.setImageResource(addEventModel.getEvent_image());
+        holder.EventCreatorPhotoPostagem.setImageResource(addEventModel.get_event_creator_photo());
     }
 
     @Override

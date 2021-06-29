@@ -33,7 +33,7 @@ import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.AccountFragment;
 import com.sunsetrebel.catsy.fragments.AddEventFragment;
 import com.sunsetrebel.catsy.fragments.EventListFragment;
-import com.sunsetrebel.catsy.models.AddEvent;
+import com.sunsetrebel.catsy.models.AddEventModel;
 
 import android.location.Location;
 import android.util.Log;
@@ -75,7 +75,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     FusedLocationProviderClient fusedLocationProviderClient;
     //Event input dialog data
     TextView infoTv;
-    private List<AddEvent> postagens = new ArrayList<>();
+    private List<AddEventModel> postagens = new ArrayList<>();
     private RecyclerView recyclerPostagem;
     private static final String TAGG = MapsActivity.class.getSimpleName();
     AnimatedBottomBar animatedBottomBar;
@@ -135,15 +135,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         ImageView MapFilter;
         MapFilter = findViewById(R.id.map_filter);
-        MapFilter.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MapsActivity.this, EventsListActivity.class);
-                startActivity(intent);
-                MapFilter.clearAnimation();
-            }
-
-        });
 
         try {
             assert mapFragment.getView() != null;
@@ -265,7 +256,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void prepararPostagens() {
-        AddEvent post = new AddEvent(
+        AddEventModel post = new AddEventModel(
 
         );
         this.postagens.add(post);}

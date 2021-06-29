@@ -41,8 +41,6 @@ public class FirebaseAuthService {
     }
 
     public boolean checkCurrentUser() {
-        //context - current page getApplicationContext()
-        //c - activity class to move if user logged
         user = fAuth.getCurrentUser();
         if (user != null) {
             return true;
@@ -64,7 +62,6 @@ public class FirebaseAuthService {
 
     public Intent signInGoogle(Context context) {
         //context - current page getApplicationContext()
-        //c - activity class to move if user logged
         this.context = context;
         return mGoogleSignInClient.getSignInIntent();
     }
