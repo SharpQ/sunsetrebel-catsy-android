@@ -48,10 +48,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.TutorialActivity" />
-        <activity
-            android:name=".activities.EventsListActivity"
-            android:label="@string/title_activity_events_list"
-            android:theme="@style/splashScreenTheme" />
 
         <uses-library
             android:name="org.apache.http.legacy"
