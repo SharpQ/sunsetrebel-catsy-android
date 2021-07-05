@@ -34,7 +34,8 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="-1dp"
-        android:layout_marginBottom="-3dp" />
+        android:background="@drawable/ui_rounded_corners"
+        android:layout_marginBottom="1dp" />
 
     <LinearLayout
         android:id="@+id/linearLayoutCustomView"
@@ -104,34 +105,34 @@
 
 
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignTop="@id/google_map"
         tools:context=".activities.MapsActivity">
 
         <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/animatedBottomBar"/>
+            android:layout_above="@+id/animatedBottomBar"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="1dp" />
 
         <nl.joery.animatedbottombar.AnimatedBottomBar
             android:id="@+id/animatedBottomBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/ui_toolbar_shape"
-            android:alpha="0.99"
-            android:layout_marginBottom="40dp"
-            android:elevation="2dp"
-            app:itemMaxLines="2"
+            android:layout_marginBottom="30dp"
+            android:elevation="33dp"
             app:abb_animationDuration="500"
             app:abb_animationInterpolator="@android:anim/overshoot_interpolator"
             app:abb_indicatorAppearance="round"
             app:abb_indicatorColor="@color/white"
             app:abb_textAppearance="@style/CustomText"
-            app:abb_indicatorHeight="4dp"
+            app:abb_indicatorHeight="6dp"
             app:abb_indicatorMargin="16dp"
             app:abb_selectedIndex="1"
             app:abb_selectedTabType="text"
@@ -140,6 +141,20 @@
             app:abb_tabColor="@color/primaryLightColor"
             app:abb_tabColorSelected="@color/white"
             app:abb_tabs="@menu/menu_bottom_navigation" />
+
+        <LinearLayout
+            android:id="@+id/emptySpace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/animatedBottomBar"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom|center_horizontal|fill_horizontal"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:background="#6a1b9a"
+            android:orientation="vertical"></LinearLayout>
 
     </RelativeLayout>
 </RelativeLayout>

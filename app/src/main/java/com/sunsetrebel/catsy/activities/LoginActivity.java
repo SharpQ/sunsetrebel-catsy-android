@@ -13,6 +13,7 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -57,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
         if(firebaseAuthService.checkCurrentUser()) {
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            Animatoo.animateFade(this);  //fire the zoom animation
             finish();
         }
     }
@@ -126,6 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             RC_SIGN_IN = FirebaseAuthService.getRCSignIn();
             Intent signInIntent = firebaseAuthService.signInGoogle(getApplicationContext());
             startActivityForResult(signInIntent, RC_SIGN_IN);
+            Animatoo.animateFade(this);  //fire the zoom animation
             isGoogleAuth = true;
             }
         );
@@ -158,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra("phoneNumber", phone);
                 intent.putExtra("isTutorialNextPage", false);
                 startActivity(intent);
+                Animatoo.animateFade(this);  //fire the zoom animation
                 setUIStatePhone();
                 progressBar.setVisibility(View.GONE);
             } else {
@@ -170,6 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {
                         progressBar.setVisibility(View.GONE);
@@ -256,6 +261,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {
                         restartActivity(mActivity);
@@ -279,6 +285,7 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {
                         restartActivity(mActivity);

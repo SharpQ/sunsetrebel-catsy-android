@@ -1,10 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+
+
+<RelativeLayout android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/greyBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/addEventScrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/greyBackground"
+    >
 
-    android:background="@drawable/ui_toolbar_shape"
+<RelativeLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/greyBackground"
     >
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -15,9 +30,27 @@
         android:layout_marginTop="40dp"
         android:layout_marginBottom="16dp"
         android:fontFamily="@font/audiowide"
-        android:text="Type event details below"
-        android:textColor="@color/black"
+        android:text="Create event"
+        android:textColor="@color/primaryTextColor"
         android:textSize="24sp" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/cardEventNameTitle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="90dp"
+        android:layout_marginEnd="245dp"
+        android:background="@color/greyBackground"
+        android:fontFamily="@font/audiowide"
+        android:hint="Event name"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/card_event_name"
@@ -26,63 +59,126 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="245dp"
         android:layout_marginTop="90dp"
-        android:layout_marginEnd="10dp"
+        android:layout_marginEnd="9dp"
+        android:background="@color/greyBackground"
         android:fontFamily="@font/audiowide"
-        android:background="@drawable/ui_rounded_corners_light"
-        android:hint="Event name..."
         android:imeOptions="actionNext"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor" />
 
     <androidx.appcompat.widget.AppCompatEditText
 
-    android:id="@+id/card_event_date"
+        android:id="@+id/card_event_date"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="450dp"
+        android:layout_marginEnd="270dp"
+        android:background="@color/greyBackground"
+        android:fontFamily="@font/audiowide"
+        android:hint="Event start "
+        android:imeOptions="actionNext"
+        android:inputType="date"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+
+        android:id="@+id/card_event_time_start"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="211dp"
+        android:layout_marginTop="450dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/greyBackground"
+        android:fontFamily="@font/audiowide"
+        android:hint="Event start "
+        android:imeOptions="actionNext"
+        android:inputType="date"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+
+        android:id="@+id/card_event_time_end"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="207dp"
+        android:layout_marginTop="500dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/greyBackground"
+        android:fontFamily="@font/audiowide"
+        android:hint="Event end time "
+        android:imeOptions="actionNext"
+        android:inputType="date"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+
+        android:id="@+id/card_event_date_end"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="238dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/ui_rounded_corners_light"
+        android:layout_marginTop="500dp"
+        android:layout_marginEnd="270dp"
+        android:background="@color/greyBackground"
         android:fontFamily="@font/audiowide"
-        android:hint="Event date..."
+        android:hint="Event end"
         android:imeOptions="actionNext"
-        android:inputType="date" />
+        android:inputType="date"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor" />
+
 
     <androidx.appcompat.widget.AppCompatEditText
 
-    android:id="@+id/card_event_location"
+        android:id="@+id/card_event_location"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="165dp"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="143dp"
         android:layout_marginEnd="10dp"
+        android:background="@color/greyBackground"
         android:fontFamily="@font/audiowide"
-        android:background="@drawable/ui_rounded_corners_light"
-        android:hint="Event location..."
+        android:hint="Event location"
         android:imeOptions="actionNext"
-        android:inputType="text"/>
+        android:inputType="text"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor" />
 
     <EditText
         android:id="@+id/card_event_detail_description"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
+        android:layout_height="100dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="399dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="870dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/ui_rounded_corners_light"
+        android:background="@drawable/ui_rounded_corners_grey"
         android:fontFamily="@font/audiowide"
-
-        android:hint="Event description..."
         android:imeOptions="actionNext"
-        android:inputType="textMultiLine|textImeMultiLine" />
+        android:inputType="textMultiLine|textImeMultiLine"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor" />
 
     <androidx.appcompat.widget.AppCompatEditText
 
@@ -92,14 +188,36 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="316dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="600dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/ui_rounded_corners_light"
+        android:background="@color/greyBackground"
         android:fontFamily="@font/audiowide"
-        android:hint="Event type..."
         android:imeOptions="actionNext"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+
+        android:id="@+id/addEventDescriptionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="850dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/greyBackground"
+        android:duplicateParentState="false"
+        android:editable="true"
+        android:fontFamily="@font/audiowide"
+        android:hint="Detailed description"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        android:textColor="@color/primaryTextColor"
+        android:textColorHint="@color/primaryTextColor" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/submit_button"
@@ -109,12 +227,59 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
         android:layout_marginStart="140dp"
-        android:layout_marginTop="580dp"
+        android:layout_marginTop="1000dp"
         android:layout_marginEnd="140dp"
 
-        android:background="@drawable/ui_rounded_corners_light"
+        android:background="@drawable/ui_rounded_corners_grey"
         android:fontFamily="@font/audiowide"
         android:gravity="center|center_vertical|fill_vertical"
         android:text="submit"
         android:textColor="@color/primaryTextColor" />
+
+    <LinearLayout
+        android:id="@+id/addEventImageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="195dp"
+        android:orientation="vertical"
+        android:paddingRight="10dp"
+        android:background="@drawable/ui_rounded_corners_grey"
+        android:paddingBottom="10dp">
+
+        <fragment
+            android:id="@+id/addEventSmallMap"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="125dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="1dp"
+            android:background="@drawable/ui_rounded_corners" />
+
+        <TextView
+            android:id="@+id/iv_filename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|bottom"
+            android:paddingBottom="10dp" />
+
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/ui_rounded_corners"
+            android:src="@mipmap/ic_launcher" />
+
+    </LinearLayout>
+</RelativeLayout>
+</ScrollView>
 </RelativeLayout>

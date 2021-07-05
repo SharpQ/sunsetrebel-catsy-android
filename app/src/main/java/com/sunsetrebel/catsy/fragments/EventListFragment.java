@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import me.everything.android.ui.overscroll.HorizontalOverScrollBounceEffectDecorator;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
+import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
+
 
 public class EventListFragment extends Fragment {
     private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
@@ -50,7 +55,8 @@ public class EventListFragment extends Fragment {
         recyclerPostagem = v.findViewById(R.id.list_background);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerPostagem.setLayoutManager(layoutManager);
-
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.list_background);
+        new VerticalOverScrollBounceEffectDecorator(new RecyclerViewOverScrollDecorAdapter(recyclerView));
         //Fill EventList with events
         if (EventListService.getListUpdateStatus()) {
             firebaseFirestoreService.getEventList(events -> {

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.sunsetrebel.catsy.R;
+import com.hencesimplified.animationlibrary.AnimationLibrary;
 
 
 
@@ -27,6 +28,7 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+      //  animationLibrary.
         return inflater.inflate(R.layout.fragment_account, container, false);
     }
 }

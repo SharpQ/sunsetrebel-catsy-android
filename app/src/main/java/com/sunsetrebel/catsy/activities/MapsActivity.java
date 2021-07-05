@@ -29,10 +29,13 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.hencesimplified.animationlibrary.AnimationLibrary;
+import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.AccountFragment;
 import com.sunsetrebel.catsy.fragments.AddEventFragment;
 import com.sunsetrebel.catsy.fragments.EventListFragment;
+import com.sunsetrebel.catsy.fragments.SampleFragment;
 import com.sunsetrebel.catsy.models.AddEventModel;
 
 import android.location.Location;
@@ -62,12 +65,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
+import com.hencesimplified.animationlibrary.AnimationLibrary;
 
 
 
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
-
+    //Variables for map
     private static final String TAG = "MapsActivity";
     private GoogleMap mMap;
     private Geocoder geocoder;
@@ -78,6 +82,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private List<AddEventModel> postagens = new ArrayList<>();
     private RecyclerView recyclerPostagem;
     private static final String TAGG = MapsActivity.class.getSimpleName();
+
     AnimatedBottomBar animatedBottomBar;
     FragmentManager fragmentManager;
 
@@ -115,10 +120,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Top and navigation bar transparency
-
-
         getWindow().setStatusBarColor(Color.parseColor("#00000000"));
-        getWindow().setNavigationBarColor(Color.parseColor("#6a1b9a"));
+        getWindow().setNavigationBarColor(Color.parseColor("#6A1B9A"));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Window w = getWindow();
             w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
@@ -127,6 +130,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         hideSystemUI();
+        RxPaparazzo.register(getApplication());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.google_map);
@@ -194,7 +198,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         fragment = new AddEventFragment();
                         break;
                     case R.id.menu_message:
-                        fragment = new AccountFragment();
+                        fragment = new SampleFragment();
                         break;
                     case R.id.menu_account:
                         fragment = new AccountFragment();
@@ -203,8 +207,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 if (fragment != null) {
                     fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction().replace(R.id.fragment_container, fragment)
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.bottom_in, R.anim.slide_in_right).replace(R.id.fragment_container, fragment)
                             .commit();
+                  //  animationLibrary.rightEnterLeftOut();
                 } else {
                     Log.e(TAGG, "Error in creating Fragment");
                 }
@@ -269,8 +274,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         infoTv.setText(String.format(getString(R.string.info), name, age, acceptedText));
     }
-
-
 
 
 
