@@ -13,6 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -58,6 +60,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onStart();
         if(firebaseAuthService.checkCurrentUser()) {
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            Animatoo.animateWindmill(this);  //fire the zoom animation
             finish();
         }
     }
@@ -128,7 +131,8 @@ public class RegistrationActivity extends AppCompatActivity {
                     RC_SIGN_IN = FirebaseAuthService.getRCSignIn();
                     Intent signInIntent = firebaseAuthService.signInGoogle(getApplicationContext());
                     startActivityForResult(signInIntent, RC_SIGN_IN);
-                    isGoogleAuth = true;
+            Animatoo.animateWindmill(this);  //fire the zoom animation
+            isGoogleAuth = true;
                 }
         );
 
@@ -166,6 +170,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 intent.putExtra("fullName", fullName);
                 intent.putExtra("isTutorialNextPage", true);
                 startActivity(intent);
+                Animatoo.animateWindmill(this);  //fire the zoom animation
                 setUIStatePhone();
                 progressBar.setVisibility(View.GONE);
             } else {
@@ -178,6 +183,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             }
                         }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
+                        Animatoo.animateWindmill(this);  //fire the zoom animation
                         finish();
                     } else {
                         progressBar.setVisibility(View.GONE);
@@ -272,6 +278,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             }
                         }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
+                        Animatoo.animateWindmill(this);  //fire the zoom animation
                         finish();
                     } else {
                         restartActivity(mActivity);
@@ -295,6 +302,7 @@ public class RegistrationActivity extends AppCompatActivity {
                             }
                         }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
+                        Animatoo.animateWindmill(this);  //fire the zoom animation
                         finish();
                     } else {
                         restartActivity(mActivity);

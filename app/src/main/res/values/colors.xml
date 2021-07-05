@@ -9,4 +9,7 @@
     <color name="googleBtnColor">#4286F5</color>
     <color name="black_half_transparent">#80000000</color>
     <color name="red_error">#FF0000</color>
+    <color name="greyBackground">#1b1b1b</color>
+    <color name="greyBackgroundLight">#424242</color>
+
 </resources>

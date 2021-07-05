@@ -5,9 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import com.sunsetrebel.catsy.models.AddEventModel;
 
+import java.util.Calendar;
 import java.util.List;
 import com.sunsetrebel.catsy.R;
 
@@ -28,6 +31,8 @@ public class AddEventAdapter extends RecyclerView.Adapter<AddEventAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
+
+
         AddEventModel addEventModel = postagens.get(position);
         holder.textName.setText(addEventModel.getName());
         holder.textDate.setText(addEventModel.getDate());
@@ -55,6 +60,7 @@ public class AddEventAdapter extends RecyclerView.Adapter<AddEventAdapter.MyView
         public MyViewHolder(View itemView) {
             super(itemView);
 
+
             textName = itemView.findViewById(R.id.card_event_name);
             textDate = itemView.findViewById(R.id.card_event_date);
             textLocation = itemView.findViewById(R.id.card_event_location);
@@ -62,6 +68,8 @@ public class AddEventAdapter extends RecyclerView.Adapter<AddEventAdapter.MyView
             textEventCreatorName = itemView.findViewById(R.id.event_type);
             imageEventIcon = itemView.findViewById(R.id.card_event_icon);
             EventCreatorPhotoPostagem = itemView.findViewById(R.id.event_creator_photo);
+
+
         }
     }
 }

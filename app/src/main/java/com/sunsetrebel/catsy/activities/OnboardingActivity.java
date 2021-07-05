@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -37,6 +39,7 @@ public class OnboardingActivity extends AppCompatActivity {
         super.onStart();
         if(firebaseAuthService.checkCurrentUser()) {
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            Animatoo.animateFade(this);  //fire the zoom animation
             finish();
         }
     }
@@ -62,16 +65,20 @@ public class OnboardingActivity extends AppCompatActivity {
 
         mToRegisterBtn.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), RegistrationActivity.class));
+            Animatoo.animateFade(this);  //fire the zoom animation
+
         });
 
         mToLoginBtn.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            Animatoo.animateFade(this);  //fire the zoom animation
         });
 
         mGoogleAuthBtn.setOnClickListener(v -> {
                     RC_SIGN_IN = FirebaseAuthService.getRCSignIn();
                     Intent signInIntent = firebaseAuthService.signInGoogle(getApplicationContext());
                     startActivityForResult(signInIntent, RC_SIGN_IN);
+                    Animatoo.animateFade(this);  //fire the zoom animation
                 }
         );
     }
@@ -132,6 +139,7 @@ public class OnboardingActivity extends AppCompatActivity {
                             }
                         }, fAuth.getCurrentUser().getUid());
                         startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {
                         restartActivity(mActivity);
