@@ -23,14 +23,14 @@ public class TutorialActivity extends AppCompatActivity {
 
         mSkipBtn.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-            Animatoo.animateWindmill(this);  //fire the zoom animation
+            Animatoo.animateFade(this);  //fire the zoom animation
             finish();
         });
 
         mSignOut.setOnClickListener(v -> {
             firebaseAuthService.signOutFirebase();
             startActivity(new Intent(getApplicationContext(), LoginActivity.class));
-            Animatoo.animateWindmill(this);  //fire the zoom animation
+            Animatoo.animateFade(this);  //fire the zoom animation
             finish();
         });
     }
