@@ -97,7 +97,7 @@ public class AddEventMapActivity extends AppCompatActivity implements OnMapReady
         mapView = mapFragment.getView();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(AddEventMapActivity.this);
-        Places.initialize(AddEventMapActivity.this, getString(R.string.google_maps_api));
+        Places.initialize(AddEventMapActivity.this, getString(R.string.google_maps_key));
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
