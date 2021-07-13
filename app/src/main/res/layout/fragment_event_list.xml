@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@drawable/ui_rounded_corners"
+    android:background="@color/white"
     android:scaleType = "centerCrop"
 
     app:layout_constraintEnd_toEndOf="parent"
@@ -99,7 +99,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/map_searchview"
-            app:popupTheme="@style/AppTheme">
+            app:popupTheme="@style/Theme.Catsy">
 
 
             <LinearLayout
@@ -107,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/im_sort_arrows_40"
-                android:dividerPadding="9dp"
+                android:dividerPadding="12dp"
                 android:orientation="horizontal"
                 android:showDividers="beginning"
                 app:tabRippleColor="@null">
@@ -147,7 +147,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="?attr/actionBarSize"
                 android:divider="@drawable/im_filter_icon_40"
-                android:dividerPadding="9dp"
+                android:dividerPadding="12dp"
                 android:orientation="horizontal"
                 android:showDividers="beginning"
                 app:tabBackground="@color/primaryColor">

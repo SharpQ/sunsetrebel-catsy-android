@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <size
+        android:width="10dp"
+        android:height="10dp" />
+    
+    <!--android:height depends on the height you want for the horizontal line-->
+</shape>

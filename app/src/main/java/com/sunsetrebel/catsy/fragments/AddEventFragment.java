@@ -1,8 +1,10 @@
 package com.sunsetrebel.catsy.fragments;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.InputType;
@@ -17,35 +19,32 @@ import android.widget.ScrollView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.fxn.pix.Pix;
+import com.fxn.utility.ImageQuality;
+import com.fxn.utility.PermUtil;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.haerul.bottomfluxdialog.BottomFluxDialog;
-import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.miguelbcr.ui.rx_paparazzo2.entities.FileData;
-import com.miguelbcr.ui.rx_paparazzo2.entities.Response;
-import com.miguelbcr.ui.rx_paparazzo2.entities.size.OriginalSize;
 import com.miguelbcr.ui.rx_paparazzo2.entities.size.Size;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.activities.AddEventMapActivity;
 import com.sunsetrebel.catsy.activities.MapsActivity;
-import com.sunsetrebel.catsy.activities.PickerUtil;
-import com.sunsetrebel.catsy.adapters.ImagesAdapter;
+import com.sunsetrebel.catsy.adapters.MyAdapter;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
-import com.yalantis.ucrop.UCrop;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import com.fxn.pix.Options;
+
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -64,9 +63,38 @@ public class AddEventFragment extends Fragment {
     private ArrayList<FileData> fileDataList;
     private Size size;
     private static final String STATE_FILES = "FILES";
+    RecyclerView recyclerViewEventImage;
+    MyAdapter myAdapter;
+
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+    Options options;
+    ArrayList<String> returnValue = new ArrayList<>();
+
+    // TODO: Rename and change types of parameters
+    private String mParam1;
+    private String mParam2;
 
     public AddEventFragment() {
         // Required empty public constructor
+    }
+
+    public static AddEventFragment newInstance(String param1, String param2) {
+        AddEventFragment fragment = new AddEventFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     @Override
@@ -128,12 +156,16 @@ public class AddEventFragment extends Fragment {
                 }
             });
 
-            eventLocation.setOnClickListener(new View.OnClickListener() {
+            /*eventLocation.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(getApplicationContext(), AddEventMapsFragment.class));
+                    Fragment addEventMapsFragment = new AddEventFragment();
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, addEventMapsFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
-            });
+            });*/
 
             if (TextUtils.isEmpty(eventNameValue) || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventDateValue) || TextUtils.isEmpty(eventDateEndValue)|| TextUtils.isEmpty(eventTypeValue) || TextUtils.isEmpty(eventDescrValue)) {
                 return;
@@ -156,10 +188,19 @@ public class AddEventFragment extends Fragment {
         ScrollView scrollView = (ScrollView) v.findViewById(R.id.addEventScrollView);
         OverScrollDecoratorHelper.setUpOverScroll(scrollView);
 
-        //Bottom sheet camera/gallery choice
-        v.findViewById(R.id.addEventImageLayout).setOnClickListener(new View.OnClickListener() {
+
+
+        v.findViewById(R.id.card_event_location).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), AddEventMapActivity.class));
+                Animatoo.animateShrink(getActivity());
+
+            } });
+
+       /* v.findViewById(R.id.addEventImageLayout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v)*{
 
                 BottomFluxDialog.confirmDialog(getActivity())
                         .setTextTitle("PickUp Image")
@@ -177,8 +218,24 @@ public class AddEventFragment extends Fragment {
                         .show();
 
             }
+        });*/
+        RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        myAdapter = new MyAdapter(getActivity());
+        options = Options.init()
+                .setRequestCode(100)
+                .setCount(3)
+                .setFrontfacing(false)
+                .setImageQuality(ImageQuality.LOW)
+                .setPreSelectedUrls(returnValue)
+                .setScreenOrientation(com.fxn.pix.Options.SCREEN_ORIENTATION_PORTRAIT)
+                .setPath("/akshay/new")
+        ;
+        recyclerView.setAdapter(myAdapter);
+        v.findViewById(R.id.fab).setOnClickListener((View view) -> {
+            options.setPreSelectedUrls(returnValue);
+            Pix.start(this, options);
         });
-
         return v;
     }
 
@@ -193,6 +250,36 @@ public class AddEventFragment extends Fragment {
         eventDescr.getText().clear();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Log.e("val", "requestCode ->  " + requestCode+"  resultCode "+resultCode);
+        switch (requestCode) {
+            case (100): {
+                if (resultCode == Activity.RESULT_OK) {
+                    returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
+                    myAdapter.addImage(returnValue);
+                }
+            }
+            break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Pix.start(getActivity(), options);
+                } else {
+                    Toast.makeText(getActivity(), "Approve permissions to open Pix ImagePicker",
+                            Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+        }
+    }
 
 
     private void showDateTimeDialog(final EditText date_time_in) {
@@ -223,35 +310,6 @@ public class AddEventFragment extends Fragment {
         new DatePickerDialog(getActivity(),dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
 
     }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        fileDataList = new ArrayList<>();
-        if (savedInstanceState != null) {
-            if (savedInstanceState.containsKey(STATE_FILES)) {
-                List files = (List) savedInstanceState.getSerializable(STATE_FILES);
-                fileDataList.addAll(files);
-            }
-        }
-
-        size = new OriginalSize();
-
-        initViews();
-    }
-
-    private void initViews() {
-        View view = getView();
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv_images);
-/*        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        loadImages();*/
-    }
-
 
 
     private void showTimeDialog(final EditText time_in) {
@@ -287,98 +345,7 @@ public class AddEventFragment extends Fragment {
         new DatePickerDialog(getActivity(),dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    private void captureImageWithCrop() {
-        UCrop.Options options = new UCrop.Options();
-        options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
-        options.setToolbarTitle("Cropping single photo");
-        options.withAspectRatio(25, 75);
-
-        OriginalSize size = new OriginalSize();
-
-        Observable<Response<AddEventFragment, FileData>> takePhotoAndCrop = pickSingle(options, size)
-                .usingCamera();
-
-        processSingle(takePhotoAndCrop);
-    }
-
-    private void pickupImage() {
-        UCrop.Options options = new UCrop.Options();
-        options.setToolbarColor(ContextCompat.getColor(getContext(), R.color.colorPrimaryDark));
-        options.setToolbarTitle("Cropping single image");
-        options.withAspectRatio(25, 75);
-        Observable<Response<AddEventFragment, FileData>> takePhotoAndCrop = pickSingle(options, size)
-                .usingFiles();
-
-        processSingle(takePhotoAndCrop);
-    }
-
-    private void processSingle(Observable<Response<AddEventFragment, FileData>> pickUsingGallery) {
-        pickUsingGallery
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    if (PickerUtil.checkResultCode(getContext(), response.resultCode())) {
-                        response.targetUI().loadImage(response.data());
-                    }
-                }, throwable -> {
-                    throwable.printStackTrace();
-                    Toast.makeText(getContext(), "ERROR " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-                });
-    }
-
-    private RxPaparazzo.SingleSelectionBuilder<AddEventFragment> pickSingle(UCrop.Options options, Size size) {
-        this.size = size;
-
-        RxPaparazzo.SingleSelectionBuilder<AddEventFragment> resized = RxPaparazzo.single(this)
-                .sendToMediaScanner()
-                .size(size);
-
-        if (options != null) {
-            resized.crop(options);
-        }
-
-        return resized;
-    }
-
-    void loadImage(FileData fileData) {
-        this.fileDataList = new ArrayList<>();
-        this.fileDataList.add(fileData);
-
-        loadImages();
-    }
-
-    private void loadImages() {
-        this.fileDataList = new ArrayList<>(fileDataList);
-
-        loadImages(fileDataList);
-    }
-
-    private void loadImages(List<FileData> fileDataList) {
-        if (fileDataList == null || fileDataList.isEmpty()) {
-            return;
-        }
 
 
-        recyclerView.setVisibility(View.VISIBLE);
-        recyclerView.setAdapter(new ImagesAdapter(fileDataList));
-    }
 
-
-    public List<FileData> getFileDatas() {
-        return fileDataList;
-    }
-
-
-    public List<String> getFilePaths() {
-        List<String> filesPaths = new ArrayList<>();
-        for (FileData fileData : fileDataList) {
-            filesPaths.add(fileData.getFile().getAbsolutePath());
-        }
-
-        return filesPaths;
-    }
-
-    public Size getSize() {
-        return size;
-    }
 }

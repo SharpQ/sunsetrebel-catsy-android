@@ -99,7 +99,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/map_searchview"
-            app:popupTheme="@style/AppTheme">
+            app:popupTheme="@style/Theme.Catsy">
 
 
             <LinearLayout

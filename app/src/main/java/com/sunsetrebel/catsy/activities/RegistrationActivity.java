@@ -60,7 +60,7 @@ public class RegistrationActivity extends AppCompatActivity {
         super.onStart();
         if(firebaseAuthService.checkCurrentUser()) {
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-            Animatoo.animateFade(this);  //fire the zoom animation
+            Animatoo.animateWindmill(this);  //fire the zoom animation
             finish();
         }
     }

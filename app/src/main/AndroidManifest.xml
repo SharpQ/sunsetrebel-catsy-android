@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.sunsetrebel.catsy">
 
     <!--
@@ -13,15 +14,19 @@
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:requestLegacyExternalStorage="true"
-        android:theme="@style/splashScreenTheme">
+        android:theme="@style/splashScreenTheme"
+        tools:replace="android:theme">
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -34,6 +39,7 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
@@ -52,6 +58,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.TutorialActivity" />
+        <activity android:name=".utils.PermissionsActivity" />
+
+        <activity
+            android:name=".activities.AddEventMapActivity"
+            android:label="Google map"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -62,8 +75,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/rx_paparazzo_file_paths" />
         </provider>
-
-
 
         <uses-library
             android:name="org.apache.http.legacy"

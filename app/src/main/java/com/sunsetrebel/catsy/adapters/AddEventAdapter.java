@@ -72,4 +72,5 @@ public class AddEventAdapter extends RecyclerView.Adapter<AddEventAdapter.MyView
 
         }
     }
+
 }

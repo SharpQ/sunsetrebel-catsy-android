@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Catsy</string>
+    <string name="google_maps_api">AIzaSyDYvKpxG_fqirpE3d0ueC81IZHHaMuF_CA</string>
     <string name="registration_title">Create account</string>
     <string name="google_authentication">Continue with Google</string>
     <string name="facebook_authentication">Continue with Facebook</string>
@@ -22,7 +23,6 @@
     <string name="text_slide_2">Get together with those who share your interests</string>
     <string name="text_slide_3">Have an amazing \n experience!</string>
     <string name="tutorial_button_skip">Skip Tutorial</string>
-    <string name="permission_required_toast">Location permission is required.</string>
     <string name="title_activity_events_list">ScrollingActivity</string>
     <string name="info">My name is %1$s. I am %2$s years old. I have %3$s accepted the terms and conditions of this app.</string>
     <string name="user_canceled">User canceled action</string>
@@ -30,4 +30,9 @@
     <string name="user_did_not_grant_permissions_never_ask">User has not accepted permissions with never ask. Go to settings</string>
     <string name="activity">Activity</string>
     <string name="fragment">Fragment</string>
+    <string name="title_activity_small_maps">Map</string>
+    <string name="title_activity_add_event_maps">Map</string>
+    <string name="permission_rationale_location">Access to the location service is required to demonstrate the \'my location\' feature, which shows your current location on the map.</string>
+    <string name="location_permission_denied">This sample requires location permission to enable the \'my location\' layer. Please try again and grant access to use the location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Google Maps API Demos\'.</string>
+
 </resources>
