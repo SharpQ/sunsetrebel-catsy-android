@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/greyBackground"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -268,16 +269,30 @@
             android:layout_gravity="center_horizontal|bottom"
             android:paddingBottom="10dp" />
 
-        <ImageView
-            android:id="@+id/iv_image"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:adjustViewBounds="true"
-            android:background="@drawable/ui_rounded_corners"
-            android:src="@mipmap/ic_launcher" />
+        <FrameLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+            xmlns:app = "http://schemas.android.com/apk/res-auto"
+            xmlns:tools = "http://schemas.android.com/tools"
+            android:layout_width = "match_parent"
+            android:layout_height = "match_parent"
+            tools:context = ".SampleFragment"
+            >
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id = "@+id/recyclerView"
+                android:layout_width = "match_parent"
+                android:layout_height = "match_parent"
+                />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id = "@+id/fab"
+                android:layout_width = "wrap_content"
+                android:layout_height = "wrap_content"
+                android:layout_gravity = "right|bottom"
+                android:layout_margin = "16dp"
+                android:src = "@drawable/ic_library_add_black_24dp"
+                android:tint = "#ffffff"
+                app:fabSize = "normal"
+                />
+        </FrameLayout>
 
     </LinearLayout>
 </RelativeLayout>

@@ -6,7 +6,6 @@ import androidx.core.app.ActivityCompat;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -29,13 +28,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.hencesimplified.animationlibrary.AnimationLibrary;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.AccountFragment;
 import com.sunsetrebel.catsy.fragments.AddEventFragment;
 import com.sunsetrebel.catsy.fragments.EventListFragment;
-import com.sunsetrebel.catsy.fragments.SampleFragment;
+import com.sunsetrebel.catsy.fragments.MessageFragment;
 import com.sunsetrebel.catsy.models.AddEventModel;
 
 import android.location.Location;
@@ -65,7 +63,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
-import com.hencesimplified.animationlibrary.AnimationLibrary;
 
 
 
@@ -198,7 +195,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         fragment = new AddEventFragment();
                         break;
                     case R.id.menu_message:
-                        fragment = new SampleFragment();
+                        fragment = new MessageFragment();
                         break;
                     case R.id.menu_account:
                         fragment = new AccountFragment();
@@ -341,13 +338,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
         //Event examples
         LatLng FirstEvent = new LatLng(50.436404, 30.369498);
-        googleMap.addMarker(new MarkerOptions().position(FirstEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_blue_40)).title("Open air cinema at 19:00"));
+        googleMap.addMarker(new MarkerOptions().position(FirstEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_blue_40)).title(String.valueOf(FirstEvent)));
 
         LatLng SecondEvent = new LatLng(50.449, 30.512850);
         googleMap.addMarker(new MarkerOptions().position(SecondEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_blue_40)).title("Guitar night at 20:00"));
 
         LatLng ThirdEvent = new LatLng(50.391566, 30.481428);
-        googleMap.addMarker(new MarkerOptions().position(ThirdEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_blue_40)).title("Mozzy birthday celebration at 09:00"));
+        googleMap.addMarker(new MarkerOptions().position(ThirdEvent).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_blue_40)).title(String.valueOf(ThirdEvent)));
         LatLng mountainView = new LatLng(37.4, -122.1);
 
     }
@@ -402,6 +399,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
     }
+
+
+
 
     @Override
     public void onMapLongClick(LatLng latLng) {
