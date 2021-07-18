@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AddEventMapActivity">
-    <include layout="@layout/content_map" />
+    tools:context=".activities.AddEventMapsActivity">
+    <include layout="@layout/add_event_map_content" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

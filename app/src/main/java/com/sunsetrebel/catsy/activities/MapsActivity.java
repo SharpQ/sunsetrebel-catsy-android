@@ -166,7 +166,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 /*        recyclerPostagem.setLayoutManager(layoutManager);
         this.prepararPostagens();
-        AddEventAdapter adapter = new AddEventAdapter(postagens);
+        AddEventDataAdapter adapter = new AddEventDataAdapter(postagens);
         recyclerPostagem.setAdapter(adapter);*/
         setTitle("Example 1");
 
@@ -215,47 +215,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
-    //Function to display the custom dialog.
-    void showCustomDialog() {
-        final Dialog dialog = new Dialog(MapsActivity.this);
-        //We have added a title in the custom layout. So let's disable the default title.
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //The user will be able to cancel the dialog bu clicking anywhere outside the dialog.
-        dialog.setCancelable(true);
-        //Mention the name of the layout of your custom dialog.
-        dialog.setContentView(R.layout.event_create_dialog);
-        dialog.getWindow().setBackgroundDrawableResource(R.drawable.ui_rounded_corners);
-        //Initializing the views of the dialog.
-        final EditText textName = dialog.findViewById(R.id.card_event_name);
-        final EditText textDate = dialog.findViewById(R.id.card_event_date);
-        final EditText  textLocation = dialog.findViewById(R.id.card_event_location);
-        final EditText  textEventDescription = dialog.findViewById(R.id.card_event_detail_description);
-        final EditText textEventCreatorName = dialog.findViewById(R.id.event_type);
-        final CheckBox termsCb = dialog.findViewById(R.id.terms_cb);
-        Button submitButton = dialog.findViewById(R.id.submit_button);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this , R.style.DialogTheme);
-
-
-
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String name = textName.getText().toString();
-                String date = textDate.getText().toString();
-                String location = textLocation.getText().toString();
-                String event_description = textEventDescription.getText().toString();
-                String event_creator_name = textEventCreatorName.getText().toString();
-                Boolean hasAccepted = termsCb.isChecked();
-               // populateInfoTv(name, age, hasAccepted);
-                dialog.dismiss();
-                prepararPostagens();
-            }
-        });
-
-        dialog.show();
-
-    }
 
     public void prepararPostagens() {
         AddEventModel post = new AddEventModel(

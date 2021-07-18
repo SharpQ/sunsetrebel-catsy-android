@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activities.AddEventMapActivity"
-    tools:showIn="@layout/activity_map">
+    tools:context=".activities.AddEventMapsActivity"
+    tools:showIn="@layout/activity_add_event_full_map">
 
 
     <fragment
-        android:id="@+id/map"
+        android:id="@+id/addEventBigFullMap"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
@@ -22,7 +22,7 @@
         app:rb_color="@color/primaryColor"
         app:rb_radius="32dp"
         app:rb_rippleAmount="4"
-        app:rb_duration="3000"
+        app:rb_duration="1700"
         app:rb_scale="6">
 
         <ImageView
@@ -30,11 +30,11 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:translationY="-18dp"
-            android:src="@drawable/im_cat_add_custom_40"/>
+            android:src="@drawable/im_cat_location_sample_35"/>
 
         <com.mancj.materialsearchbar.MaterialSearchBar
             android:id="@+id/searchBar"
-            style="@style/MaterialSearchBarLight"
+            style="@style/PlacesSearchBarTheme"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
@@ -44,14 +44,11 @@
             android:alpha="0.9"
             android:elevation="5dp"
             android:outlineProvider="bounds"
-            app:mt_clearIconTint="@color/white"
             app:mt_hint="Search a place"
-            app:mt_hintColor="@color/white"
-            app:mt_searchIconTint="@color/white"
+
             app:mt_maxSuggestionsCount="10"
             app:mt_navIconEnabled="false"
             app:mt_placeholder="Search a place"
-            app:mt_placeholderColor="@color/white"
             app:mt_roundedSearchBarEnabled="true"
             app:mt_searchBarColor="@color/primaryColor"
             app:mt_speechMode="false" />
@@ -69,7 +66,7 @@
             app:layout_constraintEnd_toStartOf="@+id/searchView"
             app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/map"
+            app:layout_constraintTop_toTopOf="@+id/addEventBigFullMap"
             app:pressedTranslationZ="1dp" />
 
     </com.skyfishjy.library.RippleBackground>
@@ -81,7 +78,7 @@
         android:background="@drawable/ui_rounded_toolbar_purple"
         >
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             android:id="@+id/locationConfirmText"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
@@ -93,8 +90,7 @@
             android:fontFamily="@font/audiowide"
             android:textColor="@color/white"
             android:text="Your location info will be here"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toTopOf="@+id/locationConfirmButton"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.541"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,7 +105,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/ui_rounded_button"
+            android:background="@drawable/ui_rounded_corners_light"
             android:fontFamily="@font/audiowide"
             android:text="Confirm"
             android:textColor="#FFFFFF"

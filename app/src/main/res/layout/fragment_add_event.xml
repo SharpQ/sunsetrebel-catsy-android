@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:background="@color/greyBackground"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -14,6 +15,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/greyBackground"
+    android:scrollbars="none"
     >
 
 <RelativeLayout
@@ -252,15 +254,15 @@
         android:paddingBottom="10dp">
 
         <fragment
-            android:id="@+id/addEventSmallMap"
+            android:id="@+id/google_map"
             class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="125dp"
             android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
             android:layout_marginEnd="0dp"
-            android:layout_marginBottom="1dp"
-            android:background="@drawable/ui_rounded_corners" />
+            android:layout_marginBottom="0dp"
+            tools:context=".fragments.AddEventFrament"/>
 
         <TextView
             android:id="@+id/iv_filename"
@@ -275,6 +277,7 @@
             android:layout_width = "match_parent"
             android:layout_height = "match_parent"
             tools:context = ".SampleFragment"
+
             >
 
             <androidx.recyclerview.widget.RecyclerView
@@ -289,7 +292,9 @@
                 android:layout_gravity = "right|bottom"
                 android:layout_margin = "16dp"
                 android:src = "@drawable/ic_library_add_black_24dp"
-                android:tint = "#ffffff"
+                android:tint = "@color/primaryLightColor"
+                android:backgroundTint="@color/primaryLightColor"
+                android:foregroundTint="@color/primaryLightColor"
                 app:fabSize = "normal"
                 />
         </FrameLayout>

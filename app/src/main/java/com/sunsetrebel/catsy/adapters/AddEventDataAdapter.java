@@ -6,25 +6,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 import com.sunsetrebel.catsy.models.AddEventModel;
 
-import java.util.Calendar;
 import java.util.List;
 import com.sunsetrebel.catsy.R;
 
-public class AddEventAdapter extends RecyclerView.Adapter<AddEventAdapter.MyViewHolder> {
+public class AddEventDataAdapter extends RecyclerView.Adapter<AddEventDataAdapter.MyViewHolder> {
     private List<AddEventModel> postagens;
 
-    public AddEventAdapter(List<AddEventModel> listaPostagens) {
+    public AddEventDataAdapter(List<AddEventModel> listaPostagens) {
         this.postagens = listaPostagens;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.event_card_detailed, parent, false);
+                .inflate(R.layout.event_list_event_card, parent, false);
 
         return new MyViewHolder(itemLista);
     }

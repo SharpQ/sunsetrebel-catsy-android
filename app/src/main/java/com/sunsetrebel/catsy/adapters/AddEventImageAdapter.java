@@ -15,11 +15,11 @@ import com.sunsetrebel.catsy.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AddEventImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private ArrayList<String> list = new ArrayList<>();
     private Context context;
 
-    public MyAdapter(Context context) {
+    public AddEventImageAdapter(Context context) {
         this.context = context;
     }
 
@@ -32,7 +32,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).
-                inflate(R.layout.image, parent, false);
+                inflate(R.layout.add_event_image, parent, false);
         return new Holder(v);
     }
 
@@ -58,7 +58,9 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         public Holder(View itemView) {
             super(itemView);
-            iv = itemView.findViewById(R.id.iv);
+            iv = itemView.findViewById(R.id.addEventImageView);
+            iv.setClipToOutline(true);
+
         }
     }
 }
