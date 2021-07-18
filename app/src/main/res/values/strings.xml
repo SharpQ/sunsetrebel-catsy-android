@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Catsy</string>
-    <string name="google_maps_api">AIzaSyDYvKpxG_fqirpE3d0ueC81IZHHaMuF_CA</string>
     <string name="registration_title">Create account</string>
     <string name="google_authentication">Continue with Google</string>
     <string name="facebook_authentication">Continue with Facebook</string>
