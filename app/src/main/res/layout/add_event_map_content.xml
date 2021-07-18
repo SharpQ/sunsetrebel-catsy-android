@@ -34,7 +34,7 @@
 
         <com.mancj.materialsearchbar.MaterialSearchBar
             android:id="@+id/searchBar"
-            style="@style/MaterialSearchBarLight"
+            style="@style/PlacesSearchBarTheme"
             android:layout_width="280dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
@@ -44,14 +44,11 @@
             android:alpha="0.9"
             android:elevation="5dp"
             android:outlineProvider="bounds"
-            app:mt_clearIconTint="@color/white"
             app:mt_hint="Search a place"
-            app:mt_hintColor="@color/white"
-            app:mt_searchIconTint="@color/white"
+
             app:mt_maxSuggestionsCount="10"
             app:mt_navIconEnabled="false"
             app:mt_placeholder="Search a place"
-            app:mt_placeholderColor="@color/white"
             app:mt_roundedSearchBarEnabled="true"
             app:mt_searchBarColor="@color/primaryColor"
             app:mt_speechMode="false" />
@@ -108,7 +105,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/ui_rounded_button"
+            android:background="@drawable/ui_rounded_corners_light"
             android:fontFamily="@font/audiowide"
             android:text="Confirm"
             android:textColor="#FFFFFF"

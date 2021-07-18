@@ -56,4 +56,19 @@
         <item name="android:textSize">10sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="PlacesSearchBarTheme" parent="MaterialSearchBarLight">
+        <item name="mt_searchBarColor">@color/searchBarPrimaryColor</item>
+        <item name="mt_dividerColor">@color/searchBarPrimaryColor</item>
+        <item name="mt_navIconTint">@color/searchBarPrimaryColor</item>
+        <item name="mt_searchIconTint">@color/searchBarPrimaryColor</item>
+        <item name="mt_clearIconTint">@color/searchBarPrimaryColor</item>
+        <item name="mt_menuIconTint">@color/searchBarPrimaryColor</item>
+        <item name="mt_backIconTint">@color/searchBarPrimaryColor</item>
+        <item name="mt_textCursorTint">@color/searchBarPrimaryColor</item>
+        <item name="mt_textColor">@color/searchBarPrimaryColor</item>
+        <item name="mt_hintColor">@color/searchBarPrimaryColor</item>
+        <item name="mt_placeholderColor">@color/searchBarPrimaryColor</item>
+        <item name="mt_highlightedTextColor">@color/searchBarPrimaryColor</item>
+    </style>
 </resources>

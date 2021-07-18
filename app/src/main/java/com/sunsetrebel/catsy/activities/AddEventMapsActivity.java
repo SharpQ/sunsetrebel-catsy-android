@@ -109,7 +109,6 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
         getWindow().setStatusBarColor(Color.parseColor("#00000000"));
         getWindow().setNavigationBarColor(Color.parseColor("#6A1B9A"));
         hideSystemUI();
-
         materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
             public void onSearchStateChanged(boolean enabled) {
@@ -378,9 +377,11 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
             @Override
             public boolean onMyLocationButtonClick() {
                 if (materialSearchBar.isSuggestionsVisible())
+                    locationConfirmText.clearComposingText();
                     materialSearchBar.clearSuggestions();
                 if (materialSearchBar.isSearchEnabled())
-                    materialSearchBar.disableSearch();
+                    locationConfirmText.clearComposingText();
+                materialSearchBar.disableSearch();
                 return false;
             }
         });
