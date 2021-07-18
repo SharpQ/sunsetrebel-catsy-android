@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.sunsetrebel.catsy.fragments.MapsFragment;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
 
@@ -16,13 +17,12 @@ public class TutorialActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(R.style.Theme_Catsy);
         setContentView(R.layout.activity_tutorial);
         mSkipBtn = findViewById(R.id.skipTutorial);
         mSignOut = findViewById(R.id.buttonLogout);
 
         mSkipBtn.setOnClickListener(v -> {
-            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            startActivity(new Intent(getApplicationContext(), MapsFragment.class));
             Animatoo.animateFade(this);  //fire the zoom animation
             finish();
         });

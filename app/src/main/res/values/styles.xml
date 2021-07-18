@@ -18,7 +18,7 @@
     <style name="FacebookButton">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">55dp</item>
-        <item name="android:backgroundTint">#4867AA</item>
+        <item name="android:backgroundTint">@color/facebookBtnColor</item>
         <item name="android:layout_marginStart">20dp</item>
         <item name="android:layout_marginEnd">20dp</item>
         <item name="android:fontFamily">@font/audiowide</item>
@@ -45,7 +45,7 @@
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
         <!-- No backgrounds, titles or window float -->
-        <item name="android:windowBackground">@color/colorPrimary</item>
+        <item name="android:windowBackground">@color/primaryColor</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
     </style>

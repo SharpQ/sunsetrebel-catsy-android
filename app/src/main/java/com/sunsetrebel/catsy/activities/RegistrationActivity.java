@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,6 +28,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.hbb20.CountryCodePicker;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.fragments.MapsFragment;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 import java.util.Arrays;
@@ -59,7 +59,7 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(firebaseAuthService.checkCurrentUser()) {
-            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            startActivity(new Intent(getApplicationContext(), MapsFragment.class));
             Animatoo.animateFade(this);  //fire the zoom animation
             finish();
         }
@@ -90,7 +90,7 @@ public class RegistrationActivity extends AppCompatActivity {
         switchRegister = findViewById(R.id.switchRegister);
         slideImageEmail = findViewById(R.id.slideImageEmail);
         slideImagePhone = findViewById(R.id.slideImagePhone);
-        ccp = findViewById(R.id.countryCodeDDL);
+        ccp = findViewById(R.id.ddlCountryCode);
         countryAndPhone = findViewById(R.id.linearEditPhone);
 
         switchRegister.setOnClickListener(v -> {

@@ -54,9 +54,9 @@
         android:textColorHint="@color/primaryTextColor"
         android:textColorLink="@color/primaryTextColor"
         android:textSize="16sp"
-        app:errorTextColor="@color/red_error"
-        app:boxStrokeErrorColor="@color/red_error"
-        app:errorIconTint="@color/red_error"
+        app:errorTextColor="@color/redError"
+        app:boxStrokeErrorColor="@color/redError"
+        app:errorIconTint="@color/redError"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,8 +67,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/audiowide"
-            app:boxBackgroundColor="@color/black_half_transparent"
-            android:background="@color/black_half_transparent"
+            app:boxBackgroundColor="@color/blackHalfTransparent"
+            android:background="@color/blackHalfTransparent"
             android:ems="10"
             android:inputType="number" />
     </com.google.android.material.textfield.TextInputLayout>

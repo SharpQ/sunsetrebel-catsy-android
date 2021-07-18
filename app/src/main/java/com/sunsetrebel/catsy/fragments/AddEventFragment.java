@@ -19,6 +19,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -38,6 +40,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.fxn.utility.ImageQuality;
 import com.fxn.utility.PermUtil;
@@ -63,8 +66,11 @@ import com.miguelbcr.ui.rx_paparazzo2.entities.FileData;
 import com.miguelbcr.ui.rx_paparazzo2.entities.size.Size;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.activities.AddEventMapsActivity;
-import com.sunsetrebel.catsy.activities.MapsActivity;
 import com.sunsetrebel.catsy.adapters.AddEventImageAdapter;
+import com.google.android.material.textfield.TextInputLayout;
+import com.miguelbcr.ui.rx_paparazzo2.entities.FileData;
+import com.miguelbcr.ui.rx_paparazzo2.entities.size.Size;
+import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -86,8 +92,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.fxn.pix.Options;
-
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 import static android.content.ContentValues.TAG;
@@ -98,8 +102,11 @@ public class AddEventFragment extends Fragment {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
     private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
-    EditText eventName, eventLocation, eventDateStart, eventDateEnd, eventTimeStart, eventTimeEnd, eventType, eventDescr;
-    Button submitButton;
+    private EditText eventName, eventLocation, eventDateStart, eventDateEnd, eventTimeStart, eventTimeEnd, eventDescr;
+    private TextInputLayout eventTheme;
+    private String[] listOfEventThemes;
+    private Button submitButton;
+    private AutoCompleteTextView autoCompleteTextView;
     private GoogleMap mMap;
     private Geocoder geocoder;
     //Pick image variables
@@ -123,6 +130,8 @@ public class AddEventFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String[] eventAccessTypes;
+
 
 
 
@@ -238,19 +247,23 @@ public class AddEventFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_event, container, false);
         fAuth = firebaseAuthService.getInstance();
+        listOfEventThemes = getResources().getStringArray(R.array.event_access_types);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), R.layout.item_ddl_event_type, listOfEventThemes);
 
         //Initializing the views of the dialog.
-        eventName = v.findViewById(R.id.card_event_name);
-        eventLocation = v.findViewById(R.id.card_event_location);
-       eventDateStart = v.findViewById(R.id.card_event_date);
-        eventDateEnd = v.findViewById(R.id.card_event_date_end);
-        eventTimeStart = v.findViewById(R.id.card_event_time_start);
-        eventTimeEnd = v.findViewById(R.id.card_event_time_end);
-        eventType = v.findViewById(R.id.event_type);
-        eventDescr = v.findViewById(R.id.card_event_detail_description);
-        submitButton = v.findViewById(R.id.submit_button);
-        AppCompatEditText cardEventLocation = v.findViewById(R.id.card_event_location);
 
+        eventName = v.findViewById(R.id.editEventTitle);
+        eventLocation = v.findViewById(R.id.textLocationTitle);
+        eventDateStart = v.findViewById(R.id.editEventDateStart);
+        eventDateEnd = v.findViewById(R.id.editEventDateEnd);
+        eventTimeStart = v.findViewById(R.id.editEventTimeStart);
+        eventTimeEnd = v.findViewById(R.id.editEventTimeEnd);
+        eventTheme = v.findViewById(R.id.textInputLayoutEventTheme);
+        eventDescr = v.findViewById(R.id.editDetailedEventDescription);
+        submitButton = v.findViewById(R.id.buttonSubmitNewEvent);
+        autoCompleteTextView = v.findViewById(R.id.autoCompleteTextView);
+
+        autoCompleteTextView.setAdapter(arrayAdapter);
 
         submitButton.setOnClickListener(v1 -> {
             String eventNameValue = eventName.getText().toString().trim();
@@ -259,7 +272,7 @@ public class AddEventFragment extends Fragment {
             String eventDateEndValue = eventDateEnd.getText().toString().trim();
             String eventTimeStartValue = eventTimeStart.getText().toString().trim();
             String eventTimeEndValue = eventTimeEnd.getText().toString().trim();
-            String eventTypeValue = eventType.getText().toString().trim();
+            String eventAccessValue = autoCompleteTextView.getText().toString();
             String eventDescrValue = eventDescr.getText().toString().trim();
 
 
@@ -302,11 +315,11 @@ public class AddEventFragment extends Fragment {
                 }
             });*/
 
-            if (TextUtils.isEmpty(eventNameValue) || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventDateValue) || TextUtils.isEmpty(eventDateEndValue)|| TextUtils.isEmpty(eventTypeValue) || TextUtils.isEmpty(eventDescrValue)) {
+            if (TextUtils.isEmpty(eventNameValue) || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventDateValue) || TextUtils.isEmpty(eventDateEndValue)|| TextUtils.isEmpty(eventAccessValue) || TextUtils.isEmpty(eventDescrValue)) {
                 return;
             }
             firebaseFirestoreService.getUserNameInFirestore(value -> {
-                firebaseFirestoreService.createNewEvent(fAuth.getCurrentUser().getUid(), eventNameValue, eventLocationValue, eventDateValue, eventTypeValue, eventDescrValue, value);
+                firebaseFirestoreService.createNewEvent(fAuth.getCurrentUser().getUid(), eventNameValue, eventLocationValue, eventDateValue, eventAccessValue, eventDescrValue, value);
             }, fAuth.getUid());
 
             clearInputFiels();
@@ -317,15 +330,15 @@ public class AddEventFragment extends Fragment {
         eventTimeStart.setInputType(InputType.TYPE_NULL);
         eventDateEnd.setInputType(InputType.TYPE_NULL);
 
-        MapsActivity mapsAct = new MapsActivity();
+        MapsFragment mapsAct = new MapsFragment();
 
 
-        ScrollView scrollView = (ScrollView) v.findViewById(R.id.addEventScrollView);
+        ScrollView scrollView = (ScrollView) v.findViewById(R.id.scrollViewAddEvent);
         OverScrollDecoratorHelper.setUpOverScroll(scrollView);
 
 
 
-        v.findViewById(R.id.card_event_location).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.textLocationTitle).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), AddEventMapsActivity.class));
@@ -377,7 +390,7 @@ public class AddEventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.addEventSmallMap);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
@@ -390,7 +403,6 @@ public class AddEventFragment extends Fragment {
         eventDateEnd.getText().clear();
         eventTimeStart.getText().clear();
         eventTimeEnd.getText().clear();
-        eventType.getText().clear();
         eventDescr.getText().clear();
     }
 

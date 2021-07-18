@@ -102,7 +102,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
         mapView = mapFragment.getView();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(AddEventMapsActivity.this);
-        Places.initialize(AddEventMapsActivity.this, "AIzaSyDYvKpxG_fqirpE3d0ueC81IZHHaMuF_CA");
+        Places.initialize(AddEventMapsActivity.this, "AIzaSyC33jwat_phgu9E7siOhcAcocoZCUhV7xs");
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 

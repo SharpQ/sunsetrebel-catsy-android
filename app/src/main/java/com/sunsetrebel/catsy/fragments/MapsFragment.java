@@ -1,8 +1,7 @@
-package com.sunsetrebel.catsy.activities;
+package com.sunsetrebel.catsy.fragments;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,9 +10,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.os.Build;
 import android.os.Bundle;
-
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -30,24 +27,18 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.fragments.AccountFragment;
-import com.sunsetrebel.catsy.fragments.AddEventFragment;
-import com.sunsetrebel.catsy.fragments.EventListFragment;
-import com.sunsetrebel.catsy.fragments.MessageFragment;
+import com.sunsetrebel.catsy.activities.HomeActivity;
 import com.sunsetrebel.catsy.models.AddEventModel;
-
 import android.location.Location;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -55,21 +46,17 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
 
 
-
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
+public class MapsFragment extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener, GoogleMap.OnMarkerDragListener {
     //Variables for map
-    private static final String TAG = "MapsActivity";
+    private static final String TAG = "MapsFragment";
     private GoogleMap mMap;
     private Geocoder geocoder;
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
@@ -78,54 +65,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     TextView infoTv;
     private List<AddEventModel> postagens = new ArrayList<>();
     private RecyclerView recyclerPostagem;
-    private static final String TAGG = MapsActivity.class.getSimpleName();
+    private static final String TAGG = MapsFragment.class.getSimpleName();
 
     AnimatedBottomBar animatedBottomBar;
     FragmentManager fragmentManager;
 
-
     private void hideSystemUI() {
-        // Enables regular immersive mode.
-        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE
-                        // Set the content to appear under the system bars so that the
-                        // content doesn't resize when the system bars hide and show.
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        )
-        // Hide the nav bar and status bar
-        //  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        //   | View.SYSTEM_UI_FLAG_FULLSCREEN)
-        ;
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        getWindow().setStatusBarColor(Color.parseColor("#00000000"));
     }
 
-    // Shows the system bars by removing all the flags
-// except for the ones that make the content appear under the system bars.
-    private void showSystemUI() {
-        View decorView = getWindow().getDecorView();
-
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //Top and navigation bar transparency
-        getWindow().setStatusBarColor(Color.parseColor("#00000000"));
-        getWindow().setNavigationBarColor(Color.parseColor("#6A1B9A"));
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Window w = getWindow();
-            w.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-        }
-
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+        setContentView(R.layout.fragment_maps);
         hideSystemUI();
         RxPaparazzo.register(getApplication());
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.

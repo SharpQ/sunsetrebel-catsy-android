@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/splashScreenTheme"
-    android:fitsSystemWindows="false"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,7 +7,6 @@
     android:orientation="vertical"
     android:background="@color/white"
     android:scaleType = "centerCrop"
-
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent">
     <TextView
@@ -60,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="@color/primaryColor"
+        android:background="@color/primaryDarkColor"
         android:layout_gravity="bottom|center_horizontal|fill_horizontal"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
@@ -95,7 +92,7 @@
             android:layout_marginStart="30dp"
             android:layout_marginEnd="30dp"
             android:alpha="0.9"
-            android:background="@color/primaryColor"
+            android:background="@color/primaryDarkColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +115,7 @@
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/primaryColor"
+                    android:background="@color/primaryDarkColor"
                     android:drawablePadding="5dp"
                     android:fontFamily="@font/audiowide"
                     android:gravity="center|start|left"
@@ -128,7 +125,6 @@
                     android:textAllCaps="true"
                     android:textSize="14sp"
                     app:tabBackground="@android:color/transparent" />
-
             </LinearLayout>
 
             <TextView
@@ -136,7 +132,7 @@
                 style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="?attr/selectableItemBackground"
+                android:background="@color/primaryDarkColor"
                 android:drawablePadding="30dp"
                 android:gravity="right"
                 android:paddingLeft="95dp"
@@ -151,14 +147,14 @@
                 android:dividerPadding="12dp"
                 android:orientation="horizontal"
                 android:showDividers="beginning"
-                app:tabBackground="@color/primaryColor">
+                app:tabBackground="@color/primaryDarkColor">
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/eventlist_filter_text"
                     style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/primaryColor"
+                    android:background="@color/primaryDarkColor"
                     android:drawablePadding="5dp"
                     android:fontFamily="@font/audiowide"
                     android:gravity="center|start|left"

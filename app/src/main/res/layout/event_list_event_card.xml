@@ -40,26 +40,26 @@
             android:textAllCaps="true"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/card_event_date"
+            app:layout_constraintBottom_toTopOf="@+id/editEventDateStart"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/card_event_date"
+            android:id="@+id/editEventDateStart"
             android:layout_width="202dp"
             android:layout_height="22dp"
             android:layout_marginEnd="5dp"
             android:fontFamily="@font/audiowide"
             android:text="TextView"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/card_event_location"
+            app:layout_constraintBottom_toTopOf="@+id/textLocationTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toBottomOf="@+id/card_event_name" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/card_event_location"
+            android:id="@+id/textLocationTitle"
             android:layout_width="202dp"
             android:layout_height="22dp"
             android:layout_marginEnd="5dp"
@@ -69,7 +69,7 @@
             app:layout_constraintBottom_toTopOf="@+id/card_people_number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toBottomOf="@+id/card_event_date" />
+            app:layout_constraintTop_toBottomOf="@+id/editEventDateStart" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/card_people_number"
@@ -80,10 +80,10 @@
             android:fontFamily="@font/audiowide"
             android:text="TextView"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/card_event_detail_description"
+            app:layout_constraintBottom_toTopOf="@+id/editDetailedEventDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toBottomOf="@+id/card_event_location" />
+            app:layout_constraintTop_toBottomOf="@+id/textLocationTitle" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -94,7 +94,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/im_clock_black_40"
             app:layout_constraintBottom_toTopOf="@+id/imageView5"
-            app:layout_constraintEnd_toStartOf="@+id/card_event_date"
+            app:layout_constraintEnd_toStartOf="@+id/editEventDateStart"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
             app:layout_constraintTop_toBottomOf="@+id/card_event_name" />
 
@@ -107,7 +107,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/im_location_marker_40"
             app:layout_constraintBottom_toTopOf="@+id/imageView6"
-            app:layout_constraintEnd_toStartOf="@+id/card_event_location"
+            app:layout_constraintEnd_toStartOf="@+id/textLocationTitle"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
             app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
@@ -120,14 +120,14 @@
             android:baselineAligned="false"
             android:scaleType="fitCenter"
             android:src="@drawable/im_crowd_black_40"
-            app:layout_constraintBottom_toTopOf="@+id/card_event_detail_description"
+            app:layout_constraintBottom_toTopOf="@+id/editDetailedEventDescription"
             app:layout_constraintEnd_toStartOf="@+id/card_people_number"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
             app:layout_constraintTop_toBottomOf="@+id/imageView5"
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/card_event_detail_description"
+            android:id="@+id/editDetailedEventDescription"
             android:layout_width="234dp"
             android:layout_height="98dp"
             android:layout_marginStart="6dp"
@@ -162,7 +162,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/card_like_button"
-            app:layout_constraintTop_toBottomOf="@+id/card_event_detail_description" />
+            app:layout_constraintTop_toBottomOf="@+id/editDetailedEventDescription" />
 
         <ImageButton
             android:id="@+id/card_like_button"
@@ -176,7 +176,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/card_join_button"
             app:layout_constraintStart_toEndOf="@+id/card_share_button"
-            app:layout_constraintTop_toBottomOf="@+id/card_event_detail_description"
+            app:layout_constraintTop_toBottomOf="@+id/editDetailedEventDescription"
             app:srcCompat="@drawable/ic_baseline_favorite_24" />
 
         <ImageButton
@@ -191,7 +191,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/card_like_button"
             app:layout_constraintStart_toEndOf="@+id/card_context_button"
-            app:layout_constraintTop_toBottomOf="@+id/card_event_detail_description"
+            app:layout_constraintTop_toBottomOf="@+id/editDetailedEventDescription"
             app:srcCompat="@android:drawable/ic_menu_share" />
 
         <ImageButton
@@ -205,7 +205,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/card_share_button"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
-            app:layout_constraintTop_toBottomOf="@+id/card_event_detail_description"
+            app:layout_constraintTop_toBottomOf="@+id/editDetailedEventDescription"
             app:layout_constraintVertical_bias="0.978"
             app:srcCompat="@drawable/im_context_menu_black_40" />
 
@@ -221,10 +221,10 @@
             app:layout_constraintBottom_toTopOf="@+id/card_context_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
-            app:layout_constraintTop_toBottomOf="@+id/card_event_detail_description" />
+            app:layout_constraintTop_toBottomOf="@+id/editDetailedEventDescription" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/event_type"
+            android:id="@+id/textInputLayoutEventTheme"
             android:layout_width="194dp"
             android:layout_height="30dp"
             android:layout_marginStart="5dp"
@@ -237,7 +237,7 @@
             app:layout_constraintBottom_toTopOf="@+id/card_like_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/event_creator_photo"
-            app:layout_constraintTop_toBottomOf="@+id/card_event_detail_description" />
+            app:layout_constraintTop_toBottomOf="@+id/editDetailedEventDescription" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

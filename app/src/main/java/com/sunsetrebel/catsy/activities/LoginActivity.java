@@ -27,6 +27,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.hbb20.CountryCodePicker;
+import com.sunsetrebel.catsy.fragments.MapsFragment;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
@@ -57,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(firebaseAuthService.checkCurrentUser()) {
-            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+            startActivity(new Intent(getApplicationContext(), MapsFragment.class));
             Animatoo.animateFade(this);  //fire the zoom animation
             finish();
         }
@@ -86,7 +87,7 @@ public class LoginActivity extends AppCompatActivity {
         switchLogin = findViewById(R.id.switchLogin);
         slideImageEmail = findViewById(R.id.slideImageEmail);
         slideImagePhone = findViewById(R.id.slideImagePhone);
-        ccp = findViewById(R.id.countryCodeDDL);
+        ccp = findViewById(R.id.ddlCountryCode);
         countryAndPhone = findViewById(R.id.linearEditPhone);
 
         switchLogin.setOnClickListener(v -> {
@@ -173,7 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                                 firebaseFirestoreService.createNewUserByEmail(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail());
                             }
                         }, fAuth.getCurrentUser().getUid());
-                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        startActivity(new Intent(getApplicationContext(), MapsFragment.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {
@@ -260,7 +261,7 @@ public class LoginActivity extends AppCompatActivity {
                                         fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
                             }
                         }, fAuth.getCurrentUser().getUid());
-                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        startActivity(new Intent(getApplicationContext(), MapsFragment.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {
@@ -284,7 +285,7 @@ public class LoginActivity extends AppCompatActivity {
                                         fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
                             }
                         }, fAuth.getCurrentUser().getUid());
-                        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+                        startActivity(new Intent(getApplicationContext(), MapsFragment.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {

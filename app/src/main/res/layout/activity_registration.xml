@@ -75,9 +75,9 @@
         android:textColorHint="@color/primaryTextColor"
         android:textColorLink="@color/primaryTextColor"
         android:textSize="16sp"
-        app:errorTextColor="@color/red_error"
-        app:boxStrokeErrorColor="@color/red_error"
-        app:errorIconTint="@color/red_error"
+        app:errorTextColor="@color/redError"
+        app:boxStrokeErrorColor="@color/redError"
+        app:errorIconTint="@color/redError"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,8 +89,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/audiowide"
-            app:boxBackgroundColor="@color/black_half_transparent"
-            android:background="@color/black_half_transparent"
+            app:boxBackgroundColor="@color/blackHalfTransparent"
+            android:background="@color/blackHalfTransparent"
             android:ems="10"
             android:inputType="textPersonName" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -112,9 +112,9 @@
         android:textColorLink="@color/primaryTextColor"
         android:textCursorDrawable="@color/primaryLightColor"
         android:textSize="16sp"
-        app:errorTextColor="@color/red_error"
-        app:boxStrokeErrorColor="@color/red_error"
-        app:errorIconTint="@color/red_error"
+        app:errorTextColor="@color/redError"
+        app:boxStrokeErrorColor="@color/redError"
+        app:errorIconTint="@color/redError"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -127,8 +127,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/audiowide"
-            app:boxBackgroundColor="@color/black_half_transparent"
-            android:background="@color/black_half_transparent"
+            app:boxBackgroundColor="@color/blackHalfTransparent"
+            android:background="@color/blackHalfTransparent"
             android:ems="10"
             android:inputType="textEmailSubject" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -149,7 +149,7 @@
         android:orientation="horizontal">
 
         <com.hbb20.CountryCodePicker
-            android:id="@+id/countryCodeDDL"
+            android:id="@+id/ddlCountryCode"
             app:ccp_autoDetectCountry="true"
             app:ccp_showArrow="false"
             android:layout_width="wrap_content"
@@ -157,7 +157,7 @@
             app:ccp_textSize="20sp"
             android:fontFamily="@font/audiowide"
             android:gravity="center"
-            android:background="@color/black_half_transparent"
+            android:background="@color/blackHalfTransparent"
             app:ccp_contentColor="@color/primaryTextColor"
             app:ccpDialog_allowSearch="true"
             app:ccpDialog_backgroundColor="@color/primaryDarkColor"
@@ -178,18 +178,18 @@
             android:textColorLink="@color/primaryTextColor"
             android:textCursorDrawable="@color/primaryLightColor"
             android:textSize="16sp"
-            app:errorTextColor="@color/red_error"
-            app:boxStrokeErrorColor="@color/red_error"
-            app:errorIconTint="@color/red_error"
-            app:layout_constraintStart_toEndOf="@+id/countryCodeDDL">
+            app:errorTextColor="@color/redError"
+            app:boxStrokeErrorColor="@color/redError"
+            app:errorIconTint="@color/redError"
+            app:layout_constraintStart_toEndOf="@+id/ddlCountryCode">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputEditUserPhone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:fontFamily="@font/audiowide"
-                app:boxBackgroundColor="@color/black_half_transparent"
-                android:background="@color/black_half_transparent"
+                app:boxBackgroundColor="@color/blackHalfTransparent"
+                android:background="@color/blackHalfTransparent"
                 android:ems="10"
                 android:inputType="phone" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -212,9 +212,9 @@
         android:textColorHint="@color/primaryTextColor"
         android:textColorLink="@color/primaryTextColor"
         android:textSize="16sp"
-        app:errorTextColor="@color/red_error"
-        app:boxStrokeErrorColor="@color/red_error"
-        app:errorIconTint="@color/red_error"
+        app:errorTextColor="@color/redError"
+        app:boxStrokeErrorColor="@color/redError"
+        app:errorIconTint="@color/redError"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -226,8 +226,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/audiowide"
-            app:boxBackgroundColor="@color/black_half_transparent"
-            android:background="@color/black_half_transparent"
+            app:boxBackgroundColor="@color/blackHalfTransparent"
+            android:background="@color/blackHalfTransparent"
             android:ems="10"
             android:inputType="none|textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
