@@ -1,24 +1,38 @@
 package com.sunsetrebel.catsy.fragments;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,26 +41,56 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.fxn.pix.Pix;
 import com.fxn.utility.ImageQuality;
 import com.fxn.utility.PermUtil;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.miguelbcr.ui.rx_paparazzo2.entities.FileData;
 import com.miguelbcr.ui.rx_paparazzo2.entities.size.Size;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.activities.AddEventMapActivity;
+import com.sunsetrebel.catsy.activities.AddEventMapsActivity;
 import com.sunsetrebel.catsy.activities.MapsActivity;
-import com.sunsetrebel.catsy.adapters.MyAdapter;
+import com.sunsetrebel.catsy.adapters.AddEventImageAdapter;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
-
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import com.fxn.pix.Options;
 
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
+import static android.content.ContentValues.TAG;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
@@ -64,16 +108,23 @@ public class AddEventFragment extends Fragment {
     private Size size;
     private static final String STATE_FILES = "FILES";
     RecyclerView recyclerViewEventImage;
-    MyAdapter myAdapter;
-
+    AddEventImageAdapter addEventImageAdapter;
+    static AppCompatEditText cardEventLocation;
+    Float coordinates;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     Options options;
     ArrayList<String> returnValue = new ArrayList<>();
+    private static final String TAG = "MapsActivity";
+
+    private int ACCESS_LOCATION_REQUEST_CODE = 10001;
+    FusedLocationProviderClient fusedLocationProviderClient;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+
 
     public AddEventFragment() {
         // Required empty public constructor
@@ -86,6 +137,88 @@ public class AddEventFragment extends Fragment {
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public static void putArguments(Bundle args)
+    {
+        String cardEventLocationInfo = args.getString("Location");
+        Float latlng = args.getFloat("Coordinates");
+       cardEventLocation.setText(cardEventLocationInfo);
+       latlng.longValue();
+
+    }
+    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(GoogleMap googleMap) {
+
+            try {
+                // Customise the styling of the base map using a JSON object defined
+                // in a raw resource file.
+                boolean success = googleMap.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                getApplicationContext(), R.raw.google_style));
+
+                if (!success) {
+                    Log.e(TAG, "Style parsing failed.");
+                }
+            } catch (Resources.NotFoundException e) {
+                Log.e(TAG, "Can't find style. Error: ", e);
+            }
+            mMap = googleMap;
+            //Google maps default buttons disabling
+            mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            mMap.getUiSettings().setMapToolbarEnabled(false);
+            mMap.getUiSettings().setCompassEnabled(false);
+            mMap.getUiSettings().setRotateGesturesEnabled(false);
+            mMap.getUiSettings().setAllGesturesEnabled(false);
+
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                enableUserLocation();
+                zoomToUserLocation();
+            } else {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    //We can show user a dialog why this permission is necessary
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
+                } else {
+                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
+                }
+
+            }
+            LatLng FirstMarkerPosition = new LatLng(50.436404, 30.369498);
+                    MarkerOptions markerOptions = new MarkerOptions()
+                            .position(FirstMarkerPosition).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35));
+                    mMap.addMarker(markerOptions);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FirstMarkerPosition, 12));
+        }
+    };
+
+
+    private void enableUserLocation() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        mMap.setMyLocationEnabled(true);
+    }
+
+    private void zoomToUserLocation() {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
     }
 
     @Override
@@ -101,6 +234,7 @@ public class AddEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_event, container, false);
         fAuth = firebaseAuthService.getInstance();
@@ -115,6 +249,8 @@ public class AddEventFragment extends Fragment {
         eventType = v.findViewById(R.id.event_type);
         eventDescr = v.findViewById(R.id.card_event_detail_description);
         submitButton = v.findViewById(R.id.submit_button);
+        AppCompatEditText cardEventLocation = v.findViewById(R.id.card_event_location);
+
 
         submitButton.setOnClickListener(v1 -> {
             String eventNameValue = eventName.getText().toString().trim();
@@ -126,8 +262,7 @@ public class AddEventFragment extends Fragment {
             String eventTypeValue = eventType.getText().toString().trim();
             String eventDescrValue = eventDescr.getText().toString().trim();
 
-            SupportMapFragment mapFragment = ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.addEventSmallMap));
-            mapFragment.getMapAsync((OnMapReadyCallback) this);
+
             eventDateStart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -193,9 +328,8 @@ public class AddEventFragment extends Fragment {
         v.findViewById(R.id.card_event_location).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AddEventMapActivity.class));
+                startActivity(new Intent(getApplicationContext(), AddEventMapsActivity.class));
                 Animatoo.animateShrink(getActivity());
-
             } });
 
        /* v.findViewById(R.id.addEventImageLayout).setOnClickListener(new View.OnClickListener() {
@@ -221,7 +355,7 @@ public class AddEventFragment extends Fragment {
         });*/
         RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        myAdapter = new MyAdapter(getActivity());
+        addEventImageAdapter = new AddEventImageAdapter(getActivity());
         options = Options.init()
                 .setRequestCode(100)
                 .setCount(3)
@@ -231,12 +365,22 @@ public class AddEventFragment extends Fragment {
                 .setScreenOrientation(com.fxn.pix.Options.SCREEN_ORIENTATION_PORTRAIT)
                 .setPath("/akshay/new")
         ;
-        recyclerView.setAdapter(myAdapter);
+        recyclerView.setAdapter(addEventImageAdapter);
         v.findViewById(R.id.fab).setOnClickListener((View view) -> {
             options.setPreSelectedUrls(returnValue);
             Pix.start(this, options);
         });
         return v;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(callback);
+        }
     }
 
     private void clearInputFiels() {
@@ -258,7 +402,7 @@ public class AddEventFragment extends Fragment {
             case (100): {
                 if (resultCode == Activity.RESULT_OK) {
                     returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
-                    myAdapter.addImage(returnValue);
+                    addEventImageAdapter.addImage(returnValue);
                 }
             }
             break;

@@ -14,14 +14,15 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatTextView;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -58,14 +59,16 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.skyfishjy.library.RippleBackground;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.fragments.AddEventFragment;
 import com.sunsetrebel.catsy.utils.PermissionsActivity;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddEventMapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class AddEventMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -74,36 +77,39 @@ public class AddEventMapActivity extends AppCompatActivity implements OnMapReady
 
     private Location mLastKnownLocation;
     private LocationCallback locationCallback;
-    private static final String TAG = "AddEventMapActivity";
+    private static final String TAG = "AddEventMapsActivity";
     private MaterialSearchBar materialSearchBar;
     private View mapView;
     private Button confirmLocationButton;
     private ImageButton backButton;
     private RippleBackground rippleBg;
-//    AppCompatTextView locationConfirmText = (AppCompatTextView) findViewById(R.id.locationConfirmText);
     private final float DEFAULT_ZOOM = 15;
+    TextView locationConfirmText;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
-   //     locationConfirmText.setText("Your location info will be here");
+        setContentView(R.layout.activity_add_event_full_map);
         materialSearchBar = findViewById(R.id.searchBar);
         confirmLocationButton = findViewById(R.id.btn_find);
         rippleBg = findViewById(R.id.ripple_bg);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.addEventBigFullMap);
         mapFragment.getMapAsync(this);
         mapView = mapFragment.getView();
 
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(AddEventMapActivity.this);
-        Places.initialize(AddEventMapActivity.this, getString(R.string.google_maps_api));
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(AddEventMapsActivity.this);
+        Places.initialize(AddEventMapsActivity.this, getString(R.string.google_maps_api));
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
         getWindow().setStatusBarColor(Color.parseColor("#00000000"));
         getWindow().setNavigationBarColor(Color.parseColor("#6A1B9A"));
         hideSystemUI();
+
         materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
             public void onSearchStateChanged(boolean enabled) {
@@ -118,7 +124,7 @@ public class AddEventMapActivity extends AppCompatActivity implements OnMapReady
             @Override
             public void onButtonClicked(int buttonCode) {
                 if (buttonCode == MaterialSearchBar.BUTTON_NAVIGATION) {
-                    //opening or closing a navigation drawer
+                    /** Opening or closing a navigation drawer **/
                 } else if (buttonCode == MaterialSearchBar.BUTTON_BACK) {
                     materialSearchBar.disableSearch();
                 }
@@ -178,7 +184,26 @@ public class AddEventMapActivity extends AppCompatActivity implements OnMapReady
                 AutocompletePrediction selectedPrediction = predictionList.get(position);
                 String suggestion = materialSearchBar.getLastSuggestions().get(position).toString();
                 materialSearchBar.setText(suggestion);
-               // locationConfirmText.setText(suggestion);
+
+                //Fill bottom text with address
+                locationConfirmText = findViewById(R.id.locationConfirmText);
+                locationConfirmText.setText(suggestion);
+                //    LatLng coordinatesSend = currentMarkerLocation;
+
+                /** Sending location address and coordinates to AddEventFragment **/
+
+                LatLng latLng = null;
+                Location location = null;
+                try{
+                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    Bundle args = new Bundle();
+                    args.putString("Location", String.valueOf(locationConfirmText));
+                    args.putFloat("Coordinates",Float.valueOf(String.valueOf(latLng)));
+                    AddEventFragment.putArguments(args);}
+                catch (Exception e){
+                  locationConfirmText.setText(suggestion);
+                };
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -196,9 +221,9 @@ public class AddEventMapActivity extends AppCompatActivity implements OnMapReady
                     @Override
                     public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
                         Place place = fetchPlaceResponse.getPlace();
+
                         Log.i("mytag", "Place found: " + place.getName());
                         LatLng latLngOfPlace = place.getLatLng();
-                     //   locationConfirmText.setText("", TextView.BufferType.valueOf(place.getName()));
                         if (latLngOfPlace != null) {
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngOfPlace, DEFAULT_ZOOM));
                         }
@@ -227,14 +252,17 @@ public class AddEventMapActivity extends AppCompatActivity implements OnMapReady
             public void onClick(View v) {
                 LatLng currentMarkerLocation = mMap.getCameraPosition().target;
                 rippleBg.startRippleAnimation();
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+
                         rippleBg.stopRippleAnimation();
-                        startActivity(new Intent(AddEventMapActivity.this, PermissionsActivity.class));
+
+                      //  startActivity(new Intent(AddEventMapsActivity.this, PermissionsActivity.class));
                         finish();
                     }
-                }, 3000);
+                }, 1000);
 
             }
         });
@@ -322,23 +350,23 @@ public class AddEventMapActivity extends AppCompatActivity implements OnMapReady
 
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder().addLocationRequest(locationRequest);
 
-        SettingsClient settingsClient = LocationServices.getSettingsClient(AddEventMapActivity.this);
+        SettingsClient settingsClient = LocationServices.getSettingsClient(AddEventMapsActivity.this);
         Task<LocationSettingsResponse> task = settingsClient.checkLocationSettings(builder.build());
 
-        task.addOnSuccessListener(AddEventMapActivity.this, new OnSuccessListener<LocationSettingsResponse>() {
+        task.addOnSuccessListener(AddEventMapsActivity.this, new OnSuccessListener<LocationSettingsResponse>() {
             @Override
             public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
                 getDeviceLocation();
             }
         });
 
-        task.addOnFailureListener(AddEventMapActivity.this, new OnFailureListener() {
+        task.addOnFailureListener(AddEventMapsActivity.this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 if (e instanceof ResolvableApiException) {
                     ResolvableApiException resolvable = (ResolvableApiException) e;
                     try {
-                        resolvable.startResolutionForResult(AddEventMapActivity.this, 51);
+                        resolvable.startResolutionForResult(AddEventMapsActivity.this, 51);
                     } catch (IntentSender.SendIntentException e1) {
                         e1.printStackTrace();
                     }
@@ -392,7 +420,7 @@ public class AddEventMapActivity extends AppCompatActivity implements OnMapReady
                                         }
                                         mLastKnownLocation = locationResult.getLastLocation();
                                         try {
-                                         //   locationConfirmText.setText("", AppCompatTextView.BufferType.valueOf(String.valueOf(locationResult.getLastLocation())));
+
                                         }
                                         catch (Exception ex) {
                                             ex.printStackTrace();
@@ -405,7 +433,7 @@ public class AddEventMapActivity extends AppCompatActivity implements OnMapReady
 
                             }
                         } else {
-                            Toast.makeText(AddEventMapActivity.this, "unable to get last location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddEventMapsActivity.this, "unable to get last location", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

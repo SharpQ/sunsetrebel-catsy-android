@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.adapters.AddEventAdapter;
+import com.sunsetrebel.catsy.adapters.AddEventDataAdapter;
 import com.sunsetrebel.catsy.models.AddEventModel;
 import com.sunsetrebel.catsy.utils.EventListService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import me.everything.android.ui.overscroll.HorizontalOverScrollBounceEffectDecorator;
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
 import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
 
@@ -45,6 +43,8 @@ public class EventListFragment extends Fragment {
                 R.drawable.im_cat_bright
         );
         this.postagens.add(post);
+       /** Future code to make image background rounded
+        * recyclerPostagem.setBackgroundResource(R.drawable.ui_transparent_rounded_corners);**/
     }
 
     @Override
@@ -66,7 +66,7 @@ public class EventListFragment extends Fragment {
                             event.get("eventLocation").toString(), event.get("eventDescr").toString(),
                             event.get("userName").toString());
                     Log.d("INFO", String.valueOf(postagens));
-                    AddEventAdapter adapter = new AddEventAdapter(postagens);
+                    AddEventDataAdapter adapter = new AddEventDataAdapter(postagens);
                     recyclerPostagem.setAdapter(adapter);
                 }
             });
@@ -81,7 +81,7 @@ public class EventListFragment extends Fragment {
                 }
             }
             Log.d("INFO", String.valueOf(postagens));
-            AddEventAdapter adapter = new AddEventAdapter(postagens);
+            AddEventDataAdapter adapter = new AddEventDataAdapter(postagens);
             recyclerPostagem.setAdapter(adapter);
         }
         return v;
