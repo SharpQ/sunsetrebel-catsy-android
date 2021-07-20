@@ -309,7 +309,7 @@ public class AddEventFragment extends Fragment {
                 public void onClick(View v) {
                     Fragment addEventMapsFragment = new AddEventFragment();
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment_container, addEventMapsFragment);
+                    transaction.replace(R.id.frameLayoutMain, addEventMapsFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
                 }
@@ -329,8 +329,6 @@ public class AddEventFragment extends Fragment {
         eventDateEnd.setInputType(InputType.TYPE_NULL);
         eventTimeStart.setInputType(InputType.TYPE_NULL);
         eventDateEnd.setInputType(InputType.TYPE_NULL);
-
-        MapsFragment mapsAct = new MapsFragment();
 
 
         ScrollView scrollView = (ScrollView) v.findViewById(R.id.scrollViewAddEvent);

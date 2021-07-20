@@ -19,7 +19,6 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.sunsetrebel.catsy.fragments.MapsFragment;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
@@ -143,7 +142,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                     intent = new Intent(getApplicationContext(), TutorialActivity.class);
                 }
                 else {
-                    intent = new Intent(getApplicationContext(), MapsFragment.class);
+                    intent = new Intent(getApplicationContext(), MainActivity.class);
                 }
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);

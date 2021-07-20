@@ -50,7 +50,7 @@
         <item name="android:windowIsFloating">false</item>
     </style>
 
-    <style name="CustomText">
+    <style name="NavBarText">
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:textSize">10sp</item>

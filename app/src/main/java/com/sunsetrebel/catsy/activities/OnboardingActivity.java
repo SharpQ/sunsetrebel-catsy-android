@@ -15,7 +15,6 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.sunsetrebel.catsy.fragments.MapsFragment;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.SliderAdapter;
@@ -39,7 +38,7 @@ public class OnboardingActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(firebaseAuthService.checkCurrentUser()) {
-            startActivity(new Intent(getApplicationContext(), MapsFragment.class));
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
             Animatoo.animateFade(this);  //fire the zoom animation
             finish();
         }
@@ -139,7 +138,7 @@ public class OnboardingActivity extends AppCompatActivity {
                                         fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
                             }
                         }, fAuth.getCurrentUser().getUid());
-                        startActivity(new Intent(getApplicationContext(), MapsFragment.class));
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {

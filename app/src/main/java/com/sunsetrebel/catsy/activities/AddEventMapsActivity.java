@@ -74,7 +74,6 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     private FusedLocationProviderClient mFusedLocationProviderClient;
     private PlacesClient placesClient;
     private List<AutocompletePrediction> predictionList;
-
     private Location mLastKnownLocation;
     private LocationCallback locationCallback;
     private static final String TAG = "AddEventMapsActivity";
@@ -85,7 +84,6 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     private RippleBackground rippleBg;
     private final float DEFAULT_ZOOM = 15;
     TextView locationConfirmText;
-
 
 
 
@@ -102,7 +100,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
         mapView = mapFragment.getView();
 
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(AddEventMapsActivity.this);
-        Places.initialize(AddEventMapsActivity.this, "AIzaSyC33jwat_phgu9E7siOhcAcocoZCUhV7xs");
+        Places.initialize(AddEventMapsActivity.this, getString(R.string.google_maps_key));
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 

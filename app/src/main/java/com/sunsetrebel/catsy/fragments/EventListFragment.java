@@ -50,7 +50,6 @@ public class EventListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //Eventlist fragment creation
         View v = inflater.inflate(R.layout.fragment_event_list, container, false);
         recyclerPostagem = v.findViewById(R.id.list_background);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -65,7 +64,6 @@ public class EventListFragment extends Fragment {
                     addEventToList(event.get("eventName").toString(), event.get("eventDate").toString(),
                             event.get("eventLocation").toString(), event.get("eventDescr").toString(),
                             event.get("userName").toString());
-                    Log.d("INFO", String.valueOf(postagens));
                     AddEventDataAdapter adapter = new AddEventDataAdapter(postagens);
                     recyclerPostagem.setAdapter(adapter);
                 }

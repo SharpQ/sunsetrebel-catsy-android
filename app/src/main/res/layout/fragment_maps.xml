@@ -1,23 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="@drawable/ui_rounded_corners"
-    android:scaleType="centerCrop"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:fontFamily="sans-serif-condensed"
-        android:gravity="center"
-        android:padding="16dp"
-        android:id="@+id/info_tv"
-        android:visibility="gone"/>
+    android:theme="@style/Theme.Catsy"
+    android:scaleType="centerCrop">
 
     <fragment
         android:id="@+id/google_map"
@@ -28,128 +17,42 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="-1dp"
         android:background="@drawable/ui_rounded_corners"
-        android:layout_marginBottom="1dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/linearLayoutCustomView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/textViewTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-        <TextView
-            android:id="@+id/textViewOtherDetails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </LinearLayout>
+    <SearchView
+        android:id="@+id/searchViewMaps"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:alpha="0.8"
+        android:background="@drawable/ui_rounded_corners"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/map_filter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.07"/>
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/linearLayoutSearchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="bottom|center_horizontal|fill_horizontal"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginEnd="15dp"
-        android:gravity="fill_horizontal"
-        android:orientation="vertical">
-
-        <SearchView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="82dp"
-            android:layout_marginBottom="30dp"
-            android:alpha="0.8"
-            android:background="@drawable/ui_rounded_corners"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/map_filter"
-            app:layout_constraintHorizontal_bias="0.25"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/map_filter"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="300dp"
-            android:background="@drawable/ui_rounded_corners"
-            android:padding="9dp"
-            android:alpha="0.8"
-            android:src="@drawable/im_filter_icon_40"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.941"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.625"
-            app:tabRippleColor="@null" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignTop="@id/google_map"
-        tools:context=".fragments.MapsFragment">
-
-        <FrameLayout
-            android:id="@+id/fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/animatedBottomBar"
-            android:layout_alignParentEnd="true" />
-
-        <nl.joery.animatedbottombar.AnimatedBottomBar
-            android:id="@+id/animatedBottomBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:elevation="33dp"
-            app:abb_animationDuration="500"
-            app:abb_animationInterpolator="@android:anim/overshoot_interpolator"
-            app:abb_indicatorAppearance="round"
-            app:abb_indicatorColor="@color/white"
-            app:abb_textAppearance="@style/CustomText"
-            app:abb_indicatorHeight="6dp"
-            app:abb_indicatorMargin="16dp"
-            app:abb_selectedIndex="0"
-            app:abb_selectedTabType="text"
-            android:layout_alignParentBottom="true"
-            app:abb_tabAnimation="fade"
-            app:abb_tabColor="@color/primaryLightColor"
-            app:abb_tabColorSelected="@color/white"
-            app:abb_tabs="@menu/menu_bottom_navigation" />
-
-        <LinearLayout
-            android:id="@+id/emptySpace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/animatedBottomBar"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="bottom|center_horizontal|fill_horizontal"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            android:background="@color/primaryDarkColor"
-            android:orientation="vertical" />
-
-    </RelativeLayout>
-</RelativeLayout>
+    <ImageView
+        android:id="@+id/map_filter"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:alpha="0.8"
+        android:background="@drawable/ui_rounded_corners"
+        android:padding="10dp"
+        android:layout_marginEnd="20dp"
+        android:src="@drawable/im_filter_icon_40"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.941"
+        app:layout_constraintStart_toEndOf="@+id/searchViewMaps"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.07"
+        app:tabRippleColor="@null" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 

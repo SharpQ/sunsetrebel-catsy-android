@@ -28,7 +28,6 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.hbb20.CountryCodePicker;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.fragments.MapsFragment;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 import java.util.Arrays;
@@ -59,7 +58,7 @@ public class RegistrationActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if(firebaseAuthService.checkCurrentUser()) {
-            startActivity(new Intent(getApplicationContext(), MapsFragment.class));
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
             Animatoo.animateFade(this);  //fire the zoom animation
             finish();
         }
