@@ -65,8 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
 
-            fragmentManager.beginTransaction().setCustomAnimations(R.anim.bottom_in, R.anim.slide_in_right).replace(R.id.frameLayoutMain, fragment)
-                    .commit();
+            fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, fragment).commit();
         });
     }
 }

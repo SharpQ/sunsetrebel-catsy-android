@@ -51,10 +51,10 @@ public class EventListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_event_list, container, false);
-        recyclerPostagem = v.findViewById(R.id.list_background);
+        recyclerPostagem = v.findViewById(R.id.recyclerViewEventList);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerPostagem.setLayoutManager(layoutManager);
-        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.list_background);
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerViewEventList);
         new VerticalOverScrollBounceEffectDecorator(new RecyclerViewOverScrollDecorAdapter(recyclerView));
         //Fill EventList with events
         if (EventListService.getListUpdateStatus()) {

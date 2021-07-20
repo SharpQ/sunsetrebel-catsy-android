@@ -231,7 +231,6 @@
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="0dp"
                 android:layout_marginBottom="1dp"
-                android:background="@drawable/ui_rounded_corners"
                 tools:context=".fragments.AddEventFrament"/>
 
             <FrameLayout xmlns:android = "http://schemas.android.com/apk/res/android"

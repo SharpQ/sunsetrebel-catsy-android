@@ -58,7 +58,7 @@
             android:layout_width="45dp"
             android:layout_height="45dp"
             android:layout_marginTop="51dp"
-            android:background="@drawable/ui_rounded_corners"
+            android:background="@color/primaryDarkColor"
             android:src="@drawable/im_back_48"
             app:borderWidth="0dp"
             app:elevation="1dp"
