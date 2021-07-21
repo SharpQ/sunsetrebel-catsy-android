@@ -44,23 +44,23 @@ public class MainActivity extends AppCompatActivity {
         RxPaparazzo.register(getApplication());
 
         animatedBottomBar = findViewById(R.id.animatedBottomBar);
-        animatedBottomBar.selectTabById(R.id.menu_map, true);
+        animatedBottomBar.selectTabById(R.id.navigationBarMap, true);
         animatedBottomBar.setOnTabSelectListener((lastIndex, lastTab, newIndex, newTab) -> {
             Fragment fragment = null;
             switch (newTab.getId()) {
-                case R.id.menu_map:
+                case R.id.navigationBarMap:
                     fragment = new MapsFragment();
                     break;
-                case R.id.menu_event_list:
+                case R.id.navigationBarEventList:
                     fragment = new EventListFragment();
                     break;
-                case R.id.menu_add_event:
+                case R.id.navigationBarNewEvent:
                     fragment = new AddEventFragment();
                     break;
-                case R.id.menu_message:
+                case R.id.navigationBarChat:
                     fragment = new MessageFragment();
                     break;
-                case R.id.menu_account:
+                case R.id.navigationBarAccount:
                     fragment = new AccountFragment();
                     break;
             }
