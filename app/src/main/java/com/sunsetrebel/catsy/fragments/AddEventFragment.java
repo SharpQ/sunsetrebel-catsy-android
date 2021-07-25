@@ -1,17 +1,13 @@
 package com.sunsetrebel.catsy.fragments;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -24,15 +20,12 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -44,13 +37,7 @@ import com.fxn.pix.Options;
 import com.fxn.pix.Pix;
 import com.fxn.utility.ImageQuality;
 import com.fxn.utility.PermUtil;
-import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -59,42 +46,20 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.miguelbcr.ui.rx_paparazzo2.entities.FileData;
 import com.miguelbcr.ui.rx_paparazzo2.entities.size.Size;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.activities.AddEventMapsActivity;
 import com.sunsetrebel.catsy.adapters.AddEventImageAdapter;
-import com.google.android.material.textfield.TextInputLayout;
-import com.miguelbcr.ui.rx_paparazzo2.entities.FileData;
-import com.miguelbcr.ui.rx_paparazzo2.entities.size.Size;
-import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import java.io.IOException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
-
-import static android.content.ContentValues.TAG;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
@@ -102,10 +67,12 @@ public class AddEventFragment extends Fragment {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
     private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
-    private EditText eventName, eventLocation, eventDateStart, eventDateEnd, eventTimeStart, eventTimeEnd, eventDescr;
-    private TextInputLayout eventTheme;
-    private String[] listOfEventThemes;
+    private EditText eventDateStart, eventDateEnd, eventTimeStart, eventTimeEnd, eventDescr;
+    private TextInputLayout eventAccess;
+    private TextInputEditText eventTitle, eventLocation;
+    private String[] listOfAccessTypes;
     private Button submitButton;
+    private View fragmentMap;
     private AutoCompleteTextView autoCompleteTextView;
     private GoogleMap mMap;
     private Geocoder geocoder;
@@ -130,10 +97,6 @@ public class AddEventFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private String[] eventAccessTypes;
-
-
-
 
     public AddEventFragment() {
         // Required empty public constructor
@@ -242,31 +205,61 @@ public class AddEventFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_add_event, container, false);
         fAuth = firebaseAuthService.getInstance();
-        listOfEventThemes = getResources().getStringArray(R.array.event_access_types);
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), R.layout.item_ddl_event_type, listOfEventThemes);
+        listOfAccessTypes = getResources().getStringArray(R.array.event_access_types);
+        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), R.layout.item_ddl_event_type, listOfAccessTypes);
 
         //Initializing the views of the dialog.
 
-        eventName = v.findViewById(R.id.editEventTitle);
-        eventLocation = v.findViewById(R.id.textLocationTitle);
+        eventTitle = v.findViewById(R.id.inputEditEventTitle);
+        eventLocation = v.findViewById(R.id.inputEditLocation);
         eventDateStart = v.findViewById(R.id.editEventDateStart);
         eventDateEnd = v.findViewById(R.id.editEventDateEnd);
         eventTimeStart = v.findViewById(R.id.editEventTimeStart);
         eventTimeEnd = v.findViewById(R.id.editEventTimeEnd);
-        eventTheme = v.findViewById(R.id.textInputLayoutEventTheme);
+        eventAccess = v.findViewById(R.id.textInputLayoutEventAccess);
         eventDescr = v.findViewById(R.id.editDetailedEventDescription);
         submitButton = v.findViewById(R.id.buttonSubmitNewEvent);
         autoCompleteTextView = v.findViewById(R.id.autoCompleteTextView);
-
+        fragmentMap = v.findViewById(R.id.fragmentMap);
         autoCompleteTextView.setAdapter(arrayAdapter);
 
+        eventDateStart.setInputType(InputType.TYPE_NULL);
+        eventDateEnd.setInputType(InputType.TYPE_NULL);
+        eventTimeStart.setInputType(InputType.TYPE_NULL);
+        eventTimeEnd.setInputType(InputType.TYPE_NULL);
+
+        eventDateStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateDialog(eventDateStart);
+            }
+        });
+
+        eventDateEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateDialog(eventDateEnd);
+            }
+        });
+
+        eventTimeStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimeDialog(eventTimeStart);
+            }
+        });
+
+        eventTimeEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTimeDialog(eventTimeEnd);
+            }
+        });
+
         submitButton.setOnClickListener(v1 -> {
-            String eventNameValue = eventName.getText().toString().trim();
+            String eventTitleValue = eventTitle.getText().toString().trim();
             String eventLocationValue = eventLocation.getText().toString().trim();
             String eventDateValue = eventDateStart.getText().toString().trim();
             String eventDateEndValue = eventDateEnd.getText().toString().trim();
@@ -275,73 +268,22 @@ public class AddEventFragment extends Fragment {
             String eventAccessValue = autoCompleteTextView.getText().toString();
             String eventDescrValue = eventDescr.getText().toString().trim();
 
-
-            eventDateStart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showDateDialog(eventDateStart);
-                }
-            });
-
-            eventDateEnd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showDateDialog(eventDateEnd);
-                }
-            });
-
-            eventTimeStart.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showTimeDialog(eventTimeStart);
-                }
-            });
-
-            eventTimeEnd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    showTimeDialog(eventTimeEnd);
-                }
-            });
-
-            /*eventLocation.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Fragment addEventMapsFragment = new AddEventFragment();
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.frameLayoutMain, addEventMapsFragment);
-                    transaction.addToBackStack(null);
-                    transaction.commit();
-                }
-            });*/
-
-            if (TextUtils.isEmpty(eventNameValue) || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventDateValue) || TextUtils.isEmpty(eventDateEndValue)|| TextUtils.isEmpty(eventAccessValue) || TextUtils.isEmpty(eventDescrValue)) {
+            if (TextUtils.isEmpty(eventTitleValue) || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventDateValue) || TextUtils.isEmpty(eventDateEndValue)|| TextUtils.isEmpty(eventAccessValue) || TextUtils.isEmpty(eventDescrValue)) {
                 return;
             }
             firebaseFirestoreService.getUserNameInFirestore(value -> {
-                firebaseFirestoreService.createNewEvent(fAuth.getCurrentUser().getUid(), eventNameValue, eventLocationValue, eventDateValue, eventAccessValue, eventDescrValue, value);
+                firebaseFirestoreService.createNewEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventDateValue, eventAccessValue, eventDescrValue, value);
             }, fAuth.getUid());
 
             clearInputFiels();
         });
 
-        eventDateStart.setInputType(InputType.TYPE_NULL);
-        eventDateEnd.setInputType(InputType.TYPE_NULL);
-        eventTimeStart.setInputType(InputType.TYPE_NULL);
-        eventDateEnd.setInputType(InputType.TYPE_NULL);
 
 
-        ScrollView scrollView = (ScrollView) v.findViewById(R.id.scrollViewAddEvent);
-        OverScrollDecoratorHelper.setUpOverScroll(scrollView);
-
-
-
-        v.findViewById(R.id.textLocationTitle).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), AddEventMapsActivity.class));
-                Animatoo.animateShrink(getActivity());
-            } });
+        eventLocation.setOnClickListener(v12 -> {
+            startActivity(new Intent(getApplicationContext(), AddEventMapsActivity.class));
+            Animatoo.animateFade(getActivity());
+        });
 
        /* v.findViewById(R.id.addEventImageLayout).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -388,14 +330,14 @@ public class AddEventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SupportMapFragment mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.addEventSmallMap);
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragmentMap);
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
     }
 
     private void clearInputFiels() {
-        eventName.getText().clear();
+        eventTitle.getText().clear();
         eventLocation.getText().clear();
         eventDateStart.getText().clear();
         eventDateEnd.getText().clear();
@@ -407,7 +349,6 @@ public class AddEventFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //Log.e("val", "requestCode ->  " + requestCode+"  resultCode "+resultCode);
         switch (requestCode) {
             case (100): {
                 if (resultCode == Activity.RESULT_OK) {

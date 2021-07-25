@@ -50,13 +50,13 @@
             android:fontFamily="@font/audiowide"
             android:text="TextView"
             android:textColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/textLocationTitle"
+            app:layout_constraintBottom_toTopOf="@+id/inputLayoutLocation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView4"
             app:layout_constraintTop_toBottomOf="@+id/card_event_name" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textLocationTitle"
+            android:id="@+id/inputLayoutLocation"
             android:layout_width="202dp"
             android:layout_height="22dp"
             android:layout_marginEnd="5dp"
@@ -80,7 +80,7 @@
             app:layout_constraintBottom_toTopOf="@+id/editDetailedEventDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView6"
-            app:layout_constraintTop_toBottomOf="@+id/textLocationTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/inputLayoutLocation" />
 
         <ImageView
             android:id="@+id/imageView4"
@@ -104,7 +104,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/im_location_marker_40"
             app:layout_constraintBottom_toTopOf="@+id/imageView6"
-            app:layout_constraintEnd_toStartOf="@+id/textLocationTitle"
+            app:layout_constraintEnd_toStartOf="@+id/inputLayoutLocation"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
             app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
@@ -221,7 +221,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editDetailedEventDescription" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/textInputLayoutEventTheme"
+            android:id="@+id/textInputLayoutEventAccess"
             android:layout_width="194dp"
             android:layout_height="30dp"
             android:layout_marginStart="5dp"

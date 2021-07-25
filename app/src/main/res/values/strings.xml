@@ -22,16 +22,17 @@
     <string name="text_slide_2">Get together with those who share your interests</string>
     <string name="text_slide_3">Have an amazing \n experience!</string>
     <string name="tutorial_button_skip">Skip Tutorial</string>
-    <string name="add_event_title">Create Event</string>
-    <string name="add_event_event_theme">Choose event theme</string>
     <string name="navigation_bar_map">Map</string>
     <string name="navigation_bar_event_list">Events</string>
     <string name="navigation_bar_new_event">Create</string>
     <string name="navigation_bar_chat">Messages</string>
     <string name="navigation_bar_account">Account</string>
+    <string name="add_event_title">Create Event</string>
+    <string name="add_event_event_access">Event access type</string>
+    <string name="add_event_event_title">Event title</string>
     <string-array name="event_access_types">
-        <item>Public</item>
-        <item>Private</item>
-        <item>On confirmation</item>
+        <item>Public (visible for everyone)</item>
+        <item>Private (visible after invitation)</item>
+        <item>Selective (visible for everyone,\n accessible after host confirmation)</item>
     </string-array>
 </resources>
