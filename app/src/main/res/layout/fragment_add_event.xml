@@ -13,16 +13,19 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/greyBackground">
+        android:background="@color/greyBackground"
+        android:fitsSystemWindows="false"
+        android:orientation="vertical"
+        tools:context=".activities.MainActivity">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textAddEventTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_vertical"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:fontFamily="@font/audiowide"
             android:text="@string/add_event_title"
             android:textColor="@color/primaryTextColor"
@@ -34,8 +37,8 @@
             app:layout_constraintVertical_bias="0.07" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:id="@+id/textInputLayoutEventAccess"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/primaryTextColor"
@@ -44,23 +47,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textAddEventTitle"
-            app:layout_constraintVertical_bias="0.01" >
+            app:layout_constraintVertical_bias="0.01">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:fontFamily="@font/audiowide"
-                android:inputType="none"
-                android:editable="false"
-                android:text="@string/add_event_event_access"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
                 android:drawableStart="@drawable/ic_baseline_supervised_user_circle_30"
                 android:drawablePadding="10dp"
+                android:editable="false"
+                android:fontFamily="@font/audiowide"
                 android:gravity="center_vertical"
-                android:textSize="15sp"/>
+                android:inputType="none"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:text="@string/add_event_event_access"
+                android:textSize="15sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -72,33 +75,33 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textInputLayoutEventAccess"
-            app:layout_constraintVertical_bias="0"/>
+            app:layout_constraintVertical_bias="0" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_library_add_black_24dp"
-            android:tint="@color/primaryLightColor"
             android:backgroundTint="@color/primaryLightColor"
             android:foregroundTint="@color/primaryLightColor"
+            android:src="@drawable/ic_library_add_black_24dp"
+            android:tint="@color/primaryLightColor"
             app:fabSize="normal"
             app:layout_constraintBottom_toBottomOf="@id/recyclerView"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/recyclerView"
-            app:layout_constraintVertical_bias="1"
-            app:layout_constraintHorizontal_bias="0.95"/>
+            app:layout_constraintVertical_bias="1" />
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/TextInputLayoutForAddEvent"
             android:id="@+id/inputLayoutEventTitle"
+            style="@style/TextInputLayoutForAddEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/add_event_event_title"
-            app:hintTextColor="@color/primaryTextColor"
             android:textSize="15sp"
             app:endIconMode="clear_text"
+            app:hintTextColor="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -109,28 +112,28 @@
                 android:id="@+id/inputEditEventTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"/>
+                android:inputType="text" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            style="@style/TextInputLayoutForAddEvent"
             android:id="@+id/inputLayoutLocation"
+            style="@style/TextInputLayoutForAddEvent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Event location"
+            android:hint="@string/add_event_event_location"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutEventTitle"
+            app:layout_constraintTop_toBottomOf="@id/editEventDateEnd"
             app:layout_constraintVertical_bias="0.01">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/inputEditLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="none"
-                android:editable="false"/>
+                android:editable="false"
+                android:inputType="none" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -139,62 +142,27 @@
             class="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            tools:context=".fragments.AddEventFrament"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/inputLayoutLocation"
-            app:layout_constraintVertical_bias="0"/>
+            app:layout_constraintVertical_bias="0"
+            tools:context=".fragments.AddEventFrament" />
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/editEventDateStart"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:background="@color/greyBackground"
+            style="@style/AppCompatEditTextAddEvent"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
             android:fontFamily="@font/audiowide"
             android:hint="Event start"
-            android:imeOptions="actionNext"
             android:inputType="date"
             android:textColor="@color/primaryTextColor"
             android:textColorHint="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/editEventTimeStart"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragmentMap"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/editEventTimeStart"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:background="@color/greyBackground"
-            android:fontFamily="@font/audiowide"
-            android:hint="Event start time"
-            android:imeOptions="actionNext"
-            android:inputType="date"
-            android:textColor="@color/primaryTextColor"
-            android:textColorHint="@color/primaryTextColor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/editEventDateStart"
-            app:layout_constraintTop_toBottomOf="@id/fragmentMap"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/editEventTimeEnd"
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:background="@color/greyBackground"
-            android:fontFamily="@font/audiowide"
-            android:hint="Event end time "
-            android:imeOptions="actionNext"
-            android:inputType="date"
-            android:textColor="@color/primaryTextColor"
-            android:textColorHint="@color/primaryTextColor"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editEventDateEnd"
-            app:layout_constraintTop_toBottomOf="@id/editEventTimeStart"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutEventTitle"
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.appcompat.widget.AppCompatEditText
@@ -209,58 +177,76 @@
             android:textColor="@color/primaryTextColor"
             android:textColorHint="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/editEventTimeEnd"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/editEventDateStart"
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/addEventDescriptionTitle"
-            android:layout_width="match_parent"
+            android:id="@+id/editEventTimeStart"
+            android:layout_width="100dp"
             android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_centerInParent="true"
             android:background="@color/greyBackground"
-            android:duplicateParentState="false"
             android:fontFamily="@font/audiowide"
-            android:hint="Detailed description"
+            android:hint="Event start time"
             android:imeOptions="actionNext"
-            android:inputType="text"
+            android:inputType="time"
             android:textColor="@color/primaryTextColor"
             android:textColorHint="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editEventDateEnd"
+            app:layout_constraintStart_toEndOf="@id/editEventDateStart"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutEventTitle"
             app:layout_constraintVertical_bias="0.0" />
 
-        <EditText
-            android:id="@+id/editDetailedEventDescription"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/ui_rounded_corners_grey"
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/editEventTimeEnd"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="@color/greyBackground"
             android:fontFamily="@font/audiowide"
+            android:hint="Event end time "
             android:imeOptions="actionNext"
-            android:inputType="textMultiLine|textImeMultiLine"
+            android:inputType="time"
             android:textColor="@color/primaryTextColor"
             android:textColorHint="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/addEventDescriptionTitle"
+            app:layout_constraintStart_toEndOf="@id/editEventDateEnd"
+            app:layout_constraintTop_toBottomOf="@id/editEventTimeStart"
             app:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayoutEventDescription"
+            style="@style/TextInputLayoutForAddEvent"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:hint="@string/add_event_event_description"
+            android:inputType="textMultiLine|textImeMultiLine"
+            app:endIconMode="clear_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragmentMap"
+            app:layout_constraintVertical_bias="0.03">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editDetailedEventDescription"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="top"
+                android:inputType="textMultiLine|textImeMultiLine"
+                android:minLines="2" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonSubmitNewEvent"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentEnd="true"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="200dp"
             android:layout_gravity="end"
-            android:background="@drawable/ui_rounded_corners_grey"
             android:fontFamily="@font/audiowide"
             android:gravity="center|center_vertical|fill_vertical"
             android:text="submit"
@@ -268,7 +254,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editDetailedEventDescription"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@id/textInputLayoutEventDescription"
+            app:layout_constraintVertical_bias="0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -17,7 +17,6 @@
     <string name="verify_phone_description">Verification code sent to:\n</string>
     <string name="login_button_login">Login</string>
     <string name="main_button_logout">Logout, BITCH!</string>
-    <string name="title_activity_maps">Map</string>
     <string name="text_slide_1">Always be on the wave of fun around</string>
     <string name="text_slide_2">Get together with those who share your interests</string>
     <string name="text_slide_3">Have an amazing \n experience!</string>
@@ -30,6 +29,8 @@
     <string name="add_event_title">Create Event</string>
     <string name="add_event_event_access">Event access type</string>
     <string name="add_event_event_title">Event title</string>
+    <string name="add_event_event_description">Event description</string>
+    <string name="add_event_event_location">Event location</string>
     <string-array name="event_access_types">
         <item>Public (visible for everyone)</item>
         <item>Private (visible after invitation)</item>
