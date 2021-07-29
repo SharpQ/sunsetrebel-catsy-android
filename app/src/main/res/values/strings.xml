@@ -26,14 +26,18 @@
     <string name="navigation_bar_new_event">Create</string>
     <string name="navigation_bar_chat">Messages</string>
     <string name="navigation_bar_account">Account</string>
-    <string name="add_event_title">Create Event</string>
-    <string name="add_event_event_access">Event access type</string>
-    <string name="add_event_event_title">Event title</string>
-    <string name="add_event_event_description">Event description</string>
-    <string name="add_event_event_location">Event location</string>
     <string-array name="event_access_types">
         <item>Public (visible for everyone)</item>
         <item>Private (visible after invitation)</item>
         <item>Selective (visible for everyone,\n accessible after host confirmation)</item>
     </string-array>
+    <string name="add_event_title">Create New Event</string>
+    <string name="add_event_event_access">Access type</string>
+    <string name="add_event_event_title">Title</string>
+    <string name="add_event_event_description">Description</string>
+    <string name="add_event_event_location">Location</string>
+    <string name="add_event_date_start">Start date</string>
+    <string name="add_event_date_end">End date</string>
+    <string name="add_event_time_start">Time start</string>
+    <string name="add_event_time_end">Time end</string>
 </resources>

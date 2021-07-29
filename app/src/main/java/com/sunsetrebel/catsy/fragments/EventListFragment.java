@@ -55,7 +55,6 @@ public class EventListFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerPostagem.setLayoutManager(layoutManager);
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerViewEventList);
-        new VerticalOverScrollBounceEffectDecorator(new RecyclerViewOverScrollDecorAdapter(recyclerView));
         //Fill EventList with events
         if (EventListService.getListUpdateStatus()) {
             firebaseFirestoreService.getEventList(events -> {

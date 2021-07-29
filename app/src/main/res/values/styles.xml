@@ -72,19 +72,18 @@
         <item name="mt_highlightedTextColor">@color/searchBarPrimaryColor</item>
     </style>
 
-    <style name="TextInputLayoutForAddEvent" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="AddEventTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_marginStart">20dp</item>
         <item name="android:layout_marginEnd">20dp</item>
-        <item name="android:fontFamily">@font/audiowide</item>
-        <item name="hintTextColor">@color/primaryTextColor</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="hintTextColor">@color/primaryTextColor</item>
         <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/audiowide</item>
+        <item name="endIconMode">clear_text</item>
     </style>
 
-    <style name="AppCompatEditTextAddEvent" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
+    <style name="AddEventTextEdit">
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="hintTextColor">@color/primaryTextColor</item>
         <item name="android:textColor">@color/primaryTextColor</item>

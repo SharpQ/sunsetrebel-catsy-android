@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,9 +66,8 @@ public class AddEventFragment extends Fragment {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
     private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
-    private EditText eventDateStart, eventDateEnd, eventTimeStart, eventTimeEnd, eventDescr;
     private TextInputLayout eventAccess;
-    private TextInputEditText eventTitle, eventLocation;
+    private TextInputEditText eventTitle, eventLocation, eventDateStart, eventDateEnd, eventTimeStart, eventTimeEnd, eventDescr;
     private String[] listOfAccessTypes;
     private Button submitButton;
     private View fragmentMap;
@@ -214,49 +212,24 @@ public class AddEventFragment extends Fragment {
 
         eventTitle = v.findViewById(R.id.inputEditEventTitle);
         eventLocation = v.findViewById(R.id.inputEditLocation);
-        eventDateStart = v.findViewById(R.id.editEventDateStart);
-        eventDateEnd = v.findViewById(R.id.editEventDateEnd);
-        eventTimeStart = v.findViewById(R.id.editEventTimeStart);
-        eventTimeEnd = v.findViewById(R.id.editEventTimeEnd);
+        eventDateStart = v.findViewById(R.id.inputEditDateStart);
+        eventDateEnd = v.findViewById(R.id.inputEditDateEnd);
+        eventTimeStart = v.findViewById(R.id.inputEditTimeStart);
+        eventTimeEnd = v.findViewById(R.id.inputEditTimeEnd);
         eventAccess = v.findViewById(R.id.textInputLayoutEventAccess);
-        eventDescr = v.findViewById(R.id.editDetailedEventDescription);
+        eventDescr = v.findViewById(R.id.inputEditEventDescription);
         submitButton = v.findViewById(R.id.buttonSubmitNewEvent);
         autoCompleteTextView = v.findViewById(R.id.autoCompleteTextView);
         fragmentMap = v.findViewById(R.id.fragmentMap);
         autoCompleteTextView.setAdapter(arrayAdapter);
 
-        eventDateStart.setInputType(InputType.TYPE_NULL);
-        eventDateEnd.setInputType(InputType.TYPE_NULL);
-        eventTimeStart.setInputType(InputType.TYPE_NULL);
-        eventTimeEnd.setInputType(InputType.TYPE_NULL);
+        eventDateStart.setOnClickListener(v13 -> showDateDialog(eventDateStart));
 
-        eventDateStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDateDialog(eventDateStart);
-            }
-        });
+        eventDateEnd.setOnClickListener(v14 -> showDateDialog(eventDateEnd));
 
-        eventDateEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDateDialog(eventDateEnd);
-            }
-        });
+        eventTimeStart.setOnClickListener(v15 -> showTimeDialog(eventTimeStart));
 
-        eventTimeStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimeDialog(eventTimeStart);
-            }
-        });
-
-        eventTimeEnd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showTimeDialog(eventTimeEnd);
-            }
-        });
+        eventTimeEnd.setOnClickListener(v16 -> showTimeDialog(eventTimeEnd));
 
         submitButton.setOnClickListener(v1 -> {
             String eventTitleValue = eventTitle.getText().toString().trim();
