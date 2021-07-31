@@ -1,4 +1,4 @@
-package com.sunsetrebel.catsy.utils;
+package com.sunsetrebel.catsy.activities;
 
 import android.Manifest;
 import android.content.DialogInterface;
@@ -8,11 +8,11 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.content.ContextCompat;
 
 import com.karumi.dexter.Dexter;
@@ -22,11 +22,10 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.activities.AddEventMapsActivity;
 
 public class PermissionsActivity extends AppCompatActivity {
 
-    private Button btnGrant;
+    private AppCompatButton btnGrant;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

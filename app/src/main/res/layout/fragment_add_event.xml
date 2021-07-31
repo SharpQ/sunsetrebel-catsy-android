@@ -6,14 +6,13 @@
     android:id="@+id/scrollViewAddEvent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/greyBackground"
+    android:background="@drawable/im_background_concert"
     android:scrollbars="none"
     android:requiresFadingEdge="none">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/greyBackground"
         android:fitsSystemWindows="false"
         android:orientation="vertical"
         tools:context=".activities.MainActivity"
@@ -67,7 +66,8 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/recyclerViewAddPic"
+            android:background="@color/blackHalfTransparent"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -76,21 +76,26 @@
             app:layout_constraintTop_toBottomOf="@id/textInputLayoutEventAccess"
             app:layout_constraintVertical_bias="0" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/materialTextViewAddImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/primaryLightColor"
-            android:foregroundTint="@color/primaryLightColor"
-            android:src="@drawable/ic_library_add_black_24dp"
-            android:tint="@color/primaryLightColor"
-            app:fabSize="normal"
-            app:layout_constraintBottom_toBottomOf="@id/recyclerView"
+            android:padding="15dp"
+            android:radius="100dip"
+            android:visibility="visible"
+            android:enabled="true"
+            android:background="@color/greyBackground"
+            android:textColor="@color/primaryTextColor"
+            android:text="@string/add_event_add_image_hint"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/audiowide"
+            android:drawableStart="@drawable/ic_library_add_black_24dp"
+            android:drawablePadding="10dp"
+            app:layout_constraintBottom_toBottomOf="@id/recyclerViewAddPic"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.95"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/recyclerView"
-            app:layout_constraintVertical_bias="1" />
+            app:layout_constraintTop_toTopOf="@id/recyclerViewAddPic"
+            app:layout_constraintVertical_bias="0.5"/>
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/AddEventTextInputLayout"
@@ -101,7 +106,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textAddEventTitle"
-            app:layout_constraintVertical_bias="0.01">
+            app:layout_constraintVertical_bias="0.02">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/AddEventTextEdit"
@@ -109,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/add_event_event_title"
-                android:inputType="text" />
+                android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -160,7 +165,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/inputLayoutTimeStart"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recyclerView"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewAddPic"
             app:layout_constraintVertical_bias="0">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -210,7 +215,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/inputLayoutDateStart"
-            app:layout_constraintTop_toBottomOf="@id/recyclerView"
+            app:layout_constraintTop_toBottomOf="@id/recyclerViewAddPic"
             app:layout_constraintVertical_bias="0.0">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -274,16 +279,11 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.appcompat.widget.AppCompatButton
+            style="@style/DefaultButton"
             android:id="@+id/buttonSubmitNewEvent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="200dp"
-            android:layout_gravity="end"
-            android:fontFamily="@font/audiowide"
-            android:gravity="center|center_vertical|fill_vertical"
-            android:text="submit"
-            android:textColor="@color/primaryTextColor"
+            android:text="@string/add_event_create_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

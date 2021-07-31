@@ -1,5 +1,7 @@
 package com.sunsetrebel.catsy.activities;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -9,8 +11,8 @@ import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
 
 public class TutorialActivity extends AppCompatActivity {
-    private Button mSkipBtn;
-    private Button mSignOut;
+    private AppCompatButton mSkipBtn;
+    private AppCompatButton mSignOut;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
 
     @Override

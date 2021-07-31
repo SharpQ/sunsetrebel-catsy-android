@@ -89,5 +89,7 @@
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorHint">@color/primaryTextColor</item>
         <item name="android:textSize">15sp</item>
+        <item name="android:background">@color/blackHalfTransparent</item>
+        <item name="boxBackgroundColor">@color/blackHalfTransparent</item>
     </style>
 </resources>

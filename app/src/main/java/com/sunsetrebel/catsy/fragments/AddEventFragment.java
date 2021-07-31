@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -47,6 +48,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.material.textview.MaterialTextView;
 import com.miguelbcr.ui.rx_paparazzo2.entities.FileData;
 import com.miguelbcr.ui.rx_paparazzo2.entities.size.Size;
 import com.sunsetrebel.catsy.R;
@@ -69,7 +71,8 @@ public class AddEventFragment extends Fragment {
     private TextInputLayout eventAccess;
     private TextInputEditText eventTitle, eventLocation, eventDateStart, eventDateEnd, eventTimeStart, eventTimeEnd, eventDescr;
     private String[] listOfAccessTypes;
-    private Button submitButton;
+    private AppCompatButton submitButton;
+    private MaterialTextView imageRecyclerLabel;
     private View fragmentMap;
     private AutoCompleteTextView autoCompleteTextView;
     private GoogleMap mMap;
@@ -221,6 +224,7 @@ public class AddEventFragment extends Fragment {
         submitButton = v.findViewById(R.id.buttonSubmitNewEvent);
         autoCompleteTextView = v.findViewById(R.id.autoCompleteTextView);
         fragmentMap = v.findViewById(R.id.fragmentMap);
+        imageRecyclerLabel = v.findViewById(R.id.materialTextViewAddImage);
         autoCompleteTextView.setAdapter(arrayAdapter);
 
         eventDateStart.setOnClickListener(v13 -> showDateDialog(eventDateStart));
@@ -279,7 +283,7 @@ public class AddEventFragment extends Fragment {
 
             }
         });*/
-        RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = v.findViewById(R.id.recyclerViewAddPic);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         addEventImageAdapter = new AddEventImageAdapter(getActivity());
         options = Options.init()
@@ -292,7 +296,7 @@ public class AddEventFragment extends Fragment {
                 .setPath("/akshay/new")
         ;
         recyclerView.setAdapter(addEventImageAdapter);
-        v.findViewById(R.id.fab).setOnClickListener((View view) -> {
+        v.findViewById(R.id.materialTextViewAddImage).setOnClickListener((View view) -> {
             options.setPreSelectedUrls(returnValue);
             Pix.start(this, options);
         });
@@ -325,6 +329,7 @@ public class AddEventFragment extends Fragment {
         switch (requestCode) {
             case (100): {
                 if (resultCode == Activity.RESULT_OK) {
+                    imageRecyclerLabel.setVisibility(View.INVISIBLE);
                     returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
                     addEventImageAdapter.addImage(returnValue);
                 }

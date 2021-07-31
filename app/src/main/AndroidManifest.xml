@@ -56,7 +56,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.TutorialActivity" />
-        <activity android:name=".utils.PermissionsActivity" />
+        <activity android:name=".activities.PermissionsActivity" />
         <activity
             android:name=".activities.AddEventMapsActivity" />
 

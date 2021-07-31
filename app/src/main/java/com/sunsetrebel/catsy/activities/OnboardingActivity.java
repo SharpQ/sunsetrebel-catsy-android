@@ -1,5 +1,6 @@
 package com.sunsetrebel.catsy.activities;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.viewpager.widget.ViewPager;
 import android.app.Activity;
 import android.content.Intent;
@@ -25,9 +26,9 @@ public class OnboardingActivity extends AppCompatActivity {
     private LinearLayout mDotLayout;
     private ViewPager mSlideViewPager;
     private SliderAdapter sliderAdapter;
-    private Button mToRegisterBtn;
-    private Button mToLoginBtn;
-    private Button mGoogleAuthBtn;
+    private AppCompatButton mToRegisterBtn;
+    private AppCompatButton mToLoginBtn;
+    private AppCompatButton mGoogleAuthBtn;
     private int RC_SIGN_IN;
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();

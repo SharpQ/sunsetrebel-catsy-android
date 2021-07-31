@@ -86,7 +86,7 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonResentCode"
         app:layout_constraintVertical_bias="0.5" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonVerify"
         style="@style/DefaultButton"
         android:text="@string/verify_button_verify"
@@ -96,7 +96,7 @@
         app:layout_constraintTop_toBottomOf="@+id/inputLayoutSmsCode"
         app:layout_constraintVertical_bias="0.9" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonResentCode"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="150dp"

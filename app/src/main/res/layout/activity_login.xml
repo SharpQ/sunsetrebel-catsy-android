@@ -197,7 +197,7 @@
             android:inputType="none|textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonLogin"
         style="@style/DefaultButton"
         android:text="@string/login_button_login"
@@ -207,7 +207,7 @@
         app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserPassword"
         app:layout_constraintVertical_bias="0.9" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonLoginGoogle"
         style="@style/GoogleButton"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -216,7 +216,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textLoginTitle"
         app:layout_constraintVertical_bias="0.05" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonLoginFacebook"
         style="@style/FacebookButton"
         app:layout_constraintBottom_toBottomOf="parent"

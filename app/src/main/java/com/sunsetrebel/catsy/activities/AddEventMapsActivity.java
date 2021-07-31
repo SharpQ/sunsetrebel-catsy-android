@@ -14,8 +14,6 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -60,10 +59,8 @@ import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.skyfishjy.library.RippleBackground;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.AddEventFragment;
-import com.sunsetrebel.catsy.utils.PermissionsActivity;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -79,7 +76,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     private static final String TAG = "AddEventMapsActivity";
     private MaterialSearchBar materialSearchBar;
     private View mapView;
-    private Button confirmLocationButton;
+    private AppCompatButton confirmLocationButton;
     private ImageButton backButton;
     private RippleBackground rippleBg;
     private final float DEFAULT_ZOOM = 15;

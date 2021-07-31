@@ -39,7 +39,7 @@
         app:layout_constraintTop_toBottomOf="@+id/guidelineOnboard"
         app:layout_constraintVertical_bias="0" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonGoToRegister"
         style="@style/DefaultButton"
         android:text="@string/registration_button_register"
@@ -49,7 +49,7 @@
         app:layout_constraintTop_toBottomOf="@+id/dotsLayout"
         app:layout_constraintVertical_bias="0.05" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonGoToGoogle"
         style="@style/GoogleButton"
         android:drawableLeft="@drawable/ic_google_icon_32p"
@@ -60,7 +60,7 @@
         app:layout_constraintTop_toBottomOf="@+id/buttonGoToRegister"
         app:layout_constraintVertical_bias="0.1" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonGoToLogin"
         style="@style/DefaultButton"
         android:text="@string/login_button_login"

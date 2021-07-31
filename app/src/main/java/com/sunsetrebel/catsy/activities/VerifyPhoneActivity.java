@@ -2,6 +2,7 @@ package com.sunsetrebel.catsy.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,7 +28,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 public class VerifyPhoneActivity extends AppCompatActivity {
-    private Button verifyBtn, resentCodeBtn;
+    private AppCompatButton verifyBtn, resentCodeBtn;
     private TextInputLayout inputLayoutCode;
     private TextInputEditText inputEditCode;
     private TextView textVerifyPhoneDescription, textResetCountdown;
