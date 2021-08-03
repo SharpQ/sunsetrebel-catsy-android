@@ -7,7 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -16,9 +16,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -29,15 +29,8 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
-import com.fxn.pix.Options;
-import com.fxn.pix.Pix;
-import com.fxn.utility.ImageQuality;
-import com.fxn.utility.PermUtil;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -49,93 +42,60 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
-import com.miguelbcr.ui.rx_paparazzo2.entities.FileData;
-import com.miguelbcr.ui.rx_paparazzo2.entities.size.Size;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.activities.AddEventMapsActivity;
-import com.sunsetrebel.catsy.adapters.AddEventImageAdapter;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 
 public class AddEventFragment extends Fragment {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
     private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
     private TextInputLayout eventAccess;
-    private TextInputEditText eventTitle, eventLocation, eventDateStart, eventDateEnd, eventTimeStart, eventTimeEnd, eventDescr;
+    private TextInputEditText eventTitle, eventLocation, eventStartTime, eventEndTime, eventDescr;
     private String[] listOfAccessTypes;
     private AppCompatButton submitButton;
-    private MaterialTextView imageRecyclerLabel;
+    private MaterialTextView mAddImageLabel;
+    private ImageView mAvatarImageView;
     private View fragmentMap;
     private AutoCompleteTextView autoCompleteTextView;
     private GoogleMap mMap;
-    private Geocoder geocoder;
-    //Pick image variables
-    private RecyclerView recyclerView;
-    private ArrayList<FileData> fileDataList;
-    private Size size;
-    private static final String STATE_FILES = "FILES";
-    RecyclerView recyclerViewEventImage;
-    AddEventImageAdapter addEventImageAdapter;
     static AppCompatEditText cardEventLocation;
-    Float coordinates;
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    Options options;
-    ArrayList<String> returnValue = new ArrayList<>();
-    private static final String TAG = "MapsActivity";
-
+    private static final int IMAGE_PICK_CODE = 1000;
+    private static final int PERMISSION_CODE = 1001;
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
-    FusedLocationProviderClient fusedLocationProviderClient;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public AddEventFragment() {
         // Required empty public constructor
     }
 
-    public static AddEventFragment newInstance(String param1, String param2) {
-        AddEventFragment fragment = new AddEventFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     public static void putArguments(Bundle args)
     {
         String cardEventLocationInfo = args.getString("Location");
         Float latlng = args.getFloat("Coordinates");
-       cardEventLocation.setText(cardEventLocationInfo);
-       latlng.longValue();
-
+        cardEventLocation.setText(cardEventLocationInfo);
+        latlng.longValue();
     }
+
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
         @Override
         public void onMapReady(GoogleMap googleMap) {
-
             try {
                 // Customise the styling of the base map using a JSON object defined
                 // in a raw resource file.
                 boolean success = googleMap.setMapStyle(
                         MapStyleOptions.loadRawResourceStyle(
-                                getApplicationContext(), R.raw.google_style));
+                                getContext(), R.raw.google_style));
 
                 if (!success) {
-                    Log.e(TAG, "Style parsing failed.");
+                    Log.e("INFO", "Style parsing failed.");
                 }
             } catch (Resources.NotFoundException e) {
-                Log.e(TAG, "Can't find style. Error: ", e);
+                Log.e("INFO", "Can't find style. Error: ", e);
             }
             mMap = googleMap;
             //Google maps default buttons disabling
@@ -197,10 +157,6 @@ public class AddEventFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -211,96 +167,66 @@ public class AddEventFragment extends Fragment {
         listOfAccessTypes = getResources().getStringArray(R.array.event_access_types);
         ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), R.layout.item_ddl_event_type, listOfAccessTypes);
 
-        //Initializing the views of the dialog.
-
         eventTitle = v.findViewById(R.id.inputEditEventTitle);
         eventLocation = v.findViewById(R.id.inputEditLocation);
-        eventDateStart = v.findViewById(R.id.inputEditDateStart);
-        eventDateEnd = v.findViewById(R.id.inputEditDateEnd);
-        eventTimeStart = v.findViewById(R.id.inputEditTimeStart);
-        eventTimeEnd = v.findViewById(R.id.inputEditTimeEnd);
+        eventStartTime = v.findViewById(R.id.inputEditStartTime);
+        eventEndTime = v.findViewById(R.id.inputEditEndTime);
         eventAccess = v.findViewById(R.id.textInputLayoutEventAccess);
         eventDescr = v.findViewById(R.id.inputEditEventDescription);
         submitButton = v.findViewById(R.id.buttonSubmitNewEvent);
         autoCompleteTextView = v.findViewById(R.id.autoCompleteTextView);
         fragmentMap = v.findViewById(R.id.fragmentMap);
-        imageRecyclerLabel = v.findViewById(R.id.materialTextViewAddImage);
+        mAvatarImageView = v.findViewById(R.id.imageViewAddEventAvatar);
+        mAddImageLabel = v.findViewById(R.id.materialTextViewAddImage);
         autoCompleteTextView.setAdapter(arrayAdapter);
 
-        eventDateStart.setOnClickListener(v13 -> showDateDialog(eventDateStart));
+        eventStartTime.setOnClickListener(v15 -> showDateTimeDialog(eventStartTime));
 
-        eventDateEnd.setOnClickListener(v14 -> showDateDialog(eventDateEnd));
-
-        eventTimeStart.setOnClickListener(v15 -> showTimeDialog(eventTimeStart));
-
-        eventTimeEnd.setOnClickListener(v16 -> showTimeDialog(eventTimeEnd));
+        eventEndTime.setOnClickListener(v16 -> showDateTimeDialog(eventEndTime));
 
         submitButton.setOnClickListener(v1 -> {
             String eventTitleValue = eventTitle.getText().toString().trim();
             String eventLocationValue = eventLocation.getText().toString().trim();
-            String eventDateValue = eventDateStart.getText().toString().trim();
-            String eventDateEndValue = eventDateEnd.getText().toString().trim();
-            String eventTimeStartValue = eventTimeStart.getText().toString().trim();
-            String eventTimeEndValue = eventTimeEnd.getText().toString().trim();
+            String eventStartTimeValue = eventStartTime.getText().toString().trim();
+            String eventEndTimeValue = eventEndTime.getText().toString().trim();
             String eventAccessValue = autoCompleteTextView.getText().toString();
             String eventDescrValue = eventDescr.getText().toString().trim();
 
-            if (TextUtils.isEmpty(eventTitleValue) || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventDateValue) || TextUtils.isEmpty(eventDateEndValue)|| TextUtils.isEmpty(eventAccessValue) || TextUtils.isEmpty(eventDescrValue)) {
+            if (TextUtils.isEmpty(eventTitleValue) || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventStartTimeValue) || TextUtils.isEmpty(eventEndTimeValue)
+                    || TextUtils.isEmpty(eventAccessValue) || TextUtils.isEmpty(eventDescrValue)) {
                 return;
             }
             firebaseFirestoreService.getUserNameInFirestore(value -> {
-                firebaseFirestoreService.createNewEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventDateValue, eventAccessValue, eventDescrValue, value);
+                firebaseFirestoreService.createNewEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, value);
             }, fAuth.getUid());
 
             clearInputFiels();
         });
 
-
-
         eventLocation.setOnClickListener(v12 -> {
-            startActivity(new Intent(getApplicationContext(), AddEventMapsActivity.class));
+            startActivity(new Intent(getContext(), AddEventMapsActivity.class));
             Animatoo.animateFade(getActivity());
         });
 
-       /* v.findViewById(R.id.addEventImageLayout).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)*{
-
-                BottomFluxDialog.confirmDialog(getActivity())
-                        .setTextTitle("PickUp Image")
-                        .setTextMessage("Choose image source")
-                        .setImageDialog(R.drawable.ui_rounded_corners_grey)
-                        .setLeftButtonText("CAMERA")
-                        .setRightButtonText("GALLERY")
-                        .setConfirmListener(new BottomFluxDialog.OnConfirmListener() {
-                            @Override
-                            public void onLeftClick() { captureImageWithCrop(); }
-
-                            @Override
-                            public void onRightClick() { pickupImage(); }
-                        })
-                        .show();
-
+        mAddImageLabel.setOnClickListener(v17 -> {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                    requestPermissions(permissions, PERMISSION_CODE);
+                } else {
+                    pickImageFromGallery();
+                }
+            } else {
+                pickImageFromGallery();
             }
-        });*/
-        RecyclerView recyclerView = v.findViewById(R.id.recyclerViewAddPic);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        addEventImageAdapter = new AddEventImageAdapter(getActivity());
-        options = Options.init()
-                .setRequestCode(100)
-                .setCount(3)
-                .setFrontfacing(false)
-                .setImageQuality(ImageQuality.LOW)
-                .setPreSelectedUrls(returnValue)
-                .setScreenOrientation(com.fxn.pix.Options.SCREEN_ORIENTATION_PORTRAIT)
-                .setPath("/akshay/new")
-        ;
-        recyclerView.setAdapter(addEventImageAdapter);
-        v.findViewById(R.id.materialTextViewAddImage).setOnClickListener((View view) -> {
-            options.setPreSelectedUrls(returnValue);
-            Pix.start(this, options);
         });
         return v;
+    }
+
+    private void pickImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_CODE);
     }
 
     @Override
@@ -313,112 +239,93 @@ public class AddEventFragment extends Fragment {
         }
     }
 
-    private void clearInputFiels() {
-        eventTitle.getText().clear();
-        eventLocation.getText().clear();
-        eventDateStart.getText().clear();
-        eventDateEnd.getText().clear();
-        eventTimeStart.getText().clear();
-        eventTimeEnd.getText().clear();
-        eventDescr.getText().clear();
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case (100): {
-                if (resultCode == Activity.RESULT_OK) {
-                    imageRecyclerLabel.setVisibility(View.INVISIBLE);
-                    returnValue = data.getStringArrayListExtra(Pix.IMAGE_RESULTS);
-                    addEventImageAdapter.addImage(returnValue);
-                }
-            }
-            break;
+        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            mAvatarImageView.setImageURI(data.getData());
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case PermUtil.REQUEST_CODE_ASK_MULTIPLE_PERMISSIONS: {
-                // If request is cancelled, the result arrays are empty.
+            case PERMISSION_CODE: {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Pix.start(getActivity(), options);
+                    pickImageFromGallery();
                 } else {
-                    Toast.makeText(getActivity(), "Approve permissions to open Pix ImagePicker",
-                            Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Please accept storage permission!", Toast.LENGTH_SHORT).show();
                 }
-                return;
             }
         }
     }
 
 
     private void showDateTimeDialog(final EditText date_time_in) {
-        final Calendar calendar=Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+        final Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 calendar.set(Calendar.YEAR,year);
                 calendar.set(Calendar.MONTH,month);
                 calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
 
-                TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+                TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                         calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
                         calendar.set(Calendar.MINUTE,minute);
 
-                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd HH:mm");
+                        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("MM-dd-yy HH:mm");
 
                         date_time_in.setText(simpleDateFormat.format(calendar.getTime()));
                     }
                 };
-
-                new TimePickerDialog(getActivity(),timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+                new TimePickerDialog(getActivity(), R.style.DatePickerDialog, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();
             }
         };
-
-        new DatePickerDialog(getActivity(),dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
-
+        new DatePickerDialog(getActivity(), R.style.DatePickerDialog, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
 
-    private void showTimeDialog(final EditText time_in) {
-        final Calendar calendar=Calendar.getInstance();
+//    private void showTimeDialog(final EditText time_in) {
+//        final Calendar calendar=Calendar.getInstance();
+//
+//        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
+//            @Override
+//            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+//                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
+//                calendar.set(Calendar.MINUTE,minute);
+//                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
+//                time_in.setText(simpleDateFormat.format(calendar.getTime()));
+//            }
+//        };
+//
+//        new TimePickerDialog(getActivity(),timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+//    }
+//
+//    private void showDateDialog(final EditText date_in) {
+//        final Calendar calendar=Calendar.getInstance();
+//        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
+//            @Override
+//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+//                calendar.set(Calendar.YEAR,year);
+//                calendar.set(Calendar.MONTH,month);
+//                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+//                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
+//                date_in.setText(simpleDateFormat.format(calendar.getTime()));
+//
+//            }
+//        };
+//
+//        new DatePickerDialog(getActivity(),dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
+//    }
 
-        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                calendar.set(Calendar.MINUTE,minute);
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
-                time_in.setText(simpleDateFormat.format(calendar.getTime()));
-            }
-        };
-
-        new TimePickerDialog(getActivity(),timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
+    private void clearInputFiels() {
+        eventTitle.getText().clear();
+        eventLocation.getText().clear();
+        eventStartTime.getText().clear();
+        eventEndTime.getText().clear();
+        eventDescr.getText().clear();
     }
-
-    private void showDateDialog(final EditText date_in) {
-        final Calendar calendar=Calendar.getInstance();
-        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                calendar.set(Calendar.YEAR,year);
-                calendar.set(Calendar.MONTH,month);
-                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
-                date_in.setText(simpleDateFormat.format(calendar.getTime()));
-
-            }
-        };
-
-        new DatePickerDialog(getActivity(),dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
-    }
-
-
-
-
 }

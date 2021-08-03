@@ -6,7 +6,6 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import com.miguelbcr.ui.rx_paparazzo2.RxPaparazzo;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.AccountFragment;
 import com.sunsetrebel.catsy.fragments.AddEventFragment;
@@ -40,8 +39,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, mapsfragment)
                 .commit();
-
-        RxPaparazzo.register(getApplication());
 
         animatedBottomBar = findViewById(R.id.animatedBottomBar);
         animatedBottomBar.selectTabById(R.id.navigationBarMap, true);

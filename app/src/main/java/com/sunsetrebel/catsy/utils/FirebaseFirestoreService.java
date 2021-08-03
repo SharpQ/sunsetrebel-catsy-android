@@ -96,8 +96,8 @@ public class FirebaseFirestoreService {
         documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
     }
 
-    public void createNewEvent(String userID, String eventName, String eventLocation, String eventDate,
-                               String eventType, String eventDescr, String userName){
+    public void createNewEvent(String userID, String eventName, String eventLocation, String eventStartTime,
+                               String eventEndTime, String eventType, String eventDescr, String userName){
         fStore = getInstance();
         String eventId = fStore.collection("eventList").document().getId();
         documentReference = fStore.collection("eventList").document(eventId);
@@ -105,7 +105,8 @@ public class FirebaseFirestoreService {
         event.put("eventId", eventId);
         event.put("eventName", eventName);
         event.put("eventLocation", eventLocation);
-        event.put("eventDate", eventDate);
+        event.put("eventStartTime", eventStartTime);
+        event.put("eventEndDate", eventEndTime);
         event.put("eventType", eventType);
         event.put("eventDescr", eventDescr);
         event.put("userId", userID);

@@ -14,19 +14,20 @@
         android:background="@color/primaryTextColor">
 
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/card_event_icon"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
             android:layout_width="150dp"
-            android:layout_height="300dp"
+            android:layout_height="150dp"
             android:layout_marginBottom="5dp"
+            android:background="@drawable/ui_transparent_rounded_corners"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/card_event_name"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/im_event_icon_example_1"
-            android:background="@drawable/ui_transparent_rounded_corners"
-            />
+            app:layout_constraintVertical_bias="0.0"
+            app:srcCompat="@drawable/im_event_icon_example_1" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/card_event_name"
@@ -37,13 +38,13 @@
             android:textAllCaps="true"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/inputLayoutDateStart"
+            app:layout_constraintBottom_toTopOf="@+id/inputLayoutStartTime"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/inputLayoutDateStart"
+            android:id="@+id/inputLayoutStartTime"
             android:layout_width="202dp"
             android:layout_height="22dp"
             android:layout_marginEnd="5dp"
@@ -66,7 +67,7 @@
             app:layout_constraintBottom_toTopOf="@+id/card_people_number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageView5"
-            app:layout_constraintTop_toBottomOf="@+id/inputLayoutDateStart" />
+            app:layout_constraintTop_toBottomOf="@+id/inputLayoutStartTime" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/card_people_number"
@@ -91,7 +92,7 @@
             android:scaleType="fitCenter"
             android:src="@drawable/im_clock_black_40"
             app:layout_constraintBottom_toTopOf="@+id/imageView5"
-            app:layout_constraintEnd_toStartOf="@+id/inputLayoutDateStart"
+            app:layout_constraintEnd_toStartOf="@+id/inputLayoutStartTime"
             app:layout_constraintStart_toEndOf="@+id/card_event_icon"
             app:layout_constraintTop_toBottomOf="@+id/card_event_name" />
 

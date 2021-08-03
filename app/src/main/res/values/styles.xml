@@ -92,4 +92,17 @@
         <item name="android:background">@color/blackHalfTransparent</item>
         <item name="boxBackgroundColor">@color/blackHalfTransparent</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
+        <item name="cornerSize">10%</item>
+    </style>
+
+    <style name="DatePickerDialog" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">@color/primaryLightColor</item>                   <!--header background-->
+        <item name="android:windowBackground">@color/greyBackground</item>     <!--calendar background-->
+        <item name="android:colorControlActivated">@color/primaryLightColor</item> <!--selected day-->
+        <item name="android:textColorPrimary">@color/primaryTextColor</item> <!--days of the month-->
+        <item name="android:textColorSecondary">@color/primaryLightColor</item>    <!--days of the week-->
+        <item name="colorControlHighlight">@color/primaryLightColor</item>
+    </style>
 </resources>

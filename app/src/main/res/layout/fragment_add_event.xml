@@ -65,37 +65,43 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewAddPic"
-            android:background="@color/blackHalfTransparent"
-            android:layout_width="match_parent"
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageViewAddEventAvatar"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+            android:layout_width="150dp"
             android:layout_height="150dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/blackHalfTransparent"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textInputLayoutEventAccess"
-            app:layout_constraintVertical_bias="0" />
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintVertical_bias="0"/>
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/materialTextViewAddImage"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:radius="100dip"
-            android:visibility="visible"
-            android:enabled="true"
-            android:background="@color/greyBackground"
-            android:textColor="@color/primaryTextColor"
-            android:text="@string/add_event_add_image_hint"
-            android:gravity="center_vertical"
-            android:fontFamily="@font/audiowide"
+            android:layout_height="60dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/ui_rounded_corners_grey"
             android:drawableStart="@drawable/ic_library_add_black_24dp"
             android:drawablePadding="10dp"
-            app:layout_constraintBottom_toBottomOf="@id/recyclerViewAddPic"
+            android:fontFamily="@font/audiowide"
+            android:gravity="center_vertical"
+            android:padding="15dp"
+            android:radius="100dip"
+            android:text="@string/add_event_add_image_hint"
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/recyclerViewAddPic"
-            app:layout_constraintVertical_bias="0.5"/>
+            app:layout_constraintTop_toBottomOf="@id/textInputLayoutEventAccess"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintVertical_bias="0.05" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/AddEventTextInputLayout"
@@ -127,7 +133,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutDateEnd"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutEndTime"
             app:layout_constraintVertical_bias="0.01">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -157,70 +163,20 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/AddEventTextInputLayout"
-            android:id="@+id/inputLayoutDateStart"
+            android:id="@+id/inputLayoutStartTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/inputLayoutTimeStart"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recyclerViewAddPic"
-            app:layout_constraintVertical_bias="0">
-
-            <com.google.android.material.textfield.TextInputEditText
-                style="@style/AddEventTextEdit"
-                android:id="@+id/inputEditDateStart"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/add_event_date_start"
-                android:clickable="true"
-                android:focusable="false"
-                android:inputType="none" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/AddEventTextInputLayout"
-            android:id="@+id/inputLayoutDateEnd"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/inputLayoutTimeEnd"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutDateStart"
-            app:layout_constraintVertical_bias="0">
-
-            <com.google.android.material.textfield.TextInputEditText
-                style="@style/AddEventTextEdit"
-                android:id="@+id/inputEditDateEnd"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/add_event_date_end"
-                android:clickable="true"
-                android:focusable="false"
-                android:inputType="none" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/AddEventTextInputLayout"
-            android:id="@+id/inputLayoutTimeStart"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/inputLayoutDateStart"
-            app:layout_constraintTop_toBottomOf="@id/recyclerViewAddPic"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageViewAddEventAvatar"
+            app:layout_constraintVertical_bias="0">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/AddEventTextEdit"
-                android:id="@+id/inputEditTimeStart"
+                android:id="@+id/inputEditStartTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/add_event_time_start"
@@ -232,20 +188,20 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/AddEventTextInputLayout"
-            android:id="@+id/inputLayoutTimeEnd"
+            android:id="@+id/inputLayoutEndTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
+            android:layout_marginEnd="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/inputLayoutDateEnd"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutTimeStart"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutStartTime"
+            app:layout_constraintVertical_bias="0">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/AddEventTextEdit"
-                android:id="@+id/inputEditTimeEnd"
+                android:id="@+id/inputEditEndTime"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/add_event_time_end"
