@@ -39,5 +39,5 @@
     <string name="add_event_time_start">Start time</string>
     <string name="add_event_time_end">End time</string>
     <string name="add_event_create_btn">Create</string>
-    <string name="add_event_add_image_hint">Add event image</string>
+    <string name="add_event_add_image_hint">Add\n image</string>
 </resources>

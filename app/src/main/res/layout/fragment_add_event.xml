@@ -84,23 +84,22 @@
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/materialTextViewAddImage"
             android:layout_width="wrap_content"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
             android:background="@drawable/ui_rounded_corners_grey"
             android:drawableStart="@drawable/ic_library_add_black_24dp"
             android:drawablePadding="10dp"
             android:fontFamily="@font/audiowide"
-            android:gravity="center_vertical"
             android:padding="15dp"
             android:radius="100dip"
             android:text="@string/add_event_add_image_hint"
+            android:textAlignment="center"
             android:textColor="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imageViewAddEventAvatar"
             app:layout_constraintTop_toBottomOf="@id/textInputLayoutEventAccess"
-            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintVertical_bias="0.05" />
 
         <com.google.android.material.textfield.TextInputLayout
