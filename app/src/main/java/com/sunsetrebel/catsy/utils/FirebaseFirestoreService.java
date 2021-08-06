@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.sunsetrebel.catsy.utils.EventListService;
 
 //    public enum AuthTypes {
 //        PHONE,
@@ -96,8 +95,8 @@ public class FirebaseFirestoreService {
         documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
     }
 
-    public void createNewEvent(String userID, String eventName, String eventLocation, String eventStartTime,
-                               String eventEndTime, String eventType, String eventDescr, String userName){
+    public void createNewPublicEvent(String userID, String eventName, String eventLocation, String eventStartTime,
+                                     String eventEndTime, AccessTypes accessType, String eventDescr, String eventAvatar, String userName){
         fStore = getInstance();
         String eventId = fStore.collection("eventList").document().getId();
         documentReference = fStore.collection("eventList").document(eventId);
@@ -106,12 +105,32 @@ public class FirebaseFirestoreService {
         event.put("eventName", eventName);
         event.put("eventLocation", eventLocation);
         event.put("eventStartTime", eventStartTime);
-        event.put("eventEndDate", eventEndTime);
-        event.put("eventType", eventType);
-        event.put("eventDescr", eventDescr);
+        event.put("eventEndTime", eventEndTime);
+        event.put("accessType", accessType);
+        event.put("eventDescription", eventDescr);
+        event.put("eventAvatar", eventAvatar);
         event.put("userId", userID);
         event.put("userName", userName);
-        documentReference.set(event).addOnSuccessListener(aVoid -> Log.d("INFO", "New event created! EventId: " + eventId));
+        documentReference.set(event).addOnSuccessListener(aVoid -> Log.d("INFO", "New public event created! EventId: " + eventId));
+    }
+
+    public void createNewPrivateEvent(String userID, String eventName, String eventLocation, String eventStartTime,
+                                     String eventEndTime, AccessTypes accessType, String eventDescr, String eventAvatar, String userName){
+        fStore = getInstance();
+        String eventId = fStore.collection("userProfiles").document(userID).collection("userEvents").document().getId();
+        documentReference = fStore.collection("userProfiles").document(userID).collection("userEvents").document(eventId);
+        Map<String, Object> event = new HashMap<>();
+        event.put("eventId", eventId);
+        event.put("eventName", eventName);
+        event.put("eventLocation", eventLocation);
+        event.put("eventStartTime", eventStartTime);
+        event.put("eventEndTime", eventEndTime);
+        event.put("accessType", accessType);
+        event.put("eventDescription", eventDescr);
+        event.put("eventAvatar", eventAvatar);
+        event.put("userId", userID);
+        event.put("userName", userName);
+        documentReference.set(event).addOnSuccessListener(aVoid -> Log.d("INFO", "New private event created! EventId: " + eventId));
     }
 
     public void getUserInFirestore(GetUserCallback getUserCallback, String userId){

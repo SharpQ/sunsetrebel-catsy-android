@@ -7,6 +7,7 @@ import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
@@ -44,15 +46,20 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.activities.AddEventMapsActivity;
+import com.sunsetrebel.catsy.utils.AccessTypes;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.utils.FirebaseStorageService;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
 
 public class AddEventFragment extends Fragment {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
     private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
+    private final FirebaseStorageService firebaseStorageService = new FirebaseStorageService();
     private TextInputLayout eventAccess;
     private TextInputEditText eventTitle, eventLocation, eventStartTime, eventEndTime, eventDescr;
     private String[] listOfAccessTypes;
@@ -66,6 +73,9 @@ public class AddEventFragment extends Fragment {
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
+    private Uri eventAvatar;
+    private String userFullName;
+    private int ddlEventAccessPosition;
 
 
     public AddEventFragment() {
@@ -164,8 +174,11 @@ public class AddEventFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_event, container, false);
         fAuth = firebaseAuthService.getInstance();
+        firebaseFirestoreService.getUserNameInFirestore(value -> {
+            userFullName = value;
+        }, fAuth.getUid());
         listOfAccessTypes = getResources().getStringArray(R.array.event_access_types);
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getContext(), R.layout.item_ddl_event_type, listOfAccessTypes);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.item_ddl_event_type, listOfAccessTypes);
 
         eventTitle = v.findViewById(R.id.inputEditEventTitle);
         eventLocation = v.findViewById(R.id.inputEditLocation);
@@ -184,21 +197,49 @@ public class AddEventFragment extends Fragment {
 
         eventEndTime.setOnClickListener(v16 -> showDateTimeDialog(eventEndTime));
 
+        autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ddlEventAccessPosition = position;
+            }
+        });
+
         submitButton.setOnClickListener(v1 -> {
             String eventTitleValue = eventTitle.getText().toString().trim();
             String eventLocationValue = eventLocation.getText().toString().trim();
             String eventStartTimeValue = eventStartTime.getText().toString().trim();
             String eventEndTimeValue = eventEndTime.getText().toString().trim();
-            String eventAccessValue = autoCompleteTextView.getText().toString();
             String eventDescrValue = eventDescr.getText().toString().trim();
 
-            if (TextUtils.isEmpty(eventTitleValue) || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventStartTimeValue) || TextUtils.isEmpty(eventEndTimeValue)
-                    || TextUtils.isEmpty(eventAccessValue) || TextUtils.isEmpty(eventDescrValue)) {
+            AccessTypes eventAccessValue;
+            switch (ddlEventAccessPosition) {
+                case 0:
+                    eventAccessValue = AccessTypes.PUBLIC;
+                    break;
+                case 1:
+                    eventAccessValue = AccessTypes.PRIVATE;
+                    break;
+                case 2:
+                    eventAccessValue = AccessTypes.SELECTIVE;
+                    break;
+                default:
+                    eventAccessValue = null;
+            }
+
+            if (TextUtils.isEmpty(eventTitleValue) || TextUtils.isEmpty(eventStartTimeValue) || TextUtils.isEmpty(eventEndTimeValue)
+                    || eventAccessValue == null || TextUtils.isEmpty(eventDescrValue)) { //TextUtils.isEmpty(eventLocationValue)
                 return;
             }
-            firebaseFirestoreService.getUserNameInFirestore(value -> {
-                firebaseFirestoreService.createNewEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, value);
-            }, fAuth.getUid());
+
+            if (eventAccessValue == AccessTypes.PUBLIC || eventAccessValue == AccessTypes.SELECTIVE) {
+                firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
+                    firebaseFirestoreService.createNewPublicEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, userFullName);
+                }, fAuth.getUid(), eventAvatar);
+            } else {
+                firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
+                    firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, userFullName);
+                }, fAuth.getUid(), eventAvatar);
+            }
 
             clearInputFiels();
         });
@@ -243,6 +284,7 @@ public class AddEventFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
+            eventAvatar = data.getData();
             mAvatarImageView.setImageURI(data.getData());
         }
     }

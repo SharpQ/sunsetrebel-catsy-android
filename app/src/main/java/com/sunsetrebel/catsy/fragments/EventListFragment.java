@@ -60,8 +60,8 @@ public class EventListFragment extends Fragment {
             firebaseFirestoreService.getEventList(events -> {
                 EventListService.setCurrentEventList(events);
                 for (Map<String, Object> event : events) {
-                    addEventToList(event.get("eventName").toString(), event.get("eventDate").toString(),
-                            event.get("eventLocation").toString(), event.get("eventDescr").toString(),
+                    addEventToList(event.get("eventName").toString(), event.get("eventStartTime").toString(),
+                            event.get("eventLocation").toString(), event.get("eventDescription").toString(),
                             event.get("userName").toString());
                     AddEventDataAdapter adapter = new AddEventDataAdapter(postagens);
                     recyclerPostagem.setAdapter(adapter);
@@ -72,8 +72,8 @@ public class EventListFragment extends Fragment {
             List<Map<String, Object>> eventListPreviousResponse = EventListService.getCurrentEventList();
             if (eventListPreviousResponse != null) {
                 for (Map<String, Object> event : eventListPreviousResponse) {
-                    addEventToList(event.get("eventName").toString(), event.get("eventDate").toString(),
-                            event.get("eventLocation").toString(), event.get("eventDescr").toString(),
+                    addEventToList(event.get("eventName").toString(), event.get("eventStartTime").toString(),
+                            event.get("eventLocation").toString(), event.get("eventDescription").toString(),
                             event.get("userName").toString());
                 }
             }
