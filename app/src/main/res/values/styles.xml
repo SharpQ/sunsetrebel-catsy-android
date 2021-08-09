@@ -11,8 +11,8 @@
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:drawableLeft">@drawable/im_cat_hearts_32p</item>
-        <item name="android:drawableRight">@drawable/im_cat_hearts_32p</item>
+        <item name="android:drawableStart">@drawable/im_cat_hearts_32p</item>
+        <item name="android:drawableEnd">@drawable/im_cat_hearts_32p</item>
     </style>
 
     <style name="FacebookButton">
@@ -21,10 +21,11 @@
         <item name="android:backgroundTint">@color/facebookBtnColor</item>
         <item name="android:layout_marginStart">20dp</item>
         <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:paddingStart">20dp</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:text">@string/facebook_authentication</item>
         <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:drawableLeft">@drawable/com_facebook_button_icon</item>
+        <item name="android:drawableStart">@drawable/com_facebook_button_icon</item>
         <item name="android:textSize">12sp</item>
     </style>
 
@@ -34,12 +35,61 @@
         <item name="android:backgroundTint">@color/googleBtnColor</item>
         <item name="android:layout_marginStart">20dp</item>
         <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:paddingStart">20dp</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:text">@string/google_authentication</item>
         <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:drawableLeft">@drawable/ic_google_logo</item>
+        <item name="android:drawableStart">@drawable/ic_google_logo</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <!--EDIT FIELDS-->
+
+    <style name="InitialFlowTextInputLayout">
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:fontFamily">@font/audiowide</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHighlight">@color/primaryTextColor</item>
+        <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="android:textCursorDrawable">@color/primaryLightColor</item>
+        <item name="hintTextColor">@color/primaryLightColor</item>
+        <item name="boxStrokeColor">@color/primaryLightColor</item>
+        <item name="android:textSize">16sp</item>
+        <item name="errorTextColor">@color/redError</item>
+        <item name="boxStrokeErrorColor">@color/redError</item>
+        <item name="errorIconTint">@color/redError</item>
+    </style>
+
+    <style name="InitialFlowTextEdit">
+        <item name="android:fontFamily">@font/audiowide</item>
+        <item name="boxBackgroundColor">@color/blackHalfTransparent</item>
+        <item name="android:background">@color/blackHalfTransparent</item>
+        <item name="android:ems">10</item>
+    </style>
+
+    <style name="AddEventTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="hintTextColor">@color/primaryTextColor</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/audiowide</item>
+        <item name="endIconMode">clear_text</item>
+        <item name="boxBackgroundColor">@color/blackHalfTransparent</item>
+    </style>
+
+    <style name="AddEventTextEdit">
+        <item name="android:fontFamily">@font/audiowide</item>
+        <item name="hintTextColor">@color/primaryTextColor</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+
+    <!--DIALOGS-->
 
     <style name="DialogTheme" parent="android:Theme.Dialog">
         <item name="android:layout_width">fill_parent</item>
@@ -50,12 +100,25 @@
         <item name="android:windowIsFloating">false</item>
     </style>
 
+    <style name="DatePickerDialog" parent="ThemeOverlay.AppCompat.Dialog">
+        <item name="colorAccent">@color/primaryLightColor</item>                   <!--header background-->
+        <item name="android:windowBackground">@color/greyBackground</item>     <!--calendar background-->
+        <item name="android:colorControlActivated">@color/primaryLightColor</item> <!--selected day-->
+        <item name="android:textColorPrimary">@color/primaryTextColor</item> <!--days of the month-->
+        <item name="android:textColorSecondary">@color/primaryLightColor</item>    <!--days of the week-->
+        <item name="colorControlHighlight">@color/primaryLightColor</item>
+    </style>
+
+    <!--TEXT-->
+
     <style name="NavBarText">
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:textSize">10sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <!--SEARCH BARS-->
 
     <style name="PlacesSearchBarTheme" parent="MaterialSearchBarLight">
         <item name="mt_searchBarColor">@color/searchBarPrimaryColor</item>
@@ -72,37 +135,10 @@
         <item name="mt_highlightedTextColor">@color/searchBarPrimaryColor</item>
     </style>
 
-    <style name="AddEventTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:textColorHint">@color/primaryTextColor</item>
-        <item name="hintTextColor">@color/primaryTextColor</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:fontFamily">@font/audiowide</item>
-        <item name="endIconMode">clear_text</item>
-    </style>
-
-    <style name="AddEventTextEdit">
-        <item name="android:fontFamily">@font/audiowide</item>
-        <item name="hintTextColor">@color/primaryTextColor</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
-        <item name="android:textColorHint">@color/primaryTextColor</item>
-        <item name="android:textSize">15sp</item>
-        <item name="android:background">@color/blackHalfTransparent</item>
-        <item name="boxBackgroundColor">@color/blackHalfTransparent</item>
-    </style>
+    <!--IMAGES-->
 
     <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
         <item name="cornerSize">10%</item>
     </style>
 
-    <style name="DatePickerDialog" parent="ThemeOverlay.AppCompat.Dialog">
-        <item name="colorAccent">@color/primaryLightColor</item>                   <!--header background-->
-        <item name="android:windowBackground">@color/greyBackground</item>     <!--calendar background-->
-        <item name="android:colorControlActivated">@color/primaryLightColor</item> <!--selected day-->
-        <item name="android:textColorPrimary">@color/primaryTextColor</item> <!--days of the month-->
-        <item name="android:textColorSecondary">@color/primaryLightColor</item>    <!--days of the week-->
-        <item name="colorControlHighlight">@color/primaryLightColor</item>
-    </style>
 </resources>

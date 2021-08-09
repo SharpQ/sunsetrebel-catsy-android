@@ -12,12 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//    public enum AuthTypes {
-//        PHONE,
-//        EMAIL,
-//        GOOGLE_AUTH,
-//        FACEBOOK_AUTH
-//    }
 
 public class FirebaseFirestoreService {
     private FirebaseFirestore fStore = null;

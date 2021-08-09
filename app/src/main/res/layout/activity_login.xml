@@ -61,26 +61,12 @@
         app:srcCompat="@drawable/ic_baseline_phone_iphone_24" />
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/InitialFlowTextInputLayout"
         android:id="@+id/inputLayoutUserEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:autofillHints=""
         android:enabled="false"
         android:visibility="invisible"
-        android:fontFamily="@font/audiowide"
-        android:hint="@string/registration_hint_email"
-        android:textAlignment="textStart"
-        android:textColor="@color/primaryTextColor"
-        android:textColorHighlight="@color/primaryTextColor"
-        android:textColorHint="@color/primaryTextColor"
-        android:textColorLink="@color/primaryTextColor"
-        android:textCursorDrawable="@color/primaryLightColor"
-        android:textSize="16sp"
-        app:errorTextColor="@color/redError"
-        app:boxStrokeErrorColor="@color/redError"
-        app:errorIconTint="@color/redError"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -88,13 +74,11 @@
         app:layout_constraintVertical_bias="0.1">
 
         <com.google.android.material.textfield.TextInputEditText
+            style="@style/InitialFlowTextEdit"
             android:id="@+id/inputEditUserEmail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/audiowide"
-            app:boxBackgroundColor="@color/blackHalfTransparent"
-            android:background="@color/blackHalfTransparent"
-            android:ems="10"
+            android:hint="@string/registration_hint_email"
             android:inputType="textEmailSubject" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -129,57 +113,32 @@
             app:ccpDialog_showTitle="false"/>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/InitialFlowTextInputLayout"
             android:id="@+id/inputLayoutUserPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints=""
-            android:fontFamily="@font/audiowide"
-            android:hint="@string/registration_hint_phone"
-            android:textAlignment="textStart"
-            android:textColor="@color/primaryTextColor"
-            android:textColorHighlight="@color/primaryTextColor"
-            android:textColorHint="@color/primaryTextColor"
-            android:textColorLink="@color/primaryTextColor"
-            android:textCursorDrawable="@color/primaryLightColor"
-            android:textSize="16sp"
-            app:errorTextColor="@color/redError"
-            app:boxStrokeErrorColor="@color/redError"
-            app:errorIconTint="@color/redError"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
             app:layout_constraintStart_toEndOf="@+id/ddlCountryCode">
 
             <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/inputEditUserPhone"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fontFamily="@font/audiowide"
-            app:boxBackgroundColor="@color/blackHalfTransparent"
-            android:background="@color/blackHalfTransparent"
-            android:ems="10"
-            android:inputType="phone" />
+                style="@style/InitialFlowTextEdit"
+                android:id="@+id/inputEditUserPhone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:inputType="phone"
+                android:hint="@string/registration_hint_phone"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 
 
     <com.google.android.material.textfield.TextInputLayout
+        style="@style/InitialFlowTextInputLayout"
         android:id="@+id/inputLayoutUserPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
         android:enabled="false"
         android:visibility="invisible"
-        android:autofillHints=""
-        android:fontFamily="@font/audiowide"
-        android:hint="@string/registration_hint_password"
-        android:textAlignment="textStart"
-        android:textColor="@color/primaryTextColor"
-        android:textColorHighlight="@color/primaryTextColor"
-        android:textColorHint="@color/primaryTextColor"
-        android:textColorLink="@color/primaryTextColor"
-        android:textSize="16sp"
-        app:errorTextColor="@color/redError"
-        app:boxStrokeErrorColor="@color/redError"
-        app:errorIconTint="@color/redError"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -187,14 +146,12 @@
         app:layout_constraintVertical_bias="0.1"
         app:passwordToggleEnabled="true">
         <com.google.android.material.textfield.TextInputEditText
+            style="@style/InitialFlowTextEdit"
             android:id="@+id/inputEditUserPassword"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="@font/audiowide"
-            app:boxBackgroundColor="@color/blackHalfTransparent"
-            android:background="@color/blackHalfTransparent"
-            android:ems="10"
-            android:inputType="none|textPassword" />
+            android:inputType="none|textPassword"
+            android:hint="@string/registration_hint_password"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
