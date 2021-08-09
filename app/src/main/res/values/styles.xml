@@ -4,7 +4,7 @@
     <style name="DefaultButton">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">55dp</item>
-        <item name="android:backgroundTint">@color/primaryLightColor</item>
+        <item name="android:backgroundTint">@color/primaryColor</item>
         <item name="android:layout_marginStart">20dp</item>
         <item name="android:layout_marginEnd">20dp</item>
         <item name="android:fontFamily">@font/audiowide</item>

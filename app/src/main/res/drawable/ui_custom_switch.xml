@@ -5,7 +5,7 @@
         android:top="-1dp"
         android:gravity="center_vertical|fill_horizontal">
         <shape>
-            <solid android:color="@color/primaryLightColor"/>
+            <solid android:color="@color/primaryColor"/>
             <corners android:radius="36dp"/>
             <size android:height="36dp"/>
         </shape>
