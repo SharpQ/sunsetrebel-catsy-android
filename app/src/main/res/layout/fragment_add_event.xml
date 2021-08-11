@@ -8,7 +8,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/im_background_concert"
     android:scrollbars="none"
-    android:requiresFadingEdge="none">
+    android:requiresFadingEdge="vertical"
+    android:fadingEdgeLength="100dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -93,6 +94,7 @@
             android:padding="15dp"
             android:radius="100dip"
             android:text="@string/add_event_add_image_hint"
+            android:textSize="18sp"
             android:textAlignment="center"
             android:textColor="@color/primaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"

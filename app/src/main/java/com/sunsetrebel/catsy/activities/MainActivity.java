@@ -28,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setStatusBarColor(Color.parseColor("#00000000"));
     }
 
+    private void showSystemUI() {
+        getWindow().getDecorView().setSystemUiVisibility(0);
+        getWindow().setStatusBarColor(getResources().getColor(R.color.primaryDarkColor));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,21 +51,25 @@ public class MainActivity extends AppCompatActivity {
             switch (newTab.getId()) {
                 case R.id.navigationBarMap:
                     fragment = new MapsFragment();
+                    hideSystemUI();
                     break;
                 case R.id.navigationBarEventList:
                     fragment = new EventListFragment();
+                    showSystemUI();
                     break;
                 case R.id.navigationBarNewEvent:
                     fragment = new AddEventFragment();
+                    hideSystemUI();
                     break;
                 case R.id.navigationBarChat:
                     fragment = new MessageFragment();
+                    showSystemUI();
                     break;
                 case R.id.navigationBarAccount:
                     fragment = new AccountFragment();
+                    showSystemUI();
                     break;
             }
-
             fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, fragment).commit();
         });
     }

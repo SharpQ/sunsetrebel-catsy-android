@@ -21,6 +21,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -115,6 +116,14 @@ public class AddEventFragment extends Fragment {
             mMap.getUiSettings().setRotateGesturesEnabled(false);
             mMap.getUiSettings().setAllGesturesEnabled(false);
 
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+                    startActivity(new Intent(getContext(), AddEventMapsActivity.class));
+                    Animatoo.animateFade(getActivity());
+                }
+            });
+
             if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 enableUserLocation();
                 zoomToUserLocation();
@@ -151,7 +160,8 @@ public class AddEventFragment extends Fragment {
     }
 
     private void zoomToUserLocation() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -244,10 +254,10 @@ public class AddEventFragment extends Fragment {
             clearInputFiels();
         });
 
-        eventLocation.setOnClickListener(v12 -> {
-            startActivity(new Intent(getContext(), AddEventMapsActivity.class));
-            Animatoo.animateFade(getActivity());
-        });
+//        eventLocation.setOnClickListener(v12 -> {
+//            startActivity(new Intent(getContext(), AddEventMapsActivity.class));
+//            Animatoo.animateFade(getActivity());
+//        });
 
         mAddImageLabel.setOnClickListener(v17 -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -25,65 +25,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:alpha="0.9"
-        android:background="@color/primaryDarkColor"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewEventList"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchViewEventList">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/eventlist_sort_text"
-            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="40dp"
-            android:layout_marginEnd="20dp"
-            android:fontFamily="@font/audiowide"
-            android:layout_gravity="start"
-            android:gravity="center"
-            android:text="Sort by"
-            android:textAllCaps="true"
-            android:textSize="14sp"
-            android:drawableLeft="@drawable/im_sort_arrows_40"
-            app:tabBackground="@android:color/transparent"
-            app:layout_constraintEnd_toStartOf="@+id/eventlist_filter_text"/>
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/eventlist_filter_text"
-            style="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="40dp"
-            android:drawablePadding="5dp"
-            android:fontFamily="@font/audiowide"
-            android:gravity="center"
-            android:layout_gravity="end"
-            android:text="Filter"
-            android:textAllCaps="true"
-            android:textSize="14sp"
-            app:tabBackground="@android:color/transparent"
-            android:drawableLeft="@drawable/im_filter_icon_40"
-            app:layout_constraintStart_toEndOf="@+id/eventlist_sort_text"/>
-    </androidx.appcompat.widget.Toolbar>
+        app:layout_constraintVertical_bias="0.01" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewEventList"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="25dp"
         android:background="@color/white"
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/searchViewEventList" />
 </androidx.constraintlayout.widget.ConstraintLayout>
