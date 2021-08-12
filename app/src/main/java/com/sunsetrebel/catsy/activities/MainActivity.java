@@ -51,23 +51,23 @@ public class MainActivity extends AppCompatActivity {
             switch (newTab.getId()) {
                 case R.id.navigationBarMap:
                     fragment = new MapsFragment();
-                    hideSystemUI();
+//                    hideSystemUI();
                     break;
                 case R.id.navigationBarEventList:
                     fragment = new EventListFragment();
-                    showSystemUI();
+//                    showSystemUI();
                     break;
                 case R.id.navigationBarNewEvent:
                     fragment = new AddEventFragment();
-                    hideSystemUI();
+//                    hideSystemUI();
                     break;
                 case R.id.navigationBarChat:
                     fragment = new MessageFragment();
-                    showSystemUI();
+//                    showSystemUI();
                     break;
                 case R.id.navigationBarAccount:
                     fragment = new AccountFragment();
-                    showSystemUI();
+//                    showSystemUI();
                     break;
             }
             fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, fragment).commit();
