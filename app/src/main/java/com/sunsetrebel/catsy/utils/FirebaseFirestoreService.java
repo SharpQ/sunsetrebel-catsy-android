@@ -1,6 +1,8 @@
 package com.sunsetrebel.catsy.utils;
 
 import android.util.Log;
+
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -89,15 +91,16 @@ public class FirebaseFirestoreService {
         documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
     }
 
-    public void createNewPublicEvent(String userID, String eventName, String eventLocation, String eventStartTime,
+    public void createNewPublicEvent(String userID, String eventTitle, String eventLocation, LatLng eventGeoLocation, String eventStartTime,
                                      String eventEndTime, AccessTypes accessType, String eventDescr, String eventAvatar, String userName){
         fStore = getInstance();
         String eventId = fStore.collection("eventList").document().getId();
         documentReference = fStore.collection("eventList").document(eventId);
         Map<String, Object> event = new HashMap<>();
         event.put("eventId", eventId);
-        event.put("eventName", eventName);
+        event.put("eventTitle", eventTitle);
         event.put("eventLocation", eventLocation);
+        event.put("eventGeoLocation", eventGeoLocation);
         event.put("eventStartTime", eventStartTime);
         event.put("eventEndTime", eventEndTime);
         event.put("accessType", accessType);
@@ -108,15 +111,16 @@ public class FirebaseFirestoreService {
         documentReference.set(event).addOnSuccessListener(aVoid -> Log.d("INFO", "New public event created! EventId: " + eventId));
     }
 
-    public void createNewPrivateEvent(String userID, String eventName, String eventLocation, String eventStartTime,
-                                     String eventEndTime, AccessTypes accessType, String eventDescr, String eventAvatar, String userName){
+    public void createNewPrivateEvent(String userID, String eventTitle, String eventLocation, LatLng eventGeoLocation, String eventStartTime,
+                                      String eventEndTime, AccessTypes accessType, String eventDescr, String eventAvatar, String userName){
         fStore = getInstance();
         String eventId = fStore.collection("userProfiles").document(userID).collection("userEvents").document().getId();
         documentReference = fStore.collection("userProfiles").document(userID).collection("userEvents").document(eventId);
         Map<String, Object> event = new HashMap<>();
         event.put("eventId", eventId);
-        event.put("eventName", eventName);
+        event.put("eventTitle", eventTitle);
         event.put("eventLocation", eventLocation);
+        event.put("eventGeoLocation", eventGeoLocation);
         event.put("eventStartTime", eventStartTime);
         event.put("eventEndTime", eventEndTime);
         event.put("accessType", accessType);

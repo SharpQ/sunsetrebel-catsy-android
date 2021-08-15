@@ -74,9 +74,12 @@ public class AddEventFragment extends Fragment {
     private static final int IMAGE_PICK_CODE = 1000;
     private static final int PERMISSION_CODE = 1001;
     private int ACCESS_LOCATION_REQUEST_CODE = 10001;
+    private static final int ADDRESS_PICK_CODE = 228;
     private Uri eventAvatar;
     private String userFullName;
     private int ddlEventAccessPosition;
+    private LatLng eventLatLng;
+    private String eventAddress;
 
 
     public AddEventFragment() {
@@ -119,7 +122,7 @@ public class AddEventFragment extends Fragment {
             mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                 @Override
                 public void onMapClick(LatLng latLng) {
-                    startActivity(new Intent(getContext(), AddEventMapsActivity.class));
+                    startActivityForResult(new Intent(getContext(), AddEventMapsActivity.class), ADDRESS_PICK_CODE);
                     Animatoo.animateFade(getActivity());
                 }
             });
@@ -237,27 +240,27 @@ public class AddEventFragment extends Fragment {
             }
 
             if (TextUtils.isEmpty(eventTitleValue) || TextUtils.isEmpty(eventStartTimeValue) || TextUtils.isEmpty(eventEndTimeValue)
-                    || eventAccessValue == null || TextUtils.isEmpty(eventDescrValue)) { //TextUtils.isEmpty(eventLocationValue)
+                    || eventAccessValue == null || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventDescrValue)) {
                 return;
             }
 
             if (eventAccessValue == AccessTypes.PUBLIC || eventAccessValue == AccessTypes.SELECTIVE) {
                 firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
-                    firebaseFirestoreService.createNewPublicEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, userFullName);
+                    firebaseFirestoreService.createNewPublicEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, userFullName);
                 }, fAuth.getUid(), eventAvatar);
             } else {
                 firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
-                    firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, userFullName);
+                    firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, userFullName);
                 }, fAuth.getUid(), eventAvatar);
             }
 
             clearInputFiels();
         });
 
-//        eventLocation.setOnClickListener(v12 -> {
-//            startActivity(new Intent(getContext(), AddEventMapsActivity.class));
-//            Animatoo.animateFade(getActivity());
-//        });
+        eventLocation.setOnClickListener(v12 -> {
+            startActivityForResult(new Intent(getContext(), AddEventMapsActivity.class), ADDRESS_PICK_CODE);
+            Animatoo.animateFade(getActivity());
+        });
 
         mAddImageLabel.setOnClickListener(v17 -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -293,9 +296,25 @@ public class AddEventFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_PICK_CODE) {
-            eventAvatar = data.getData();
-            mAvatarImageView.setImageURI(data.getData());
+        switch (requestCode) {
+            case (IMAGE_PICK_CODE) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    eventAvatar = data.getData();
+                    mAvatarImageView.setImageURI(data.getData());
+                }
+                break;
+            }
+            case (ADDRESS_PICK_CODE) : {
+                if (resultCode == Activity.RESULT_OK) {
+                    eventLatLng = data.getExtras().getParcelable("EVENT_LAT_LNG");
+                    eventAddress = data.getStringExtra("EVENT_ADDRESS");
+                    eventLocation.setText(eventAddress);
+                    mMap.clear();
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, 12));
+                    mMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
+                }
+                break;
+            }
         }
     }
 

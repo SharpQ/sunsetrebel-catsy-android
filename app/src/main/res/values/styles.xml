@@ -120,7 +120,7 @@
 
     <!--SEARCH BARS-->
 
-    <style name="PlacesSearchBarTheme" parent="MaterialSearchBarLight">
+    <style name="PlacesSearchBarTheme">
         <item name="mt_searchBarColor">@color/searchBarPrimaryColor</item>
         <item name="mt_dividerColor">@color/searchBarPrimaryColor</item>
         <item name="mt_navIconTint">@color/searchBarPrimaryColor</item>

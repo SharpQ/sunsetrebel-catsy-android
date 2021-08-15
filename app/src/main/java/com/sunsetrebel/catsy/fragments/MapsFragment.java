@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,19 +58,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         mapFragment.getMapAsync(this);
         geocoder = new Geocoder(getContext());
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getContext());
-        ImageView mapFilter = v.findViewById(R.id.map_filter);
-
-//        try {
-//            assert mapFragment.getView() != null;
-//            final ViewGroup parent = (ViewGroup) mapFragment.getView().findViewWithTag("Compass").getParent();
-//            parent.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                }
-//            });
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
         return v;
     }
 

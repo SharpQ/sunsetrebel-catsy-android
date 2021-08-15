@@ -1,6 +1,7 @@
 package com.sunsetrebel.catsy.activities;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.res.Resources;
@@ -37,8 +38,10 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -56,7 +59,6 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
-import com.skyfishjy.library.RippleBackground;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.AddEventFragment;
 
@@ -73,24 +75,24 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     private List<AutocompletePrediction> predictionList;
     private Location mLastKnownLocation;
     private LocationCallback locationCallback;
-    private static final String TAG = "AddEventMapsActivity";
     private MaterialSearchBar materialSearchBar;
     private View mapView;
     private AppCompatButton confirmLocationButton;
     private ImageButton backButton;
-    private RippleBackground rippleBg;
     private final float DEFAULT_ZOOM = 15;
     TextView locationConfirmText;
-
+    private LatLng latLngOfPlace;
+    private String suggestion;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_event_full_map);
+        setContentView(R.layout.activity_add_event_map);
+        hideSystemUI();
+
         materialSearchBar = findViewById(R.id.searchBar);
         confirmLocationButton = findViewById(R.id.btn_find);
-        rippleBg = findViewById(R.id.ripple_bg);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.addEventBigFullMap);
         mapFragment.getMapAsync(this);
@@ -101,9 +103,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
-        getWindow().setStatusBarColor(Color.parseColor("#00000000"));
-        getWindow().setNavigationBarColor(Color.parseColor("#6A1B9A"));
-        hideSystemUI();
+
         materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
             public void onSearchStateChanged(boolean enabled) {
@@ -157,7 +157,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                                 }
                             }
                         } else {
-                            Log.i("mytag", "prediction fetching task unsuccessful");
+                            Log.i("INFO", "prediction fetching task unsuccessful");
                         }
                     }
                 });
@@ -176,8 +176,9 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                     return;
                 }
                 AutocompletePrediction selectedPrediction = predictionList.get(position);
-                String suggestion = materialSearchBar.getLastSuggestions().get(position).toString();
+                suggestion = materialSearchBar.getLastSuggestions().get(position).toString();
                 materialSearchBar.setText(suggestion);
+                mMap.clear();
 
                 //Fill bottom text with address
                 locationConfirmText = findViewById(R.id.locationConfirmText);
@@ -216,10 +217,11 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                     public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
                         Place place = fetchPlaceResponse.getPlace();
 
-                        Log.i("mytag", "Place found: " + place.getName());
-                        LatLng latLngOfPlace = place.getLatLng();
+                        Log.i("INFO", "Place found: " + place.getName());
+                        latLngOfPlace = place.getLatLng();
                         if (latLngOfPlace != null) {
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngOfPlace, DEFAULT_ZOOM));
+                            mMap.addMarker(new MarkerOptions().position(latLngOfPlace).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -229,8 +231,8 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                             ApiException apiException = (ApiException) e;
                             apiException.printStackTrace();
                             int statusCode = apiException.getStatusCode();
-                            Log.i("mytag", "place not found: " + e.getMessage());
-                            Log.i("mytag", "status code: " + statusCode);
+                            Log.i("INFO", "place not found: " + e.getMessage());
+                            Log.i("INFO", "status code: " + statusCode);
                         }
                     }
                 });
@@ -241,23 +243,17 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
 
             }
         });
+
         confirmLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LatLng currentMarkerLocation = mMap.getCameraPosition().target;
-                rippleBg.startRippleAnimation();
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        rippleBg.stopRippleAnimation();
-
-                      //  startActivity(new Intent(AddEventMapsActivity.this, PermissionsActivity.class));
-                        finish();
-                    }
-                }, 1000);
-
+                if (latLngOfPlace != null) {
+                    Intent resultIntent = new Intent();
+                    resultIntent.putExtra("EVENT_LAT_LNG", latLngOfPlace);
+                    resultIntent.putExtra("EVENT_ADDRESS", suggestion);
+                    setResult(Activity.RESULT_OK, resultIntent);
+                    finish();
+                }
             }
         });
 
@@ -269,43 +265,6 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
             }
         });
 
-
-       /* //Custom font for SearchView
-        View view = this.materialSearchBar.getChildAt(0);
-        if (view == null) {
-            throw new TypeCastException("null cannot be cast to non-null type androidx.cardview.widget.CardView");
-        } else {
-            view = view != null ? ((CardView) view).getChildAt(0) : null;
-            if (!(view instanceof ConstraintLayout)) {
-                view = null;
-            }
-            ConstraintLayout constraintLayout = (ConstraintLayout) view;
-            view = constraintLayout != null ? constraintLayout.getChildAt(1) : null;
-            if (view == null) {
-                throw new TypeCastException("null cannot be cast to non-null type androidx.appcompat.widget.AppCompatTextView");
-            } else {
-                AppCompatTextView placeholderTextView = (AppCompatTextView) view;
-                view = constraintLayout != null ? constraintLayout.getChildAt(2) : null;
-                if (view == null) {
-                    throw new TypeCastException("null cannot be cast to non-null type android.widget.LinearLayout");
-                } else {
-                    view = view != null ? ((LinearLayout) view).getChildAt(1) : null;
-                    if (view == null) {
-                        throw new TypeCastException("null cannot be cast to non-null type androidx.appcompat.widget.AppCompatEditText");
-                    } else {
-                        AppCompatEditText editTextView = (AppCompatEditText) view;
-                        Typeface customTypeface = ResourcesCompat.getFont(this, R.font.audiowide);
-                        placeholderTextView.setTypeface(customTypeface);
-                        editTextView.setTypeface(customTypeface);
-                        CardView v = (CardView) constraintLayout.getParent();
-                        v.setRadius(26);
-                        v.setCardElevation(0);
-                        v.setCardBackgroundColor(this.getResources().getColor(R.color.white));
-                    }
-                }
-            }
-        }
-*/
     }
 
     @SuppressLint("MissingPermission")
@@ -322,10 +281,10 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                             getApplicationContext(), R.raw.google_style));
 
             if (!success) {
-                Log.e(TAG, "Style parsing failed.");
+                Log.e("INFO", "Style parsing failed.");
             }
         } catch (Resources.NotFoundException e) {
-            Log.e(TAG, "Can't find style. Error: ", e);
+            Log.e("INFO", "Can't find style. Error: ", e);
         }
 
         if (mapView != null && mapView.findViewById(Integer.parseInt("1")) != null) {
@@ -434,21 +393,12 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                     }
                 });
     }
+
     private void hideSystemUI() {
-        // Enables regular immersive mode.
-        // For "lean back" mode, remove SYSTEM_UI_FLAG_IMMERSIVE.
-        // Or for "sticky immersive," replace it with SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE
-                        // Set the content to appear under the system bars so that the
-                        // content doesn't resize when the system bars hide and show.
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        )
-        // Hide the nav bar and status bar
-        //  | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-        //   | View.SYSTEM_UI_FLAG_FULLSCREEN)
-        ;
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        getWindow().setStatusBarColor(Color.parseColor("#00000000"));
     }
 }
