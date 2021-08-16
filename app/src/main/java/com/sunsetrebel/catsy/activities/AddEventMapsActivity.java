@@ -6,9 +6,10 @@ import android.content.Intent;
 import android.content.IntentSender;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -60,12 +61,13 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.fragments.AddEventFragment;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class AddEventMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -81,8 +83,8 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     private ImageButton backButton;
     private final float DEFAULT_ZOOM = 15;
     TextView locationConfirmText;
-    private LatLng latLngOfPlace;
-    private String suggestion;
+    private LatLng eventLatLng;
+    private String eventAddress;
 
 
     @Override
@@ -93,6 +95,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
 
         materialSearchBar = findViewById(R.id.searchBar);
         confirmLocationButton = findViewById(R.id.btn_find);
+        locationConfirmText = findViewById(R.id.locationConfirmText);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.addEventBigFullMap);
         mapFragment.getMapAsync(this);
@@ -176,35 +179,15 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                     return;
                 }
                 AutocompletePrediction selectedPrediction = predictionList.get(position);
-                suggestion = materialSearchBar.getLastSuggestions().get(position).toString();
-                materialSearchBar.setText(suggestion);
+                eventAddress = materialSearchBar.getLastSuggestions().get(position).toString();
+                materialSearchBar.setText(eventAddress);
                 mMap.clear();
 
                 //Fill bottom text with address
-                locationConfirmText = findViewById(R.id.locationConfirmText);
-                locationConfirmText.setText(suggestion);
+                locationConfirmText.setText(eventAddress);
                 //    LatLng coordinatesSend = currentMarkerLocation;
-
-                /** Sending location address and coordinates to AddEventFragment **/
-
-                LatLng latLng = null;
-                Location location = null;
-                try{
-                    latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    Bundle args = new Bundle();
-                    args.putString("Location", String.valueOf(locationConfirmText));
-                    args.putFloat("Coordinates",Float.valueOf(String.valueOf(latLng)));
-                    AddEventFragment.putArguments(args);}
-                catch (Exception e){
-                  locationConfirmText.setText(suggestion);
-                };
-
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        materialSearchBar.clearSuggestions();
-                    }
-                }, 1000);
+                
+                materialSearchBar.clearSuggestions();
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 if (imm != null)
                     imm.hideSoftInputFromWindow(materialSearchBar.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -218,10 +201,10 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                         Place place = fetchPlaceResponse.getPlace();
 
                         Log.i("INFO", "Place found: " + place.getName());
-                        latLngOfPlace = place.getLatLng();
-                        if (latLngOfPlace != null) {
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngOfPlace, DEFAULT_ZOOM));
-                            mMap.addMarker(new MarkerOptions().position(latLngOfPlace).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
+                        eventLatLng = place.getLatLng();
+                        if (eventLatLng != null) {
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, DEFAULT_ZOOM));
+                            mMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -247,10 +230,10 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
         confirmLocationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (latLngOfPlace != null) {
+                if (eventLatLng != null) {
                     Intent resultIntent = new Intent();
-                    resultIntent.putExtra("EVENT_LAT_LNG", latLngOfPlace);
-                    resultIntent.putExtra("EVENT_ADDRESS", suggestion);
+                    resultIntent.putExtra("EVENT_LAT_LNG", eventLatLng);
+                    resultIntent.putExtra("EVENT_ADDRESS", eventAddress);
                     setResult(Activity.RESULT_OK, resultIntent);
                     finish();
                 }
@@ -271,6 +254,8 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        Geocoder geocoder;
+        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 //        mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         try {
@@ -337,6 +322,43 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                     locationConfirmText.clearComposingText();
                 materialSearchBar.disableSearch();
                 return false;
+            }
+        });
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                // Creating a marker
+                MarkerOptions markerOptions = new MarkerOptions();
+
+                // Setting the position for the marker
+                markerOptions.position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35));
+
+                // Clears the previously touched position
+                mMap.clear();
+
+                // Animating to the touched position
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
+
+                // Placing a marker on the touched position
+                mMap.addMarker(markerOptions);
+
+                List<Address> addresses = null;
+
+                try {
+                    addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                    Log.d("INFO", "List of addresses from users mark: " + String.valueOf(addresses));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                eventLatLng = latLng;
+                if (addresses == null || !addresses.isEmpty()) {
+                    eventAddress = addresses.get(0).getAddressLine(0);
+                    locationConfirmText.setText(eventAddress);
+                } else {
+                    locationConfirmText.setText("Can't identify address. Please use search field");
+                }
             }
         });
     }
