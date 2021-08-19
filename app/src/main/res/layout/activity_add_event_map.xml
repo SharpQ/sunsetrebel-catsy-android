@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/backButton"
+        android:id="@+id/imageButtonBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
@@ -50,7 +50,7 @@
         app:mt_speechMode="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/backButton"
+        app:layout_constraintStart_toEndOf="@id/imageButtonBack"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.05"/>
 
@@ -79,14 +79,14 @@
             android:textColor="@color/white"
             android:textSize="14sp"
             android:gravity="center"
-            app:layout_constraintBottom_toTopOf="@id/btn_find"
+            app:layout_constraintBottom_toTopOf="@id/buttonConfirm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_find"
+            android:id="@+id/buttonConfirm"
             style="@style/DefaultButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

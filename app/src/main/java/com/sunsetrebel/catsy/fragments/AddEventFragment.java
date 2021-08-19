@@ -1,12 +1,11 @@
 package com.sunsetrebel.catsy.fragments;
 
-import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,27 +20,16 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TimePicker;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MapStyleOptions;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
@@ -51,12 +39,13 @@ import com.sunsetrebel.catsy.utils.AccessTypes;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.utils.FirebaseStorageService;
-
+import com.sunsetrebel.catsy.utils.GoogleMapService;
+import com.sunsetrebel.catsy.utils.PermissionUtils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 
-public class AddEventFragment extends Fragment {
+public class AddEventFragment extends Fragment implements OnMapReadyCallback {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
     private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
@@ -67,13 +56,8 @@ public class AddEventFragment extends Fragment {
     private AppCompatButton submitButton;
     private MaterialTextView mAddImageLabel;
     private ImageView mAvatarImageView;
-    private View fragmentMap;
     private AutoCompleteTextView autoCompleteTextView;
-    private GoogleMap mMap;
-    static AppCompatEditText cardEventLocation;
     private static final int IMAGE_PICK_CODE = 1000;
-    private static final int PERMISSION_CODE = 1001;
-    private int ACCESS_LOCATION_REQUEST_CODE = 10001;
     private static final int ADDRESS_PICK_CODE = 228;
     private Uri eventAvatar;
     private String userFullName;
@@ -81,100 +65,8 @@ public class AddEventFragment extends Fragment {
     private LatLng eventLatLng;
     private String eventAddress;
 
-
     public AddEventFragment() {
         // Required empty public constructor
-    }
-
-
-    public static void putArguments(Bundle args)
-    {
-        String cardEventLocationInfo = args.getString("Location");
-        Float latlng = args.getFloat("Coordinates");
-        cardEventLocation.setText(cardEventLocationInfo);
-        latlng.longValue();
-    }
-
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
-        @Override
-        public void onMapReady(GoogleMap googleMap) {
-            try {
-                // Customise the styling of the base map using a JSON object defined
-                // in a raw resource file.
-                boolean success = googleMap.setMapStyle(
-                        MapStyleOptions.loadRawResourceStyle(
-                                getContext(), R.raw.google_style));
-
-                if (!success) {
-                    Log.e("INFO", "Style parsing failed.");
-                }
-            } catch (Resources.NotFoundException e) {
-                Log.e("INFO", "Can't find style. Error: ", e);
-            }
-            mMap = googleMap;
-            //Google maps default buttons disabling
-            mMap.getUiSettings().setMyLocationButtonEnabled(false);
-            mMap.getUiSettings().setMapToolbarEnabled(false);
-            mMap.getUiSettings().setCompassEnabled(false);
-            mMap.getUiSettings().setRotateGesturesEnabled(false);
-            mMap.getUiSettings().setAllGesturesEnabled(false);
-
-            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
-                @Override
-                public void onMapClick(LatLng latLng) {
-                    startActivityForResult(new Intent(getContext(), AddEventMapsActivity.class), ADDRESS_PICK_CODE);
-                    Animatoo.animateFade(getActivity());
-                }
-            });
-
-            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                enableUserLocation();
-                zoomToUserLocation();
-            } else {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)) {
-                    //We can show user a dialog why this permission is necessary
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
-                } else {
-                    ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
-                }
-
-            }
-            LatLng FirstMarkerPosition = new LatLng(50.436404, 30.369498);
-                    MarkerOptions markerOptions = new MarkerOptions()
-                            .position(FirstMarkerPosition).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35));
-                    mMap.addMarker(markerOptions);
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(FirstMarkerPosition, 12));
-        }
-    };
-
-
-    private void enableUserLocation() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        mMap.setMyLocationEnabled(true);
-    }
-
-    private void zoomToUserLocation() {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
     }
 
     @Override
@@ -186,6 +78,9 @@ public class AddEventFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_add_event, container, false);
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragmentMap);
+        mapFragment.getMapAsync(this);
         fAuth = firebaseAuthService.getInstance();
         firebaseFirestoreService.getUserNameInFirestore(value -> {
             userFullName = value;
@@ -201,7 +96,6 @@ public class AddEventFragment extends Fragment {
         eventDescr = v.findViewById(R.id.inputEditEventDescription);
         submitButton = v.findViewById(R.id.buttonSubmitNewEvent);
         autoCompleteTextView = v.findViewById(R.id.autoCompleteTextView);
-        fragmentMap = v.findViewById(R.id.fragmentMap);
         mAvatarImageView = v.findViewById(R.id.imageViewAddEventAvatar);
         mAddImageLabel = v.findViewById(R.id.materialTextViewAddImage);
         autoCompleteTextView.setAdapter(arrayAdapter);
@@ -264,11 +158,10 @@ public class AddEventFragment extends Fragment {
 
         mAddImageLabel.setOnClickListener(v17 -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-                    String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
-                    requestPermissions(permissions, PERMISSION_CODE);
-                } else {
+                if (PermissionUtils.isGalleryPermissionEnabled(getContext())) {
                     pickImageFromGallery();
+                } else {
+                    PermissionUtils.requestGalleryPermissionsFragment(AddEventFragment.this);
                 }
             } else {
                 pickImageFromGallery();
@@ -277,20 +170,23 @@ public class AddEventFragment extends Fragment {
         return v;
     }
 
-    private void pickImageFromGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
-        startActivityForResult(intent, IMAGE_PICK_CODE);
-    }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        SupportMapFragment mapFragment =
-                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragmentMap);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(callback);
-        }
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        GoogleMapService.setupMap(googleMap, getContext(), AddEventFragment.this);
+
+        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                startActivityForResult(new Intent(getContext(), AddEventMapsActivity.class), ADDRESS_PICK_CODE);
+                Animatoo.animateFade(getActivity());
+            }
+        });
     }
 
     @Override
@@ -309,9 +205,7 @@ public class AddEventFragment extends Fragment {
                     eventLatLng = data.getExtras().getParcelable("EVENT_LAT_LNG");
                     eventAddress = data.getStringExtra("EVENT_ADDRESS");
                     eventLocation.setText(eventAddress);
-                    mMap.clear();
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, 12));
-                    mMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
+                    GoogleMapService.clearAndSetMarker(eventLatLng);
                 }
                 break;
             }
@@ -320,17 +214,26 @@ public class AddEventFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_CODE: {
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    pickImageFromGallery();
-                } else {
-                    Toast.makeText(getActivity(), "Please accept storage permission!", Toast.LENGTH_SHORT).show();
-                }
+        if (requestCode == PermissionUtils.getAccessGalleryRequestCode()) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                pickImageFromGallery();
+            } else {
+                Log.e("INFO", "Permissions not granted");
+            }
+        } else if (requestCode == PermissionUtils.getAccessLocationRequestCode()) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                GoogleMapService.zoomToUserLocation(getContext());
+            } else {
+                Log.e("INFO", "Permissions not granted");
             }
         }
     }
 
+    private void pickImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_CODE);
+    }
 
     private void showDateTimeDialog(final EditText date_time_in) {
         final Calendar calendar = Calendar.getInstance();
@@ -357,40 +260,6 @@ public class AddEventFragment extends Fragment {
         };
         new DatePickerDialog(getActivity(), R.style.DatePickerDialog, dateSetListener, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
-
-
-//    private void showTimeDialog(final EditText time_in) {
-//        final Calendar calendar=Calendar.getInstance();
-//
-//        TimePickerDialog.OnTimeSetListener timeSetListener=new TimePickerDialog.OnTimeSetListener() {
-//            @Override
-//            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-//                calendar.set(Calendar.HOUR_OF_DAY,hourOfDay);
-//                calendar.set(Calendar.MINUTE,minute);
-//                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("HH:mm");
-//                time_in.setText(simpleDateFormat.format(calendar.getTime()));
-//            }
-//        };
-//
-//        new TimePickerDialog(getActivity(),timeSetListener,calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false).show();
-//    }
-//
-//    private void showDateDialog(final EditText date_in) {
-//        final Calendar calendar=Calendar.getInstance();
-//        DatePickerDialog.OnDateSetListener dateSetListener=new DatePickerDialog.OnDateSetListener() {
-//            @Override
-//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                calendar.set(Calendar.YEAR,year);
-//                calendar.set(Calendar.MONTH,month);
-//                calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-//                SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yy-MM-dd");
-//                date_in.setText(simpleDateFormat.format(calendar.getTime()));
-//
-//            }
-//        };
-//
-//        new DatePickerDialog(getActivity(),dateSetListener,calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH)).show();
-//    }
 
     private void clearInputFiels() {
         eventTitle.getText().clear();
