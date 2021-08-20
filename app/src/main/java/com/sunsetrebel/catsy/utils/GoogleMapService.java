@@ -6,10 +6,16 @@ import android.app.Activity;
 import android.content.Context;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Looper;
+import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -82,9 +88,31 @@ public class GoogleMapService {
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
-                mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
+                if (location != null) {
+                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+                    mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
+                }
+//                TO DO: FIX GETTING CURRENT LOCATION AND SETTING SINGLE ICON
+//                else {
+//                    LocationRequest currentLocationRequest = new LocationRequest();
+//                    currentLocationRequest.setInterval(10000)
+//                            .setFastestInterval(0)
+//                            .setMaxWaitTime(0)
+//                            .setSmallestDisplacement(0)
+//                            .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+//                    fusedLocationProviderClient.requestLocationUpdates(currentLocationRequest, new LocationCallback() {
+//                        @Override
+//                        public void onLocationResult(@NonNull LocationResult locationResult) {
+//                            super.onLocationResult(locationResult);
+//                            LatLng latLng = new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
+//                            Log.d("CHUPAKABRA", String.valueOf(latLng));
+//                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+//                            mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
+//                        }
+//                    }, Looper.myLooper());
+//                }
+
             }
         });
     }

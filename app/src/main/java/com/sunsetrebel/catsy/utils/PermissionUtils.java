@@ -18,7 +18,7 @@ public class PermissionUtils extends Fragment {
     }
 
     public static boolean isLocationPermissionEnabled(android.content.Context context) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
                 ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return false;
         } else {
@@ -35,11 +35,11 @@ public class PermissionUtils extends Fragment {
     }
 
     public static void requestLocationPermissionsActivity(android.app.Activity activity) {
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
     }
 
     public static void requestLocationPermissionsFragment(Fragment fragment) {
-        fragment.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PermissionUtils.getAccessLocationRequestCode());
+        fragment.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
     }
 
     public static void requestGalleryPermissionsFragment(Fragment fragment) {
