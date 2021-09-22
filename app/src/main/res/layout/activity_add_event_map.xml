@@ -78,6 +78,7 @@
             android:text="@string/add_event_maps_address_placeholder"
             android:textColor="@color/white"
             android:textSize="14sp"
+            android:textAlignment="center"
             android:gravity="center"
             app:layout_constraintBottom_toTopOf="@id/buttonConfirm"
             app:layout_constraintEnd_toEndOf="parent"

@@ -21,12 +21,15 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/textAddEventTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:drawableStart="@drawable/im_cat_hearts_32p"
+            android:drawableEnd="@drawable/im_cat_hearts_32p"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:gravity="center"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_vertical"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
             android:fontFamily="@font/audiowide"
             android:text="@string/add_event_title"
             android:textColor="@color/primaryTextColor"
@@ -134,11 +137,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutEndTime"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutEventTheme"
             app:layout_constraintVertical_bias="0.01">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/AddEventTextEdit"
+                android:drawableEnd="@android:drawable/arrow_down_float"
                 android:id="@+id/inputEditLocation"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -168,9 +172,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/inputLayoutEndTime"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageViewAddEventAvatar"
             app:layout_constraintVertical_bias="0">
@@ -196,8 +200,8 @@
             android:layout_marginEnd="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutStartTime"
+            app:layout_constraintStart_toEndOf="@id/inputLayoutStartTime"
+            app:layout_constraintTop_toBottomOf="@id/imageViewAddEventAvatar"
             app:layout_constraintVertical_bias="0">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -206,6 +210,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/add_event_time_end"
+                android:clickable="true"
+                android:focusable="false"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/AddEventTextInputLayout"
+            android:id="@+id/inputLayoutEventTheme"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutEndTime"
+            app:layout_constraintVertical_bias="0">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/AddEventTextEdit"
+                android:drawableEnd="@android:drawable/arrow_down_float"
+                android:id="@+id/inputEditEventTheme"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/add_event_event_theme"
                 android:clickable="true"
                 android:focusable="false"
                 android:inputType="none" />

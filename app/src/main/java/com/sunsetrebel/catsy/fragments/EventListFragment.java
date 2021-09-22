@@ -13,6 +13,7 @@ import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.AddEventDataAdapter;
 import com.sunsetrebel.catsy.models.AddEventModel;
 import com.sunsetrebel.catsy.utils.EventListService;
+import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,6 +61,14 @@ public class EventListFragment extends Fragment {
             firebaseFirestoreService.getEventList(events -> {
                 EventListService.setCurrentEventList(events);
                 for (Map<String, Object> event : events) {
+                    if (event.get("eventThemes") != null) {
+                        EventThemes eventThemesList = new EventThemes(getActivity().getResources());
+                        Map<Enum<?>, String> themesArray = eventThemesList.getEventThemesList();
+                        ArrayList<Object[]> listThemes = (ArrayList<Object[]>) event.get("eventThemes");
+                        for (Object eventString : listThemes) {
+                            Log.d("INFO", String.valueOf(themesArray.get(EventThemes.eventThemes.valueOf((String) eventString))));
+                        }
+                    }
                     addEventToList(event.get("eventTitle").toString(), event.get("eventStartTime").toString(),
                             event.get("eventLocation").toString(), event.get("eventDescription").toString(),
                             event.get("userName").toString());

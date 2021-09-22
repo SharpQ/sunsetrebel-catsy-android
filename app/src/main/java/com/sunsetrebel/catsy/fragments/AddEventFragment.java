@@ -2,8 +2,10 @@ package com.sunsetrebel.catsy.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -21,6 +23,8 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TimePicker;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
@@ -35,14 +39,21 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.activities.AddEventMapsActivity;
+import com.sunsetrebel.catsy.models.AddEventModel;
 import com.sunsetrebel.catsy.utils.AccessTypes;
+import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.utils.FirebaseStorageService;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
 import com.sunsetrebel.catsy.utils.PermissionUtils;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class AddEventFragment extends Fragment implements OnMapReadyCallback {
@@ -51,7 +62,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
     private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
     private final FirebaseStorageService firebaseStorageService = new FirebaseStorageService();
     private TextInputLayout eventAccess;
-    private TextInputEditText eventTitle, eventLocation, eventStartTime, eventEndTime, eventDescr;
+    private TextInputEditText eventTitle, eventLocation, eventStartTime, eventEndTime, eventDescr, eventTheme;
     private String[] listOfAccessTypes;
     private AppCompatButton submitButton;
     private MaterialTextView mAddImageLabel;
@@ -64,15 +75,15 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
     private int ddlEventAccessPosition;
     private LatLng eventLatLng;
     private String eventAddress;
+    private boolean[] selectedTheme;
+    private List<Enum<?>> eventThemes;
 
     public AddEventFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+    public void onCreate(Bundle savedInstanceState) { super.onCreate(savedInstanceState); }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,6 +103,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
         eventLocation = v.findViewById(R.id.inputEditLocation);
         eventStartTime = v.findViewById(R.id.inputEditStartTime);
         eventEndTime = v.findViewById(R.id.inputEditEndTime);
+        eventTheme = v.findViewById(R.id.inputEditEventTheme);
         eventAccess = v.findViewById(R.id.textInputLayoutEventAccess);
         eventDescr = v.findViewById(R.id.inputEditEventDescription);
         submitButton = v.findViewById(R.id.buttonSubmitNewEvent);
@@ -103,6 +115,91 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
         eventStartTime.setOnClickListener(v15 -> showDateTimeDialog(eventStartTime));
 
         eventEndTime.setOnClickListener(v16 -> showDateTimeDialog(eventEndTime));
+
+        //Initialize themes array
+        EventThemes eventThemesList = new EventThemes(getActivity().getResources());
+        Map<Enum<?>, String> themesArray = eventThemesList.getEventThemesList();
+        String[] themesArrayValues = themesArray.values().toArray(new String[0]);
+        ArrayList<Integer> chosenThemesArray = new ArrayList<>();
+        selectedTheme = new boolean[themesArray.size()];
+
+        eventTheme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Initialize alert dialog
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                //Set builder properties
+                builder.setTitle(getResources().getString(R.string.add_event_event_theme_dialog_title));
+                builder.setCancelable(false);
+                builder.setMultiChoiceItems(themesArrayValues, selectedTheme, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                        if (isChecked) {
+                            //When checkbox selected add position in theme list
+                            if (!chosenThemesArray.contains(which)) {
+                                chosenThemesArray.add(which);
+                            }
+                            //Sort theme list
+                            Collections.sort(chosenThemesArray);
+                        } else {
+                            if (chosenThemesArray.size() > which && chosenThemesArray.contains(which)) {
+                                //When checkbox unselected remove position from theme list
+                                chosenThemesArray.remove(which);
+                            }
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        eventThemes = new ArrayList<>();
+                        int maxQuantity;
+                        if (chosenThemesArray.size() > 3) {
+                            Toast.makeText(getContext(), getResources().getString(R.string.add_event_event_theme_dialog_notification), Toast.LENGTH_SHORT).show();
+                            maxQuantity = 3;
+                        } else {
+                            maxQuantity = chosenThemesArray.size();
+                        }
+                        for (int j = 0; j < maxQuantity; j++) {
+                            eventThemes.add(EventThemes.getKeyByValue(themesArray, themesArrayValues[chosenThemesArray.get(j)]));
+                            //Concat array value
+                            stringBuilder.append(themesArrayValues[chosenThemesArray.get(j)]);
+                            if (j != maxQuantity - 1) {
+                                stringBuilder.append(", ");
+                            }
+                        }
+                        //Clear all checkboxes and chosen list
+                        chosenThemesArray.clear();
+                        selectedTheme = new boolean[themesArray.size()];
+                        //Set text on textview
+                        eventTheme.setText(stringBuilder.toString());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        for (int j=0; j<selectedTheme.length; j++) {
+                            //Remove all selection
+                            selectedTheme[j] = false;
+                            chosenThemesArray.clear();
+                            eventTheme.setText("");
+                        }
+                    }
+                });
+
+                builder.show();
+            }
+        });
 
         autoCompleteTextView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -138,14 +235,20 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
                 return;
             }
 
-            if (eventAccessValue == AccessTypes.PUBLIC || eventAccessValue == AccessTypes.SELECTIVE) {
+            if (eventAvatar != null) {
                 firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
-                    firebaseFirestoreService.createNewPublicEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, userFullName);
+                    if (eventAccessValue == AccessTypes.PUBLIC || eventAccessValue == AccessTypes.SELECTIVE) {
+                        firebaseFirestoreService.createNewPublicEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, eventThemes, userFullName);
+                    } else {
+                        firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, eventThemes, userFullName);
+                    }
                 }, fAuth.getUid(), eventAvatar);
             } else {
-                firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
-                    firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, userFullName);
-                }, fAuth.getUid(), eventAvatar);
+                if (eventAccessValue == AccessTypes.PUBLIC || eventAccessValue == AccessTypes.SELECTIVE) {
+                    firebaseFirestoreService.createNewPublicEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, null, eventThemes, userFullName);
+                } else {
+                    firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, null, eventThemes, userFullName);
+                }
             }
 
             clearInputFiels();
