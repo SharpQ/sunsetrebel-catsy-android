@@ -239,6 +239,8 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
 
             if (TextUtils.isEmpty(eventTitleValue) || TextUtils.isEmpty(eventStartTimeValue) || TextUtils.isEmpty(eventEndTimeValue)
                     || eventAccessValue == null || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventDescrValue)) {
+                //TO DO: change color of all mandatory fields
+                Toast.makeText(getContext(), getResources().getString(R.string.add_event_fill_mandatory_fields_notification), Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -266,7 +268,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
             Animatoo.animateFade(getActivity());
         });
 
-        mAddImageLabel.setOnClickListener(v17 -> {
+        mAvatarImageView.setOnClickListener(v17 -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (PermissionUtils.isGalleryPermissionEnabled(getContext())) {
                     pickImageFromGallery();
@@ -307,6 +309,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
                 if (resultCode == Activity.RESULT_OK) {
                     eventAvatar = data.getData();
                     mAvatarImageView.setImageURI(data.getData());
+                    mAddImageLabel.setVisibility(View.INVISIBLE);
                 }
                 break;
             }
@@ -383,5 +386,6 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
         eventTheme.getText().clear();
         autoCompleteTextView.setText(getResources().getText(R.string.add_event_event_access));
         mAvatarImageView.setImageURI(null);
+        mAddImageLabel.setVisibility(View.VISIBLE);
     }
 }

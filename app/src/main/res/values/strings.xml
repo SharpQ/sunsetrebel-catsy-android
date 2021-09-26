@@ -41,6 +41,7 @@
     <string name="add_event_event_theme">Event theme</string>
     <string name="add_event_event_theme_dialog_title">Select event themes</string>
     <string name="add_event_event_theme_dialog_notification">Please choose no more than 3 themes</string>
+    <string name="add_event_fill_mandatory_fields_notification">Please fill out all mandatory fields</string>
     <string name="add_event_create_btn">Create</string>
     <string name="add_event_add_image_hint">Add\n image</string>
     <string name="add_event_maps_address_placeholder">Check event address here</string>
