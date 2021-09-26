@@ -62,7 +62,8 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
     private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
     private final FirebaseStorageService firebaseStorageService = new FirebaseStorageService();
     private TextInputLayout eventAccess;
-    private TextInputEditText eventTitle, eventLocation, eventStartTime, eventEndTime, eventDescr, eventTheme;
+    private TextInputEditText eventTitle, eventLocation, eventStartTime, eventEndTime, eventDescr,
+            eventTheme, eventMinAge, eventMaxAge, eventAttendees;
     private String[] listOfAccessTypes;
     private AppCompatButton submitButton;
     private MaterialTextView mAddImageLabel;
@@ -106,6 +107,9 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
         eventTheme = v.findViewById(R.id.inputEditEventTheme);
         eventAccess = v.findViewById(R.id.textInputLayoutEventAccess);
         eventDescr = v.findViewById(R.id.inputEditEventDescription);
+        eventMinAge = v.findViewById(R.id.inputEditEventMinAge);
+        eventMaxAge = v.findViewById(R.id.inputEditEventMaxAge);
+        eventAttendees = v.findViewById(R.id.inputEditEventAttendees);
         submitButton = v.findViewById(R.id.buttonSubmitNewEvent);
         autoCompleteTextView = v.findViewById(R.id.autoCompleteTextView);
         mAvatarImageView = v.findViewById(R.id.imageViewAddEventAvatar);
@@ -214,6 +218,9 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
             String eventStartTimeValue = eventStartTime.getText().toString().trim();
             String eventEndTimeValue = eventEndTime.getText().toString().trim();
             String eventDescrValue = eventDescr.getText().toString().trim();
+            String eventMinAgeValue = eventMinAge.getText().toString().trim();
+            String eventMaxAgeValue = eventMaxAge.getText().toString().trim();
+            String eventAttendeesValue = eventAttendees.getText().toString().trim();
 
             AccessTypes eventAccessValue;
             switch (ddlEventAccessPosition) {
@@ -238,16 +245,16 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
             if (eventAvatar != null) {
                 firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
                     if (eventAccessValue == AccessTypes.PUBLIC || eventAccessValue == AccessTypes.SELECTIVE) {
-                        firebaseFirestoreService.createNewPublicEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, eventThemes, userFullName);
+                        firebaseFirestoreService.createNewPublicEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, eventMinAgeValue, eventMaxAgeValue, eventAttendeesValue, downloadUrl, eventThemes, userFullName);
                     } else {
-                        firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, downloadUrl, eventThemes, userFullName);
+                        firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, eventMinAgeValue, eventMaxAgeValue, eventAttendeesValue, downloadUrl, eventThemes, userFullName);
                     }
                 }, fAuth.getUid(), eventAvatar);
             } else {
                 if (eventAccessValue == AccessTypes.PUBLIC || eventAccessValue == AccessTypes.SELECTIVE) {
-                    firebaseFirestoreService.createNewPublicEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, null, eventThemes, userFullName);
+                    firebaseFirestoreService.createNewPublicEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, eventMinAgeValue, eventMaxAgeValue, eventAttendeesValue, null, eventThemes, userFullName);
                 } else {
-                    firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, null, eventThemes, userFullName);
+                    firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, eventMinAgeValue, eventMaxAgeValue, eventAttendeesValue, null, eventThemes, userFullName);
                 }
             }
 
@@ -370,5 +377,11 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
         eventStartTime.getText().clear();
         eventEndTime.getText().clear();
         eventDescr.getText().clear();
+        eventMinAge.getText().clear();
+        eventMaxAge.getText().clear();
+        eventAttendees.getText().clear();
+        eventTheme.getText().clear();
+        autoCompleteTextView.setText(getResources().getText(R.string.add_event_event_access));
+        mAvatarImageView.setImageURI(null);
     }
 }

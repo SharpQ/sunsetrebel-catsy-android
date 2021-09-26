@@ -130,44 +130,6 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/AddEventTextInputLayout"
-            android:id="@+id/inputLayoutLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:endIconMode="none"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutEventTheme"
-            app:layout_constraintVertical_bias="0.01">
-
-            <com.google.android.material.textfield.TextInputEditText
-                style="@style/AddEventTextEdit"
-                android:drawableEnd="@android:drawable/arrow_down_float"
-                android:id="@+id/inputEditLocation"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/add_event_event_location"
-                android:clickable="true"
-                android:focusable="false"
-                android:inputType="none" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <fragment
-            android:id="@+id/fragmentMap"
-            class="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_marginTop="2dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutLocation"
-            app:layout_constraintVertical_bias="0"
-            tools:context=".fragments.AddEventFrament" />
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/AddEventTextInputLayout"
             android:id="@+id/inputLayoutStartTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -243,6 +205,109 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/AddEventTextInputLayout"
+            android:id="@+id/inputLayoutLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="none"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutEventTheme"
+            app:layout_constraintVertical_bias="0.01">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/AddEventTextEdit"
+                android:drawableEnd="@android:drawable/arrow_down_float"
+                android:id="@+id/inputEditLocation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/add_event_event_location"
+                android:clickable="true"
+                android:focusable="false"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <fragment
+            android:id="@+id/fragmentMap"
+            class="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutLocation"
+            app:layout_constraintVertical_bias="0"
+            tools:context=".fragments.AddEventFrament" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/AddEventTextInputLayout"
+            android:id="@+id/inputLayoutEventMinAge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/inputLayoutEventMaxAge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/fragmentMap"
+            app:layout_constraintVertical_bias="0.02">
+
+        <com.google.android.material.textfield.TextInputEditText
+            style="@style/AddEventTextEdit"
+            android:id="@+id/inputEditEventMinAge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/add_event_event_min_age"
+            android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/AddEventTextInputLayout"
+            android:id="@+id/inputLayoutEventMaxAge"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/inputLayoutEventMinAge"
+            app:layout_constraintTop_toBottomOf="@id/fragmentMap"
+            app:layout_constraintVertical_bias="0.02">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/AddEventTextEdit"
+                android:id="@+id/inputEditEventMaxAge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_event_event_max_age"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/AddEventTextInputLayout"
+            android:id="@+id/inputLayoutEventAttendees"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutEventMinAge"
+            app:layout_constraintVertical_bias="0.02">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/AddEventTextEdit"
+                android:id="@+id/inputEditEventAttendees"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/add_event_event_attendees"
+                android:inputType="numberDecimal"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/inputLayoutEventDescription"
             style="@style/AddEventTextInputLayout"
             android:layout_width="match_parent"
@@ -250,7 +315,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/fragmentMap"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutEventAttendees"
             app:layout_constraintVertical_bias="0.03">
 
             <com.google.android.material.textfield.TextInputEditText

@@ -92,7 +92,8 @@ public class FirebaseFirestoreService {
     }
 
     public void createNewPublicEvent(String userID, String eventTitle, String eventLocation, LatLng eventGeoLocation, String eventStartTime,
-                                     String eventEndTime, AccessTypes accessType, String eventDescr, String eventAvatar, List<Enum<?>> eventThemes, String userName){
+                                     String eventEndTime, AccessTypes accessType, String eventDescr, String eventMinAge, String eventMaxAge,
+                                     String eventAttendees, String eventAvatar, List<Enum<?>> eventThemes, String userName){
         fStore = getInstance();
         String eventId = fStore.collection("eventList").document().getId();
         documentReference = fStore.collection("eventList").document(eventId);
@@ -105,6 +106,9 @@ public class FirebaseFirestoreService {
         event.put("eventEndTime", eventEndTime);
         event.put("accessType", accessType);
         event.put("eventDescription", eventDescr);
+        event.put("eventMinAge", eventMinAge);
+        event.put("eventMaxAge", eventMaxAge);
+        event.put("eventAttendees", eventAttendees);
         event.put("eventAvatar", eventAvatar);
         event.put("eventThemes", eventThemes);
         event.put("userId", userID);
@@ -113,7 +117,8 @@ public class FirebaseFirestoreService {
     }
 
     public void createNewPrivateEvent(String userID, String eventTitle, String eventLocation, LatLng eventGeoLocation, String eventStartTime,
-                                      String eventEndTime, AccessTypes accessType, String eventDescr, String eventAvatar, List<Enum<?>> eventThemes, String userName){
+                                      String eventEndTime, AccessTypes accessType, String eventDescr, String eventMinAge, String eventMaxAge,
+                                      String eventAttendees, String eventAvatar, List<Enum<?>> eventThemes, String userName){
         fStore = getInstance();
         String eventId = fStore.collection("userProfiles").document(userID).collection("userEvents").document().getId();
         documentReference = fStore.collection("userProfiles").document(userID).collection("userEvents").document(eventId);
@@ -126,6 +131,9 @@ public class FirebaseFirestoreService {
         event.put("eventEndTime", eventEndTime);
         event.put("accessType", accessType);
         event.put("eventDescription", eventDescr);
+        event.put("eventMinAge", eventMinAge);
+        event.put("eventMaxAge", eventMaxAge);
+        event.put("eventAttendees", eventAttendees);
         event.put("eventAvatar", eventAvatar);
         event.put("eventThemes", eventThemes);
         event.put("userId", userID);
