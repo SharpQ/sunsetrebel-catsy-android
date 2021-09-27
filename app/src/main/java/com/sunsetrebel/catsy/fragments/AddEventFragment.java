@@ -39,7 +39,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.activities.AddEventMapsActivity;
-import com.sunsetrebel.catsy.models.AddEventModel;
 import com.sunsetrebel.catsy.utils.AccessTypes;
 import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.FirebaseAuthService;
@@ -51,7 +50,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +59,8 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
     private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
     private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
     private final FirebaseStorageService firebaseStorageService = new FirebaseStorageService();
-    private TextInputLayout eventAccess;
+    private TextInputLayout eventTitleLayout, eventAccessLayout, eventLocationLayout,
+            eventDescrLayout, eventStartTimeLayout, eventEndTimeLayout;
     private TextInputEditText eventTitle, eventLocation, eventStartTime, eventEndTime, eventDescr,
             eventTheme, eventMinAge, eventMaxAge, eventAttendees;
     private String[] listOfAccessTypes;
@@ -78,6 +77,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
     private String eventAddress;
     private boolean[] selectedTheme;
     private List<Enum<?>> eventThemes;
+    private ArrayAdapter<String> arrayAdapter;
 
     public AddEventFragment() {
         // Required empty public constructor
@@ -98,14 +98,13 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
             userFullName = value;
         }, fAuth.getUid());
         listOfAccessTypes = getResources().getStringArray(R.array.event_access_types);
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getContext(), R.layout.item_ddl_event_type, listOfAccessTypes);
+        arrayAdapter = new ArrayAdapter<>(getContext(), R.layout.item_ddl_event_type, listOfAccessTypes);
 
         eventTitle = v.findViewById(R.id.inputEditEventTitle);
         eventLocation = v.findViewById(R.id.inputEditLocation);
         eventStartTime = v.findViewById(R.id.inputEditStartTime);
         eventEndTime = v.findViewById(R.id.inputEditEndTime);
         eventTheme = v.findViewById(R.id.inputEditEventTheme);
-        eventAccess = v.findViewById(R.id.textInputLayoutEventAccess);
         eventDescr = v.findViewById(R.id.inputEditEventDescription);
         eventMinAge = v.findViewById(R.id.inputEditEventMinAge);
         eventMaxAge = v.findViewById(R.id.inputEditEventMaxAge);
@@ -114,6 +113,13 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
         autoCompleteTextView = v.findViewById(R.id.autoCompleteTextView);
         mAvatarImageView = v.findViewById(R.id.imageViewAddEventAvatar);
         mAddImageLabel = v.findViewById(R.id.materialTextViewAddImage);
+        eventTitleLayout = v.findViewById(R.id.inputLayoutEventTitle);
+        eventAccessLayout = v.findViewById(R.id.inputLayoutEventAccess);
+        eventLocationLayout = v.findViewById(R.id.inputLayoutLocation);
+        eventDescrLayout = v.findViewById(R.id.inputLayoutEventDescription);
+        eventStartTimeLayout = v.findViewById(R.id.inputLayoutStartTime);
+        eventEndTimeLayout = v.findViewById(R.id.inputLayoutEndTime);
+
         autoCompleteTextView.setAdapter(arrayAdapter);
 
         eventStartTime.setOnClickListener(v15 -> showDateTimeDialog(eventStartTime));
@@ -213,6 +219,12 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
         });
 
         submitButton.setOnClickListener(v1 -> {
+            eventTitleLayout.setError(null);
+            eventLocationLayout.setError(null);
+            eventStartTimeLayout.setError(null);
+            eventEndTimeLayout.setError(null);
+            eventDescrLayout.setError(null);
+            eventAccessLayout.setError(null);
             String eventTitleValue = eventTitle.getText().toString().trim();
             String eventLocationValue = eventLocation.getText().toString().trim();
             String eventStartTimeValue = eventStartTime.getText().toString().trim();
@@ -240,7 +252,12 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
             if (TextUtils.isEmpty(eventTitleValue) || TextUtils.isEmpty(eventStartTimeValue) || TextUtils.isEmpty(eventEndTimeValue)
                     || eventAccessValue == null || TextUtils.isEmpty(eventLocationValue) || TextUtils.isEmpty(eventDescrValue)) {
                 //TO DO: change color of all mandatory fields
-                Toast.makeText(getContext(), getResources().getString(R.string.add_event_fill_mandatory_fields_notification), Toast.LENGTH_SHORT).show();
+                eventTitleLayout.setError(getResources().getString(R.string.add_event_fill_mandatory_field_error));
+                eventLocationLayout.setError(getResources().getString(R.string.add_event_fill_mandatory_field_error));
+                eventStartTimeLayout.setError(getResources().getString(R.string.add_event_fill_mandatory_field_error));
+                eventEndTimeLayout.setError(getResources().getString(R.string.add_event_fill_mandatory_field_error));
+                eventDescrLayout.setError(getResources().getString(R.string.add_event_fill_mandatory_field_error));
+                eventAccessLayout.setError(getResources().getString(R.string.add_event_fill_mandatory_field_error));
                 return;
             }
 

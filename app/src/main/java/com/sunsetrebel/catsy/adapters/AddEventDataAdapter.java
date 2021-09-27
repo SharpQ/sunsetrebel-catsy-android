@@ -63,7 +63,7 @@ public class AddEventDataAdapter extends RecyclerView.Adapter<AddEventDataAdapte
             textDate = itemView.findViewById(R.id.inputLayoutStartTime);
             textLocation = itemView.findViewById(R.id.inputLayoutLocation);
             textEventDescription = itemView.findViewById(R.id.inputEditEventDescription);
-            textEventCreatorName = itemView.findViewById(R.id.textInputLayoutEventAccess);
+            textEventCreatorName = itemView.findViewById(R.id.inputLayoutEventAccess);
             imageEventIcon = itemView.findViewById(R.id.card_event_icon);
             EventCreatorPhotoPostagem = itemView.findViewById(R.id.event_creator_photo);
 

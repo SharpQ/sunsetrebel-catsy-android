@@ -79,6 +79,9 @@
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="endIconMode">clear_text</item>
         <item name="boxBackgroundColor">@color/blackHalfTransparent</item>
+        <item name="errorTextColor">@color/redError</item>
+        <item name="boxStrokeErrorColor">@color/redError</item>
+        <item name="errorIconTint">@color/redError</item>
     </style>
 
     <style name="AddEventTextEdit">

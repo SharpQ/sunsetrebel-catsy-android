@@ -42,14 +42,17 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-            android:id="@+id/textInputLayoutEventAccess"
+            android:id="@+id/inputLayoutEventAccess"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/inputLayoutEventTitle"
-            app:layout_constraintVertical_bias="0.01">
+            app:layout_constraintVertical_bias="0.01"
+            app:errorTextColor="@color/redError"
+            app:boxStrokeErrorColor="@color/redError"
+            app:errorIconTint="@color/redError">
 
             <AutoCompleteTextView
                 android:id="@+id/autoCompleteTextView"
@@ -80,7 +83,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textInputLayoutEventAccess"
+            app:layout_constraintTop_toBottomOf="@id/inputLayoutEventAccess"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintVertical_bias="0"/>
 
@@ -94,7 +97,7 @@
             android:drawablePadding="10dp"
             android:fontFamily="@font/audiowide"
             android:layout_margin="12dp"
-            android:padding="15dp"
+            android:padding="10dp"
             android:radius="100dip"
             android:text="@string/add_event_add_image_hint"
             android:textSize="18sp"
