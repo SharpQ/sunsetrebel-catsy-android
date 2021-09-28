@@ -23,8 +23,6 @@
             android:id="@+id/textAddEventTitle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:drawableStart="@drawable/im_cat_hearts_32p"
-            android:drawableEnd="@drawable/im_cat_hearts_32p"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:gravity="center"
@@ -228,7 +226,7 @@
                 android:hint="@string/add_event_event_location"
                 android:clickable="true"
                 android:focusable="false"
-                android:inputType="none" />
+                android:inputType="textVisiblePassword|textNoSuggestions" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

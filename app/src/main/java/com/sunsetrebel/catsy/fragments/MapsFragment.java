@@ -19,6 +19,7 @@ import com.sunsetrebel.catsy.utils.PermissionUtils;
 
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
+    private GoogleMap mMap;
     public MapsFragment() {
         // Required empty public constructor
     }
@@ -42,6 +43,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
         GoogleMapService.setupMap(googleMap, getContext(), MapsFragment.this);
     }
 
@@ -51,7 +53,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PermissionUtils.getAccessLocationRequestCode()) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                GoogleMapService.zoomToUserLocation(getContext());
+                GoogleMapService.zoomToUserLocation(getContext(), mMap);
             } else {
                 Log.e("INFO", "Permissions not granted");
             }

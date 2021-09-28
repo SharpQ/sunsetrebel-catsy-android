@@ -33,7 +33,6 @@ import com.sunsetrebel.catsy.fragments.MapsFragment;
 import java.util.Locale;
 
 public class GoogleMapService {
-    private static GoogleMap mMap = null;
     private static Geocoder geocoder = null;
     private static FusedLocationProviderClient fusedLocationProviderClient = null;
 
@@ -48,16 +47,15 @@ public class GoogleMapService {
     @SuppressLint("MissingPermission")
     public static void setupMap(GoogleMap googleMap, Context context, Fragment fragment) {
         //MAP STYLE AND BUTTONS SETUP
-        mMap = googleMap;
-        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
                 context, R.raw.google_style));
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.getUiSettings().setCompassEnabled(false);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
+        googleMap.getUiSettings().setCompassEnabled(false);
 //        mMap.getUiSettings().setRotateGesturesEnabled(false);
 
         if (PermissionUtils.isLocationPermissionEnabled(context)) {
-            zoomToUserLocation(context);
+            zoomToUserLocation(context, googleMap);
         } else {
             PermissionUtils.requestLocationPermissionsFragment(fragment);
         }
@@ -66,23 +64,22 @@ public class GoogleMapService {
     @SuppressLint("MissingPermission")
     public static void setupMapActivity(GoogleMap googleMap, Context context, Activity activity) {
         //MAP STYLE AND BUTTONS SETUP
-        mMap = googleMap;
-        mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
+        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
                 context, R.raw.google_style));
-        mMap.getUiSettings().setMyLocationButtonEnabled(false);
-        mMap.getUiSettings().setMapToolbarEnabled(false);
-        mMap.getUiSettings().setCompassEnabled(false);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
+        googleMap.getUiSettings().setCompassEnabled(false);
 
         if (PermissionUtils.isLocationPermissionEnabled(context)) {
-            zoomToUserLocation(context);
+            zoomToUserLocation(context, googleMap);
         } else {
             PermissionUtils.requestLocationPermissionsActivity(activity);
         }
     }
 
     @SuppressLint("MissingPermission")
-    public static void zoomToUserLocation(Context context) {
-        mMap.setMyLocationEnabled(true);
+    public static void zoomToUserLocation(Context context, GoogleMap googleMap) {
+        googleMap.setMyLocationEnabled(true);
         getFusedLocationProviderInstance(context);
         Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
         locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -90,8 +87,8 @@ public class GoogleMapService {
             public void onSuccess(Location location) {
                 if (location != null) {
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
-                    mMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
+//                    googleMap.addMarker(new MarkerOptions().position(latLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
                 }
 //                TO DO: FIX GETTING CURRENT LOCATION AND SETTING SINGLE ICON
 //                else {
@@ -118,9 +115,9 @@ public class GoogleMapService {
     }
 
     @SuppressLint("MissingPermission")
-    public static void clearAndSetMarker(LatLng eventLatLng) {
-        mMap.clear();
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, 12));
-        mMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
+    public static void clearAndSetMarker(LatLng eventLatLng, GoogleMap googleMap, float zoom) {
+        googleMap.clear();
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, zoom));
+        googleMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
     }
 }

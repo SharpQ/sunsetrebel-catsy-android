@@ -57,6 +57,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     private LatLng eventLatLng;
     private String eventAddress;
     private Geocoder geocoder;
+    private GoogleMap mMap;
 
     private void hideSystemUI() {
         View decorView = getWindow().getDecorView();
@@ -178,7 +179,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                         Log.i("INFO", "Place found: " + place.getName());
                         eventLatLng = place.getLatLng();
                         if (eventLatLng != null) {
-                            GoogleMapService.clearAndSetMarker(eventLatLng);
+                            GoogleMapService.clearAndSetMarker(eventLatLng, mMap, 12);
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -227,6 +228,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
         GoogleMapService.setupMapActivity(googleMap, getApplicationContext(), AddEventMapsActivity.this);
 
         googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
@@ -245,7 +247,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                GoogleMapService.clearAndSetMarker(latLng);
+                GoogleMapService.clearAndSetMarker(latLng, mMap, 12);
 
                 List<Address> addresses = null;
 
@@ -272,7 +274,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PermissionUtils.getAccessLocationRequestCode()) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                GoogleMapService.zoomToUserLocation(getApplicationContext());
+                GoogleMapService.zoomToUserLocation(getApplicationContext(), mMap);
             } else {
                 Log.e("INFO", "Permissions not granted");
             }

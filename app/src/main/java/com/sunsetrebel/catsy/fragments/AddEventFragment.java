@@ -29,6 +29,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -78,6 +80,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
     private boolean[] selectedTheme;
     private List<Enum<?>> eventThemes;
     private ArrayAdapter<String> arrayAdapter;
+    private GoogleMap mMap;
 
     public AddEventFragment() {
         // Required empty public constructor
@@ -276,8 +279,8 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
                     firebaseFirestoreService.createNewPrivateEvent(fAuth.getCurrentUser().getUid(), eventTitleValue, eventLocationValue, eventLatLng, eventStartTimeValue, eventEndTimeValue, eventAccessValue, eventDescrValue, eventMinAgeValue, eventMaxAgeValue, eventAttendeesValue, null, eventThemes, userFullName);
                 }
             }
-
-            clearInputFiels();
+            restartFragment();
+            Toast.makeText(getContext(), getResources().getString(R.string.add_event_event_created_notification), Toast.LENGTH_SHORT).show();
         });
 
         eventLocation.setOnClickListener(v12 -> {
@@ -307,6 +310,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
         GoogleMapService.setupMap(googleMap, getContext(), AddEventFragment.this);
 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -335,7 +339,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
                     eventLatLng = data.getExtras().getParcelable("EVENT_LAT_LNG");
                     eventAddress = data.getStringExtra("EVENT_ADDRESS");
                     eventLocation.setText(eventAddress);
-                    GoogleMapService.clearAndSetMarker(eventLatLng);
+                    GoogleMapService.clearAndSetMarker(eventLatLng, mMap, 10);
                 }
                 break;
             }
@@ -352,7 +356,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
             }
         } else if (requestCode == PermissionUtils.getAccessLocationRequestCode()) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                GoogleMapService.zoomToUserLocation(getContext());
+                GoogleMapService.zoomToUserLocation(getContext(), mMap);
             } else {
                 Log.e("INFO", "Permissions not granted");
             }
@@ -404,5 +408,12 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
         autoCompleteTextView.setText(getResources().getText(R.string.add_event_event_access));
         mAvatarImageView.setImageURI(null);
         mAddImageLabel.setVisibility(View.VISIBLE);
+    }
+
+    private void restartFragment() {
+        FragmentManager fragmentManager = getFragmentManager();
+        Fragment fragment = new AddEventFragment();
+        fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, fragment)
+                .commit();
     }
 }
