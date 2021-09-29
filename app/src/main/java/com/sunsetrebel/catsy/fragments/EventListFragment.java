@@ -2,6 +2,7 @@ package com.sunsetrebel.catsy.fragments;
 
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,11 +63,14 @@ public class EventListFragment extends Fragment {
                 EventListService.setCurrentEventList(events);
                 for (Map<String, Object> event : events) {
                     if (event.get("eventThemes") != null) {
-                        EventThemes eventThemesList = new EventThemes(getActivity().getResources());
-                        Map<Enum<?>, String> themesArray = eventThemesList.getEventThemesList();
-                        ArrayList<Object[]> listThemes = (ArrayList<Object[]>) event.get("eventThemes");
-                        for (Object eventString : listThemes) {
-                            Log.d("INFO", String.valueOf(themesArray.get(EventThemes.eventThemes.valueOf((String) eventString))));
+                        FragmentActivity fragment = getActivity();
+                        if (fragment != null) {
+                            EventThemes eventThemesList = new EventThemes(fragment.getResources());
+                            Map<Enum<?>, String> themesArray = eventThemesList.getEventThemesList();
+                            ArrayList<Object[]> listThemes = (ArrayList<Object[]>) event.get("eventThemes");
+                            for (Object eventString : listThemes) {
+                                Log.d("INFO", String.valueOf(themesArray.get(EventThemes.eventThemes.valueOf((String) eventString))));
+                            }
                         }
                     }
                     addEventToList(event.get("eventTitle").toString(), event.get("eventStartTime").toString(),
