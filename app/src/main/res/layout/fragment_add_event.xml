@@ -117,7 +117,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textAddEventTitle"
-            app:layout_constraintVertical_bias="0.02">
+            app:layout_constraintVertical_bias="0">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/AddEventTextEdit"

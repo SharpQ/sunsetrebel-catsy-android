@@ -140,7 +140,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View v) {
                 //Initialize alert dialog
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.DatePickerDialog);
                 //Set builder properties
                 builder.setTitle(getResources().getString(R.string.add_event_event_theme_dialog_title));
                 builder.setCancelable(false);
