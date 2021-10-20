@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_marginTop="5dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/greyBackgroundEventItem">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageViewHostAvatar"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="5dp"
+            android:background="@color/primaryLightColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.05"
+            app:shapeAppearanceOverlay="@style/EventListHostAvatar" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageViewEventAvatar"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:background="@color/primaryLightColor"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewHostAvatar"
+            app:layout_constraintVertical_bias="1.0"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceAvatarEventList" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewEventTitle"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/audiowide"
+            android:gravity="center_vertical"
+            android:text="[Title]"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            android:textAllCaps="true"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/imageViewHostAvatar"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.02" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewHostName"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/audiowide"
+            android:gravity="center_vertical"
+            android:text="@string/event_list_host_placeholder"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="12sp"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/imageViewHostAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEventTitle"
+            app:layout_constraintVertical_bias="0.01" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewStartTime"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/audiowide"
+            android:text="[START_TIME]"
+            android:gravity="center_vertical"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="14sp"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/imageViewStartTime"
+            app:layout_constraintTop_toBottomOf="@+id/textViewHostName"
+            app:layout_constraintVertical_bias="0.04" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewLocation"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/audiowide"
+            android:text="[LOCATION]"
+            android:maxEms="15"
+            android:textSize="14sp"
+            android:lines="2"
+            android:maxLines="2"
+            android:singleLine="false"
+            android:gravity="top"
+            android:textColor="@color/primaryTextColor"
+            android:inputType="textVisiblePassword|textNoSuggestions|textMultiLine"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/imageViewLocation"
+            app:layout_constraintTop_toBottomOf="@+id/textViewStartTime"
+            app:layout_constraintVertical_bias="0.04" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewParticipants"
+            android:layout_width="wrap_content"
+            android:layout_height="15dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:fontFamily="@font/audiowide"
+            android:gravity="center_vertical|center"
+            android:text="[Joined ####]"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="10sp"
+            android:inputType="textVisiblePassword|textNoSuggestions"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@+id/imageViewParticipants"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEventTitle"
+            app:layout_constraintVertical_bias="0.01" />
+
+        <ImageView
+            android:id="@+id/imageViewStartTime"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_baseline_access_time_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.02"
+            app:layout_constraintStart_toEndOf="@+id/imageViewEventAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/textViewHostName"
+            app:layout_constraintVertical_bias="0.04" />
+
+        <ImageView
+            android:id="@+id/imageViewLocation"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_baseline_location_on_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.02"
+            app:layout_constraintStart_toEndOf="@+id/imageViewEventAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewStartTime"
+            app:layout_constraintVertical_bias="0.04" />
+
+        <ImageView
+            android:id="@+id/imageViewParticipants"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_baseline_people_alt_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textViewHostName"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEventTitle"
+            app:layout_constraintHorizontal_bias="0.02"
+            app:layout_constraintVertical_bias="0.01" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/textViewEventDescription"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:ems="10"
+            android:maxEms="15"
+            android:fontFamily="@font/audiowide"
+            android:inputType="textVisiblePassword|textNoSuggestions|textMultiLine"
+            android:lines="2"
+            android:maxLines="2"
+            android:singleLine="false"
+            android:text="[DESCRIPTION]"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/imageViewEventAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/textViewLocation"
+            app:layout_constraintVertical_bias="0.02" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonJoinEvent"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/ui_rounded_corners_light"
+            android:fontFamily="@font/audiowide"
+            android:text="@string/event_list_button_join"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageButtonLike"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEventDescription"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <ImageButton
+            android:id="@+id/imageButtonShare"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="5dp"
+            android:background="?android:selectableItemBackground"
+            android:src="@drawable/ic_baseline_share_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageViewEventAvatar"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEventDescription"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintHorizontal_bias="0"/>
+
+        <ImageButton
+            android:id="@+id/imageButtonLike"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="10dp"
+            android:background="?android:selectableItemBackground"
+            app:srcCompat="@drawable/ic_baseline_favorite_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageButtonShare"
+            app:layout_constraintTop_toBottomOf="@+id/textViewEventDescription"
+            app:layout_constraintVertical_bias="0.5"
+            app:layout_constraintHorizontal_bias="0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

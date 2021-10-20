@@ -108,7 +108,7 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
         eventStartTime = v.findViewById(R.id.inputEditStartTime);
         eventEndTime = v.findViewById(R.id.inputEditEndTime);
         eventTheme = v.findViewById(R.id.inputEditEventTheme);
-        eventDescr = v.findViewById(R.id.inputEditEventDescription);
+        eventDescr = v.findViewById(R.id.textViewEventDescription);
         eventMinAge = v.findViewById(R.id.inputEditEventMinAge);
         eventMaxAge = v.findViewById(R.id.inputEditEventMaxAge);
         eventAttendees = v.findViewById(R.id.inputEditEventAttendees);
@@ -118,9 +118,9 @@ public class AddEventFragment extends Fragment implements OnMapReadyCallback {
         mAddImageLabel = v.findViewById(R.id.materialTextViewAddImage);
         eventTitleLayout = v.findViewById(R.id.inputLayoutEventTitle);
         eventAccessLayout = v.findViewById(R.id.inputLayoutEventAccess);
-        eventLocationLayout = v.findViewById(R.id.inputLayoutLocation);
+        eventLocationLayout = v.findViewById(R.id.textViewLocation);
         eventDescrLayout = v.findViewById(R.id.inputLayoutEventDescription);
-        eventStartTimeLayout = v.findViewById(R.id.inputLayoutStartTime);
+        eventStartTimeLayout = v.findViewById(R.id.textViewStartTime);
         eventEndTimeLayout = v.findViewById(R.id.inputLayoutEndTime);
 
         autoCompleteTextView.setAdapter(arrayAdapter);

@@ -10,5 +10,6 @@
     <color name="facebookBtnColor">#4867AA</color>
     <color name="blackHalfTransparent">#80000000</color>
     <color name="redError">#FF0000</color>
-    <color name="greyBackground">#242527</color>
+    <color name="greyBackground">#111111</color>
+    <color name="greyBackgroundEventItem">#161616</color>
 </resources>

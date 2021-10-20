@@ -22,7 +22,7 @@ public class AddEventDataAdapter extends RecyclerView.Adapter<AddEventDataAdapte
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.event_list_event_card, parent, false);
+                .inflate(R.layout.event_list_item, parent, false);
 
         return new MyViewHolder(itemLista);
     }
@@ -59,13 +59,13 @@ public class AddEventDataAdapter extends RecyclerView.Adapter<AddEventDataAdapte
             super(itemView);
 
 
-            textName = itemView.findViewById(R.id.card_event_name);
-            textDate = itemView.findViewById(R.id.inputLayoutStartTime);
-            textLocation = itemView.findViewById(R.id.inputLayoutLocation);
-            textEventDescription = itemView.findViewById(R.id.inputEditEventDescription);
-            textEventCreatorName = itemView.findViewById(R.id.inputLayoutEventAccess);
-            imageEventIcon = itemView.findViewById(R.id.card_event_icon);
-            EventCreatorPhotoPostagem = itemView.findViewById(R.id.event_creator_photo);
+            textName = itemView.findViewById(R.id.textViewEventTitle);
+            textDate = itemView.findViewById(R.id.textViewStartTime);
+            textLocation = itemView.findViewById(R.id.textViewLocation);
+            textEventDescription = itemView.findViewById(R.id.textViewEventDescription);
+            textEventCreatorName = itemView.findViewById(R.id.textViewHostName);
+            imageEventIcon = itemView.findViewById(R.id.imageViewEventAvatar);
+            EventCreatorPhotoPostagem = itemView.findViewById(R.id.imageViewHostAvatar);
 
 
         }

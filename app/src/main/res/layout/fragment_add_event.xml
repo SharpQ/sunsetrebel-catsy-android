@@ -72,7 +72,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageViewAddEventAvatar"
-            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize10Percent"
+            app:shapeAppearanceOverlay="@style/CornerSize10Percent"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginTop="10dp"
@@ -96,6 +96,7 @@
             android:fontFamily="@font/audiowide"
             android:layout_margin="12dp"
             android:padding="10dp"
+            android:alpha="0.9"
             android:radius="100dip"
             android:text="@string/add_event_add_image_hint"
             android:textSize="18sp"
@@ -131,7 +132,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/AddEventTextInputLayout"
-            android:id="@+id/inputLayoutStartTime"
+            android:id="@+id/textViewStartTime"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
@@ -163,7 +164,7 @@
             android:layout_marginEnd="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/inputLayoutStartTime"
+            app:layout_constraintStart_toEndOf="@id/textViewStartTime"
             app:layout_constraintTop_toBottomOf="@id/imageViewAddEventAvatar"
             app:layout_constraintVertical_bias="0">
 
@@ -207,7 +208,7 @@
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/AddEventTextInputLayout"
-            android:id="@+id/inputLayoutLocation"
+            android:id="@+id/textViewLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:endIconMode="none"
@@ -239,7 +240,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/inputLayoutLocation"
+            app:layout_constraintTop_toBottomOf="@id/textViewLocation"
             app:layout_constraintVertical_bias="0"
             tools:context=".fragments.AddEventFrament" />
 
@@ -321,7 +322,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/AddEventTextEdit"
-                android:id="@+id/inputEditEventDescription"
+                android:id="@+id/textViewEventDescription"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="@string/add_event_event_description"

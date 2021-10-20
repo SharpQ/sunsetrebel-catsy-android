@@ -142,8 +142,18 @@
 
     <!--IMAGES-->
 
-    <style name="ShapeAppearanceOverlay.App.CornerSize10Percent" parent="">
+    <style name="ShapeAppearanceAvatarEventList" parent="">
+        <item name="cornerSizeTopRight">10%</item>
+        <item name="cornerSizeBottomRight">10%</item>
+    </style>
+
+    <style name="CornerSize10Percent" parent="">
         <item name="cornerSize">10%</item>
+    </style>
+
+    <style name="EventListHostAvatar" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
 </resources>
