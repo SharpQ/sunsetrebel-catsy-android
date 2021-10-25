@@ -12,6 +12,8 @@ import com.sunsetrebel.catsy.fragments.AddEventFragment;
 import com.sunsetrebel.catsy.fragments.EventListFragment;
 import com.sunsetrebel.catsy.fragments.MapsFragment;
 import com.sunsetrebel.catsy.fragments.MessageFragment;
+import com.sunsetrebel.catsy.utils.MediaPlayerService;
+
 import nl.joery.animatedbottombar.AnimatedBottomBar;
 
 
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
             fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, fragment).commit();
+            MediaPlayerService.playNavigation(this);
         });
     }
 }
