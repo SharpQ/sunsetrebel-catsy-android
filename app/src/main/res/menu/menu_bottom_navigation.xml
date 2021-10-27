@@ -3,26 +3,26 @@
 
     <item
         android:id="@+id/navigationBarMap"
-        android:icon="@drawable/ic_map"
+        android:icon="@drawable/ic_outline_map_28"
         android:title="@string/navigation_bar_map"/>
 
     <item
         android:id="@+id/navigationBarEventList"
-        android:icon="@drawable/book"
+        android:icon="@drawable/ic_baseline_list_28"
         android:title="@string/navigation_bar_event_list"/>
 
     <item
         android:id="@+id/navigationBarNewEvent"
-        android:icon="@drawable/ic_add"
+        android:icon="@drawable/ic_baseline_add_28"
         android:title="@string/navigation_bar_new_event" />
 
     <item
         android:id="@+id/navigationBarChat"
-        android:icon="@drawable/ic_message"
+        android:icon="@drawable/ic_baseline_mail_outline_28"
         android:title="@string/navigation_bar_chat" />
 
     <item
         android:id="@+id/navigationBarAccount"
-        android:icon="@drawable/ic_user"
+        android:icon="@drawable/ic_baseline_person_outline_28"
         android:title="@string/navigation_bar_account" />
 </menu>

@@ -47,7 +47,7 @@ public class SliderAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = layoutInflater.inflate(R.layout.slide_layout, container, false);
+        View view = layoutInflater.inflate(R.layout.item_slide_layout, container, false);
 
         ImageView slideImageView = view.findViewById(R.id.slideImage);
         TextView slideText = view.findViewById(R.id.slideText);
