@@ -27,7 +27,7 @@ import java.util.Map;
 
 
 public class EventListFragment extends Fragment {
-    private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
+    private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private RecyclerView recyclerPostagem;
     private List<AddEventModel> postagens = new ArrayList<>();
 
