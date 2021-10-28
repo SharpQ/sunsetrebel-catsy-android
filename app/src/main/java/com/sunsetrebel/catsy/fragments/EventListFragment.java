@@ -40,7 +40,7 @@ public class EventListFragment extends Fragment {
                 eventDate,
                 eventLocation,
                 eventDescr,
-                "Posted by: " + eventAuthor,
+                "Posted by " + eventAuthor,
                 R.drawable.im_event_icon_example_1,
                 R.drawable.im_cat_bright
         );
