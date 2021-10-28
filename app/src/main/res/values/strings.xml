@@ -89,5 +89,5 @@
     <string name="event_theme_lgbtq">LGBTQ+</string>
     <string name="event_theme_study">Study</string>
     <string name="event_theme_books">Books</string>
-    <string name="event_list_host_placeholder">Posted by </string>
+    <string name="event_list_host_placeholder">Posted by\u0020</string>
 </resources>

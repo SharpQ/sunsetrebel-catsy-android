@@ -27,9 +27,10 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.hbb20.CountryCodePicker;
-import com.sunsetrebel.catsy.utils.FirebaseAuthService;
+import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.utils.LoginType;
 
 import java.util.Arrays;
 import java.util.regex.Matcher;
@@ -47,8 +48,8 @@ public class LoginActivity extends AppCompatActivity {
     private boolean isGoogleAuth = false;
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private CallbackManager mCallbackManager;
-    private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
-    private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
+    private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
+    private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private Activity mActivity;
     private boolean isOTPregistration = true;
     private CountryCodePicker ccp;
@@ -56,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if(firebaseAuthService.checkCurrentUser()) {
+        if(firebaseAuthService.isUserLoggedIn()) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             Animatoo.animateFade(this);  //fire the zoom animation
             finish();
@@ -70,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
         mActivity = LoginActivity.this;
         firebaseAuthService.createGoogleAuthRequestGetInstance(getApplicationContext());
         firebaseAuthService.InitializeFacebookSdk(getApplicationContext());
-        fAuth = firebaseAuthService.getInstance();
+        fAuth = firebaseAuthService.getFirebaseClient();
         mCallbackManager = CallbackManager.Factory.create();
 
         mLayoutEmail = findViewById(R.id.inputLayoutUserEmail);
@@ -125,9 +126,8 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         mGoogleAuthBtn.setOnClickListener(v -> {
-            RC_SIGN_IN = FirebaseAuthService.getRCSignIn();
             Intent signInIntent = firebaseAuthService.signInGoogle(getApplicationContext());
-            startActivityForResult(signInIntent, RC_SIGN_IN);
+            startActivityForResult(signInIntent, FirebaseAuthService.getRCSignIn());
             Animatoo.animateFade(this);  //fire the zoom animation
             isGoogleAuth = true;
             }
@@ -167,12 +167,7 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
-                        firebaseFirestoreService.getUserInFirestore(value -> {
-                            if(!value) {
-                                firebaseFirestoreService.createNewUserByEmail(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail());
-                            }
-                        }, fAuth.getCurrentUser().getUid());
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.EMAIL);
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
@@ -253,13 +248,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
-                        firebaseFirestoreService.getUserInFirestore(value -> {
-                            if(!value) {
-                                firebaseFirestoreService.createNewUserByGoogle(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
-                                        fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
-                            }
-                        }, fAuth.getCurrentUser().getUid());
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.GOOGLE);
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
@@ -277,13 +266,7 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
-                        firebaseFirestoreService.getUserInFirestore(value -> {
-                            if(!value) {
-                                firebaseFirestoreService.createNewUserByFacebook(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
-                                        fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
-                            }
-                        }, fAuth.getCurrentUser().getUid());
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.FACEBOOK);
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();

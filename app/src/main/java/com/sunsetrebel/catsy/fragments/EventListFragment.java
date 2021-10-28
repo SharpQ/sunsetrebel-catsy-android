@@ -10,18 +10,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.google.firebase.Timestamp;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.AddEventDataAdapter;
 import com.sunsetrebel.catsy.models.AddEventModel;
 import com.sunsetrebel.catsy.utils.EventListService;
 import com.sunsetrebel.catsy.utils.EventThemes;
-import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-
-import me.everything.android.ui.overscroll.VerticalOverScrollBounceEffectDecorator;
-import me.everything.android.ui.overscroll.adapters.RecyclerViewOverScrollDecorAdapter;
 
 
 public class EventListFragment extends Fragment {
@@ -40,7 +42,7 @@ public class EventListFragment extends Fragment {
                 eventDate,
                 eventLocation,
                 eventDescr,
-                "Posted by " + eventAuthor,
+                getResources().getString(R.string.event_list_host_placeholder) + eventAuthor,
                 R.drawable.im_event_icon_example_1,
                 R.drawable.im_cat_bright
         );
@@ -57,6 +59,7 @@ public class EventListFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerPostagem.setLayoutManager(layoutManager);
         RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerViewEventList);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
         //Fill EventList with events
         if (EventListService.getListUpdateStatus()) {
             firebaseFirestoreService.getEventList(events -> {
@@ -73,7 +76,7 @@ public class EventListFragment extends Fragment {
                             }
                         }
                     }
-                    addEventToList(event.get("eventTitle").toString(), event.get("eventStartTime").toString(),
+                    addEventToList(event.get("eventTitle").toString(), simpleDateFormat.format(((Timestamp) event.get("eventStartTime")).toDate()),
                             event.get("eventLocation").toString(), event.get("eventDescription").toString(),
                             event.get("userName").toString());
                     AddEventDataAdapter adapter = new AddEventDataAdapter(postagens);
@@ -85,7 +88,7 @@ public class EventListFragment extends Fragment {
             List<Map<String, Object>> eventListPreviousResponse = EventListService.getCurrentEventList();
             if (eventListPreviousResponse != null) {
                 for (Map<String, Object> event : eventListPreviousResponse) {
-                    addEventToList(event.get("eventTitle").toString(), event.get("eventStartTime").toString(),
+                    addEventToList(event.get("eventTitle").toString(), simpleDateFormat.format(((Timestamp) event.get("eventStartTime")).toDate()),
                             event.get("eventLocation").toString(), event.get("eventDescription").toString(),
                             event.get("userName").toString());
                 }

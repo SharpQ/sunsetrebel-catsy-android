@@ -16,9 +16,9 @@ import com.sunsetrebel.catsy.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MessageFragment extends Fragment {
+public class ChatFragment extends Fragment {
 
-    public MessageFragment() {
+    public ChatFragment() {
         // Required empty public constructor
     }
 

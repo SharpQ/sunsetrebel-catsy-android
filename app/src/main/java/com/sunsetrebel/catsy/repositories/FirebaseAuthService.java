@@ -1,4 +1,4 @@
-package com.sunsetrebel.catsy.utils;
+package com.sunsetrebel.catsy.repositories;
 
 import android.content.Context;
 import android.content.Intent;
@@ -10,26 +10,59 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.utils.LoginType;
 
 public class FirebaseAuthService {
+    private static FirebaseAuthService instance;
     private GoogleSignInClient mGoogleSignInClient;
     private android.content.Context context;
-    private com.google.firebase.auth.FirebaseAuth fAuth;
+    private FirebaseAuth fAuth;
     private final static int RC_SIGN_IN = 123;
     private FirebaseUser user;
+
+    public FirebaseAuthService() {
+        fAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
+    }
+
+    public static FirebaseAuthService getInstance() {
+        if (instance == null) {
+            instance = new FirebaseAuthService();
+        }
+        return instance;
+    }
+
+    public com.google.firebase.auth.FirebaseAuth getFirebaseClient() {
+        if (fAuth == null) {
+            fAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
+        }
+        return fAuth;
+    }
 
     public static int getRCSignIn() {
         return RC_SIGN_IN;
     }
 
-    public com.google.firebase.auth.FirebaseAuth getInstance() {
-        return fAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
-    }
-
-    public void setFirebaseUser(FirebaseUser user) {
+    public void setFirebaseUser(FirebaseUser user, LoginType loginType) {
         this.user = user;
+        FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
+        firebaseFirestoreService.getUserInFirestore(value -> {
+            if(!value) {
+                if (loginType == LoginType.GOOGLE) {
+                    firebaseFirestoreService.createNewUserByGoogle(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
+                            fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
+                } else if (loginType == LoginType.FACEBOOK) {
+                    firebaseFirestoreService.createNewUserByFacebook(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
+                            fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
+                } else if (loginType == LoginType.PHONE) {
+                    firebaseFirestoreService.createNewUserByPhone(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getPhoneNumber());
+                } else if (loginType == LoginType.EMAIL) {
+                    firebaseFirestoreService.createNewUserByEmail(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail());
+                }
+            }
+        }, fAuth.getCurrentUser().getUid());
     }
 
     public void signOutFirebase() {
@@ -40,7 +73,7 @@ public class FirebaseAuthService {
         FacebookSdk.sdkInitialize(context);
     }
 
-    public boolean checkCurrentUser() {
+    public boolean isUserLoggedIn() {
         user = fAuth.getCurrentUser();
         if (user != null) {
             return true;

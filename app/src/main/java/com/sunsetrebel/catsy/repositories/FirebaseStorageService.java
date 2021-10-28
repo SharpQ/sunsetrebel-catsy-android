@@ -1,33 +1,41 @@
-package com.sunsetrebel.catsy.utils;
+package com.sunsetrebel.catsy.repositories;
 
 import android.net.Uri;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import java.util.UUID;
 
 
 public class FirebaseStorageService {
-    private FirebaseStorage fStorage = null;
+    private static FirebaseStorageService instance;
+    private FirebaseStorage fStorage;
+
+    public FirebaseStorageService() {
+        fStorage = FirebaseStorage.getInstance();
+    }
+
+    public static FirebaseStorageService getInstance() {
+        if (instance == null) {
+            instance = new FirebaseStorageService();
+        }
+        return instance;
+    }
+
+    private FirebaseStorage getFirebaseStorageClient() {
+        if (fStorage == null) {
+            fStorage = FirebaseStorage.getInstance();
+        }
+        return fStorage;
+    }
 
     public interface GetAvatarStorageReference {
         void onResponse(String downloadUrl);
     }
 
-    private FirebaseStorage getInstance() {
-        return fStorage = FirebaseStorage.getInstance();
-    }
-
-
     public void getAvatarStorageReference(GetAvatarStorageReference getAvatarStorageReference, String userId, Uri uri) {
-        fStorage = getInstance();
+        fStorage = getFirebaseStorageClient();
         StorageReference storageReference = fStorage.getReference("events/" + userId + "/" + UUID.randomUUID().toString() + ".jpg");
         storageReference.putFile(uri).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

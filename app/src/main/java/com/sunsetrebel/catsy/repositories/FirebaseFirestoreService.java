@@ -1,4 +1,4 @@
-package com.sunsetrebel.catsy.utils;
+package com.sunsetrebel.catsy.repositories;
 
 import android.util.Log;
 
@@ -9,15 +9,38 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.Source;
+import com.sunsetrebel.catsy.utils.AccessType;
+import com.sunsetrebel.catsy.utils.EventListService;
+
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 public class FirebaseFirestoreService {
-    private FirebaseFirestore fStore = null;
+    private static FirebaseFirestoreService instance;
+    private FirebaseFirestore fStore;
     private DocumentReference documentReference = null;
+
+    public FirebaseFirestoreService() {
+        fStore = FirebaseFirestore.getInstance();
+    }
+
+    public static FirebaseFirestoreService getInstance() {
+        if (instance == null) {
+            instance = new FirebaseFirestoreService();
+        }
+        return instance;
+    }
+
+    private FirebaseFirestore getFirestoreClient() {
+        if (fStore == null) {
+            fStore = FirebaseFirestore.getInstance();
+        }
+        return fStore;
+    }
 
     public interface GetUserCallback {
         void onResponse(Boolean value);
@@ -31,12 +54,8 @@ public class FirebaseFirestoreService {
         void onResponse(List<Map<String, Object>> events);
     }
 
-    private FirebaseFirestore getInstance() {
-        return fStore = FirebaseFirestore.getInstance();
-    }
-
     public void createNewUserByEmail(String userID, String fullName, String email){
-        fStore = getInstance();
+        fStore = getFirestoreClient();
         documentReference = fStore.collection("userProfiles").document(userID);
         if (fullName == null) {
             fullName = "userName";
@@ -50,7 +69,7 @@ public class FirebaseFirestoreService {
     }
 
     public void createNewUserByPhone(String userID, String fullName, String phone){
-        fStore = getInstance();
+        fStore = getFirestoreClient();
         documentReference = fStore.collection("userProfiles").document(userID);
         if (fullName == null) {
             fullName = "userName";
@@ -64,7 +83,7 @@ public class FirebaseFirestoreService {
     }
 
     public void createNewUserByFacebook(String userID, String fullName, String email, String phone, String profileUrl){
-        fStore = getInstance();
+        fStore = getFirestoreClient();
         documentReference = fStore.collection("userProfiles").document(userID);
         if (fullName == null) {
             fullName = "userName";
@@ -78,7 +97,7 @@ public class FirebaseFirestoreService {
     }
 
     public void createNewUserByGoogle(String userID, String fullName, String email, String phone, String profileUrl){
-        fStore = getInstance();
+        fStore = getFirestoreClient();
         documentReference = fStore.collection("userProfiles").document(userID);
         if (fullName == null) {
             fullName = "userName";
@@ -91,10 +110,10 @@ public class FirebaseFirestoreService {
         documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
     }
 
-    public void createNewPublicEvent(String userID, String eventTitle, String eventLocation, LatLng eventGeoLocation, String eventStartTime,
-                                     String eventEndTime, AccessTypes accessType, String eventDescr, String eventMinAge, String eventMaxAge,
+    public void createNewPublicEvent(String userID, String eventTitle, String eventLocation, LatLng eventGeoLocation, Date eventStartTime,
+                                     Date eventEndTime, AccessType accessType, String eventDescr, String eventMinAge, String eventMaxAge,
                                      String eventAttendees, String eventAvatar, List<Enum<?>> eventThemes, String userName){
-        fStore = getInstance();
+        fStore = getFirestoreClient();
         String eventId = fStore.collection("eventList").document().getId();
         documentReference = fStore.collection("eventList").document(eventId);
         Map<String, Object> event = new HashMap<>();
@@ -116,10 +135,10 @@ public class FirebaseFirestoreService {
         documentReference.set(event).addOnSuccessListener(aVoid -> Log.d("INFO", "New public event created! EventId: " + eventId));
     }
 
-    public void createNewPrivateEvent(String userID, String eventTitle, String eventLocation, LatLng eventGeoLocation, String eventStartTime,
-                                      String eventEndTime, AccessTypes accessType, String eventDescr, String eventMinAge, String eventMaxAge,
+    public void createNewPrivateEvent(String userID, String eventTitle, String eventLocation, LatLng eventGeoLocation, Date eventStartTime,
+                                      Date eventEndTime, AccessType accessType, String eventDescr, String eventMinAge, String eventMaxAge,
                                       String eventAttendees, String eventAvatar, List<Enum<?>> eventThemes, String userName){
-        fStore = getInstance();
+        fStore = getFirestoreClient();
         String eventId = fStore.collection("userProfiles").document(userID).collection("userEvents").document().getId();
         documentReference = fStore.collection("userProfiles").document(userID).collection("userEvents").document(eventId);
         Map<String, Object> event = new HashMap<>();
@@ -142,7 +161,7 @@ public class FirebaseFirestoreService {
     }
 
     public void getUserInFirestore(GetUserCallback getUserCallback, String userId){
-        fStore = getInstance();
+        fStore = getFirestoreClient();
         DocumentReference existingUser = fStore.collection("userProfiles").document(userId);
         existingUser.get(Source.SERVER).addOnCompleteListener(task -> {
             DocumentSnapshot document;
@@ -152,7 +171,7 @@ public class FirebaseFirestoreService {
     }
 
     public void getUserNameInFirestore(GetUserNameCallback getUserNameCallback, String userId){
-        fStore = getInstance();
+        fStore = getFirestoreClient();
         DocumentReference existingUser = fStore.collection("userProfiles").document(userId);
         existingUser.get(Source.SERVER).addOnCompleteListener(task -> {
             DocumentSnapshot document;
@@ -162,7 +181,7 @@ public class FirebaseFirestoreService {
     }
 
     public void getEventList(GetEventsCallback getEventsCallback){
-        fStore = getInstance();
+        fStore = getFirestoreClient();
         CollectionReference eventList = fStore.collection("eventList");
         eventList.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

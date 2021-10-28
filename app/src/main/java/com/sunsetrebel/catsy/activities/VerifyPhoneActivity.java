@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,9 +19,10 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.sunsetrebel.catsy.utils.FirebaseAuthService;
+import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.utils.LoginType;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -36,8 +36,8 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     private String phoneNumber, fullName, systemVerificationCode, verifyDescription;
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private boolean isTutorialNextPage;
-    private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
-    private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
+    private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
+    private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private Activity mActivity;
     private static final long START_TIME_IN_MILLIS = 60000;
     private CountDownTimer mCountDownTimer;
@@ -49,7 +49,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
         mActivity = VerifyPhoneActivity.this;
-        fAuth = firebaseAuthService.getInstance();
+        fAuth = firebaseAuthService.getFirebaseClient();
 
         verifyBtn = findViewById(R.id.buttonVerify);
         inputLayoutCode = findViewById(R.id.inputLayoutSmsCode);
@@ -132,12 +132,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     private void signInUserByCredentials(PhoneAuthCredential credential){
         fAuth.signInWithCredential(credential).addOnCompleteListener(VerifyPhoneActivity.this, task -> {
             if (task.isSuccessful()){
-                firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
-                firebaseFirestoreService.getUserInFirestore(value -> {
-                    if(!value) {
-                        firebaseFirestoreService.createNewUserByPhone(fAuth.getCurrentUser().getUid(), fullName, phoneNumber);
-                    }
-                }, fAuth.getCurrentUser().getUid());
+                firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.PHONE);
                 Intent intent;
                 if (isTutorialNextPage) {
                     intent = new Intent(getApplicationContext(), TutorialActivity.class);

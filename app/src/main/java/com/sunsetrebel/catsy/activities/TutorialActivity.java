@@ -4,16 +4,15 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
-import com.sunsetrebel.catsy.utils.FirebaseAuthService;
+import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
 
 public class TutorialActivity extends AppCompatActivity {
     private AppCompatButton mSkipBtn;
     private AppCompatButton mSignOut;
-    private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
+    private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

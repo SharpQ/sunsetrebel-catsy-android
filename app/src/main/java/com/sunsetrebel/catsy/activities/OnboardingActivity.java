@@ -17,8 +17,9 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.SliderAdapter;
-import com.sunsetrebel.catsy.utils.FirebaseAuthService;
-import com.sunsetrebel.catsy.utils.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
+import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.utils.LoginType;
 import com.sunsetrebel.catsy.utils.MediaPlayerService;
 
 public class OnboardingActivity extends AppCompatActivity {
@@ -29,17 +30,15 @@ public class OnboardingActivity extends AppCompatActivity {
     private AppCompatButton mToRegisterBtn;
     private AppCompatButton mToLoginBtn;
     private AppCompatButton mGoogleAuthBtn;
-    private int RC_SIGN_IN;
     private com.google.firebase.auth.FirebaseAuth fAuth;
-    private final FirebaseAuthService firebaseAuthService = new FirebaseAuthService();
-    private final FirebaseFirestoreService firebaseFirestoreService = new FirebaseFirestoreService();
+    private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
+    private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private Activity mActivity;
 
     @Override
     protected void onStart() {
         super.onStart();
-        MediaPlayerService.playIntro(this);
-        if(firebaseAuthService.checkCurrentUser()) {
+        if(firebaseAuthService.isUserLoggedIn()) {
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
             Animatoo.animateFade(this);  //fire the zoom animation
             finish();
@@ -52,7 +51,7 @@ public class OnboardingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_onboarding);
         mActivity = OnboardingActivity.this;
         firebaseAuthService.createGoogleAuthRequestGetInstance(getApplicationContext());
-        fAuth = firebaseAuthService.getInstance();
+        fAuth = firebaseAuthService.getFirebaseClient();
 
         mSlideViewPager = findViewById(R.id.slideViewPager);
         mDotLayout = findViewById(R.id.dotsLayout);
@@ -77,9 +76,8 @@ public class OnboardingActivity extends AppCompatActivity {
         });
 
         mGoogleAuthBtn.setOnClickListener(v -> {
-                    RC_SIGN_IN = FirebaseAuthService.getRCSignIn();
                     Intent signInIntent = firebaseAuthService.signInGoogle(getApplicationContext());
-                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                    startActivityForResult(signInIntent, FirebaseAuthService.getRCSignIn());
                     Animatoo.animateFade(this);  //fire the zoom animation
                 }
         );
@@ -101,11 +99,8 @@ public class OnboardingActivity extends AppCompatActivity {
     }
 
     ViewPager.OnPageChangeListener viewListener = new ViewPager.OnPageChangeListener() {
-
         @Override
-        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-        }
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {}
 
         @Override
         public void onPageSelected(int position) {
@@ -113,9 +108,7 @@ public class OnboardingActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onPageScrollStateChanged(int state) {
-
-        }
+        public void onPageScrollStateChanged(int state) {}
     };
 
     @Override
@@ -133,13 +126,7 @@ public class OnboardingActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser());
-                        firebaseFirestoreService.getUserInFirestore(value -> {
-                            if(!value) {
-                                firebaseFirestoreService.createNewUserByGoogle(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
-                                        fAuth.getCurrentUser().getPhoneNumber(), fAuth.getCurrentUser().getPhotoUrl().toString());
-                            }
-                        }, fAuth.getCurrentUser().getUid());
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.GOOGLE);
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();

@@ -11,7 +11,7 @@ import com.sunsetrebel.catsy.fragments.AccountFragment;
 import com.sunsetrebel.catsy.fragments.AddEventFragment;
 import com.sunsetrebel.catsy.fragments.EventListFragment;
 import com.sunsetrebel.catsy.fragments.MapsFragment;
-import com.sunsetrebel.catsy.fragments.MessageFragment;
+import com.sunsetrebel.catsy.fragments.ChatFragment;
 import com.sunsetrebel.catsy.utils.MediaPlayerService;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
@@ -39,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        MediaPlayerService.playIntro(this);
         hideSystemUI();
 
         Fragment mapsfragment = new MapsFragment();
@@ -53,23 +54,18 @@ public class MainActivity extends AppCompatActivity {
             switch (newTab.getId()) {
                 case R.id.navigationBarMap:
                     fragment = new MapsFragment();
-//                    hideSystemUI();
                     break;
                 case R.id.navigationBarEventList:
                     fragment = new EventListFragment();
-//                    showSystemUI();
                     break;
                 case R.id.navigationBarNewEvent:
                     fragment = new AddEventFragment();
-//                    hideSystemUI();
                     break;
                 case R.id.navigationBarChat:
-                    fragment = new MessageFragment();
-//                    showSystemUI();
+                    fragment = new ChatFragment();
                     break;
                 case R.id.navigationBarAccount:
                     fragment = new AccountFragment();
-//                    showSystemUI();
                     break;
             }
             fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, fragment).commit();

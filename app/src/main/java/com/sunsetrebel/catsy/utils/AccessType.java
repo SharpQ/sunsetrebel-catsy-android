@@ -1,6 +1,6 @@
 package com.sunsetrebel.catsy.utils;
 
-public enum AccessTypes {
+public enum AccessType {
     PUBLIC,
     PRIVATE,
     SELECTIVE
