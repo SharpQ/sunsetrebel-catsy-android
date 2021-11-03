@@ -51,7 +51,7 @@
     <string name="add_event_maps_confirm_button">Confirm</string>
     <string name="add_event_event_min_age">Minimum age</string>
     <string name="add_event_event_max_age">Maximum age</string>
-    <string name="add_event_event_attendees">Number of attendees</string>
+    <string name="add_event_event_attendees">Maximum number of people</string>
     <string name="event_theme_sport">Sport</string>
     <string name="event_theme_music">Music</string>
     <string name="event_theme_art">Art</string>

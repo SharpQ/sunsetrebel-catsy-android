@@ -49,7 +49,6 @@ public class LoginActivity extends AppCompatActivity {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private CallbackManager mCallbackManager;
     private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
-    private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private Activity mActivity;
     private boolean isOTPregistration = true;
     private CountryCodePicker ccp;

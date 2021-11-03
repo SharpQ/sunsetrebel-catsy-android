@@ -37,7 +37,6 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private boolean isTutorialNextPage;
     private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
-    private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private Activity mActivity;
     private static final long START_TIME_IN_MILLIS = 60000;
     private CountDownTimer mCountDownTimer;

@@ -32,7 +32,6 @@ public class OnboardingActivity extends AppCompatActivity {
     private AppCompatButton mGoogleAuthBtn;
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
-    private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private Activity mActivity;
 
     @Override

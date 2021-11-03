@@ -133,7 +133,6 @@
             android:fontFamily="@font/audiowide"
             android:gravity="center_vertical|start"
             android:inputType="textVisiblePassword|textNoSuggestions"
-            android:text="666"
             android:textColor="@color/primaryTextColor"
             android:textSize="12sp"
             android:longClickable="false"
