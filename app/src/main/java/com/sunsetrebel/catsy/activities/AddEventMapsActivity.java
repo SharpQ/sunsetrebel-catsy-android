@@ -52,7 +52,6 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     private List<AutocompletePrediction> predictionList;
     private MaterialSearchBar materialSearchBar;
     private AppCompatButton confirmLocationButton;
-    private ImageButton backButton;
     private TextView locationConfirmText;
     private LatLng eventLatLng;
     private String eventAddress;
@@ -84,7 +83,6 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
-
         materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
             public void onSearchStateChanged(boolean enabled) {
@@ -98,11 +96,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
 
             @Override
             public void onButtonClicked(int buttonCode) {
-                if (buttonCode == MaterialSearchBar.BUTTON_NAVIGATION) {
-                    /** Opening or closing a navigation drawer **/
-                } else if (buttonCode == MaterialSearchBar.BUTTON_BACK) {
-                    materialSearchBar.disableSearch();
-                }
+
             }
 
         });
@@ -150,7 +144,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
             }
         });
 
-        materialSearchBar.setSuggstionsClickListener(new SuggestionsAdapter.OnItemViewClickListener() {
+        materialSearchBar.setSuggestionsClickListener(new SuggestionsAdapter.OnItemViewClickListener() {
             @Override
             public void OnItemClickListener(int position, View v) {
                 if (position >= predictionList.size()) {
@@ -214,15 +208,6 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                 }
             }
         });
-
-        backButton = findViewById(R.id.imageButtonBack);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
     }
 
     @SuppressLint("MissingPermission")
@@ -237,9 +222,9 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                 if (materialSearchBar.isSuggestionsVisible())
                     locationConfirmText.clearComposingText();
                     materialSearchBar.clearSuggestions();
-                if (materialSearchBar.isSearchEnabled())
+                if (materialSearchBar.isSearchOpened())
                     locationConfirmText.clearComposingText();
-                materialSearchBar.disableSearch();
+                materialSearchBar.closeSearch();
                 return false;
             }
         });

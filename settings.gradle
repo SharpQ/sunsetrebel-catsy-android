@@ -1,2 +1,3 @@
+include ':MaterialSearchBarLibrary'
 include ':app'
 rootProject.name = "Catsy"

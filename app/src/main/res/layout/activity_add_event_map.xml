@@ -16,33 +16,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/imageButtonBack"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:background="@drawable/ui_maps_fragment_searchview"
-        android:src="@drawable/im_back_48"
-        app:borderWidth="0dp"
-        app:elevation="1dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/searchBar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/addEventBigFullMap"
-        app:layout_constraintVertical_bias="0.05"
-        app:pressedTranslationZ="1dp" />
-
     <com.mancj.materialsearchbar.MaterialSearchBar
         android:id="@+id/searchBar"
         style="@style/PlacesSearchBarTheme"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/ui_maps_fragment_filter"
+        android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:elevation="5dp"
         android:outlineProvider="bounds"
         app:mt_hint="Search a place"
-        app:mt_maxSuggestionsCount="10"
+        app:mt_maxSuggestionsCount="5"
         app:mt_navIconEnabled="false"
         app:mt_placeholder="@string/add_event_maps_search_bar_placeholder"
         app:mt_roundedSearchBarEnabled="false"
@@ -50,9 +33,9 @@
         app:mt_speechMode="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/imageButtonBack"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05"/>
+        app:layout_constraintVertical_bias="0.07"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
