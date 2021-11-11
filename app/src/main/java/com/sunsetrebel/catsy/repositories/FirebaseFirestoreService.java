@@ -250,8 +250,10 @@ public class FirebaseFirestoreService {
 
     private List<EventThemes> convertEventThemes(ArrayList<Object[]> eventObjects) {
         List<EventThemes> convertedEventThemeServices = new ArrayList<>();
-        for (Object object : eventObjects) {
-            convertedEventThemeServices.add(EventThemes.valueOf(object.toString()));
+        if (eventObjects != null) {
+            for (Object object : eventObjects) {
+                convertedEventThemeServices.add(EventThemes.valueOf(object.toString()));
+            }
         }
         return convertedEventThemeServices;
     }

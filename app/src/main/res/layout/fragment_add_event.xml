@@ -6,10 +6,7 @@
     android:id="@+id/scrollViewAddEvent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/im_background_concert"
-    android:scrollbars="none"
-    android:requiresFadingEdge="vertical"
-    android:fadingEdgeLength="100dp">
+    android:background="@drawable/im_background_concert">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
