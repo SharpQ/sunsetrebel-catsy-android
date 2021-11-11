@@ -61,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigationBarNewEvent:
                     fragment = new AddEventFragment();
                     break;
-                case R.id.navigationBarChat:
-                    fragment = new ChatFragment();
-                    break;
+//                case R.id.navigationBarChat:
+//                    fragment = new ChatFragment();
+//                    break;
                 case R.id.navigationBarAccount:
                     fragment = new AccountFragment();
                     break;

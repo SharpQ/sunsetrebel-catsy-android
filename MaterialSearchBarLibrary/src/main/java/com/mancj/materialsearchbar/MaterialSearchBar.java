@@ -825,11 +825,11 @@ public class MaterialSearchBar extends FrameLayout implements View.OnClickListen
         if (navButtonEnabled) {
             navIcon.setVisibility(VISIBLE);
             navIcon.setClickable(true);
-            arrowIcon.setVisibility(GONE);
+//            arrowIcon.setVisibility(GONE);
         } else {
             navIcon.setVisibility(GONE);
             navIcon.setClickable(false);
-            arrowIcon.setVisibility(VISIBLE);
+//            arrowIcon.setVisibility(VISIBLE);
         }
         navIcon.requestLayout();
         placeHolder.requestLayout();

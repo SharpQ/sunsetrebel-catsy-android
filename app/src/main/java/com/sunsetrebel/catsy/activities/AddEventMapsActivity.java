@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +54,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     private MaterialSearchBar materialSearchBar;
     private AppCompatButton confirmLocationButton;
     private TextView locationConfirmText;
+    private ImageView arrowView;
     private LatLng eventLatLng;
     private String eventAddress;
     private Geocoder geocoder;
@@ -75,6 +77,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
         materialSearchBar = findViewById(R.id.searchBar);
         confirmLocationButton = findViewById(R.id.buttonConfirm);
         locationConfirmText = findViewById(R.id.locationConfirmText);
+        arrowView = findViewById(R.id.mt_arrow);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.addEventBigFullMap);
         mapFragment.getMapAsync(this);
@@ -83,22 +86,11 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
         placesClient = Places.createClient(this);
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
-        materialSearchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
+        arrowView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSearchStateChanged(boolean enabled) {
-
+            public void onClick(View v) {
+                finish();
             }
-
-            @Override
-            public void onSearchConfirmed(CharSequence text) {
-                startSearch(text.toString(), true, null, true);
-            }
-
-            @Override
-            public void onButtonClicked(int buttonCode) {
-
-            }
-
         });
 
         materialSearchBar.addTextChangeListener(new TextWatcher() {

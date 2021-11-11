@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Last request"
+        android:fontFamily="@font/audiowide"
         android:id="@+id/text"
         android:textColor="@android:color/white" />
 
