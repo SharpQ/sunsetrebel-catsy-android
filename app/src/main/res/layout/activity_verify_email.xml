@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/im_background_general"
-    tools:context=".activities.VerifyPhoneActivity">
+    tools:context=".activities.VerifyEmailActivity">
 
     <TextView
-        android:id="@+id/textVerifyPhoneTitle"
+        android:id="@+id/tvVerifyEmailTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/audiowide"
-        android:text="@string/verify_phone_title"
+        android:text="@string/verify_phone_email"
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"
         android:textSize="25sp"
@@ -23,40 +23,21 @@
         app:layout_constraintVertical_bias="0.03" />
 
     <TextView
-        android:id="@+id/textVerifyPhoneDescription"
+        android:id="@+id/tvVerifyEmailDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:fontFamily="@font/audiowide"
-        android:text="@string/verify_phone_description"
+        android:text="@string/verify_email_description"
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textVerifyPhoneTitle"
+        app:layout_constraintTop_toBottomOf="@+id/tvVerifyEmailTitle"
         app:layout_constraintVertical_bias="0.2" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/InitialFlowTextInputLayout"
-        android:id="@+id/inputLayoutSmsCode"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textVerifyPhoneDescription"
-        app:layout_constraintVertical_bias="0.2">
-        <com.google.android.material.textfield.TextInputEditText
-            style="@style/InitialFlowTextEdit"
-            android:id="@+id/inputEditSmsCode"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/verify_number_hint_code"
-            android:inputType="number" />
-    </com.google.android.material.textfield.TextInputLayout>
 
     <ProgressBar
         android:id="@+id/progressBarVerify"
@@ -65,38 +46,28 @@
         android:layout_height="wrap_content"
         android:indeterminateDrawable="@drawable/ui_progress_bar"
         android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/buttonVerify"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonResentCode"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonVerify"
-        style="@style/DefaultButton"
-        android:text="@string/verify_button_verify"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutSmsCode"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintTop_toBottomOf="@+id/buttonResentLink"
+        app:layout_constraintVertical_bias="0.5" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonResentCode"
+        android:id="@+id/buttonResentLink"
         android:backgroundTint="@color/primaryColor"
         android:layout_width="150dp"
         android:layout_height="40dp"
         app:strokeColor="@color/primaryLightColor"
         android:fontFamily="@font/audiowide"
-        android:text="@string/verify_button_resent_code"
+        android:text="@string/verify_button_resent_link"
         android:textAlignment="center"
         android:textColor="@color/primaryTextColor"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutSmsCode"
-        app:layout_constraintVertical_bias="0.1" />
+        app:layout_constraintTop_toBottomOf="@+id/tvVerifyEmailDescription"
+        app:layout_constraintVertical_bias="0.2" />
 
     <TextView
         android:id="@+id/textResetCountdown"
@@ -110,8 +81,8 @@
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonResentCode"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutSmsCode"
-        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintStart_toEndOf="@+id/buttonResentLink"
+        app:layout_constraintTop_toBottomOf="@+id/tvVerifyEmailDescription"
+        app:layout_constraintVertical_bias="0.2"
         app:layout_constraintHorizontal_bias="0.01"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

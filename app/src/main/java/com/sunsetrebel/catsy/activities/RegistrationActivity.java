@@ -103,7 +103,6 @@ public class RegistrationActivity extends AppCompatActivity {
         });
 
         mFacebookAuthBtn.setOnClickListener(v -> {
-
             LoginManager.getInstance().logInWithReadPermissions(RegistrationActivity.this, Arrays.asList("public_profile", "email"));
 
         });
@@ -176,10 +175,21 @@ public class RegistrationActivity extends AppCompatActivity {
             } else {
                 fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.EMAIL);
-                        startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
-                        Animatoo.animateFade(this);  //fire the zoom animation
-                        finish();
+                        if (fAuth.getCurrentUser().isEmailVerified()) {
+                            firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.EMAIL);
+                            startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
+                            Animatoo.animateFade(this);  //fire the zoom animation
+                            finish();
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), VerifyEmailActivity.class);
+                            intent.putExtra("email", email);
+                            intent.putExtra("fullName", fullName);
+                            intent.putExtra("isTutorialNextPage", true);
+                            startActivity(intent);
+                            Animatoo.animateFade(this);  //fire the zoom animation
+                            setUIStateEmail();
+                            progressBar.setVisibility(View.GONE);
+                        }
                     } else {
                         progressBar.setVisibility(View.GONE);
                         restartActivity(mActivity);

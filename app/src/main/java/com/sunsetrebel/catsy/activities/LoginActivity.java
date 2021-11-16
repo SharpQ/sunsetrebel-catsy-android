@@ -18,6 +18,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.login.Login;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -33,6 +34,7 @@ import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.utils.LoginType;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -166,15 +168,25 @@ public class LoginActivity extends AppCompatActivity {
             } else {
                 fAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.EMAIL);
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        Animatoo.animateFade(this);  //fire the zoom animation
-                        finish();
+                        if (fAuth.getCurrentUser().isEmailVerified()) {
+                            firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.EMAIL);
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                            Animatoo.animateFade(this);  //fire the zoom animation
+                            finish();
+                        } else {
+                            Intent intent = new Intent(getApplicationContext(), VerifyEmailActivity.class);
+                            intent.putExtra("email", email);
+                            intent.putExtra("isTutorialNextPage", false);
+                            startActivity(intent);
+                            Animatoo.animateFade(this);  //fire the zoom animation
+                            setUIStateEmail();
+                            progressBar.setVisibility(View.GONE);
+                        }
                     } else {
                         progressBar.setVisibility(View.GONE);
                         restartActivity(mActivity);
                         setUIStatePhone();
-                        Toast.makeText(LoginActivity.this, "Email authentication failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "Email authentication failed!" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }

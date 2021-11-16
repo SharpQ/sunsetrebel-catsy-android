@@ -40,6 +40,7 @@
             android:value="@string/facebook_app_id" />
 
         <activity android:name=".activities.VerifyPhoneActivity" />
+        <activity android:name=".activities.VerifyEmailActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:windowSoftInputMode="adjustResize" />
