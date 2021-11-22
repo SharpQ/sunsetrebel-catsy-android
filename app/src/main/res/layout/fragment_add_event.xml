@@ -13,7 +13,6 @@
         android:layout_height="wrap_content"
         android:fitsSystemWindows="false"
         android:orientation="vertical"
-        tools:context=".activities.MainActivity"
         android:requiresFadingEdge="none">
 
         <androidx.appcompat.widget.AppCompatTextView

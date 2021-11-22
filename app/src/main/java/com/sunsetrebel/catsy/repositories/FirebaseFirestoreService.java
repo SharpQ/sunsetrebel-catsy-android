@@ -57,49 +57,7 @@ public class FirebaseFirestoreService {
         void onResponse(String value);
     }
 
-    public void createNewUserByEmail(String userID, String fullName, String email){
-        fStore = getFirestoreClient();
-        documentReference = fStore.collection("userProfiles").document(userID);
-        if (fullName == null) {
-            fullName = "userName";
-        }
-        Map<String, Object> user = new HashMap<>();
-        user.put("fullName", fullName);
-        user.put("email", email);
-        user.put("phone", null);
-        user.put("profileImg", null);
-        documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
-    }
-
-    public void createNewUserByPhone(String userID, String fullName, String phone){
-        fStore = getFirestoreClient();
-        documentReference = fStore.collection("userProfiles").document(userID);
-        if (fullName == null) {
-            fullName = "userName";
-        }
-        Map<String, Object> user = new HashMap<>();
-        user.put("fullName", fullName);
-        user.put("email", null);
-        user.put("phone", phone);
-        user.put("profileImg", null);
-        documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
-    }
-
-    public void createNewUserByFacebook(String userID, String fullName, String email, String phone, String profileUrl){
-        fStore = getFirestoreClient();
-        documentReference = fStore.collection("userProfiles").document(userID);
-        if (fullName == null) {
-            fullName = "userName";
-        }
-        Map<String, Object> user = new HashMap<>();
-        user.put("fullName", fullName);
-        user.put("email", email);
-        user.put("phone", phone);
-        user.put("profileImg", profileUrl);
-        documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
-    }
-
-    public void createNewUserByGoogle(String userID, String fullName, String email, String phone, String profileUrl){
+    public void createNewUser(String userID, String fullName, String email, String phone, String profileUrl){
         fStore = getFirestoreClient();
         documentReference = fStore.collection("userProfiles").document(userID);
         if (fullName == null) {
