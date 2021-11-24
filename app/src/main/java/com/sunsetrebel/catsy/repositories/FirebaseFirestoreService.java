@@ -1,8 +1,10 @@
 package com.sunsetrebel.catsy.repositories;
 
 import android.util.Log;
+
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
@@ -16,12 +18,12 @@ import com.google.firebase.firestore.Source;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.utils.AccessType;
 import com.sunsetrebel.catsy.utils.EventThemes;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 public class FirebaseFirestoreService {
@@ -71,14 +73,21 @@ public class FirebaseFirestoreService {
         documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
     }
 
-    public void createNewPublicEvent(String hostId, String hostName, String hostProfileImg, String eventTitle, String eventLocation, LatLng eventGeoLocation, Date eventStartTime,
-                                     Date eventEndTime, AccessType eventAccessType, String eventDescr, int eventMinAge, int eventMaxAge,
-                                     int eventMaxPerson, String eventAvatar, List<Enum<?>> eventThemes){
+    public void createNewEvent(String hostId, String hostName, String hostProfileImg, String eventTitle, String eventLocation, LatLng eventGeoLocation,
+                               Date eventStartTime, Date eventEndTime, AccessType eventAccessType, String eventDescr, Integer eventMinAge,
+                               Integer eventMaxAge, Integer eventMaxPerson, String eventAvatar, List<Enum<?>> eventThemes){
         fStore = getFirestoreClient();
-        String eventId = fStore.collection("eventList").document().getId();
-        documentReference = fStore.collection("eventList").document(eventId);
+        String eventId = null;
+        if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
+            eventId = fStore.collection("eventList").document().getId();
+            documentReference = fStore.collection("eventList").document(eventId);
+        } else if (eventAccessType == AccessType.PRIVATE) {
+            eventId = fStore.collection("userProfiles").document(hostId).collection("userEvents").document().getId();
+            documentReference = fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId);
+        }
+        String finalEventId = eventId;
         Map<String, Object> event = new HashMap<>();
-        event.put("eventId", eventId);
+        event.put("eventId", finalEventId);
         event.put("eventTitle", eventTitle);
         event.put("eventLocation", eventLocation);
         event.put("eventGeoLocation", eventGeoLocation);
@@ -95,34 +104,7 @@ public class FirebaseFirestoreService {
         event.put("hostId", hostId);
         event.put("hostName", hostName);
         event.put("hostProfileImg", hostProfileImg);
-        documentReference.set(event).addOnSuccessListener(aVoid -> Log.d("INFO", "New public event created! EventId: " + eventId));
-    }
-
-    public void createNewPrivateEvent(String hostId, String hostName, String hostProfileImg, String eventTitle, String eventLocation, LatLng eventGeoLocation, Date eventStartTime,
-                                      Date eventEndTime, AccessType eventAccessType, String eventDescr, int eventMinAge, int eventMaxAge,
-                                      int eventMaxPerson, String eventAvatar, List<Enum<?>> eventThemes){
-        fStore = getFirestoreClient();
-        String eventId = fStore.collection("userProfiles").document(hostId).collection("userEvents").document().getId();
-        documentReference = fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId);
-        Map<String, Object> event = new HashMap<>();
-        event.put("eventId", eventId);
-        event.put("eventTitle", eventTitle);
-        event.put("eventLocation", eventLocation);
-        event.put("eventGeoLocation", eventGeoLocation);
-        event.put("eventStartTime", eventStartTime);
-        event.put("eventEndTime", eventEndTime);
-        event.put("eventAccessType", eventAccessType);
-        event.put("eventDescription", eventDescr);
-        event.put("eventMinAge", eventMinAge);
-        event.put("eventMaxAge", eventMaxAge);
-        event.put("eventParticipants", 1);
-        event.put("eventMaxPerson", eventMaxPerson);
-        event.put("eventAvatar", eventAvatar);
-        event.put("eventThemes", eventThemes);
-        event.put("hostId", hostId);
-        event.put("hostName", hostName);
-        event.put("hostProfileImg", hostProfileImg);
-        documentReference.set(event).addOnSuccessListener(aVoid -> Log.d("INFO", "New private event created! EventId: " + eventId));
+        documentReference.set(event).addOnSuccessListener(aVoid -> Log.d("INFO", "New event created! EventId: " + finalEventId));
     }
 
     public void getUserInFirestore(GetUserCallback getUserCallback, String userId){

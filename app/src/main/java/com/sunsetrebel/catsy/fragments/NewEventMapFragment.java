@@ -1,24 +1,26 @@
-package com.sunsetrebel.catsy.activities;
+package com.sunsetrebel.catsy.fragments;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Intent;
+import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -43,12 +45,14 @@ import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
 import com.sunsetrebel.catsy.utils.PermissionUtils;
+import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AddEventMapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class NewEventMapFragment extends Fragment implements OnMapReadyCallback {
     private PlacesClient placesClient;
     private List<AutocompletePrediction> predictionList;
     private MaterialSearchBar materialSearchBar;
@@ -59,37 +63,35 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     private String eventAddress;
     private Geocoder geocoder;
     private GoogleMap mMap;
+    private NewEventViewModel newEventViewModel;
 
-    private void hideSystemUI() {
-        View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-        getWindow().setStatusBarColor(Color.parseColor("#00000000"));
+    public NewEventMapFragment() {
+        // Required empty public constructor
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_event_map);
-        hideSystemUI();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.fragment_new_event_map, container, false);
+        newEventViewModel = new ViewModelProvider(requireActivity()).get(NewEventViewModel.class);
 
-        materialSearchBar = findViewById(R.id.searchBar);
-        confirmLocationButton = findViewById(R.id.buttonConfirm);
-        locationConfirmText = findViewById(R.id.locationConfirmText);
-        arrowView = findViewById(R.id.mt_arrow);
+        materialSearchBar = v.findViewById(R.id.searchBar);
+        confirmLocationButton = v.findViewById(R.id.buttonConfirm);
+        locationConfirmText = v.findViewById(R.id.locationConfirmText);
+        arrowView = v.findViewById(R.id.mt_arrow);
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.addEventBigFullMap);
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.addEventBigFullMap);
         mapFragment.getMapAsync(this);
-        geocoder = GoogleMapService.getGeocoderInstance(getApplicationContext());
-        Places.initialize(AddEventMapsActivity.this, getString(R.string.google_maps_key));
-        placesClient = Places.createClient(this);
+        geocoder = GoogleMapService.getGeocoderInstance(getContext());
+        Places.initialize(getContext(), getString(R.string.google_maps_key));
+        placesClient = Places.createClient(getContext());
         final AutocompleteSessionToken token = AutocompleteSessionToken.newInstance();
 
         arrowView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                getParentFragmentManager().popBackStack();
             }
         });
 
@@ -150,7 +152,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                 locationConfirmText.setText(eventAddress);
                 
                 materialSearchBar.clearSuggestions();
-                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null)
                     imm.hideSoftInputFromWindow(materialSearchBar.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
                 final String placeId = selectedPrediction.getPlaceId();
@@ -192,21 +194,20 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
             @Override
             public void onClick(View v) {
                 if (eventLatLng != null) {
-                    Intent resultIntent = new Intent();
-                    resultIntent.putExtra("EVENT_LAT_LNG", eventLatLng);
-                    resultIntent.putExtra("EVENT_ADDRESS", eventAddress);
-                    setResult(Activity.RESULT_OK, resultIntent);
-                    finish();
+                    newEventViewModel.setNewEventLocation(eventAddress, eventLatLng);
+                    getParentFragmentManager().beginTransaction().addToBackStack("NewEventMapFragment")
+                            .replace(R.id.frameLayoutMain, new NewEventFinalFragment()).commit();
                 }
             }
         });
+        return v;
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        GoogleMapService.setupMapActivity(googleMap, getApplicationContext(), AddEventMapsActivity.this);
+        GoogleMapService.setupMapActivity(googleMap, getContext(), getActivity());
 
         googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
@@ -239,8 +240,10 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
                 if (addresses == null || !addresses.isEmpty()) {
                     eventAddress = addresses.get(0).getAddressLine(0);
                     locationConfirmText.setText(eventAddress);
+                    materialSearchBar.clearSuggestions();
+                    materialSearchBar.setText(eventAddress);
                 } else {
-                    locationConfirmText.setText("Can't identify address. Please use search field");
+                    locationConfirmText.setText(getResources().getText(R.string.new_event_maps_popup_error_text));
                 }
             }
         });
@@ -251,7 +254,7 @@ public class AddEventMapsActivity extends AppCompatActivity implements OnMapRead
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PermissionUtils.getAccessLocationRequestCode()) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                GoogleMapService.zoomToUserLocation(getApplicationContext(), mMap);
+                GoogleMapService.zoomToUserLocation(getContext(), mMap);
             } else {
                 Log.e("INFO", "Permissions not granted");
             }

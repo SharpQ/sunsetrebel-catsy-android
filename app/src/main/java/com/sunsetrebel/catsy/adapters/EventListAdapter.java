@@ -14,10 +14,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.sunsetrebel.catsy.models.EventModel;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import com.sunsetrebel.catsy.R;
 
@@ -90,9 +88,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             super(itemView);
             tvEventTitle = itemView.findViewById(R.id.textViewEventTitle);
             tvHostName = itemView.findViewById(R.id.textViewHostName);
-            tvEventStartTime = itemView.findViewById(R.id.textViewStartTime);
+            tvEventStartTime = itemView.findViewById(R.id.til_start_time);
             tvEventLocation = itemView.findViewById(R.id.textViewLocation);
-            tvEventDescription = itemView.findViewById(R.id.textViewEventDescription);
+            tvEventDescription = itemView.findViewById(R.id.tiet_event_description);
             tvEventParticipants = itemView.findViewById(R.id.textViewParticipants);
             ivHostAvatar = itemView.findViewById(R.id.imageViewHostAvatar);
             ivEventAvatar = itemView.findViewById(R.id.imageViewEventAvatar);

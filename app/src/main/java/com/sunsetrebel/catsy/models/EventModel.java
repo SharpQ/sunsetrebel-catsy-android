@@ -120,23 +120,23 @@ public class EventModel {
 
     public void setEventDescr(String eventDescr) { this.eventDescr = eventDescr; }
 
-    public int getEventMinAge() {
+    public Integer getEventMinAge() {
         return eventMinAge;
     }
 
     public void setEventMinAge(Integer eventMinAge) { this.eventMinAge = eventMinAge; }
 
-    public int getEventMaxAge() {
+    public Integer getEventMaxAge() {
         return eventMaxAge;
     }
 
     public void setEventMaxAge(Integer eventMaxAge) { this.eventMaxAge = eventMaxAge; }
 
-    public int getEventParticipants() { return eventParticipants; }
+    public Integer getEventParticipants() { return eventParticipants; }
 
     public void setEventParticipants(Integer eventParticipants) { this.eventParticipants = eventParticipants; }
 
-    public int getEventMaxPerson() { return eventMaxPerson; }
+    public Integer getEventMaxPerson() { return eventMaxPerson; }
 
     public void setEventMaxPerson(Integer eventMaxPerson) { this.eventMaxPerson = eventMaxPerson; }
 

@@ -16,11 +16,6 @@
         android:icon="@drawable/ic_baseline_add_28"
         android:title="@string/navigation_bar_new_event" />
 
-<!--    <item-->
-<!--        android:id="@+id/navigationBarChat"-->
-<!--        android:icon="@drawable/ic_baseline_mail_outline_28"-->
-<!--        android:title="@string/navigation_bar_chat" />-->
-
     <item
         android:id="@+id/navigationBarAccount"
         android:icon="@drawable/ic_baseline_person_outline_28"

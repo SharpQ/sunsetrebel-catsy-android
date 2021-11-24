@@ -9,6 +9,8 @@
     <color name="googleBtnColor">#4286F5</color>
     <color name="facebookBtnColor">#4867AA</color>
     <color name="blackHalfTransparent">#80000000</color>
+    <color name="blackQuoterTransparent">#40000000</color>
+    <color name="primaryColorTransparent">#906a1b9a</color>
     <color name="redError">#FF0000</color>
     <color name="greyBackground">#111111</color>
     <color name="greyBackgroundEventItem">#161616</color>

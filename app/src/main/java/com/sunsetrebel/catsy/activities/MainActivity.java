@@ -8,10 +8,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.AccountFragment;
-import com.sunsetrebel.catsy.fragments.AddEventFragment;
+import com.sunsetrebel.catsy.fragments.NewEventPrimaryFragment;
 import com.sunsetrebel.catsy.fragments.EventListFragment;
 import com.sunsetrebel.catsy.fragments.MapsFragment;
-import com.sunsetrebel.catsy.fragments.ChatFragment;
 import com.sunsetrebel.catsy.utils.MediaPlayerService;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
@@ -59,11 +58,8 @@ public class MainActivity extends AppCompatActivity {
                     fragment = new EventListFragment();
                     break;
                 case R.id.navigationBarNewEvent:
-                    fragment = new AddEventFragment();
+                    fragment = new NewEventPrimaryFragment();
                     break;
-//                case R.id.navigationBarChat:
-//                    fragment = new ChatFragment();
-//                    break;
                 case R.id.navigationBarAccount:
                     fragment = new AccountFragment();
                     break;
