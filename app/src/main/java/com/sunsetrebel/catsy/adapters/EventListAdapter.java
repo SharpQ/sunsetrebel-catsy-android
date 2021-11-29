@@ -1,12 +1,18 @@
 package com.sunsetrebel.catsy.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -16,19 +22,28 @@ import com.sunsetrebel.catsy.models.EventModel;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.utils.EventThemes;
+import com.sunsetrebel.catsy.utils.EventThemesService;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
     private List<EventModel> eventList;
     private Context context;
-    SimpleDateFormat simpleDateFormat;
+    private SimpleDateFormat simpleDateFormat;
+    private EventThemesService eventThemesService;
+    private Map<Enum<?>, String> eventThemesEnumList;
+    private Random rand = new Random();
 
 
     public EventListAdapter(Context context, List<EventModel> eventList) {
         this.eventList = eventList;
         this.context = context;
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
+        eventThemesService = new EventThemesService(context.getResources());
+        eventThemesEnumList = eventThemesService.getEventThemesList();
     }
 
     @Override
@@ -40,7 +55,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(EventListAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         //Set event avatar
         RequestOptions defaultOptionsEventAvatar = new RequestOptions()
                 .error(R.drawable.im_background_concert);
@@ -62,7 +77,32 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         holder.tvEventLocation.setText(eventList.get(position).getEventLocation());
         holder.tvEventDescription.setText(eventList.get(position).getEventDescr());
         holder.tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants()));
+        List<EventThemes> eventThemes = eventList.get(position).getEventThemes();
+        if (eventThemes != null) {
+            for (EventThemes theme : eventThemes) {
+                TextView tv = new TextView(context);
+                tv.setText("#" + eventThemesEnumList.get(theme));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
+                );
+                params.setMargins(0,0,0,0);
+                tv.setLayoutParams(params);
+                tv.setPadding(1,1,5,1);
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                tv.setTextSize(14);
+                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    tv.setTextColor(Color.rgb(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+                } else {
+                    tv.setTextColor(context.getResources().getColor(R.color.primaryTextColor));
+                }
+                Typeface typeface = ResourcesCompat.getFont(context, R.font.audiowide);
+                tv.setTypeface(typeface);
+                holder.linearLayout.addView(tv);
+            }
+        }
     }
 
     @Override
@@ -83,6 +123,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         private TextView tvEventParticipants;
         private ImageView ivHostAvatar;
         private ImageView ivEventAvatar;
+        private LinearLayout linearLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -94,6 +135,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             tvEventParticipants = itemView.findViewById(R.id.textViewParticipants);
             ivHostAvatar = itemView.findViewById(R.id.imageViewHostAvatar);
             ivEventAvatar = itemView.findViewById(R.id.imageViewEventAvatar);
+            linearLayout = itemView.findViewById(R.id.ll_tags);
         }
     }
 }

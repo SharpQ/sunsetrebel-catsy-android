@@ -3,7 +3,6 @@ package com.sunsetrebel.catsy.viewmodel;
 import android.net.Uri;
 import android.text.TextUtils;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -24,8 +23,6 @@ public class NewEventViewModel extends ViewModel {
     private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
     private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private final FirebaseStorageService firebaseStorageService = FirebaseStorageService.getInstance();
-    private String userFullName;
-    private String userProfileImg;
 
 
     public void init() {
@@ -67,7 +64,7 @@ public class NewEventViewModel extends ViewModel {
                             firebaseFirestoreService.createNewEvent(eventModel.getUserID(), eventModel.getUserName(), eventModel.getUserProfileImg(),
                                     eventModel.getEventTitle(), eventModel.getEventLocation(), eventModel.getEventGeoLocation(), eventModel.getEventStartTime(),
                                     eventModel.getEventEndTime(), eventModel.getAccessType(), eventModel.getEventDescr(),
-                                    eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), downloadUrl, convertEventThemes());
+                                    eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), downloadUrl, getConvertedEventThemes());
                         }
                     }, fAuth.getUid(), eventAvatarURI);
                 } else {
@@ -75,7 +72,7 @@ public class NewEventViewModel extends ViewModel {
                         firebaseFirestoreService.createNewEvent(eventModel.getUserID(), eventModel.getUserName(), eventModel.getUserProfileImg(),
                                 eventModel.getEventTitle(), eventModel.getEventLocation(), eventModel.getEventGeoLocation(), eventModel.getEventStartTime(),
                                 eventModel.getEventEndTime(), eventModel.getAccessType(), eventModel.getEventDescr(),
-                                eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), null, convertEventThemes());
+                                eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), null, getConvertedEventThemes());
                     }
                 }
             }, fAuth.getUid());
@@ -90,7 +87,7 @@ public class NewEventViewModel extends ViewModel {
                 && eventModel.getEventGeoLocation() != null;
     }
 
-    private List<Enum<?>> convertEventThemes() {
+    private List<Enum<?>> getConvertedEventThemes() {
         List<EventThemes> eventThemesBefore = eventModel.getEventThemes();
         List<Enum<?>> eventThemesAfter = new ArrayList<>();
         if (eventThemesBefore != null) {
