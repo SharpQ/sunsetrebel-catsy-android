@@ -226,8 +226,9 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
             @Override
             public void onMapClick(LatLng latLng) {
                 GoogleMapService.clearAndSetMarker(latLng, mMap, 12);
-
-                List<Address> addresses = null;
+                List<Address> addresses = new ArrayList<>();
+                materialSearchBar.clearSuggestions();
+                eventLatLng = latLng;
 
                 try {
                     addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
@@ -236,11 +237,9 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
                     e.printStackTrace();
                 }
 
-                eventLatLng = latLng;
-                if (addresses == null || !addresses.isEmpty()) {
+                if (addresses.size() > 0) {
                     eventAddress = addresses.get(0).getAddressLine(0);
                     locationConfirmText.setText(eventAddress);
-                    materialSearchBar.clearSuggestions();
                     materialSearchBar.setText(eventAddress);
                 } else {
                     locationConfirmText.setText(getResources().getText(R.string.new_event_maps_popup_error_text));

@@ -12,6 +12,7 @@ import java.util.List;
 public class EventListViewModel extends ViewModel {
     private LiveData<List<EventModel>> eventList;
     private FirebaseFirestoreService firebaseFirestoreService;
+    private EventModel selectedEvent;
 
     public void init() {
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
@@ -20,5 +21,13 @@ public class EventListViewModel extends ViewModel {
 
     public LiveData<List<EventModel>> getLiveEventListData() {
         return eventList;
+    }
+
+    public EventModel getSelectedEvent() {
+        return selectedEvent;
+    }
+
+    public void setSelectedEvent(EventModel selectedEvent) {
+        this.selectedEvent = selectedEvent;
     }
 }

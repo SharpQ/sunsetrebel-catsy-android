@@ -12,11 +12,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.sunsetrebel.catsy.fragments.EventListDetailedFragment;
 import com.sunsetrebel.catsy.models.EventModel;
 
 import java.text.SimpleDateFormat;
@@ -28,6 +36,8 @@ import java.util.Random;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.EventThemesService;
+import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
+import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
     private List<EventModel> eventList;
@@ -36,14 +46,16 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     private EventThemesService eventThemesService;
     private Map<Enum<?>, String> eventThemesEnumList;
     private Random rand = new Random();
+    private EventListViewModel eventListViewModel;
 
 
-    public EventListAdapter(Context context, List<EventModel> eventList) {
+    public EventListAdapter(Context context, FragmentActivity fragmentActivity, List<EventModel> eventList) {
         this.eventList = eventList;
         this.context = context;
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
         eventThemesService = new EventThemesService(context.getResources());
         eventThemesEnumList = eventThemesService.getEventThemesList();
+        eventListViewModel = new ViewModelProvider(fragmentActivity).get(EventListViewModel.class);
     }
 
     @Override
@@ -103,6 +115,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                 holder.linearLayout.addView(tv);
             }
         }
+        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                eventListViewModel.setSelectedEvent(eventList.get(position));
+                FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+                manager.beginTransaction().addToBackStack("EventListFragment")
+                        .replace(R.id.frameLayoutMain, new EventListDetailedFragment()).commit();
+            }
+        });
     }
 
     @Override
@@ -115,6 +136,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private ConstraintLayout itemLayout;
         private TextView tvEventTitle;
         private TextView tvHostName;
         private TextView tvEventStartTime;
@@ -127,6 +149,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemLayout = itemView.findViewById(R.id.cl_item_event_list);
             tvEventTitle = itemView.findViewById(R.id.textViewEventTitle);
             tvHostName = itemView.findViewById(R.id.textViewHostName);
             tvEventStartTime = itemView.findViewById(R.id.til_start_time);

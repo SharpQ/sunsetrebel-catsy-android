@@ -1,11 +1,16 @@
 package com.sunsetrebel.catsy.repositories;
 
+import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -15,6 +20,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
+import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.utils.AccessType;
 import com.sunsetrebel.catsy.utils.EventThemes;
@@ -73,7 +79,7 @@ public class FirebaseFirestoreService {
         documentReference.set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userID));
     }
 
-    public void createNewEvent(String hostId, String hostName, String hostProfileImg, String eventTitle, String eventLocation, LatLng eventGeoLocation,
+    public void createNewEvent(Context context, String hostId, String hostName, String hostProfileImg, String eventTitle, String eventLocation, LatLng eventGeoLocation,
                                Date eventStartTime, Date eventEndTime, AccessType eventAccessType, String eventDescr, Integer eventMinAge,
                                Integer eventMaxAge, Integer eventMaxPerson, String eventAvatar, List<Enum<?>> eventThemes){
         fStore = getFirestoreClient();
@@ -104,7 +110,15 @@ public class FirebaseFirestoreService {
         event.put("hostId", hostId);
         event.put("hostName", hostName);
         event.put("hostProfileImg", hostProfileImg);
-        documentReference.set(event).addOnSuccessListener(aVoid -> Log.d("INFO", "New event created! EventId: " + finalEventId));
+        documentReference.set(event).addOnSuccessListener(aVoid -> {
+            Log.d("INFO", "New event created! EventId: " + finalEventId);
+            Toast.makeText(context, context.getResources().getString(R.string.new_event_event_created_notification), Toast.LENGTH_SHORT).show();
+        });
+
+        documentReference.set(event).addOnFailureListener(e -> {
+            Log.d("INFO", "Failed to create new event!");
+            Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
+        });
     }
 
     public void getUserInFirestore(GetUserCallback getUserCallback, String userId){
@@ -120,25 +134,23 @@ public class FirebaseFirestoreService {
     public void getUserNameInFirestore(GetUserNameCallback getUserNameCallback, String userId){
         fStore = getFirestoreClient();
         DocumentReference existingUser = fStore.collection("userProfiles").document(userId);
-        existingUser.get(Source.SERVER).addOnCompleteListener(task -> {
-            DocumentSnapshot document;
-            document = task.getResult();
-            getUserNameCallback.onResponse(document.get("fullName").toString());
+        existingUser.get(Source.SERVER).addOnSuccessListener(documentSnapshot -> {
+            getUserNameCallback.onResponse(documentSnapshot.get("fullName").toString());
         });
+        existingUser.get(Source.SERVER).addOnFailureListener(e -> getUserNameCallback.onResponse(null));
     }
 
     public void getUserProfileImgInFirestore(GetUserNameCallback getUserNameCallback, String userId){
         fStore = getFirestoreClient();
         DocumentReference existingUser = fStore.collection("userProfiles").document(userId);
-        existingUser.get(Source.SERVER).addOnCompleteListener(task -> {
-            DocumentSnapshot document;
-            document = task.getResult();
-            if (document.get("profileImg") != null) {
-                getUserNameCallback.onResponse(document.get("profileImg").toString());
+        existingUser.get(Source.SERVER).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.get("profileImg") != null) {
+                getUserNameCallback.onResponse(documentSnapshot.get("profileImg").toString());
             } else {
                 getUserNameCallback.onResponse(null);
             }
         });
+        existingUser.get(Source.SERVER).addOnFailureListener(e -> getUserNameCallback.onResponse(null));
     }
 
     public MutableLiveData<List<EventModel>> getEventListMutableLiveData() {

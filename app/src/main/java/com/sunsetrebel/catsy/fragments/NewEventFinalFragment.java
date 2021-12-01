@@ -91,11 +91,10 @@ public class NewEventFinalFragment extends Fragment {
                 eventMaxPeopleValue = Integer.parseInt(eventMaxPeople.getText().toString().trim());
             }
 
-            newEventViewModel.completeNewEventInfo(eventDescrValue, eventAvatarURI, eventMinAgeValue, eventMaxAgeValue, eventMaxPeopleValue);
+            newEventViewModel.completeNewEventInfo(getContext(), eventDescrValue, eventAvatarURI, eventMinAgeValue, eventMaxAgeValue, eventMaxPeopleValue);
             getParentFragmentManager().beginTransaction().replace(R.id.frameLayoutMain, new EventListFragment()).commit();
             AnimatedBottomBar animatedBottomBar = getActivity().findViewById(R.id.animatedBottomBar);
             animatedBottomBar.selectTabById(R.id.navigationBarEventList, true);
-            Toast.makeText(getContext(), getResources().getString(R.string.new_event_event_created_notification), Toast.LENGTH_SHORT).show();
         });
 
         mAvatarImageView.setOnClickListener(v17 -> {

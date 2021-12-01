@@ -3,6 +3,9 @@ package com.sunsetrebel.catsy.repositories;
 import android.net.Uri;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -45,6 +48,8 @@ public class FirebaseStorageService {
                 String downloadUrl = uri1.toString();
                 getAvatarStorageReference.onResponse(downloadUrl);
             });
+            storageReference.getDownloadUrl().addOnFailureListener(e -> getAvatarStorageReference.onResponse(null));
         });
+        storageReference.putFile(uri).addOnFailureListener(e -> getAvatarStorageReference.onResponse(null));
     }
 }

@@ -41,7 +41,7 @@ public class EventListFragment extends Fragment {
         eventListViewModel.init();
         //Get event list through viewmodel
         eventListViewModel.getLiveEventListData().observe(getViewLifecycleOwner(), eventList -> {
-            eventListAdapter = new EventListAdapter(getContext(), eventList);
+            eventListAdapter = new EventListAdapter(getContext(), requireActivity(), eventList);
             eventRecycler.setAdapter(eventListAdapter);
             eventListAdapter.notifyDataSetChanged();
             progressBar.setVisibility(View.INVISIBLE);
