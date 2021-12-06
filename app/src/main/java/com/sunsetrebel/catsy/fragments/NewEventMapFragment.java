@@ -116,10 +116,18 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
                             if (predictionsResponse != null) {
                                 predictionList = predictionsResponse.getAutocompletePredictions();
                                 List<String> suggestionsList = new ArrayList<>();
-                                for (int i = 0; i < predictionList.size(); i++) {
-                                    AutocompletePrediction prediction = predictionList.get(i);
-                                    suggestionsList.add(prediction.getFullText(null).toString());
+                                if (predictionList.size() <= 3) {
+                                    for (int i = 0; i < predictionList.size(); i++) {
+                                        AutocompletePrediction prediction = predictionList.get(i);
+                                        suggestionsList.add(prediction.getFullText(null).toString());
+                                    }
+                                } else {
+                                    for (int i = 0; i < 3; i++) {
+                                        AutocompletePrediction prediction = predictionList.get(i);
+                                        suggestionsList.add(prediction.getFullText(null).toString());
+                                    }
                                 }
+
                                 materialSearchBar.updateLastSuggestions(suggestionsList);
                                 if (!materialSearchBar.isSuggestionsVisible()) {
                                     materialSearchBar.showSuggestionsList();

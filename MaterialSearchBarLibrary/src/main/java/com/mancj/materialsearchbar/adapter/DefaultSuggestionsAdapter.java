@@ -49,12 +49,12 @@ public class DefaultSuggestionsAdapter extends SuggestionsAdapter<String, Defaul
 
     class SuggestionHolder extends RecyclerView.ViewHolder {
         private final TextView text;
-        private final ImageView iv_delete;
+//        private final ImageView iv_delete;
 
         public SuggestionHolder(final View itemView) {
             super(itemView);
             text = itemView.findViewById(R.id.text);
-            iv_delete = itemView.findViewById(R.id.iv_delete);
+//            iv_delete = itemView.findViewById(R.id.iv_delete);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -62,16 +62,16 @@ public class DefaultSuggestionsAdapter extends SuggestionsAdapter<String, Defaul
                     listener.OnItemClickListener(getAdapterPosition(), v);
                 }
             });
-            iv_delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position > 0 && position < getSuggestions().size()) {
-                        v.setTag(getSuggestions().get(getAdapterPosition()));
-                        listener.OnItemDeleteListener(getAdapterPosition(), v);
-                    }
-                }
-            });
+//            iv_delete.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int position = getAdapterPosition();
+//                    if (position > 0 && position < getSuggestions().size()) {
+//                        v.setTag(getSuggestions().get(getAdapterPosition()));
+//                        listener.OnItemDeleteListener(getAdapterPosition(), v);
+//                    }
+//                }
+//            });
         }
     }
 }

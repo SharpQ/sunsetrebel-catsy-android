@@ -83,7 +83,7 @@
                     android:layout_marginRight="8dp"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:hint="@string/action_search"
+                    android:hint=""
                     android:fontFamily="@font/audiowide"
                     android:imeOptions="flagNoExtractUi|actionSearch"
                     android:inputType="textVisiblePassword|textNoSuggestions"

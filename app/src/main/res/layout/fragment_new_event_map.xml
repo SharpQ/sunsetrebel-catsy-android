@@ -23,8 +23,6 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:outlineProvider="bounds"
-        app:mt_hint="Search a place"
-        app:mt_maxSuggestionsCount="5"
         app:mt_navIconEnabled="false"
         app:mt_placeholder="@string/new_event_maps_search_bar_placeholder"
         app:mt_roundedSearchBarEnabled="false"

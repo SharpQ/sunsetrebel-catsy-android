@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/requestItem"
@@ -12,25 +13,27 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/imageView"
-        android:src="@drawable/ic_history_black_48dp"
+        app:srcCompat="@drawable/ic_baseline_map_48"
         android:padding="13dp" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Last request"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical"
         android:fontFamily="@font/audiowide"
         android:id="@+id/text"
         android:textColor="@android:color/white" />
 
-    <ImageView
-        android:id="@+id/iv_delete"
-        android:tint="@color/material_grey_600"
-        android:src="@drawable/ic_close_black_48dp"
-        android:background="?attr/selectableItemBackground"
-        android:padding="13dp"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
+<!--    <ImageView-->
+<!--        android:id="@+id/iv_delete"-->
+<!--        android:tint="@color/material_grey_600"-->
+<!--        android:src="@drawable/ic_close_black_48dp"-->
+<!--        android:background="?attr/selectableItemBackground"-->
+<!--        android:padding="13dp"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp" />-->
 </LinearLayout>
