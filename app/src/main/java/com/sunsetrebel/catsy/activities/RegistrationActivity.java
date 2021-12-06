@@ -2,6 +2,7 @@ package com.sunsetrebel.catsy.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -50,7 +51,6 @@ public class RegistrationActivity extends AppCompatActivity {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private CallbackManager mCallbackManager;
     private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
-    private Activity mActivity;
     private boolean isOTPregistration = true;
     private CountryCodePicker ccp;
     private String userID;
@@ -65,11 +65,19 @@ public class RegistrationActivity extends AppCompatActivity {
         }
     }
 
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        getWindow().setStatusBarColor(Color.parseColor("#00000000"));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
-        mActivity = RegistrationActivity.this;
+        hideSystemUI();
         firebaseAuthService.createGoogleAuthRequestGetInstance(getApplicationContext());
         firebaseAuthService.InitializeFacebookSdk(getApplicationContext());
         fAuth = firebaseAuthService.getFirebaseClient();
@@ -120,7 +128,7 @@ public class RegistrationActivity extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
-                restartActivity(mActivity);
+                restartActivity(RegistrationActivity.this);
                 setUIStatePhone();
                 Toast.makeText(getApplicationContext(), "Facebook authentication failed!", Toast.LENGTH_SHORT).show();
             }
@@ -192,7 +200,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         }
                     } else {
                         progressBar.setVisibility(View.GONE);
-                        restartActivity(mActivity);
+                        restartActivity(RegistrationActivity.this);
                         setUIStatePhone();
                         Toast.makeText(RegistrationActivity.this, "Email authentication failed!" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -280,7 +288,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {
-                        restartActivity(mActivity);
+                        restartActivity(RegistrationActivity.this);
                         setUIStatePhone();
                         Toast.makeText(getApplicationContext(), "Google authentication failed!", Toast.LENGTH_SHORT).show();
                     }
@@ -298,7 +306,7 @@ public class RegistrationActivity extends AppCompatActivity {
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {
-                        restartActivity(mActivity);
+                        restartActivity(RegistrationActivity.this);
                         setUIStatePhone();
                         Toast.makeText(getApplicationContext(), "Facebook authentication failed!", Toast.LENGTH_SHORT).show();
                     }

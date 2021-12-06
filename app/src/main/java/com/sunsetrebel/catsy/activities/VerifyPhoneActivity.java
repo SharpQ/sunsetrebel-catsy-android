@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -36,17 +37,24 @@ public class VerifyPhoneActivity extends AppCompatActivity {
     private com.google.firebase.auth.FirebaseAuth fAuth;
     private boolean isTutorialNextPage;
     private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
-    private Activity mActivity;
     private static final long START_TIME_IN_MILLIS = 60000;
     private CountDownTimer mCountDownTimer;
     private boolean mTimerRunning = false;
     private long mTimeLeftInMillis = START_TIME_IN_MILLIS;
 
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_IMMERSIVE
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        getWindow().setStatusBarColor(Color.parseColor("#00000000"));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_phone);
-        mActivity = VerifyPhoneActivity.this;
+        hideSystemUI();
         fAuth = firebaseAuthService.getFirebaseClient();
 
         verifyBtn = findViewById(R.id.buttonVerify);
