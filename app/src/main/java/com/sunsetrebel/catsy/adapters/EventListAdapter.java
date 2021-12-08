@@ -70,7 +70,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         //Set event avatar
         RequestOptions defaultOptionsEventAvatar = new RequestOptions()
-                .error(R.drawable.im_background_concert);
+                .error(R.drawable.im_event_avatar_placeholder_64);
         Glide.with(context)
                 .setDefaultRequestOptions(defaultOptionsEventAvatar)
                 .load(eventList.get(position).getEventAvatar())
@@ -137,14 +137,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private ConstraintLayout itemLayout;
-        private TextView tvEventTitle;
-        private TextView tvHostName;
-        private TextView tvEventStartTime;
-        private TextView tvEventLocation;
-        private TextView tvEventDescription;
-        private TextView tvEventParticipants;
-        private ImageView ivHostAvatar;
-        private ImageView ivEventAvatar;
+        private TextView tvEventTitle, tvHostName, tvEventStartTime, tvEventLocation,
+                tvEventDescription, tvEventParticipants;
+        private ImageView ivHostAvatar, ivEventAvatar;
         private LinearLayout linearLayout;
 
         public ViewHolder(View itemView) {

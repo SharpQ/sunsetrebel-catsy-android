@@ -58,6 +58,13 @@
     <string name="new_event_event_min_age">Minimum age</string>
     <string name="new_event_event_max_age">Maximum age</string>
     <string name="new_event_event_attendees">Maximum number of people</string>
+    <string name="event_detailed_join_button">Join</string>
+    <string name="event_detailed_start_time_text">Start time:</string>
+    <string name="event_detailed_end_time_text">End time:</string>
+    <string name="event_detailed_participants_text">Joined:</string>
+    <string name="event_detailed_max_participants_text">Max person:</string>
+    <string name="event_detailed_min_age_text">Min age:</string>
+    <string name="event_detailed_max_age_text">Max age:</string>
     <string name="event_theme_sport">Sport</string>
     <string name="event_theme_music">Music</string>
     <string name="event_theme_art">Art</string>

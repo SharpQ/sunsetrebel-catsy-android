@@ -1,23 +1,56 @@
 package com.sunsetrebel.catsy.fragments;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
+import com.sunsetrebel.catsy.utils.EventThemes;
+import com.sunsetrebel.catsy.utils.EventThemesService;
+import com.sunsetrebel.catsy.utils.GoogleMapService;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 
-public class EventListDetailedFragment extends Fragment {
+
+public class EventListDetailedFragment extends Fragment implements OnMapReadyCallback {
     private EventListViewModel eventListViewModel;
     private EventModel eventModel;
-    private AppCompatTextView title1, title2, title3;
+    private GoogleMap mMap;
+    private SimpleDateFormat simpleDateFormat;
+    private ImageView backButton, likeButton, shareButton, extraButton;
+    private AppCompatButton joinButton;
+    private ImageView ivHostAvatar, ivEventAvatar;
+    private TextView tvEventTitle, tvHostName, tvEventStartTime, tvEventEndTime, tvEventDescription,
+            tvEventParticipants, tvEventMinAge, tvEventMaxAge, tvEventMaxPerson;
+    private LinearLayout linearLayout;
+    private Random rand = new Random();
+    private EventThemesService eventThemesService;
+    private Map<Enum<?>, String> eventThemesEnumList;
 
     public EventListDetailedFragment() {
         // Required empty public constructor
@@ -32,16 +65,106 @@ public class EventListDetailedFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_event_list_detailed, container, false);
         eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         eventListViewModel.init();
-
-        title1 = v.findViewById(R.id.tv_title1);
-        title2 = v.findViewById(R.id.tv_title2);
-        title3 = v.findViewById(R.id.tv_title3);
-
         eventModel = eventListViewModel.getSelectedEvent();
+        simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
+        eventThemesService = new EventThemesService(getContext().getResources());
+        eventThemesEnumList = eventThemesService.getEventThemesList();
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+                .findFragmentById(R.id.fragment_event_detailed_map);
+        mapFragment.getMapAsync(this);
 
-        title1.setText(eventModel.getEventTitle());
-        title2.setText(eventModel.getUserName());
-        title3.setText(eventModel.getEventLocation());
+        backButton = v.findViewById(R.id.ib_back);
+        likeButton = v.findViewById(R.id.ib_like);
+        shareButton = v.findViewById(R.id.ib_share);
+        extraButton = v.findViewById(R.id.ib_extra);
+        joinButton = v.findViewById(R.id.button_join);
+        ivHostAvatar = v.findViewById(R.id.iv_host_avatar);
+        ivEventAvatar = v.findViewById(R.id.iv_event_avatar);
+        tvEventTitle = v.findViewById(R.id.tv_event_title);
+        tvHostName = v.findViewById(R.id.tv_host_name);
+        tvEventStartTime = v.findViewById(R.id.tv_start_time_value);
+        tvEventEndTime = v.findViewById(R.id.tv_end_time_value);
+        tvEventDescription = v.findViewById(R.id.tv_event_description);
+        tvEventParticipants = v.findViewById(R.id.tv_event_detailed_participants_value);
+        tvEventMinAge = v.findViewById(R.id.tv_event_detailed_min_age_value);
+        tvEventMaxAge = v.findViewById(R.id.tv_event_detailed_max_age_value);
+        tvEventMaxPerson = v.findViewById(R.id.tv_event_detailed_max_people_value);
+        linearLayout = v.findViewById(R.id.ll_event_detailed_tags);
+
+        backButton.setOnClickListener(v1 -> getParentFragmentManager().popBackStack());
+
+        //Set event avatar
+        RequestOptions defaultOptionsEventAvatar = new RequestOptions()
+                .error(R.drawable.im_event_avatar_placeholder_64);
+        Glide.with(getContext())
+                .setDefaultRequestOptions(defaultOptionsEventAvatar)
+                .load(eventModel.getEventAvatar())
+                .into(ivEventAvatar);
+        //Set host avatar
+        RequestOptions defaultOptionsHostAvatar = new RequestOptions()
+                .error(R.drawable.im_cat_hearts);
+        Glide.with(getContext())
+                .setDefaultRequestOptions(defaultOptionsHostAvatar)
+                .load(eventModel.getUserProfileImg())
+                .into(ivHostAvatar);
+
+        tvEventTitle.setText(eventModel.getEventTitle());
+        tvHostName.setText(getContext().getString(R.string.event_list_host_placeholder) + eventModel.getUserName());
+        tvEventStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
+        tvEventEndTime.setText(simpleDateFormat.format(eventModel.getEventEndTime()));
+        tvEventDescription.setText(eventModel.getEventDescr());
+        tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants()));
+        if (eventModel.getEventMinAge() != null) {
+            tvEventMinAge.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventMinAge()));
+        } else {
+            tvEventMinAge.setText("N/A");
+        }
+
+        if (eventModel.getEventMaxAge() != null) {
+            tvEventMaxAge.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventMaxAge()));
+        } else {
+            tvEventMaxAge.setText("N/A");
+        }
+
+        if (eventModel.getEventMaxPerson() != null) {
+            tvEventMaxPerson.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventMaxPerson()));
+        } else {
+            tvEventMaxPerson.setText("N/A");
+        }
+
+        List<EventThemes> eventThemes = eventModel.getEventThemes();
+        if (eventThemes != null) {
+            for (EventThemes theme : eventThemes) {
+                TextView tv = new TextView(getContext());
+                tv.setText("#" + eventThemesEnumList.get(theme));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
+                );
+                params.setMargins(0,0,0,0);
+                tv.setLayoutParams(params);
+                tv.setPadding(1,1,5,1);
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                tv.setTextSize(14);
+                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    tv.setTextColor(Color.rgb(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+                } else {
+                    tv.setTextColor(getContext().getResources().getColor(R.color.primaryTextColor));
+                }
+                Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.audiowide);
+                tv.setTypeface(typeface);
+                linearLayout.addView(tv);
+            }
+        }
         return v;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mMap = googleMap;
+        GoogleMapService.setupMap(googleMap, getContext(), EventListDetailedFragment.this);
+        GoogleMapService.clearAndSetMarker(eventModel.getEventGeoLocation(), mMap, 12);
     }
 }
