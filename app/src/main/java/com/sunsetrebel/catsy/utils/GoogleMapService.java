@@ -1,34 +1,33 @@
 package com.sunsetrebel.catsy.utils;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
 import android.location.Location;
-import android.os.Looper;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomViewTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationCallback;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.fragments.MapsFragment;
 
 import java.util.Locale;
 
@@ -93,11 +92,31 @@ public class GoogleMapService {
         });
     }
 
-    @SuppressLint("MissingPermission")
-    public static void clearAndSetMarker(LatLng eventLatLng, GoogleMap googleMap, float zoom) {
+    public static void clearAndSetMarker(GoogleMap googleMap, LatLng eventLatLng, float zoom, String marketTitle) {
         googleMap.clear();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, zoom));
 //        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, zoom));
-        googleMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)));
+        googleMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)).title(marketTitle)).showInfoWindow();
+    }
+
+    public static void setEventMarker(GoogleMap googleMap, LatLng eventLatLng, String marketTitle, String marketSubTitle, String userAvatarURL, Context context) {
+       Glide.with(context)
+                .asBitmap()
+                .load(userAvatarURL)
+                .apply(RequestOptions.circleCropTransform())
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onLoadFailed(@Nullable Drawable errorDrawable) {
+                        googleMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)).title(marketTitle).snippet(marketSubTitle));
+                    }
+
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        final float scale = context.getResources().getDisplayMetrics().density;
+                        int pixels = (int) (35 * scale + 0.5f);
+                        Bitmap bitmap = Bitmap.createScaledBitmap(resource, pixels, pixels, true);
+                        googleMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromBitmap(bitmap)).title(marketTitle).snippet(marketSubTitle));
+                    }
+                });
     }
 }

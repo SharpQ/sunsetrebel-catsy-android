@@ -65,6 +65,10 @@ public class FirebaseFirestoreService {
         void onResponse(String value);
     }
 
+    public interface GetEventListCallback {
+        void onResponse(List<EventModel> eventList);
+    }
+
     public void createNewUser(String userID, String fullName, String email, String phone, String profileUrl){
         fStore = getFirestoreClient();
         documentReference = fStore.collection("userProfiles").document(userID);
@@ -169,6 +173,30 @@ public class FirebaseFirestoreService {
             }
         });
         return eventListMutableLiveData;
+    }
+
+    public void getEventList(GetEventListCallback getEventListCallback) {
+        fStore = getFirestoreClient();
+        fStore.collection("eventList").get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<EventModel> eventList = new ArrayList<>();
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    if (document != null) {
+                        EventModel event = convertDocumentToModel(document.getData());
+                        eventList.add(event);
+                    }
+                }
+                getEventListCallback.onResponse(eventList);
+            }
+        });
+
+        fStore.collection("eventList").get(Source.SERVER).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                getEventListCallback.onResponse(null);
+            }
+        });
     }
 
     private EventModel convertDocumentToModel(Map<String, Object> map) {

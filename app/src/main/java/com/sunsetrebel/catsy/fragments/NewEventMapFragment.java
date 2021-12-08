@@ -175,7 +175,7 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
                         Log.i("INFO", "Place found: " + place.getName());
                         eventLatLng = place.getLatLng();
                         if (eventLatLng != null) {
-                            GoogleMapService.clearAndSetMarker(eventLatLng, mMap, 12);
+                            GoogleMapService.clearAndSetMarker(mMap, eventLatLng, 12, eventAddress);
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -233,7 +233,7 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                GoogleMapService.clearAndSetMarker(latLng, mMap, 12);
+
                 List<Address> addresses = new ArrayList<>();
                 materialSearchBar.clearSuggestions();
                 eventLatLng = latLng;
@@ -247,10 +247,13 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
 
                 if (addresses.size() > 0) {
                     eventAddress = addresses.get(0).getAddressLine(0);
+                    GoogleMapService.clearAndSetMarker(mMap, latLng, 12, eventAddress);
                     locationConfirmText.setText(eventAddress);
                     materialSearchBar.setText(eventAddress);
                 } else {
-                    locationConfirmText.setText(getResources().getText(R.string.new_event_maps_popup_error_text));
+                    String eventAddressError = (String) getResources().getText(R.string.new_event_maps_popup_error_text);
+                    GoogleMapService.clearAndSetMarker(mMap, latLng, 12, eventAddressError);
+                    locationConfirmText.setText(eventAddressError);
                 }
             }
         });

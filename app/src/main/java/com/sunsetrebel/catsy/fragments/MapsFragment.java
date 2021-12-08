@@ -10,16 +10,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.models.EventModel;
+import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
 import com.sunsetrebel.catsy.utils.PermissionUtils;
+import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
+    private EventListViewModel eventListViewModel;
+    private FirebaseFirestoreService firebaseFirestoreService;
+
     public MapsFragment() {
         // Required empty public constructor
     }
@@ -31,6 +38,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragmentGoogleMaps);
         mapFragment.getMapAsync(this);
+        firebaseFirestoreService = FirebaseFirestoreService.getInstance();
         return v;
     }
 
@@ -45,6 +53,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         GoogleMapService.setupMap(googleMap, getContext(), MapsFragment.this);
+        firebaseFirestoreService.getEventList(eventList -> {
+            if (eventList != null) {
+                for (EventModel event : eventList) {
+                    GoogleMapService.setEventMarker(mMap,
+                            event.getEventGeoLocation(),
+                            event.getEventTitle(),
+                            getContext().getString(R.string.event_list_host_placeholder) + event.getUserName(),
+                            event.getUserProfileImg(),
+                            getContext());
+                }
+            }
+        });
     }
 
 
