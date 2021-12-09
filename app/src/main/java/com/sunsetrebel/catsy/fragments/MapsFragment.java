@@ -24,8 +24,9 @@ import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
-    private EventListViewModel eventListViewModel;
     private FirebaseFirestoreService firebaseFirestoreService;
+    private String hostPlaceholder;
+
 
     public MapsFragment() {
         // Required empty public constructor
@@ -39,6 +40,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 .findFragmentById(R.id.fragmentGoogleMaps);
         mapFragment.getMapAsync(this);
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
+        hostPlaceholder = getContext().getString(R.string.event_list_host_placeholder);
         return v;
     }
 
@@ -59,8 +61,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     GoogleMapService.setEventMarker(mMap,
                             event.getEventGeoLocation(),
                             event.getEventTitle(),
-                            getContext().getString(R.string.event_list_host_placeholder) + event.getUserName(),
-                            event.getUserProfileImg(),
+                            hostPlaceholder + event.getUserName(),
+                            event.getEventAvatar(),
                             getContext());
                 }
             }
