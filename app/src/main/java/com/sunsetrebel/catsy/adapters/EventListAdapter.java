@@ -36,6 +36,7 @@ import java.util.Random;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.EventThemesService;
+import com.sunsetrebel.catsy.utils.ImageUtils;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
 
@@ -69,20 +70,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         //Set event avatar
-        RequestOptions defaultOptionsEventAvatar = new RequestOptions()
-                .error(R.drawable.im_event_avatar_placeholder_64);
-        Glide.with(context)
-                .setDefaultRequestOptions(defaultOptionsEventAvatar)
-                .load(eventList.get(position).getEventAvatar())
-                .into(holder.ivEventAvatar);
+        ImageUtils.loadImageView(context, eventList.get(position).getEventAvatar(), holder.ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
         //Set host avatar
-        RequestOptions defaultOptionsHostAvatar = new RequestOptions()
-                .error(R.drawable.im_cat_hearts);
-        Glide.with(context)
-                .setDefaultRequestOptions(defaultOptionsHostAvatar)
-                .load(eventList.get(position).getUserProfileImg())
-                .into(holder.ivHostAvatar);
-
+        ImageUtils.loadImageView(context, eventList.get(position).getUserProfileImg(), holder.ivHostAvatar, R.drawable.im_cat_hearts);
         holder.tvEventTitle.setText(eventList.get(position).getEventTitle());
         holder.tvHostName.setText(context.getString(R.string.event_list_host_placeholder) + eventList.get(position).getUserName());
         holder.tvEventStartTime.setText(simpleDateFormat.format(eventList.get(position).getEventStartTime()));

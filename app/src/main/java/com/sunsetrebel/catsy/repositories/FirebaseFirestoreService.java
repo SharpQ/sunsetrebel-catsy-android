@@ -85,7 +85,7 @@ public class FirebaseFirestoreService {
 
     public void createNewEvent(Context context, String hostId, String hostName, String hostProfileImg, String eventTitle, String eventLocation, LatLng eventGeoLocation,
                                Date eventStartTime, Date eventEndTime, AccessType eventAccessType, String eventDescr, Integer eventMinAge,
-                               Integer eventMaxAge, Integer eventMaxPerson, String eventAvatar, List<Enum<?>> eventThemes){
+                               Integer eventMaxAge, Integer eventMaxPerson, String eventAvatar, List<Enum<?>> eventThemes, Timestamp createTS, Timestamp updateTS){
         fStore = getFirestoreClient();
         String eventId = null;
         if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
@@ -114,6 +114,8 @@ public class FirebaseFirestoreService {
         event.put("hostId", hostId);
         event.put("hostName", hostName);
         event.put("hostProfileImg", hostProfileImg);
+        event.put("createTS", createTS);
+        event.put("updateTS", updateTS);
         documentReference.set(event).addOnSuccessListener(aVoid -> {
             Log.d("INFO", "New event created! EventId: " + finalEventId);
             Toast.makeText(context, context.getResources().getString(R.string.new_event_event_created_notification), Toast.LENGTH_SHORT).show();

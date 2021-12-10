@@ -28,6 +28,7 @@ import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.EventThemesService;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
+import com.sunsetrebel.catsy.utils.ImageUtils;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
 import java.text.SimpleDateFormat;
@@ -94,43 +95,18 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         backButton.setOnClickListener(v1 -> getParentFragmentManager().popBackStack());
 
         //Set event avatar
-        RequestOptions defaultOptionsEventAvatar = new RequestOptions()
-                .error(R.drawable.im_event_avatar_placeholder_64);
-        Glide.with(getContext())
-                .setDefaultRequestOptions(defaultOptionsEventAvatar)
-                .load(eventModel.getEventAvatar())
-                .into(ivEventAvatar);
+        ImageUtils.loadImageView(getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
         //Set host avatar
-        RequestOptions defaultOptionsHostAvatar = new RequestOptions()
-                .error(R.drawable.im_cat_hearts);
-        Glide.with(getContext())
-                .setDefaultRequestOptions(defaultOptionsHostAvatar)
-                .load(eventModel.getUserProfileImg())
-                .into(ivHostAvatar);
-
+        ImageUtils.loadImageView(getContext(), eventModel.getUserProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
         tvEventTitle.setText(eventModel.getEventTitle());
         tvHostName.setText(getContext().getString(R.string.event_list_host_placeholder) + eventModel.getUserName());
         tvEventStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
         tvEventEndTime.setText(simpleDateFormat.format(eventModel.getEventEndTime()));
         tvEventDescription.setText(eventModel.getEventDescr());
         tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants()));
-        if (eventModel.getEventMinAge() != null) {
-            tvEventMinAge.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventMinAge()));
-        } else {
-            tvEventMinAge.setText("N/A");
-        }
-
-        if (eventModel.getEventMaxAge() != null) {
-            tvEventMaxAge.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventMaxAge()));
-        } else {
-            tvEventMaxAge.setText("N/A");
-        }
-
-        if (eventModel.getEventMaxPerson() != null) {
-            tvEventMaxPerson.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventMaxPerson()));
-        } else {
-            tvEventMaxPerson.setText("N/A");
-        }
+        setIntegerTextFields(eventModel.getEventMinAge(), tvEventMinAge);
+        setIntegerTextFields(eventModel.getEventMaxAge(), tvEventMaxAge);
+        setIntegerTextFields(eventModel.getEventMaxPerson(), tvEventMaxPerson);
 
         List<EventThemes> eventThemes = eventModel.getEventThemes();
         if (eventThemes != null) {
@@ -159,6 +135,14 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             }
         }
         return v;
+    }
+
+    private void setIntegerTextFields(Integer integer, TextView textView) {
+        if (integer != null) {
+            textView.setText(String.format(Locale.getDefault(), "%d", integer));
+        } else {
+            textView.setText("N/A");
+        }
     }
 
     @Override

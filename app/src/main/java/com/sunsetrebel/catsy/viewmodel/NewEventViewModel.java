@@ -16,6 +16,7 @@ import com.sunsetrebel.catsy.repositories.FirebaseStorageService;
 import com.sunsetrebel.catsy.utils.AccessType;
 import com.sunsetrebel.catsy.utils.EventThemes;
 
+import com.google.firebase.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -61,13 +62,15 @@ public class NewEventViewModel extends ViewModel {
             eventModel.setUserName(userName);
             firebaseFirestoreService.getUserProfileImgInFirestore(userProfile -> {
                 eventModel.setUserProfileImg(userProfile);
+                Date date = new Date();
+                Timestamp createTS = new Timestamp(date);
                 if (eventAvatarURI != null) {
                     firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
                         if (validNewEventParams()) {
                             firebaseFirestoreService.createNewEvent(context, eventModel.getUserID(), eventModel.getUserName(), eventModel.getUserProfileImg(),
                                     eventModel.getEventTitle(), eventModel.getEventLocation(), eventModel.getEventGeoLocation(), eventModel.getEventStartTime(),
                                     eventModel.getEventEndTime(), eventModel.getAccessType(), eventModel.getEventDescr(),
-                                    eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), downloadUrl, getConvertedEventThemes());
+                                    eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), downloadUrl, getConvertedEventThemes(), createTS, createTS);
                         } else {
                             Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
                         }
@@ -77,7 +80,7 @@ public class NewEventViewModel extends ViewModel {
                         firebaseFirestoreService.createNewEvent(context, eventModel.getUserID(), eventModel.getUserName(), eventModel.getUserProfileImg(),
                                 eventModel.getEventTitle(), eventModel.getEventLocation(), eventModel.getEventGeoLocation(), eventModel.getEventStartTime(),
                                 eventModel.getEventEndTime(), eventModel.getAccessType(), eventModel.getEventDescr(),
-                                eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), null, getConvertedEventThemes());
+                                eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), null, getConvertedEventThemes(), createTS, createTS);
                     } else {
                         Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
                     }
