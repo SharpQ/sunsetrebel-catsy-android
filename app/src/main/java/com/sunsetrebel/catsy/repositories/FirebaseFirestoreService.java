@@ -212,7 +212,8 @@ public class FirebaseFirestoreService {
                 map.get("eventDescription").toString(),
                 convertObjectToInteger(map.get("eventMinAge")), convertObjectToInteger(map.get("eventMaxAge")),
                 ((Number) map.get("eventParticipants")).intValue(), convertObjectToInteger(map.get("eventMaxPerson")),
-                convertObjectToString(map.get("eventAvatar")), convertEventThemes((ArrayList<Object[]>) map.get("eventThemes")));
+                convertObjectToString(map.get("eventAvatar")), convertEventThemes((ArrayList<Object[]>) map.get("eventThemes")),
+                ((Timestamp) map.get("createTS")).toDate(), ((Timestamp) map.get("updateTS")).toDate());
     }
 
     private String convertObjectToString(Object object) {
