@@ -1,5 +1,7 @@
 package com.sunsetrebel.catsy.viewmodel;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -29,5 +31,9 @@ public class EventListViewModel extends ViewModel {
 
     public void setSelectedEvent(EventModel selectedEvent) {
         this.selectedEvent = selectedEvent;
+    }
+
+    public void removeEventListListener() {
+        firebaseFirestoreService.removeEventListListener();
     }
 }

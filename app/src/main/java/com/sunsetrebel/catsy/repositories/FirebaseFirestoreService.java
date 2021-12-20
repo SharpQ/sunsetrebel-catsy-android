@@ -9,14 +9,17 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
@@ -37,6 +40,7 @@ public class FirebaseFirestoreService {
     private FirebaseFirestore fStore;
     private DocumentReference documentReference = null;
     private static MutableLiveData<List<EventModel>> eventListMutableLiveData;
+    private ListenerRegistration eventListListener;
 
     public FirebaseFirestoreService() {
         fStore = FirebaseFirestore.getInstance();
@@ -67,6 +71,10 @@ public class FirebaseFirestoreService {
 
     public interface GetEventListCallback {
         void onResponse(List<EventModel> eventList);
+    }
+
+    public interface GetEventParticipantsCallback {
+        void onResponse(Integer value);
     }
 
     public void createNewUser(String userID, String fullName, String email, String phone, String profileUrl){
@@ -161,7 +169,7 @@ public class FirebaseFirestoreService {
 
     public MutableLiveData<List<EventModel>> getEventListMutableLiveData() {
         fStore = getFirestoreClient();
-        fStore.collection("eventList").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        ListenerRegistration eventListListener = fStore.collection("eventList").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 List<EventModel> eventList = new ArrayList<>();
@@ -177,9 +185,30 @@ public class FirebaseFirestoreService {
         return eventListMutableLiveData;
     }
 
+    public void removeEventListListener() {
+        if (eventListListener != null) {
+            eventListListener.remove();
+        }
+    }
+
+    public void getEventParticipants(GetEventParticipantsCallback getEventParticipantsCallback, EventModel eventModel) {
+        fStore = getFirestoreClient();
+        fStore.collection("eventList").document(eventModel.getEventId()).collection("usersJoined").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                getEventParticipantsCallback.onResponse(queryDocumentSnapshots.size());
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                getEventParticipantsCallback.onResponse(null);
+            }
+        });
+    }
+
     public void getEventList(GetEventListCallback getEventListCallback) {
         fStore = getFirestoreClient();
-        fStore.collection("eventList").get(Source.SERVER).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        fStore.collection("eventList").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 List<EventModel> eventList = new ArrayList<>();
@@ -211,7 +240,7 @@ public class FirebaseFirestoreService {
                 AccessType.valueOf(map.get("eventAccessType").toString()),
                 map.get("eventDescription").toString(),
                 convertObjectToInteger(map.get("eventMinAge")), convertObjectToInteger(map.get("eventMaxAge")),
-                ((Number) map.get("eventParticipants")).intValue(), convertObjectToInteger(map.get("eventMaxPerson")),
+                /*((Number) map.get("eventParticipants")).intValue()*/ null, convertObjectToInteger(map.get("eventMaxPerson")),
                 convertObjectToString(map.get("eventAvatar")), convertEventThemes((ArrayList<Object[]>) map.get("eventThemes")),
                 ((Timestamp) map.get("createTS")).toDate(), ((Timestamp) map.get("updateTS")).toDate());
     }

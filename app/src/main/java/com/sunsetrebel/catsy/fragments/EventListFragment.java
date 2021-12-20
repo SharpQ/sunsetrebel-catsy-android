@@ -48,4 +48,10 @@ public class EventListFragment extends Fragment {
         });
         return v;
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        eventListViewModel.removeEventListListener();
+    }
 }

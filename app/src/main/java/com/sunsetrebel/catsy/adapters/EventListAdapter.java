@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.EventThemesService;
 import com.sunsetrebel.catsy.utils.ImageUtils;
@@ -48,6 +49,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     private Map<Enum<?>, String> eventThemesEnumList;
     private Random rand = new Random();
     private EventListViewModel eventListViewModel;
+    private FirebaseFirestoreService firebaseFirestoreService;
 
 
     public EventListAdapter(Context context, FragmentActivity fragmentActivity, List<EventModel> eventList) {
@@ -57,6 +59,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         eventThemesService = new EventThemesService(context.getResources());
         eventThemesEnumList = eventThemesService.getEventThemesList();
         eventListViewModel = new ViewModelProvider(fragmentActivity).get(EventListViewModel.class);
+        firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     }
 
     @Override
@@ -78,7 +81,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         holder.tvEventStartTime.setText(simpleDateFormat.format(eventList.get(position).getEventStartTime()));
         holder.tvEventLocation.setText(eventList.get(position).getEventLocation());
         holder.tvEventDescription.setText(eventList.get(position).getEventDescr());
-        holder.tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants()));
+        if (eventList.get(position).getEventParticipants() == null) {
+            firebaseFirestoreService.getEventParticipants(value -> {
+                eventList.get(position).setEventParticipants(value);
+                holder.tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants()));
+            }, eventList.get(position));
+        } else {
+            holder.tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants()));
+        }
+
         List<EventThemes> eventThemes = eventList.get(position).getEventThemes();
         if (eventThemes != null) {
             for (EventThemes theme : eventThemes) {
