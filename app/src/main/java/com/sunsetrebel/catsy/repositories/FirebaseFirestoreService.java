@@ -38,9 +38,8 @@ import java.util.Map;
 public class FirebaseFirestoreService {
     private static FirebaseFirestoreService instance;
     private FirebaseFirestore fStore;
-    private DocumentReference documentReference = null;
     private static MutableLiveData<List<EventModel>> eventListMutableLiveData;
-    private ListenerRegistration eventListListener;
+    private ListenerRegistration eventListListener = null;
 
     public FirebaseFirestoreService() {
         fStore = FirebaseFirestore.getInstance();
@@ -79,7 +78,7 @@ public class FirebaseFirestoreService {
 
     public void createNewUser(String userID, String fullName, String email, String phone, String profileUrl){
         fStore = getFirestoreClient();
-        documentReference = fStore.collection("userProfiles").document(userID);
+        DocumentReference documentReference = fStore.collection("userProfiles").document(userID);
         if (fullName == null) {
             fullName = "userName";
         }
@@ -96,12 +95,16 @@ public class FirebaseFirestoreService {
                                Integer eventMaxAge, Integer eventMaxPerson, String eventAvatar, List<Enum<?>> eventThemes, Timestamp createTS, Timestamp updateTS){
         fStore = getFirestoreClient();
         String eventId = null;
+        DocumentReference eventDocumentReference = null, eventPersonalDocumentReference = null, firstUserDocumentReference = null;
         if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
             eventId = fStore.collection("eventList").document().getId();
-            documentReference = fStore.collection("eventList").document(eventId);
+            eventDocumentReference = fStore.collection("eventList").document(eventId);
+            eventPersonalDocumentReference = fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId);
+            firstUserDocumentReference = fStore.collection("eventList").document(eventId).collection("usersJoined").document(hostId);
         } else if (eventAccessType == AccessType.PRIVATE) {
             eventId = fStore.collection("userProfiles").document(hostId).collection("userEvents").document().getId();
-            documentReference = fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId);
+            eventDocumentReference = fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId);
+            firstUserDocumentReference = fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId).collection("usersJoined").document(hostId);
         }
         String finalEventId = eventId;
         Map<String, Object> event = new HashMap<>();
@@ -115,7 +118,6 @@ public class FirebaseFirestoreService {
         event.put("eventDescription", eventDescr);
         event.put("eventMinAge", eventMinAge);
         event.put("eventMaxAge", eventMaxAge);
-        event.put("eventParticipants", 1);
         event.put("eventMaxPerson", eventMaxPerson);
         event.put("eventAvatar", eventAvatar);
         event.put("eventThemes", eventThemes);
@@ -124,12 +126,20 @@ public class FirebaseFirestoreService {
         event.put("hostProfileImg", hostProfileImg);
         event.put("createTS", createTS);
         event.put("updateTS", updateTS);
-        documentReference.set(event).addOnSuccessListener(aVoid -> {
+        Map<String, Object> firstUserMap = new HashMap<>();
+        firstUserMap.put("userId", hostId);
+        DocumentReference finalEventPersonalDocumentReference = eventPersonalDocumentReference;
+        DocumentReference finalFirstUserDocumentReference = firstUserDocumentReference;
+        eventDocumentReference.set(event).addOnSuccessListener(aVoid -> {
+            finalFirstUserDocumentReference.set(firstUserMap);
+            if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
+                finalEventPersonalDocumentReference.set(event);
+            }
             Log.d("INFO", "New event created! EventId: " + finalEventId);
             Toast.makeText(context, context.getResources().getString(R.string.new_event_event_created_notification), Toast.LENGTH_SHORT).show();
         });
 
-        documentReference.set(event).addOnFailureListener(e -> {
+        eventDocumentReference.set(event).addOnFailureListener(e -> {
             Log.d("INFO", "Failed to create new event!");
             Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
         });
@@ -169,7 +179,7 @@ public class FirebaseFirestoreService {
 
     public MutableLiveData<List<EventModel>> getEventListMutableLiveData() {
         fStore = getFirestoreClient();
-        ListenerRegistration eventListListener = fStore.collection("eventList").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        eventListListener = fStore.collection("eventList").addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
                 List<EventModel> eventList = new ArrayList<>();
@@ -240,7 +250,7 @@ public class FirebaseFirestoreService {
                 AccessType.valueOf(map.get("eventAccessType").toString()),
                 map.get("eventDescription").toString(),
                 convertObjectToInteger(map.get("eventMinAge")), convertObjectToInteger(map.get("eventMaxAge")),
-                /*((Number) map.get("eventParticipants")).intValue()*/ null, convertObjectToInteger(map.get("eventMaxPerson")),
+                null, convertObjectToInteger(map.get("eventMaxPerson")),
                 convertObjectToString(map.get("eventAvatar")), convertEventThemes((ArrayList<Object[]>) map.get("eventThemes")),
                 ((Timestamp) map.get("createTS")).toDate(), ((Timestamp) map.get("updateTS")).toDate());
     }
