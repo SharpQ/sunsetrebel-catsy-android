@@ -108,7 +108,6 @@ public class FirebaseFirestoreService {
         }
         String finalEventId = eventId;
         Map<String, Object> event = new HashMap<>();
-        Log.d("INFO228", "array created");
         event.put("eventId", finalEventId);
         event.put("eventTitle", eventTitle);
         event.put("eventLocation", eventLocation);
