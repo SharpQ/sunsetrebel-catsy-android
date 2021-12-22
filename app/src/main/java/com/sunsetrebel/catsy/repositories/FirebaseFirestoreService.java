@@ -73,7 +73,7 @@ public class FirebaseFirestoreService {
     }
 
     public interface GetEventParticipantsCallback {
-        void onResponse(Integer value);
+        void onResponse(List<String> value);
     }
 
     public void createNewUser(String userID, String fullName, String email, String phone, String profileUrl){
@@ -108,6 +108,7 @@ public class FirebaseFirestoreService {
         }
         String finalEventId = eventId;
         Map<String, Object> event = new HashMap<>();
+        Log.d("INFO228", "array created");
         event.put("eventId", finalEventId);
         event.put("eventTitle", eventTitle);
         event.put("eventLocation", eventLocation);
@@ -144,6 +145,20 @@ public class FirebaseFirestoreService {
             Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
         });
     }
+
+//    public void setUserJoinEvent(Context context, EventModel event, String userId) {
+//        fStore = getFirestoreClient();
+//        String eventId = event.getEventId();
+//        AccessType accessType = event.getAccessType();
+//        DocumentReference eventDocumentReference = null, eventPersonalDocumentReference = null, userDocumentReference = null;
+//        if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
+//            eventPersonalDocumentReference = fStore.collection("userProfiles").document(userId).collection("userEvents").document(eventId);
+//            userDocumentReference = fStore.collection("eventList").document(eventId).collection("usersJoined").document(userId);
+//        } else if (accessType == AccessType.PRIVATE) {
+//            eventDocumentReference = fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId);
+//            userDocumentReference = fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId).collection("usersJoined").document(hostId);
+//        }
+//    }
 
     public void getUserInFirestore(GetUserCallback getUserCallback, String userId){
         fStore = getFirestoreClient();
@@ -206,7 +221,13 @@ public class FirebaseFirestoreService {
         fStore.collection("eventList").document(eventModel.getEventId()).collection("usersJoined").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                getEventParticipantsCallback.onResponse(queryDocumentSnapshots.size());
+                List<String> usersList = new ArrayList<>();
+                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                    if (document != null) {
+                        usersList.add(document.getId());
+                    }
+                }
+                getEventParticipantsCallback.onResponse(usersList);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

@@ -23,7 +23,7 @@ public class EventModel {
     private String eventDescr;
     private Integer eventMinAge;
     private Integer eventMaxAge;
-    private Integer eventParticipants;
+    private List<String> eventParticipants;
     private Integer eventMaxPerson;
     private String eventAvatar;
     private List<EventThemes> eventThemes;
@@ -36,7 +36,7 @@ public class EventModel {
     public EventModel(String userID, String userName, String userProfileImg, String eventId,
                       String eventTitle, String eventLocation, LatLng eventGeoLocation,
                       Date eventStartTime, Date eventEndTime, AccessType accessType,
-                      String eventDescr, Integer eventMinAge, Integer eventMaxAge, Integer eventParticipants,
+                      String eventDescr, Integer eventMinAge, Integer eventMaxAge, List<String> eventParticipants,
                       Integer eventMaxPerson, String eventAvatar, List<EventThemes> eventThemes, Date createTS, Date updateTS) {
         this.userID = userID;
         this.userName = userName;
@@ -137,9 +137,9 @@ public class EventModel {
 
     public void setEventMaxAge(Integer eventMaxAge) { this.eventMaxAge = eventMaxAge; }
 
-    public Integer getEventParticipants() { return eventParticipants; }
+    public List<String> getEventParticipants() { return eventParticipants; }
 
-    public void setEventParticipants(Integer eventParticipants) { this.eventParticipants = eventParticipants; }
+    public void setEventParticipants(List<String> eventParticipants) { this.eventParticipants = eventParticipants; }
 
     public Integer getEventMaxPerson() { return eventMaxPerson; }
 

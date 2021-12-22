@@ -84,10 +84,10 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         if (eventList.get(position).getEventParticipants() == null) {
             firebaseFirestoreService.getEventParticipants(value -> {
                 eventList.get(position).setEventParticipants(value);
-                holder.tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants()));
+                holder.tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants().size()));
             }, eventList.get(position));
         } else {
-            holder.tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants()));
+            holder.tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants().size()));
         }
 
         List<EventThemes> eventThemes = eventList.get(position).getEventThemes();

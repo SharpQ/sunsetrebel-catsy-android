@@ -1,5 +1,6 @@
 package com.sunsetrebel.catsy.fragments;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -103,10 +104,16 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         tvEventStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
         tvEventEndTime.setText(simpleDateFormat.format(eventModel.getEventEndTime()));
         tvEventDescription.setText(eventModel.getEventDescr());
-        tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants()));
+        tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants().size()));
         setIntegerTextFields(eventModel.getEventMinAge(), tvEventMinAge);
         setIntegerTextFields(eventModel.getEventMaxAge(), tvEventMaxAge);
         setIntegerTextFields(eventModel.getEventMaxPerson(), tvEventMaxPerson);
+
+        if (eventListViewModel.isUserEventHost(eventModel)) {
+            setJoinButtonAsHost();
+        } else if (eventListViewModel.isUserJoinedToEvent(eventModel.getEventParticipants())) {
+            setJoinButtonAsJoined();
+        }
 
         List<EventThemes> eventThemes = eventModel.getEventThemes();
         if (eventThemes != null) {
@@ -134,7 +141,30 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
                 linearLayout.addView(tv);
             }
         }
+
+        joinButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         return v;
+    }
+
+    private void setJoinButtonAsHost() {
+        joinButton.setEnabled(false);
+        joinButton.setText(getContext().getString(R.string.event_detailed_joined_button_user_host));
+        joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blackQuoterTransparent)));
+    }
+
+    private void setJoinButtonAsJoined() {
+        joinButton.setText(getContext().getString(R.string.event_detailed_joined_button_leave_state));
+        joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryLightColor)));
+    }
+
+    private void setJoinButtonAsGuest() {
+        joinButton.setText(getContext().getString(R.string.event_detailed_join_button));
+        joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
     }
 
     private void setIntegerTextFields(Integer integer, TextView textView) {
