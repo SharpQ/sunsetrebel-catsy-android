@@ -43,7 +43,7 @@
         <activity android:name=".activities.VerifyEmailActivity" />
         <activity
             android:name=".activities.MainActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.LoginActivity" />
         <activity android:name=".activities.RegistrationActivity" />
         <activity android:name=".activities.OnboardingActivity">

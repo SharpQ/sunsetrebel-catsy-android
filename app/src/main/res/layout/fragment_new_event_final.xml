@@ -151,8 +151,10 @@
             android:layout_height="match_parent"
             android:hint="@string/new_event_event_description"
             android:gravity="top"
-            android:inputType="textMultiLine|textImeMultiLine"
-            android:minLines="1" />
+            android:inputType="textImeMultiLine"
+            android:imeOptions="actionDone"
+            android:minLines="1"
+            android:maxLines="3"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
