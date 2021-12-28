@@ -92,7 +92,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
         List<EventThemes> eventThemes = eventList.get(position).getEventThemes();
         if (eventThemes != null) {
+            int tvCurrentSize = 0;
             for (EventThemes theme : eventThemes) {
+                tvCurrentSize = tvCurrentSize + theme.toString().length();
                 TextView tv = new TextView(context);
                 tv.setText("#" + eventThemesEnumList.get(theme));
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
@@ -113,7 +115,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                 }
                 Typeface typeface = ResourcesCompat.getFont(context, R.font.audiowide);
                 tv.setTypeface(typeface);
-                holder.linearLayout.addView(tv);
+                if (tvCurrentSize < 15) {
+                    holder.linearLayout.addView(tv);
+                }
             }
         }
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
