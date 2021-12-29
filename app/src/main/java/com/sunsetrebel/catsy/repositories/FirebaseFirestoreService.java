@@ -9,14 +9,13 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -74,6 +73,10 @@ public class FirebaseFirestoreService {
 
     public interface GetEventParticipantsCallback {
         void onResponse(List<String> value);
+    }
+
+    public interface SetUserInteractEventCallback {
+        void onResponse(Boolean isResponseSuccessful);
     }
 
     public void createNewUser(String userID, String fullName, String email, String phone, String profileUrl){
@@ -137,27 +140,88 @@ public class FirebaseFirestoreService {
             }
             Log.d("INFO", "New event created! EventId: " + finalEventId);
             Toast.makeText(context, context.getResources().getString(R.string.new_event_event_created_notification), Toast.LENGTH_SHORT).show();
-        });
-
-        eventDocumentReference.set(event).addOnFailureListener(e -> {
+        }).addOnFailureListener(e -> {
             Log.d("INFO", "Failed to create new event!");
             Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
         });
     }
 
-//    public void setUserJoinEvent(Context context, EventModel event, String userId) {
-//        fStore = getFirestoreClient();
-//        String eventId = event.getEventId();
-//        AccessType accessType = event.getAccessType();
-//        DocumentReference eventDocumentReference = null, eventPersonalDocumentReference = null, userDocumentReference = null;
-//        if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
-//            eventPersonalDocumentReference = fStore.collection("userProfiles").document(userId).collection("userEvents").document(eventId);
-//            userDocumentReference = fStore.collection("eventList").document(eventId).collection("usersJoined").document(userId);
-//        } else if (accessType == AccessType.PRIVATE) {
-//            eventDocumentReference = fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId);
-//            userDocumentReference = fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId).collection("usersJoined").document(hostId);
-//        }
-//    }
+    public void setUserJoinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, String userId) {
+        fStore = getFirestoreClient();
+        String eventTitle = event.getEventTitle();
+        String eventId = event.getEventId();
+        String hostId = event.getHostId();
+        AccessType accessType = event.getAccessType();
+        Map<String, Object> userMap = new HashMap<>();
+        userMap.put("userId", userId);
+        if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
+            fStore.collection("eventList").document(eventId).collection("usersJoined").document(userId).set(userMap).addOnSuccessListener(aVoid -> {
+                fStore.collection("userProfiles").document(userId).update("joinedEvents",
+                        FieldValue.arrayUnion(eventId)).addOnSuccessListener(aVoid1 -> joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
+                        .addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+            }).addOnFailureListener(e -> {
+                joinUserReturnFail(context, eventTitle, setUserInteractEventCallback);
+            });
+        } else if (accessType == AccessType.PRIVATE) {
+            fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId).collection("usersJoined").document(hostId).set(userMap).addOnSuccessListener(aVoid -> {
+                fStore.collection("userProfiles").document(userId).update("joinedEvents",
+                        FieldValue.arrayUnion(eventId)).addOnSuccessListener(aVoid1 -> joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
+                        .addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+                joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback);
+            }).addOnFailureListener(e -> {
+                joinUserReturnFail(context, eventTitle, setUserInteractEventCallback);
+            });
+        }
+    }
+
+    private void joinUserReturnFail(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
+        Log.d("INFO", "Failed to join event: " + eventTitle + "!");
+        Toast.makeText(context, context.getResources().getString(R.string.event_detailed_join_fail) + eventTitle + "!", Toast.LENGTH_SHORT).show();
+        setUserInteractEventCallback.onResponse(false);
+    }
+
+    private void joinUserReturnSuccess(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
+        Log.d("INFO", "You joined event: " + eventTitle + "!");
+        Toast.makeText(context, context.getResources().getString(R.string.event_detailed_join_success) + eventTitle + "!", Toast.LENGTH_SHORT).show();
+        setUserInteractEventCallback.onResponse(true);
+    }
+
+    public void setUserLeaveEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, String userId) {
+        fStore = getFirestoreClient();
+        String eventTitle = event.getEventTitle();
+        String eventId = event.getEventId();
+        String hostId = event.getHostId();
+        AccessType accessType = event.getAccessType();
+        if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
+            fStore.collection("eventList").document(eventId).collection("usersJoined").document(userId).delete().addOnSuccessListener(aVoid -> {
+                fStore.collection("userProfiles").document(userId).update("joinedEvents",
+                        FieldValue.arrayRemove(eventId)).addOnSuccessListener(aVoid1 -> leaveUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
+                        .addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+            }).addOnFailureListener(e -> {
+                leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback);
+            });
+        } else if (accessType == AccessType.PRIVATE) {
+            fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId).collection("usersJoined").document(hostId).delete().addOnSuccessListener(aVoid -> {
+                fStore.collection("userProfiles").document(userId).update("joinedEvents",
+                        FieldValue.arrayRemove(eventId)).addOnSuccessListener(aVoid1 -> leaveUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
+                        .addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+            }).addOnFailureListener(e -> {
+                leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback);
+            });
+        }
+    }
+
+    private void leaveUserReturnFail(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
+        Log.d("INFO", "Failed to leave event: " + eventTitle + "!");
+        Toast.makeText(context, context.getResources().getString(R.string.event_detailed_leave_fail) + eventTitle + "!", Toast.LENGTH_SHORT).show();
+        setUserInteractEventCallback.onResponse(false);
+    }
+
+    private void leaveUserReturnSuccess(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
+        Log.d("INFO", "You left event: " + eventTitle + "!");
+        Toast.makeText(context, context.getResources().getString(R.string.event_detailed_leave_success) + eventTitle + "!", Toast.LENGTH_SHORT).show();
+        setUserInteractEventCallback.onResponse(true);
+    }
 
     public void getUserInFirestore(GetUserCallback getUserCallback, String userId){
         fStore = getFirestoreClient();
@@ -217,23 +281,45 @@ public class FirebaseFirestoreService {
 
     public void getEventParticipants(GetEventParticipantsCallback getEventParticipantsCallback, EventModel eventModel) {
         fStore = getFirestoreClient();
-        fStore.collection("eventList").document(eventModel.getEventId()).collection("usersJoined").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<String> usersList = new ArrayList<>();
-                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                    if (document != null) {
-                        usersList.add(document.getId());
+        String hostId = eventModel.getHostId();
+        String eventId = eventModel.getEventId();
+        if (eventModel.getAccessType() == AccessType.PUBLIC || eventModel.getAccessType() == AccessType.SELECTIVE) {
+            fStore.collection("eventList").document(eventId).collection("usersJoined").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    List<String> usersList = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        if (document != null) {
+                            usersList.add(document.getId());
+                        }
                     }
+                    getEventParticipantsCallback.onResponse(usersList);
                 }
-                getEventParticipantsCallback.onResponse(usersList);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                getEventParticipantsCallback.onResponse(null);
-            }
-        });
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    getEventParticipantsCallback.onResponse(null);
+                }
+            });
+        } else {
+            fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId).collection("usersJoined").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    List<String> usersList = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        if (document != null) {
+                            usersList.add(document.getId());
+                        }
+                    }
+                    getEventParticipantsCallback.onResponse(usersList);
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    getEventParticipantsCallback.onResponse(null);
+                }
+            });
+        }
     }
 
     public void getEventList(GetEventListCallback getEventListCallback) {

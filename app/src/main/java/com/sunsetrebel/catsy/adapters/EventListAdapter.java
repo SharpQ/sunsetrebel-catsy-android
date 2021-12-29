@@ -17,13 +17,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.sunsetrebel.catsy.fragments.EventListDetailedFragment;
 import com.sunsetrebel.catsy.models.EventModel;
 
@@ -39,7 +35,6 @@ import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.EventThemesService;
 import com.sunsetrebel.catsy.utils.ImageUtils;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
-import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
     private List<EventModel> eventList;
@@ -75,9 +70,9 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         //Set event avatar
         ImageUtils.loadImageView(context, eventList.get(position).getEventAvatar(), holder.ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
         //Set host avatar
-        ImageUtils.loadImageView(context, eventList.get(position).getUserProfileImg(), holder.ivHostAvatar, R.drawable.im_cat_hearts);
+        ImageUtils.loadImageView(context, eventList.get(position).getHostProfileImg(), holder.ivHostAvatar, R.drawable.im_cat_hearts);
         holder.tvEventTitle.setText(eventList.get(position).getEventTitle());
-        holder.tvHostName.setText(context.getString(R.string.event_list_host_placeholder) + eventList.get(position).getUserName());
+        holder.tvHostName.setText(context.getString(R.string.event_list_host_placeholder) + eventList.get(position).getHostName());
         holder.tvEventStartTime.setText(simpleDateFormat.format(eventList.get(position).getEventStartTime()));
         holder.tvEventLocation.setText(eventList.get(position).getEventLocation());
         holder.tvEventDescription.setText(eventList.get(position).getEventDescr());

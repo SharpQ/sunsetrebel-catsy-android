@@ -2,7 +2,6 @@ package com.sunsetrebel.catsy.models;
 
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.firebase.Timestamp;
 import com.sunsetrebel.catsy.utils.AccessType;
 import com.sunsetrebel.catsy.utils.EventThemes;
 
@@ -10,9 +9,9 @@ import java.util.Date;
 import java.util.List;
 
 public class EventModel {
-    private String userID;
-    private String userName;
-    private String userProfileImg;
+    private String hostId;
+    private String hostName;
+    private String hostProfileImg;
     private String eventId;
     private String eventTitle;
     private String eventLocation;
@@ -33,14 +32,14 @@ public class EventModel {
     public EventModel() {
     }
 
-    public EventModel(String userID, String userName, String userProfileImg, String eventId,
+    public EventModel(String hostId, String hostName, String hostProfileImg, String eventId,
                       String eventTitle, String eventLocation, LatLng eventGeoLocation,
                       Date eventStartTime, Date eventEndTime, AccessType accessType,
                       String eventDescr, Integer eventMinAge, Integer eventMaxAge, List<String> eventParticipants,
                       Integer eventMaxPerson, String eventAvatar, List<EventThemes> eventThemes, Date createTS, Date updateTS) {
-        this.userID = userID;
-        this.userName = userName;
-        this.userProfileImg = userProfileImg;
+        this.hostId = hostId;
+        this.hostName = hostName;
+        this.hostProfileImg = hostProfileImg;
         this.eventId = eventId;
         this.eventTitle = eventTitle;
         this.eventLocation = eventLocation;
@@ -59,19 +58,17 @@ public class EventModel {
         this.updateTS = updateTS;
     }
 
-    public String getUserID() { return userID; }
+    public String getHostId() { return hostId; }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
+    public void setHostId(String hostId) { this.hostId = hostId; }
 
-    public String getUserName() { return userName; }
+    public String getHostName() { return hostName; }
 
-    public void setUserName(String userName) { this.userName = userName; }
+    public void setHostName(String hostName) { this.hostName = hostName; }
 
-    public String getUserProfileImg() { return userProfileImg; }
+    public String getHostProfileImg() { return hostProfileImg; }
 
-    public void setUserProfileImg(String userProfileImg) { this.userProfileImg = userProfileImg; }
+    public void setHostProfileImg(String hostProfileImg) { this.hostProfileImg = hostProfileImg; }
 
     public String getEventId() {
         return eventId;

@@ -19,7 +19,6 @@ import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
 import com.sunsetrebel.catsy.utils.PermissionUtils;
-import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback {
@@ -61,7 +60,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                     GoogleMapService.setEventMarker(mMap,
                             event.getEventGeoLocation(),
                             event.getEventTitle(),
-                            hostPlaceholder + event.getUserName(),
+                            hostPlaceholder + event.getHostName(),
                             event.getEventAvatar(),
                             getContext());
                 }

@@ -53,21 +53,21 @@ public class NewEventViewModel extends ViewModel {
         eventModel.setEventMinAge(eventMinAgeValue);
         eventModel.setEventMaxAge(eventMaxAgeValue);
         eventModel.setEventMaxPerson(eventMaxPeopleValue);
-        eventModel.setUserID(fAuth.getCurrentUser().getUid());
+        eventModel.setHostId(fAuth.getCurrentUser().getUid());
         createEvent(context, eventAvatarURI);
     }
 
     private void createEvent(Context context, Uri eventAvatarURI) {
         firebaseFirestoreService.getUserNameInFirestore(userName -> {
-            eventModel.setUserName(userName);
+            eventModel.setHostName(userName);
             firebaseFirestoreService.getUserProfileImgInFirestore(userProfile -> {
-                eventModel.setUserProfileImg(userProfile);
+                eventModel.setHostProfileImg(userProfile);
                 Date date = new Date();
                 Timestamp createTS = new Timestamp(date);
                 if (eventAvatarURI != null) {
                     firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
                         if (validNewEventParams()) {
-                            firebaseFirestoreService.createNewEvent(context, eventModel.getUserID(), eventModel.getUserName(), eventModel.getUserProfileImg(),
+                            firebaseFirestoreService.createNewEvent(context, eventModel.getHostId(), eventModel.getHostName(), eventModel.getHostProfileImg(),
                                     eventModel.getEventTitle(), eventModel.getEventLocation(), eventModel.getEventGeoLocation(), eventModel.getEventStartTime(),
                                     eventModel.getEventEndTime(), eventModel.getAccessType(), eventModel.getEventDescr(),
                                     eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), downloadUrl, getConvertedEventThemes(), createTS, createTS);
@@ -77,7 +77,7 @@ public class NewEventViewModel extends ViewModel {
                     }, fAuth.getUid(), eventAvatarURI);
                 } else {
                     if (validNewEventParams()) {
-                        firebaseFirestoreService.createNewEvent(context, eventModel.getUserID(), eventModel.getUserName(), eventModel.getUserProfileImg(),
+                        firebaseFirestoreService.createNewEvent(context, eventModel.getHostId(), eventModel.getHostName(), eventModel.getHostProfileImg(),
                                 eventModel.getEventTitle(), eventModel.getEventLocation(), eventModel.getEventGeoLocation(), eventModel.getEventStartTime(),
                                 eventModel.getEventEndTime(), eventModel.getAccessType(), eventModel.getEventDescr(),
                                 eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), null, getConvertedEventThemes(), createTS, createTS);
@@ -90,7 +90,7 @@ public class NewEventViewModel extends ViewModel {
     }
 
     private boolean validNewEventParams() {
-        return !TextUtils.isEmpty(eventModel.getUserID()) && !TextUtils.isEmpty(eventModel.getUserName())
+        return !TextUtils.isEmpty(eventModel.getHostId()) && !TextUtils.isEmpty(eventModel.getHostName())
                 && !TextUtils.isEmpty(eventModel.getEventTitle()) && eventModel.getEventStartTime() != null
                 && eventModel.getEventEndTime() != null && eventModel.getAccessType() != null
                 && !TextUtils.isEmpty(eventModel.getEventDescr()) && !TextUtils.isEmpty(eventModel.getEventLocation())

@@ -14,13 +14,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -53,6 +50,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private Random rand = new Random();
     private EventThemesService eventThemesService;
     private Map<Enum<?>, String> eventThemesEnumList;
+    private boolean isUserJoinedToEvent;
 
     public EventListDetailedFragment() {
         // Required empty public constructor
@@ -98,9 +96,9 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         //Set event avatar
         ImageUtils.loadImageView(getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
         //Set host avatar
-        ImageUtils.loadImageView(getContext(), eventModel.getUserProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
+        ImageUtils.loadImageView(getContext(), eventModel.getHostProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
         tvEventTitle.setText(eventModel.getEventTitle());
-        tvHostName.setText(getContext().getString(R.string.event_list_host_placeholder) + eventModel.getUserName());
+        tvHostName.setText(getContext().getString(R.string.event_list_host_placeholder) + eventModel.getHostName());
         tvEventStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
         tvEventEndTime.setText(simpleDateFormat.format(eventModel.getEventEndTime()));
         tvEventDescription.setText(eventModel.getEventDescr());
@@ -145,24 +143,41 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         joinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (isUserJoinedToEvent) {
+                    eventListViewModel.leaveEvent(isResponseSuccessful -> {
+                        if (isResponseSuccessful) {
+                            setJoinButtonAsGuest();
+                        }
+                    }, getContext(), eventModel);
+                } else {
+                    eventListViewModel.joinEvent(isResponseSuccessful -> {
+                        if (isResponseSuccessful) {
+                            setJoinButtonAsJoined();
+                        }
+                    }, getContext(), eventModel);
+                }
             }
         });
         return v;
     }
 
     private void setJoinButtonAsHost() {
+        isUserJoinedToEvent = true;
         joinButton.setEnabled(false);
         joinButton.setText(getContext().getString(R.string.event_detailed_joined_button_user_host));
         joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blackQuoterTransparent)));
     }
 
     private void setJoinButtonAsJoined() {
+        isUserJoinedToEvent = true;
+        joinButton.setEnabled(true);
         joinButton.setText(getContext().getString(R.string.event_detailed_joined_button_leave_state));
         joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryLightColor)));
     }
 
     private void setJoinButtonAsGuest() {
+        isUserJoinedToEvent = false;
+        joinButton.setEnabled(true);
         joinButton.setText(getContext().getString(R.string.event_detailed_join_button));
         joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
     }

@@ -1,9 +1,8 @@
 package com.sunsetrebel.catsy.viewmodel;
 
-import android.util.Log;
+import android.content.Context;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -18,11 +17,17 @@ public class EventListViewModel extends ViewModel {
     private FirebaseFirestoreService firebaseFirestoreService;
     private FirebaseAuthService firebaseAuthService;
     private EventModel selectedEvent;
+    private String userId;
 
     public void init() {
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
         eventList = firebaseFirestoreService.getEventListMutableLiveData();
         firebaseAuthService = FirebaseAuthService.getInstance();
+        userId = firebaseAuthService.getFirebaseClient().getCurrentUser().getUid();
+    }
+
+    public interface SetUserInteractEventCallback {
+        void onResponse(Boolean isResponseSuccessful);
     }
 
     public LiveData<List<EventModel>> getLiveEventListData() {
@@ -42,13 +47,10 @@ public class EventListViewModel extends ViewModel {
     }
 
     public boolean isUserEventHost(EventModel event) {
-        FirebaseAuth fAuth = firebaseAuthService.getFirebaseClient();
-        return fAuth.getCurrentUser().getUid().equals(event.getUserID());
+        return userId.equals(event.getHostId());
     }
 
     public boolean isUserJoinedToEvent(List<String> joinedUsers) {
-        FirebaseAuth fAuth = firebaseAuthService.getFirebaseClient();
-        String userId = fAuth.getCurrentUser().getUid();
         for (String user : joinedUsers) {
             if (userId.equals(user)) {
                 return true;
@@ -57,11 +59,15 @@ public class EventListViewModel extends ViewModel {
         return false;
     }
 
-    public void joinEvent() {
-
+    public void joinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel eventModel) {
+        firebaseFirestoreService.setUserJoinEvent(value -> {
+            setUserInteractEventCallback.onResponse(value);
+        }, context, eventModel, userId);
     }
 
-    public void leaveEvent() {
-
+    public void leaveEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel eventModel) {
+        firebaseFirestoreService.setUserLeaveEvent(value -> {
+            setUserInteractEventCallback.onResponse(value);
+        }, context, eventModel, userId);
     }
 }
