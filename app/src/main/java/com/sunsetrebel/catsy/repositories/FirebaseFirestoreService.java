@@ -124,6 +124,7 @@ public class FirebaseFirestoreService {
         event.put("eventMaxPerson", eventMaxPerson);
         event.put("eventAvatar", eventAvatar);
         event.put("eventThemes", eventThemes);
+        event.put("eventParticipants", 1);
         event.put("hostId", hostId);
         event.put("hostName", hostName);
         event.put("hostProfileImg", hostProfileImg);
@@ -157,16 +158,24 @@ public class FirebaseFirestoreService {
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
             fStore.collection("eventList").document(eventId).collection("usersJoined").document(userId).set(userMap).addOnSuccessListener(aVoid -> {
                 fStore.collection("userProfiles").document(userId).update("joinedEvents",
-                        FieldValue.arrayUnion(eventId)).addOnSuccessListener(aVoid1 -> joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
-                        .addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+                        FieldValue.arrayUnion(eventId)).addOnSuccessListener(aVoid1 -> {
+                            fStore.collection("eventList").document(eventId).update("eventParticipants", FieldValue.increment(1)).addOnSuccessListener(aVoid2 -> {
+                                joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback);
+                            }).addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+                        }).addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
             }).addOnFailureListener(e -> {
                 joinUserReturnFail(context, eventTitle, setUserInteractEventCallback);
             });
         } else if (accessType == AccessType.PRIVATE) {
-            fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId).collection("usersJoined").document(hostId).set(userMap).addOnSuccessListener(aVoid -> {
-                fStore.collection("userProfiles").document(userId).update("joinedEvents",
-                        FieldValue.arrayUnion(eventId)).addOnSuccessListener(aVoid1 -> joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
-                        .addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+            fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId).collection("usersJoined").document(hostId).set(userMap)
+                    .addOnSuccessListener(aVoid -> {
+                        fStore.collection("userProfiles").document(userId).update("joinedEvents",
+                        FieldValue.arrayUnion(eventId)).addOnSuccessListener(aVoid1 -> {
+                            fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId)
+                                    .update("eventParticipants", FieldValue.increment(1)).addOnSuccessListener(aVoid2 -> {
+                                joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback);
+                            }).addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+                        }).addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
                 joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback);
             }).addOnFailureListener(e -> {
                 joinUserReturnFail(context, eventTitle, setUserInteractEventCallback);
@@ -195,16 +204,24 @@ public class FirebaseFirestoreService {
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
             fStore.collection("eventList").document(eventId).collection("usersJoined").document(userId).delete().addOnSuccessListener(aVoid -> {
                 fStore.collection("userProfiles").document(userId).update("joinedEvents",
-                        FieldValue.arrayRemove(eventId)).addOnSuccessListener(aVoid1 -> leaveUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
-                        .addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+                        FieldValue.arrayRemove(eventId)).addOnSuccessListener(aVoid1 -> {
+                    fStore.collection("eventList").document(eventId).update("eventParticipants", FieldValue.increment(-1))
+                            .addOnSuccessListener(aVoid2 -> {
+                                leaveUserReturnSuccess(context, eventTitle, setUserInteractEventCallback);
+                            }).addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+                        }).addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
             }).addOnFailureListener(e -> {
                 leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback);
             });
         } else if (accessType == AccessType.PRIVATE) {
             fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId).collection("usersJoined").document(hostId).delete().addOnSuccessListener(aVoid -> {
                 fStore.collection("userProfiles").document(userId).update("joinedEvents",
-                        FieldValue.arrayRemove(eventId)).addOnSuccessListener(aVoid1 -> leaveUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
-                        .addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+                        FieldValue.arrayRemove(eventId)).addOnSuccessListener(aVoid1 -> {
+                    fStore.collection("userProfiles").document(hostId).collection("userEvents").document(eventId)
+                            .update("eventParticipants", FieldValue.increment(-1)).addOnSuccessListener(aVoid2 -> {
+                                leaveUserReturnSuccess(context, eventTitle, setUserInteractEventCallback);
+                            }).addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
+                        }).addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
             }).addOnFailureListener(e -> {
                 leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback);
             });
@@ -356,7 +373,7 @@ public class FirebaseFirestoreService {
                 AccessType.valueOf(map.get("eventAccessType").toString()),
                 map.get("eventDescription").toString(),
                 convertObjectToInteger(map.get("eventMinAge")), convertObjectToInteger(map.get("eventMaxAge")),
-                null, convertObjectToInteger(map.get("eventMaxPerson")),
+                convertObjectToInteger(map.get("eventParticipants")), null, convertObjectToInteger(map.get("eventMaxPerson")),
                 convertObjectToString(map.get("eventAvatar")), convertEventThemes((ArrayList<Object[]>) map.get("eventThemes")),
                 ((Timestamp) map.get("createTS")).toDate(), ((Timestamp) map.get("updateTS")).toDate());
     }

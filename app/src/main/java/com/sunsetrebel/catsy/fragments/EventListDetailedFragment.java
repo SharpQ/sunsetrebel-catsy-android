@@ -51,6 +51,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private EventThemesService eventThemesService;
     private Map<Enum<?>, String> eventThemesEnumList;
     private boolean isUserJoinedToEvent;
+    private boolean isUserEventHost;
 
     public EventListDetailedFragment() {
         // Required empty public constructor
@@ -102,16 +103,24 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         tvEventStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
         tvEventEndTime.setText(simpleDateFormat.format(eventModel.getEventEndTime()));
         tvEventDescription.setText(eventModel.getEventDescr());
-        tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants().size()));
+        tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants()));
         setIntegerTextFields(eventModel.getEventMinAge(), tvEventMinAge);
         setIntegerTextFields(eventModel.getEventMaxAge(), tvEventMaxAge);
         setIntegerTextFields(eventModel.getEventMaxPerson(), tvEventMaxPerson);
+        isUserEventHost = eventListViewModel.isUserEventHost(eventModel);
 
-        if (eventListViewModel.isUserEventHost(eventModel)) {
+        if (isUserEventHost) {
             setJoinButtonAsHost();
-        } else if (eventListViewModel.isUserJoinedToEvent(eventModel.getEventParticipants())) {
-            setJoinButtonAsJoined();
         }
+
+        eventListViewModel.getEventParticipants(value -> {
+            boolean isUserJoinedToEvent = eventListViewModel.isUserJoinedToEvent(value);
+            if (!isUserEventHost && isUserJoinedToEvent) {
+                setJoinButtonAsJoined();
+            } else if (!eventListViewModel.isUserEventHost(eventModel) && !isUserJoinedToEvent) {
+                setJoinButtonAsGuest();
+            }
+        }, eventModel);
 
         List<EventThemes> eventThemes = eventModel.getEventThemes();
         if (eventThemes != null) {

@@ -11,6 +11,7 @@ import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 
 import java.util.List;
+import java.util.Locale;
 
 public class EventListViewModel extends ViewModel {
     private LiveData<List<EventModel>> eventList;
@@ -28,6 +29,10 @@ public class EventListViewModel extends ViewModel {
 
     public interface SetUserInteractEventCallback {
         void onResponse(Boolean isResponseSuccessful);
+    }
+
+    public interface GetEventParticipantsCallback {
+        void onResponse(List<String> value);
     }
 
     public LiveData<List<EventModel>> getLiveEventListData() {
@@ -48,6 +53,13 @@ public class EventListViewModel extends ViewModel {
 
     public boolean isUserEventHost(EventModel event) {
         return userId.equals(event.getHostId());
+    }
+
+    public void getEventParticipants(GetEventParticipantsCallback getEventParticipantsCallback, EventModel eventModel) {
+        firebaseFirestoreService.getEventParticipants(value -> {
+            eventModel.setJoinedUsersList(value);
+            getEventParticipantsCallback.onResponse(value);
+        }, eventModel);
     }
 
     public boolean isUserJoinedToEvent(List<String> joinedUsers) {

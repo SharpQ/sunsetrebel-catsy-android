@@ -22,7 +22,8 @@ public class EventModel {
     private String eventDescr;
     private Integer eventMinAge;
     private Integer eventMaxAge;
-    private List<String> eventParticipants;
+    private Integer eventParticipants;
+    private List<String> joinedUsersList;
     private Integer eventMaxPerson;
     private String eventAvatar;
     private List<EventThemes> eventThemes;
@@ -35,7 +36,7 @@ public class EventModel {
     public EventModel(String hostId, String hostName, String hostProfileImg, String eventId,
                       String eventTitle, String eventLocation, LatLng eventGeoLocation,
                       Date eventStartTime, Date eventEndTime, AccessType accessType,
-                      String eventDescr, Integer eventMinAge, Integer eventMaxAge, List<String> eventParticipants,
+                      String eventDescr, Integer eventMinAge, Integer eventMaxAge, Integer eventParticipants, List<String> joinedUsersList,
                       Integer eventMaxPerson, String eventAvatar, List<EventThemes> eventThemes, Date createTS, Date updateTS) {
         this.hostId = hostId;
         this.hostName = hostName;
@@ -51,6 +52,7 @@ public class EventModel {
         this.eventMinAge = eventMinAge;
         this.eventMaxAge = eventMaxAge;
         this.eventParticipants = eventParticipants;
+        this.joinedUsersList = joinedUsersList;
         this.eventMaxPerson = eventMaxPerson;
         this.eventAvatar = eventAvatar;
         this.eventThemes = eventThemes;
@@ -134,9 +136,13 @@ public class EventModel {
 
     public void setEventMaxAge(Integer eventMaxAge) { this.eventMaxAge = eventMaxAge; }
 
-    public List<String> getEventParticipants() { return eventParticipants; }
+    public Integer getEventParticipants() { return eventParticipants; }
 
-    public void setEventParticipants(List<String> eventParticipants) { this.eventParticipants = eventParticipants; }
+    public void setEventParticipants(Integer eventParticipants) { this.eventParticipants = eventParticipants; }
+
+    public List<String> getJoinedUsersList() { return joinedUsersList; }
+
+    public void setJoinedUsersList(List<String> joinedUsersList) { this.joinedUsersList = joinedUsersList; }
 
     public Integer getEventMaxPerson() { return eventMaxPerson; }
 
