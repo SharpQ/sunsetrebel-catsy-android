@@ -48,7 +48,7 @@ public class FirebaseAuthService {
     public void setFirebaseUser(FirebaseUser user, LoginType loginType) {
         this.user = user;
         FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
-        firebaseFirestoreService.getUserInFirestore(value -> {
+        firebaseFirestoreService.isUserRegistered(value -> {
             if(!value) {
                 if (loginType == LoginType.GOOGLE) {
                     String photoUrl = null;
@@ -76,7 +76,7 @@ public class FirebaseAuthService {
     public void setFirebaseUser(FirebaseUser user, LoginType loginType, String userName) {
         this.user = user;
         FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
-        firebaseFirestoreService.getUserInFirestore(value -> {
+        firebaseFirestoreService.isUserRegistered(value -> {
             if(!value) {
                 if (loginType == LoginType.GOOGLE) {
                     String photoUrl = null;

@@ -20,21 +20,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.EventListDetailedFragment;
 import com.sunsetrebel.catsy.models.EventModel;
+import com.sunsetrebel.catsy.utils.EventThemes;
+import com.sunsetrebel.catsy.utils.EventThemesService;
+import com.sunsetrebel.catsy.utils.ImageUtils;
+import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-
-import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
-import com.sunsetrebel.catsy.utils.EventThemes;
-import com.sunsetrebel.catsy.utils.EventThemesService;
-import com.sunsetrebel.catsy.utils.ImageUtils;
-import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
     private List<EventModel> eventList;
@@ -44,7 +42,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     private Map<Enum<?>, String> eventThemesEnumList;
     private Random rand = new Random();
     private EventListViewModel eventListViewModel;
-    private FirebaseFirestoreService firebaseFirestoreService;
 
 
     public EventListAdapter(Context context, FragmentActivity fragmentActivity, List<EventModel> eventList) {
@@ -54,7 +51,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         eventThemesService = new EventThemesService(context.getResources());
         eventThemesEnumList = eventThemesService.getEventThemesList();
         eventListViewModel = new ViewModelProvider(fragmentActivity).get(EventListViewModel.class);
-        firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     }
 
     @Override
