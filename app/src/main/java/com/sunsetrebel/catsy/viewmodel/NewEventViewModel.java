@@ -49,44 +49,38 @@ public class NewEventViewModel extends ViewModel {
     }
 
     public void completeNewEventInfo(Context context, String eventDescrValue, Uri eventAvatarURI, Integer eventMinAgeValue, Integer eventMaxAgeValue, Integer eventMaxPeopleValue) {
+        Date date = new Date();
+        Timestamp createTS = new Timestamp(date);
+        eventModel.setCreateTS(createTS);
+        eventModel.setUpdateTS(createTS);
         eventModel.setEventDescr(eventDescrValue);
         eventModel.setEventMinAge(eventMinAgeValue);
         eventModel.setEventMaxAge(eventMaxAgeValue);
         eventModel.setEventMaxPerson(eventMaxPeopleValue);
         eventModel.setHostId(fAuth.getCurrentUser().getUid());
-        createEvent(context, eventAvatarURI);
+        firebaseFirestoreService.getUserProfile(userProfile -> {
+            eventModel.setHostName(userProfile.getUserFullName());
+            eventModel.setHostProfileImg(userProfile.getUserProfileImg());
+            if (eventAvatarURI != null) {
+                firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
+                    createEvent(context, downloadUrl);
+                }, fAuth.getUid(), eventAvatarURI);
+            } else {
+                createEvent(context, null);
+            }
+        }, fAuth.getUid());
     }
 
-    private void createEvent(Context context, Uri eventAvatarURI) {
-        firebaseFirestoreService.getUserNameInFirestore(userName -> {
-            eventModel.setHostName(userName);
-            firebaseFirestoreService.getUserProfileImgInFirestore(userProfile -> {
-                eventModel.setHostProfileImg(userProfile);
-                Date date = new Date();
-                Timestamp createTS = new Timestamp(date);
-                if (eventAvatarURI != null) {
-                    firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
-                        if (validNewEventParams()) {
-                            firebaseFirestoreService.createNewEvent(context, eventModel.getHostId(), eventModel.getHostName(), eventModel.getHostProfileImg(),
-                                    eventModel.getEventTitle(), eventModel.getEventLocation(), eventModel.getEventGeoLocation(), eventModel.getEventStartTime(),
-                                    eventModel.getEventEndTime(), eventModel.getAccessType(), eventModel.getEventDescr(),
-                                    eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), downloadUrl, getConvertedEventThemes(), createTS, createTS);
-                        } else {
-                            Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
-                        }
-                    }, fAuth.getUid(), eventAvatarURI);
-                } else {
-                    if (validNewEventParams()) {
-                        firebaseFirestoreService.createNewEvent(context, eventModel.getHostId(), eventModel.getHostName(), eventModel.getHostProfileImg(),
-                                eventModel.getEventTitle(), eventModel.getEventLocation(), eventModel.getEventGeoLocation(), eventModel.getEventStartTime(),
-                                eventModel.getEventEndTime(), eventModel.getAccessType(), eventModel.getEventDescr(),
-                                eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), null, getConvertedEventThemes(), createTS, createTS);
-                    } else {
-                        Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }, fAuth.getUid());
-        }, fAuth.getUid());
+    private void createEvent(Context context, String eventAvatarDownloadURI) {
+        if (validNewEventParams()) {
+            firebaseFirestoreService.createNewEvent(context, eventModel.getHostId(), eventModel.getHostName(), eventModel.getHostProfileImg(),
+                    eventModel.getEventTitle(), eventModel.getEventLocation(), eventModel.getEventGeoLocation(), eventModel.getEventStartTime(),
+                    eventModel.getEventEndTime(), eventModel.getAccessType(), eventModel.getEventDescr(),
+                    eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), eventAvatarDownloadURI, getConvertedEventThemes(),
+                    eventModel.getCreateTS(), eventModel.getUpdateTS());
+        } else {
+            Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private boolean validNewEventParams() {

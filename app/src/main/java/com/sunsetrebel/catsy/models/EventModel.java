@@ -2,6 +2,7 @@ package com.sunsetrebel.catsy.models;
 
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.Timestamp;
 import com.sunsetrebel.catsy.utils.AccessType;
 import com.sunsetrebel.catsy.utils.EventThemes;
 
@@ -27,8 +28,8 @@ public class EventModel {
     private Integer eventMaxPerson;
     private String eventAvatar;
     private List<EventThemes> eventThemes;
-    private Date createTS;
-    private Date updateTS;
+    private Timestamp createTS;
+    private Timestamp updateTS;
 
     public EventModel() {
     }
@@ -37,7 +38,7 @@ public class EventModel {
                       String eventTitle, String eventLocation, LatLng eventGeoLocation,
                       Date eventStartTime, Date eventEndTime, AccessType accessType,
                       String eventDescr, Integer eventMinAge, Integer eventMaxAge, Integer eventParticipants, List<String> joinedUsersList,
-                      Integer eventMaxPerson, String eventAvatar, List<EventThemes> eventThemes, Date createTS, Date updateTS) {
+                      Integer eventMaxPerson, String eventAvatar, List<EventThemes> eventThemes, Timestamp createTS, Timestamp updateTS) {
         this.hostId = hostId;
         this.hostName = hostName;
         this.hostProfileImg = hostProfileImg;
@@ -160,16 +161,16 @@ public class EventModel {
 
     public void setEventThemes(List<EventThemes> eventThemes) { this.eventThemes = eventThemes; }
 
-    public Date getCreateTS() {
+    public Timestamp getCreateTS() {
         return createTS;
     }
 
-    public void setCreateTS(Date createTS) { this.createTS = createTS; }
+    public void setCreateTS(Timestamp createTS) { this.createTS = createTS; }
 
-    public Date getUpdateTS() {
+    public Timestamp getUpdateTS() {
         return updateTS;
     }
 
-    public void setUpdateTS(Date updateTS) { this.updateTS = updateTS; }
+    public void setUpdateTS(Timestamp updateTS) { this.updateTS = updateTS; }
 
 }

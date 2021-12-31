@@ -21,6 +21,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
+import com.sunsetrebel.catsy.models.UserProfileModel;
 import com.sunsetrebel.catsy.utils.AccessType;
 import com.sunsetrebel.catsy.utils.EventThemes;
 
@@ -52,8 +53,8 @@ public class FirebaseFirestoreService {
         void onResponse(Boolean value);
     }
 
-    public interface GetUserNameCallback {
-        void onResponse(String value);
+    public interface GetUserProfileCallback {
+        void onResponse(UserProfileModel userProfile);
     }
 
     public interface GetEventListCallback {
@@ -114,10 +115,14 @@ public class FirebaseFirestoreService {
         if (fullName == null) {
             fullName = "userName";
         }
-        user.put("fullName", fullName);
-        user.put("email", email);
-        user.put("phone", phone);
-        user.put("profileImg", profileUrl);
+        user.put("userId", userId);
+        user.put("userFullName", fullName);
+        user.put("userEmail", email);
+        user.put("userPhone", phone);
+        user.put("userProfileImg", profileUrl);
+        user.put("joinedEvents", null);
+        user.put("hostedPublicEvents", null);
+        user.put("hostedPrivateEvents", null);
         getUserProfileDocRef(userId).set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userId));
     }
 
@@ -247,20 +252,10 @@ public class FirebaseFirestoreService {
         });
     }
 
-    public void getUserNameInFirestore(GetUserNameCallback getUserNameCallback, String userId) {
+    public void getUserProfile(GetUserProfileCallback getUserProfileCallback, String userId) {
         getUserProfileDocRef(userId).get(Source.SERVER).addOnSuccessListener(documentSnapshot -> {
-            getUserNameCallback.onResponse(documentSnapshot.get("fullName").toString());
-        }).addOnFailureListener(e -> getUserNameCallback.onResponse(null));
-    }
-
-    public void getUserProfileImgInFirestore(GetUserNameCallback getUserNameCallback, String userId) {
-        getUserProfileDocRef(userId).get(Source.SERVER).addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.get("profileImg") != null) {
-                getUserNameCallback.onResponse(documentSnapshot.get("profileImg").toString());
-            } else {
-                getUserNameCallback.onResponse(null);
-            }
-        }).addOnFailureListener(e -> getUserNameCallback.onResponse(null));
+            getUserProfileCallback.onResponse(convertUserProfileDocumentToModel(documentSnapshot.getData()));
+        }).addOnFailureListener(e -> getUserProfileCallback.onResponse(null));
     }
 
     public void getEventList(GetEventListCallback getEventListCallback) {
@@ -268,7 +263,7 @@ public class FirebaseFirestoreService {
             List<EventModel> eventList = new ArrayList<>();
             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                 if (document != null) {
-                    EventModel event = convertDocumentToModel(document.getData());
+                    EventModel event = convertEventDocumentToModel(document.getData());
                     eventList.add(event);
                 }
             }
@@ -281,7 +276,7 @@ public class FirebaseFirestoreService {
             List<EventModel> eventList = new ArrayList<>();
             for (QueryDocumentSnapshot document : value) {
                 if (document != null) {
-                    EventModel event = convertDocumentToModel(document.getData());
+                    EventModel event = convertEventDocumentToModel(document.getData());
                     eventList.add(event);
                 }
             }
@@ -318,7 +313,7 @@ public class FirebaseFirestoreService {
         }).addOnFailureListener(e -> getEventParticipantsCallback.onResponse(null));
     }
 
-    private EventModel convertDocumentToModel(Map<String, Object> map) {
+    private EventModel convertEventDocumentToModel(Map<String, Object> map) {
         return new EventModel(map.get("hostId").toString(), map.get("hostName").toString(),
                 convertObjectToString(map.get("hostProfileImg")), map.get("eventId").toString(),
                 map.get("eventTitle").toString(), map.get("eventLocation").toString(),
@@ -330,7 +325,7 @@ public class FirebaseFirestoreService {
                 convertObjectToInteger(map.get("eventMinAge")), convertObjectToInteger(map.get("eventMaxAge")),
                 convertObjectToInteger(map.get("eventParticipants")), null, convertObjectToInteger(map.get("eventMaxPerson")),
                 convertObjectToString(map.get("eventAvatar")), convertEventThemes((ArrayList<Object[]>) map.get("eventThemes")),
-                ((Timestamp) map.get("createTS")).toDate(), ((Timestamp) map.get("updateTS")).toDate());
+                ((Timestamp) map.get("createTS")), ((Timestamp) map.get("updateTS")));
     }
 
     private String convertObjectToString(Object object) {
@@ -361,5 +356,24 @@ public class FirebaseFirestoreService {
             }
         }
         return convertedEventThemeServices;
+    }
+
+    private UserProfileModel convertUserProfileDocumentToModel(Map<String, Object> map) {
+        return new UserProfileModel(map.get("userId").toString(), convertObjectToString(map.get("userEmail")),
+                convertObjectToString(map.get("userPhone")), map.get("userFullName").toString(),
+                convertObjectToString(map.get("userProfileImg")),
+                convertUserProfileEvents((ArrayList<Object[]>) map.get("hostedPublicEvents")),
+                convertUserProfileEvents((ArrayList<Object[]>) map.get("hostedPrivateEvents")),
+                convertUserProfileEvents((ArrayList<Object[]>) map.get("joinedEvents")));
+    }
+
+    private List<String> convertUserProfileEvents(ArrayList<Object[]> userEventsObjects) {
+        List<String> userEvents = new ArrayList<>();
+        if (userEventsObjects != null) {
+            for (Object object : userEventsObjects) {
+                userEvents.add(object.toString());
+            }
+        }
+        return userEvents;
     }
 }
