@@ -11,6 +11,7 @@ import com.sunsetrebel.catsy.fragments.AccountFragment;
 import com.sunsetrebel.catsy.fragments.NewEventPrimaryFragment;
 import com.sunsetrebel.catsy.fragments.EventListFragment;
 import com.sunsetrebel.catsy.fragments.MapsFragment;
+import com.sunsetrebel.catsy.repositories.UserProfileService;
 import com.sunsetrebel.catsy.utils.MediaPlayerService;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         MediaPlayerService.playIntro(this);
         hideSystemUI();
-
+        UserProfileService.getInstance();
         Fragment mapsfragment = new MapsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, mapsfragment)

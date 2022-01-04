@@ -4,9 +4,11 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
@@ -253,8 +255,12 @@ public class FirebaseFirestoreService {
     }
 
     public void getUserProfile(GetUserProfileCallback getUserProfileCallback, String userId) {
-        getUserProfileDocRef(userId).get(Source.SERVER).addOnSuccessListener(documentSnapshot -> {
-            getUserProfileCallback.onResponse(convertUserProfileDocumentToModel(documentSnapshot.getData()));
+        getUserProfileDocRef(userId).get().addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.getData() != null) {
+                getUserProfileCallback.onResponse(convertUserProfileDocumentToModel(documentSnapshot.getData()));
+            } else {
+                getUserProfileCallback.onResponse(null);
+            }
         }).addOnFailureListener(e -> getUserProfileCallback.onResponse(null));
     }
 
@@ -313,6 +319,13 @@ public class FirebaseFirestoreService {
         }).addOnFailureListener(e -> getEventParticipantsCallback.onResponse(null));
     }
 
+    public void setEventAsLikedByUser(SetUserInteractEventCallback setUserInteractEventCallback, String userId, String eventId) {
+        Task<Void> task1 = getUserProfileDocRef(userId).update("likedEvents", FieldValue.arrayUnion(eventId));
+        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1);
+        allTasks.addOnSuccessListener(querySnapshots -> setUserInteractEventCallback.onResponse(true))
+                .addOnFailureListener(e -> setUserInteractEventCallback.onResponse(false));
+    }
+
     private EventModel convertEventDocumentToModel(Map<String, Object> map) {
         return new EventModel(map.get("hostId").toString(), map.get("hostName").toString(),
                 convertObjectToString(map.get("hostProfileImg")), map.get("eventId").toString(),
@@ -362,9 +375,10 @@ public class FirebaseFirestoreService {
         return new UserProfileModel(map.get("userId").toString(), convertObjectToString(map.get("userEmail")),
                 convertObjectToString(map.get("userPhone")), map.get("userFullName").toString(),
                 convertObjectToString(map.get("userProfileImg")),
+                convertUserProfileEvents((ArrayList<Object[]>) map.get("joinedEvents")),
                 convertUserProfileEvents((ArrayList<Object[]>) map.get("hostedPublicEvents")),
                 convertUserProfileEvents((ArrayList<Object[]>) map.get("hostedPrivateEvents")),
-                convertUserProfileEvents((ArrayList<Object[]>) map.get("joinedEvents")));
+                convertUserProfileEvents((ArrayList<Object[]>) map.get("likedEvents")));
     }
 
     private List<String> convertUserProfileEvents(ArrayList<Object[]> userEventsObjects) {

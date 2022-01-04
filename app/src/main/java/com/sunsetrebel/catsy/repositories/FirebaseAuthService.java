@@ -23,6 +23,10 @@ public class FirebaseAuthService {
     private final static int RC_SIGN_IN = 123;
     private FirebaseUser user;
 
+    public interface CreateUserCallback {
+        void onResponse(Boolean isResponseSuccessful);
+    }
+
     public FirebaseAuthService() {
         fAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
     }
@@ -45,34 +49,6 @@ public class FirebaseAuthService {
         return RC_SIGN_IN;
     }
 
-    public void setFirebaseUser(FirebaseUser user, LoginType loginType) {
-        this.user = user;
-        FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
-        firebaseFirestoreService.isUserRegistered(value -> {
-            if(!value) {
-                if (loginType == LoginType.GOOGLE) {
-                    String photoUrl = null;
-                    if (fAuth.getCurrentUser().getPhotoUrl() != null) {
-                        photoUrl = fAuth.getCurrentUser().getPhotoUrl().toString();
-                    }
-                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
-                            fAuth.getCurrentUser().getPhoneNumber(), photoUrl);
-                } else if (loginType == LoginType.FACEBOOK) {
-                    String photoUrl = null;
-                    if (fAuth.getCurrentUser().getPhotoUrl() != null) {
-                        photoUrl = fAuth.getCurrentUser().getPhotoUrl().toString();
-                    }
-                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
-                            fAuth.getCurrentUser().getPhoneNumber(), photoUrl);
-                } else if (loginType == LoginType.PHONE) {
-                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), null, null, fAuth.getCurrentUser().getPhoneNumber(), null);
-                } else if (loginType == LoginType.EMAIL) {
-                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), null, fAuth.getCurrentUser().getEmail(), null, null);
-                }
-            }
-        }, fAuth.getCurrentUser().getUid());
-    }
-
     public void setFirebaseUser(FirebaseUser user, LoginType loginType, String userName) {
         this.user = user;
         FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
@@ -83,14 +59,14 @@ public class FirebaseAuthService {
                     if (fAuth.getCurrentUser().getPhotoUrl() != null) {
                         photoUrl = fAuth.getCurrentUser().getPhotoUrl().toString();
                     }
-                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
+                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), userName, fAuth.getCurrentUser().getEmail(),
                             fAuth.getCurrentUser().getPhoneNumber(), photoUrl);
                 } else if (loginType == LoginType.FACEBOOK) {
                     String photoUrl = null;
                     if (fAuth.getCurrentUser().getPhotoUrl() != null) {
                         photoUrl = fAuth.getCurrentUser().getPhotoUrl().toString();
                     }
-                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), fAuth.getCurrentUser().getDisplayName(), fAuth.getCurrentUser().getEmail(),
+                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), userName, fAuth.getCurrentUser().getEmail(),
                             fAuth.getCurrentUser().getPhoneNumber(), photoUrl);
                 } else if (loginType == LoginType.PHONE) {
                     firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), userName, null, fAuth.getCurrentUser().getPhoneNumber(), null);

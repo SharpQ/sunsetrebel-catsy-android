@@ -10,9 +10,11 @@ import androidx.lifecycle.ViewModel;
 import com.google.android.gms.maps.model.LatLng;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
+import com.sunsetrebel.catsy.models.UserProfileModel;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.repositories.FirebaseStorageService;
+import com.sunsetrebel.catsy.repositories.UserProfileService;
 import com.sunsetrebel.catsy.utils.AccessType;
 import com.sunsetrebel.catsy.utils.EventThemes;
 
@@ -27,11 +29,14 @@ public class NewEventViewModel extends ViewModel {
     private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
     private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private final FirebaseStorageService firebaseStorageService = FirebaseStorageService.getInstance();
+    private final UserProfileService userProfileService = UserProfileService.getInstance();
+    private UserProfileModel userProfileModel;
 
 
     public void init() {
         eventModel = new EventModel();
         fAuth = firebaseAuthService.getFirebaseClient();
+        userProfileModel = userProfileService.getUserProfile();
     }
 
     public void setNewEventPrimaryInfo(String eventTitle, AccessType accessType, Date eventStartTime,
@@ -58,17 +63,15 @@ public class NewEventViewModel extends ViewModel {
         eventModel.setEventMaxAge(eventMaxAgeValue);
         eventModel.setEventMaxPerson(eventMaxPeopleValue);
         eventModel.setHostId(fAuth.getCurrentUser().getUid());
-        firebaseFirestoreService.getUserProfile(userProfile -> {
-            eventModel.setHostName(userProfile.getUserFullName());
-            eventModel.setHostProfileImg(userProfile.getUserProfileImg());
-            if (eventAvatarURI != null) {
-                firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
-                    createEvent(context, downloadUrl);
-                }, fAuth.getUid(), eventAvatarURI);
-            } else {
-                createEvent(context, null);
-            }
-        }, fAuth.getUid());
+        eventModel.setHostName(userProfileModel.getUserFullName());
+        eventModel.setHostProfileImg(userProfileModel.getUserProfileImg());
+        if (eventAvatarURI != null) {
+            firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
+                createEvent(context, downloadUrl);
+            }, fAuth.getUid(), eventAvatarURI);
+        } else {
+            createEvent(context, null);
+        }
     }
 
     private void createEvent(Context context, String eventAvatarDownloadURI) {

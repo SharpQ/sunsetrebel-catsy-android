@@ -11,12 +11,14 @@ public class UserProfileModel {
     private List<String> joinedEvents;
     private List<String> hostedPublicEvents;
     private List<String> hostedPrivateEvents;
+    private List<String> likedEvents;
 
     public UserProfileModel() {
     }
 
     public UserProfileModel(String userId, String userEmail, String userPhone, String userFullName, String userProfileImg,
-                            List<String> joinedEvents, List<String> hostedPublicEvents, List<String> hostedPrivateEvents) {
+                            List<String> joinedEvents, List<String> hostedPublicEvents, List<String> hostedPrivateEvents,
+                            List<String> likedEvents) {
         this.userId = userId;
         this.userEmail = userEmail;
         this.userPhone = userPhone;
@@ -25,6 +27,7 @@ public class UserProfileModel {
         this.joinedEvents = joinedEvents;
         this.hostedPublicEvents = hostedPublicEvents;
         this.hostedPrivateEvents = hostedPrivateEvents;
+        this.likedEvents = likedEvents;
     }
 
     public String getUserId() { return userId; }
@@ -58,4 +61,12 @@ public class UserProfileModel {
     public List<String> getHostedPrivateEvents() { return hostedPrivateEvents; }
 
     public void setHostedPrivateEvents(List<String> hostedPrivateEvents) { this.hostedPrivateEvents = hostedPrivateEvents; }
+
+    public List<String> getLikedEvents() { return likedEvents; }
+
+    public void setLikedEvents(List<String> likedEvents) { this.likedEvents = likedEvents; }
+
+    public void addLikedEvents(String eventId) {
+        this.likedEvents.add(eventId);
+    }
 }

@@ -66,7 +66,6 @@
     <string name="event_detailed_max_participants_text">Max person:</string>
     <string name="event_detailed_min_age_text">Min age:</string>
     <string name="event_detailed_max_age_text">Max age:</string>
-    <string name="event_detailed_joined_button_user_host">You are host</string>
     <string name="event_detailed_joined_button_leave_state">Leave</string>
     <string name="event_detailed_join_success">You joined event:\u0020</string>
     <string name="event_detailed_join_fail">Failed to join event:\u0020</string>

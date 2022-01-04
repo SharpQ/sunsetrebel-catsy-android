@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -73,6 +75,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         holder.tvEventLocation.setText(eventList.get(position).getEventLocation());
         holder.tvEventDescription.setText(eventList.get(position).getEventDescr());
         holder.tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants()));
+        if (eventListViewModel.isEventLikedByUser(eventList.get(position).getEventId())) {
+            holder.likeButton.setVisibility(View.INVISIBLE);
+            holder.likeButton.setEnabled(false);
+        } else {
+            holder.likeButton.setVisibility(View.VISIBLE);
+            holder.likeButton.setEnabled(true);
+        }
 
         List<EventThemes> eventThemes = eventList.get(position).getEventThemes();
         if (eventThemes != null) {
@@ -104,15 +113,23 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                 }
             }
         }
-        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                eventListViewModel.setSelectedEvent(eventList.get(position));
-                FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
-                manager.beginTransaction().addToBackStack("EventListFragment")
-                        .replace(R.id.frameLayoutMain, new EventListDetailedFragment()).commit();
-            }
+
+        holder.itemLayout.setOnClickListener(v -> {
+            eventListViewModel.setSelectedEvent(eventList.get(position));
+            FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
+            manager.beginTransaction().addToBackStack("EventListFragment")
+                    .replace(R.id.frameLayoutMain, new EventListDetailedFragment()).commit();
         });
+
+        holder.likeButton.setOnClickListener(v -> eventListViewModel.likeEvent(value -> {
+            if (value) {
+                holder.likeButton.setVisibility(View.INVISIBLE);
+                Log.d("INFO", "Event added to liked: " + eventList.get(position).getEventId());
+            } else {
+                holder.likeButton.setVisibility(View.VISIBLE);
+                Log.d("INFO", "Failed to add event as liked: " + eventList.get(position).getEventId());
+            }
+        }, eventList.get(position).getEventId()));
     }
 
     @Override
@@ -130,6 +147,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                 tvEventDescription, tvEventParticipants;
         private ImageView ivHostAvatar, ivEventAvatar;
         private LinearLayout linearLayout;
+        private ImageButton likeButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -143,6 +161,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             ivHostAvatar = itemView.findViewById(R.id.imageViewHostAvatar);
             ivEventAvatar = itemView.findViewById(R.id.imageViewEventAvatar);
             linearLayout = itemView.findViewById(R.id.ll_tags);
+            likeButton = itemView.findViewById(R.id.imageButtonLike);
         }
     }
 }

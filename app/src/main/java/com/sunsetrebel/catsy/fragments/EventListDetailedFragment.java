@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,6 +108,14 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         setIntegerTextFields(eventModel.getEventMinAge(), tvEventMinAge);
         setIntegerTextFields(eventModel.getEventMaxAge(), tvEventMaxAge);
         setIntegerTextFields(eventModel.getEventMaxPerson(), tvEventMaxPerson);
+        if (eventListViewModel.isEventLikedByUser(eventModel.getEventId())) {
+            likeButton.setVisibility(View.INVISIBLE);
+            likeButton.setEnabled(false);
+        } else {
+            likeButton.setVisibility(View.VISIBLE);
+            likeButton.setEnabled(true);
+        }
+
         isUserEventHost = eventListViewModel.isUserEventHost(eventModel);
 
         if (isUserEventHost) {
@@ -117,7 +126,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             boolean isUserJoinedToEvent = eventListViewModel.isUserJoinedToEvent(value);
             if (!isUserEventHost && isUserJoinedToEvent) {
                 setJoinButtonAsJoined();
-            } else if (!eventListViewModel.isUserEventHost(eventModel) && !isUserJoinedToEvent) {
+            } else if (!isUserEventHost && !isUserJoinedToEvent) {
                 setJoinButtonAsGuest();
             }
         }, eventModel);
@@ -149,46 +158,53 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             }
         }
 
-        joinButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (isUserJoinedToEvent) {
-                    eventListViewModel.leaveEvent(isResponseSuccessful -> {
-                        if (isResponseSuccessful) {
-                            setJoinButtonAsGuest();
-                        }
-                    }, getContext(), eventModel);
-                } else {
-                    eventListViewModel.joinEvent(isResponseSuccessful -> {
-                        if (isResponseSuccessful) {
-                            setJoinButtonAsJoined();
-                        }
-                    }, getContext(), eventModel);
-                }
+        joinButton.setOnClickListener(v12 -> {
+            if (isUserJoinedToEvent) {
+                eventListViewModel.leaveEvent(isResponseSuccessful -> {
+                    if (isResponseSuccessful) {
+                        setJoinButtonAsGuest();
+                    }
+                }, getContext(), eventModel);
+            } else {
+                eventListViewModel.joinEvent(isResponseSuccessful -> {
+                    if (isResponseSuccessful) {
+                        setJoinButtonAsJoined();
+                    }
+                }, getContext(), eventModel);
             }
         });
+
+        likeButton.setOnClickListener(v13 -> eventListViewModel.likeEvent(value -> {
+            if (value) {
+                likeButton.setVisibility(View.INVISIBLE);
+                Log.d("INFO", "Event added to liked: " + eventModel.getEventId());
+            } else {
+                likeButton.setVisibility(View.VISIBLE);
+                Log.d("INFO", "Failed to add event as liked: " + eventModel.getEventId());
+            }
+        }, eventModel.getEventId()));
+
         return v;
     }
 
     private void setJoinButtonAsHost() {
         isUserJoinedToEvent = true;
         joinButton.setEnabled(false);
-        joinButton.setText(getContext().getString(R.string.event_detailed_joined_button_user_host));
-        joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.blackQuoterTransparent)));
+        joinButton.setVisibility(View.INVISIBLE);
     }
 
     private void setJoinButtonAsJoined() {
         isUserJoinedToEvent = true;
         joinButton.setEnabled(true);
+        joinButton.setVisibility(View.VISIBLE);
         joinButton.setText(getContext().getString(R.string.event_detailed_joined_button_leave_state));
-        joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryLightColor)));
     }
 
     private void setJoinButtonAsGuest() {
         isUserJoinedToEvent = false;
         joinButton.setEnabled(true);
+        joinButton.setVisibility(View.VISIBLE);
         joinButton.setText(getContext().getString(R.string.event_detailed_join_button));
-        joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
     }
 
     private void setIntegerTextFields(Integer integer, TextView textView) {

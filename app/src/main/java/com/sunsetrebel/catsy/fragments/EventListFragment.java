@@ -10,8 +10,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.EventListAdapter;
+import com.sunsetrebel.catsy.repositories.UserProfileService;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
 
