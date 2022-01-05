@@ -247,7 +247,8 @@
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/ll_tags"
             app:layout_constraintVertical_bias="0.5"
-            app:srcCompat="@drawable/ic_baseline_favorite_24" />
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/im_paw_like_64p" />
 
         <LinearLayout
             android:id="@+id/ll_tags"

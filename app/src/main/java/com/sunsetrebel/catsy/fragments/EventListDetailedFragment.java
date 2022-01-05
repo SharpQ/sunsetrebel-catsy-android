@@ -217,7 +217,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        GoogleMapService.setupMap(googleMap, getContext(), EventListDetailedFragment.this);
-        GoogleMapService.clearAndSetMarker(mMap, eventModel.getEventGeoLocation(), 12, eventModel.getEventLocation());
+        GoogleMapService.setupMap(googleMap, getContext(), false, false, EventListDetailedFragment.this);
+        GoogleMapService.clearAndSetMarker(mMap, eventModel.getEventGeoLocation(), 12, eventModel.getEventLocation(), getContext());
     }
 }

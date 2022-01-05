@@ -11,8 +11,8 @@
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:drawableStart">@drawable/im_cat_hearts_32p</item>
-        <item name="android:drawableEnd">@drawable/im_cat_hearts_32p</item>
+        <item name="android:drawableStart">@drawable/ic_main_button_drawable_scale</item>
+        <item name="android:drawableEnd">@drawable/ic_main_button_drawable_scale</item>
     </style>
 
     <style name="FacebookButton">

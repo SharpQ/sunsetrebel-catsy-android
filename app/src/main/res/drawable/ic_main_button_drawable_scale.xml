@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:drawable="@drawable/im_cat_hearts"
+    android:width="32dp"
+    android:height="32dp">
+</item>
+</layer-list>

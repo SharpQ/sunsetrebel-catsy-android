@@ -175,7 +175,7 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
                         Log.i("INFO", "Place found: " + place.getName());
                         eventLatLng = place.getLatLng();
                         if (eventLatLng != null) {
-                            GoogleMapService.clearAndSetMarker(mMap, eventLatLng, 12, eventAddress);
+                            GoogleMapService.clearAndSetMarker(mMap, eventLatLng, mMap.getCameraPosition().zoom, eventAddress, getContext());
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -215,7 +215,7 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        GoogleMapService.setupMapActivity(googleMap, getContext(), getActivity());
+        GoogleMapService.setupMap(googleMap, getContext(), true, false, NewEventMapFragment.this);
 
         googleMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
             @Override
@@ -247,12 +247,12 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
 
                 if (addresses.size() > 0) {
                     eventAddress = addresses.get(0).getAddressLine(0);
-                    GoogleMapService.clearAndSetMarker(mMap, latLng, 12, eventAddress);
+                    GoogleMapService.clearAndSetMarker(mMap, latLng, mMap.getCameraPosition().zoom, eventAddress, getContext());
                     locationConfirmText.setText(eventAddress);
                     materialSearchBar.setText(eventAddress);
                 } else {
                     String eventAddressError = (String) getResources().getText(R.string.new_event_maps_popup_error_text);
-                    GoogleMapService.clearAndSetMarker(mMap, latLng, 12, eventAddressError);
+                    GoogleMapService.clearAndSetMarker(mMap, latLng, mMap.getCameraPosition().zoom, eventAddressError, getContext());
                     locationConfirmText.setText(eventAddressError);
                 }
             }

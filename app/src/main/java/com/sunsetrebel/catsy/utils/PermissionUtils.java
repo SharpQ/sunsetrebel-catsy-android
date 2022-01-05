@@ -1,6 +1,7 @@
 package com.sunsetrebel.catsy.utils;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
@@ -34,12 +35,14 @@ public class PermissionUtils extends Fragment {
         }
     }
 
-    public static void requestLocationPermissionsActivity(android.app.Activity activity) {
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
-    }
-
-    public static void requestLocationPermissionsFragment(Fragment fragment) {
-        fragment.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
+    public static void requestLocationPermissions(Boolean isActivity, Object screen) {
+        if (isActivity) {
+            ActivityCompat.requestPermissions((Activity) screen, new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
+        } else {
+            Fragment fragment = (Fragment) screen;
+            fragment.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, ACCESS_LOCATION_REQUEST_CODE);
+        }
     }
 
     public static void requestGalleryPermissionsFragment(Fragment fragment) {

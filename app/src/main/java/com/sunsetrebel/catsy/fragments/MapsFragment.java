@@ -53,7 +53,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        GoogleMapService.setupMap(googleMap, getContext(), MapsFragment.this);
+        GoogleMapService.setupMap(googleMap, getContext(), true, false, MapsFragment.this);
         firebaseFirestoreService.getEventList(eventList -> {
             if (eventList != null) {
                 for (EventModel event : eventList) {

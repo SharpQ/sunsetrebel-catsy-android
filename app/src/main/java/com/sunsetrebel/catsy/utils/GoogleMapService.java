@@ -43,18 +43,22 @@ import java.util.Locale;
 
 public class GoogleMapService {
     private static Geocoder geocoder = null;
-    private static FusedLocationProviderClient fusedLocationProviderClient = null;
+    private static FusedLocationProviderClient fusedLocationProviderClient;
+    public static Bitmap mapMarkerDefault;
 
     public static Geocoder getGeocoderInstance(Context context) {
         return geocoder = new Geocoder(context, Locale.getDefault());
     }
 
     private static FusedLocationProviderClient getFusedLocationProviderInstance(Context context) {
-        return fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        if (fusedLocationProviderClient == null) {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
+        }
+        return fusedLocationProviderClient;
     }
 
     @SuppressLint("MissingPermission")
-    public static void setupMap(GoogleMap googleMap, Context context, Fragment fragment) {
+    public static void setupMap(GoogleMap googleMap, Context context, Boolean shouldZoomToUser, Boolean isActivity, Object screen) {
         //MAP STYLE AND BUTTONS SETUP
         googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
                 context, R.raw.google_style));
@@ -62,27 +66,15 @@ public class GoogleMapService {
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setCompassEnabled(false);
 //        mMap.getUiSettings().setRotateGesturesEnabled(false);
-
-        if (PermissionUtils.isLocationPermissionEnabled(context)) {
-            zoomToUserLocation(context, googleMap);
-        } else {
-            PermissionUtils.requestLocationPermissionsFragment(fragment);
-        }
-    }
-
-    @SuppressLint("MissingPermission")
-    public static void setupMapActivity(GoogleMap googleMap, Context context, Activity activity) {
-        //MAP STYLE AND BUTTONS SETUP
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(
-                context, R.raw.google_style));
-        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
-        googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.getUiSettings().setCompassEnabled(false);
-
-        if (PermissionUtils.isLocationPermissionEnabled(context)) {
-            zoomToUserLocation(context, googleMap);
-        } else {
-            PermissionUtils.requestLocationPermissionsActivity(activity);
+        if (shouldZoomToUser) {
+            if (PermissionUtils.isLocationPermissionEnabled(context)) {
+                zoomToUserLocation(context, googleMap);
+            } else {
+                PermissionUtils.requestLocationPermissions(isActivity, screen);
+                if (PermissionUtils.isLocationPermissionEnabled(context)) {
+                    zoomToUserLocation(context, googleMap);
+                }
+            }
         }
     }
 
@@ -90,23 +82,22 @@ public class GoogleMapService {
     public static void zoomToUserLocation(Context context, GoogleMap googleMap) {
         googleMap.setMyLocationEnabled(true);
         getFusedLocationProviderInstance(context);
-        Task<Location> locationTask = fusedLocationProviderClient.getLastLocation();
-        locationTask.addOnSuccessListener(new OnSuccessListener<Location>() {
-            @Override
-            public void onSuccess(Location location) {
-                if (location != null) {
-                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
-                }
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location != null) {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12));
             }
         });
     }
 
-    public static void clearAndSetMarker(GoogleMap googleMap, LatLng eventLatLng, float zoom, String marketTitle) {
+    public static void clearAndSetMarker(GoogleMap googleMap, LatLng eventLatLng, float zoom, String marketTitle, Context context) {
+        if (mapMarkerDefault == null) {
+            initMarkerDrawable(context);
+        }
         googleMap.clear();
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, zoom));
 //        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, zoom));
-        googleMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromResource(R.drawable.im_cat_location_sample_35)).title(marketTitle)).showInfoWindow();
+        googleMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromBitmap(mapMarkerDefault)).title(marketTitle)).showInfoWindow();
     }
 
     public static void setEventMarker(GoogleMap googleMap, LatLng eventLatLng, String marketTitle, String marketSubTitle, String eventAvatarURL, Context context) {
@@ -117,5 +108,8 @@ public class GoogleMapService {
         }
     }
 
-
+    private static void initMarkerDrawable(Context context) {
+        Bitmap errowDrawable = ((BitmapDrawable) context.getDrawable(R.drawable.im_cat_market_default_512p)).getBitmap();
+        mapMarkerDefault = Bitmap.createScaledBitmap(errowDrawable, 100, 100, true);
+    }
 }

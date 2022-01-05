@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -85,7 +87,7 @@ public class NewEventPrimaryFragment extends Fragment {
         eventAccessValue = AccessType.PUBLIC;
         buttonPublic.setBackgroundColor(getResources().getColor(R.color.primaryColorTransparent));
         eventAccessDescr.setText(getResources().getText(R.string.event_access_public_description));
-        eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.im_caticorn_public_64p, 0, 0, 0);
+        eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caticorn_public_scale, 0, 0, 0);
 
         buttonPublic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +96,7 @@ public class NewEventPrimaryFragment extends Fragment {
                 buttonPrivate.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
                 buttonSelective.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
                 buttonPublic.setBackgroundColor(getResources().getColor(R.color.primaryColorTransparent));
-                eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.im_caticorn_public_64p, 0, 0, 0);
+                eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caticorn_public_scale, 0, 0, 0);
                 eventAccessDescr.setText(getResources().getText(R.string.event_access_public_description));
             }
         });
@@ -106,7 +108,7 @@ public class NewEventPrimaryFragment extends Fragment {
                 buttonPublic.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
                 buttonSelective.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
                 buttonPrivate.setBackgroundColor(getResources().getColor(R.color.primaryColorTransparent));
-                eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.im_caticorn_private_64p, 0, 0, 0);
+                eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caticorn_private_scale, 0, 0, 0);
                 eventAccessDescr.setText(getResources().getText(R.string.event_access_private_description));
             }
         });
@@ -118,7 +120,7 @@ public class NewEventPrimaryFragment extends Fragment {
                 buttonPublic.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
                 buttonPrivate.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
                 buttonSelective.setBackgroundColor(getResources().getColor(R.color.primaryColorTransparent));
-                eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.im_caticorn_selective_64p, 0, 0, 0);
+                eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caticorn_selective_scale, 0, 0, 0);
                 eventAccessDescr.setText(getResources().getText(R.string.event_access_selective_description));
             }
         });
