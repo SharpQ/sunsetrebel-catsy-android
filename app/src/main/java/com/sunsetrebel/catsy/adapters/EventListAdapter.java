@@ -25,8 +25,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.EventListDetailedFragment;
 import com.sunsetrebel.catsy.models.EventModel;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.EventThemes;
-import com.sunsetrebel.catsy.utils.EventThemesService;
+import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.utils.ImageUtils;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
@@ -40,7 +41,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     private List<EventModel> eventList;
     private Context context;
     private SimpleDateFormat simpleDateFormat;
-    private EventThemesService eventThemesService;
+    private EventThemesUtil eventThemesUtil;
     private Map<Enum<?>, String> eventThemesEnumList;
     private Random rand = new Random();
     private EventListViewModel eventListViewModel;
@@ -50,8 +51,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         this.eventList = eventList;
         this.context = context;
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
-        eventThemesService = new EventThemesService(context.getResources());
-        eventThemesEnumList = eventThemesService.getEventThemesList();
+        eventThemesUtil = new EventThemesUtil(context.getResources());
+        eventThemesEnumList = eventThemesUtil.getEventThemesList();
         eventListViewModel = new ViewModelProvider(fragmentActivity).get(EventListViewModel.class);
     }
 
@@ -124,10 +125,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         holder.likeButton.setOnClickListener(v -> eventListViewModel.likeEvent(value -> {
             if (value) {
                 holder.likeButton.setVisibility(View.INVISIBLE);
-                Log.d("INFO", "Event added to liked: " + eventList.get(position).getEventId());
+                CustomToastUtil.showSuccessToast(context, context.getResources().getText(R.string.event_liked_success).toString() + eventList.get(position).getEventTitle());
+                Log.d("INFO", "You liked event: " + eventList.get(position).getEventId());
             } else {
                 holder.likeButton.setVisibility(View.VISIBLE);
-                Log.d("INFO", "Failed to add event as liked: " + eventList.get(position).getEventId());
+                CustomToastUtil.showFailToast(context, context.getResources().getText(R.string.event_liked_fail).toString() + eventList.get(position).getEventTitle());
+                Log.d("INFO", "Failed to like event: " + eventList.get(position).getEventId());
             }
         }, eventList.get(position).getEventId()));
     }
@@ -147,7 +150,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                 tvEventDescription, tvEventParticipants;
         private ImageView ivHostAvatar, ivEventAvatar;
         private LinearLayout linearLayout;
-        private ImageButton likeButton;
+        private ImageButton likeButton, shareButton;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -162,6 +165,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             ivEventAvatar = itemView.findViewById(R.id.imageViewEventAvatar);
             linearLayout = itemView.findViewById(R.id.ll_tags);
             likeButton = itemView.findViewById(R.id.imageButtonLike);
+            shareButton = itemView.findViewById(R.id.imageButtonShare);
         }
     }
 }

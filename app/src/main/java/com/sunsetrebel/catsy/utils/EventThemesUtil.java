@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class EventThemesService extends Application {
+public class EventThemesUtil extends Application {
     Resources resources;
     Map<Enum<?>, String> eventThemesList;
 
-    public EventThemesService(Resources resources) {
+    public EventThemesUtil(Resources resources) {
         this.resources = resources;
     }
 

@@ -19,6 +19,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.LoginType;
 
 import java.util.Locale;
@@ -94,9 +95,9 @@ public class VerifyEmailActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    Toast.makeText(VerifyEmailActivity.this, "Please check your email inbox!", Toast.LENGTH_SHORT).show();
+                    CustomToastUtil.showSuccessToast(getApplicationContext(), "Please check your email inbox!");
                 } else {
-                    Toast.makeText(VerifyEmailActivity.this, "Error sending verification link!", Toast.LENGTH_SHORT).show();
+                    CustomToastUtil.showFailToast(getApplicationContext(), "Error sending verification link!");
                 }
             }
         });

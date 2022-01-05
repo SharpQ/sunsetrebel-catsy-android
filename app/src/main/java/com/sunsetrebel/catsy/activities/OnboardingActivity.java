@@ -20,6 +20,7 @@ import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.SliderAdapter;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.LoginType;
 import com.sunsetrebel.catsy.utils.MediaPlayerService;
 
@@ -139,7 +140,7 @@ public class OnboardingActivity extends AppCompatActivity {
                         finish();
                     } else {
                         restartActivity(OnboardingActivity.this);
-                        Toast.makeText(getApplicationContext(), "Google authentication failed!", Toast.LENGTH_SHORT).show();
+                        CustomToastUtil.showFailToast(getApplicationContext(), "Google authentication failed!");
                     }
                 });
     }

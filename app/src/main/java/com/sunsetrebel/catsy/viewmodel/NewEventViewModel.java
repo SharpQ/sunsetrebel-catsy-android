@@ -16,6 +16,7 @@ import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.repositories.FirebaseStorageService;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
 import com.sunsetrebel.catsy.utils.AccessType;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.EventThemes;
 
 import com.google.firebase.Timestamp;
@@ -82,7 +83,7 @@ public class NewEventViewModel extends ViewModel {
                     eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), eventAvatarDownloadURI, getConvertedEventThemes(),
                     eventModel.getCreateTS(), eventModel.getUpdateTS());
         } else {
-            Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
+            CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.new_event_event_failed_create_notification));
         }
     }
 

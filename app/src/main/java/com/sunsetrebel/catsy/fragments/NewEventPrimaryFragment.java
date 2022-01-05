@@ -24,8 +24,9 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.AccessType;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.EventThemes;
-import com.sunsetrebel.catsy.utils.EventThemesService;
+import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
 
 import java.text.SimpleDateFormat;
@@ -127,8 +128,8 @@ public class NewEventPrimaryFragment extends Fragment {
         eventEndTime.setOnClickListener(v16 -> showDateTimeDialog(eventEndTime, false));
 
         //Initialize themes array
-        EventThemesService eventThemesServiceList = new EventThemesService(getActivity().getResources());
-        Map<Enum<?>, String> themesArray = eventThemesServiceList.getEventThemesList();
+        EventThemesUtil eventThemesUtilList = new EventThemesUtil(getActivity().getResources());
+        Map<Enum<?>, String> themesArray = eventThemesUtilList.getEventThemesList();
         String[] themesArrayValues = themesArray.values().toArray(new String[0]);
         ArrayList<Integer> chosenThemesArray = new ArrayList<>();
         selectedTheme = new boolean[themesArray.size()];
@@ -167,13 +168,13 @@ public class NewEventPrimaryFragment extends Fragment {
                         eventThemes = new ArrayList<>();
                         int maxQuantity;
                         if (chosenThemesArray.size() > 3) {
-                            Toast.makeText(getContext(), getResources().getString(R.string.event_theme_dialog_notification), Toast.LENGTH_SHORT).show();
+                            CustomToastUtil.showFailToast(getContext(), getResources().getString(R.string.event_theme_dialog_notification));
                             maxQuantity = 3;
                         } else {
                             maxQuantity = chosenThemesArray.size();
                         }
                         for (int j = 0; j < maxQuantity; j++) {
-                            eventThemes.add((EventThemes) EventThemesService.getKeyByValue(themesArray, themesArrayValues[chosenThemesArray.get(j)]));
+                            eventThemes.add((EventThemes) EventThemesUtil.getKeyByValue(themesArray, themesArrayValues[chosenThemesArray.get(j)]));
                             //Concat array value
                             stringBuilder.append(themesArrayValues[chosenThemesArray.get(j)]);
                             if (j != maxQuantity - 1) {

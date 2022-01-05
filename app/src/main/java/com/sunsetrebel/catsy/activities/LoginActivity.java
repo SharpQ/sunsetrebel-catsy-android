@@ -32,6 +32,7 @@ import com.hbb20.CountryCodePicker;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.LoginType;
 
 import java.util.Arrays;
@@ -130,7 +131,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onError(FacebookException error) {
                 restartActivity(LoginActivity.this);
                 setUIStatePhone();
-                Toast.makeText(getApplicationContext(), "Facebook authentication failed!", Toast.LENGTH_SHORT).show();
+                CustomToastUtil.showFailToast(getApplicationContext(), "Facebook authentication failed!");
             }
         });
 
@@ -194,7 +195,7 @@ public class LoginActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         restartActivity(LoginActivity.this);
                         setUIStatePhone();
-                        Toast.makeText(LoginActivity.this, "Email authentication failed!" + Objects.requireNonNull(task.getException()).getMessage(), Toast.LENGTH_SHORT).show();
+                        CustomToastUtil.showFailToast(getApplicationContext(), "Email authentication failed!" + Objects.requireNonNull(task.getException()).getMessage());
                     }
                 });
             }
@@ -274,7 +275,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         restartActivity(LoginActivity.this);
                         setUIStatePhone();
-                        Toast.makeText(getApplicationContext(), "Google authentication failed!", Toast.LENGTH_SHORT).show();
+                        CustomToastUtil.showFailToast(getApplicationContext(), "Google authentication failed!");
                     }
                 });
     }
@@ -292,7 +293,7 @@ public class LoginActivity extends AppCompatActivity {
                     } else {
                         restartActivity(LoginActivity.this);
                         setUIStatePhone();
-                        Toast.makeText(getApplicationContext(), "Facebook authentication failed!", Toast.LENGTH_SHORT).show();
+                        CustomToastUtil.showFailToast(getApplicationContext(), "Facebook authentication failed!");
                     }
                 });
     }

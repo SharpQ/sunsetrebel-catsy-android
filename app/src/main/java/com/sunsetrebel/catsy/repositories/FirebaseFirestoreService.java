@@ -25,6 +25,7 @@ import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.models.UserProfileModel;
 import com.sunsetrebel.catsy.utils.AccessType;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.EventThemes;
 
 import java.util.ArrayList;
@@ -174,10 +175,10 @@ public class FirebaseFirestoreService {
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2, task3);
         allTasks.addOnSuccessListener(querySnapshots -> {
             Log.d("INFO", "New event created! EventId: " + finalEventId);
-            Toast.makeText(context, context.getResources().getString(R.string.new_event_event_created_notification), Toast.LENGTH_SHORT).show();
+            CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.new_event_event_created_notification));
         }).addOnFailureListener(e -> {
             Log.d("INFO", "Failed to create new event!");
-            Toast.makeText(context, context.getResources().getString(R.string.new_event_event_failed_create_notification), Toast.LENGTH_SHORT).show();
+            CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.new_event_event_failed_create_notification));
         });
     }
 
@@ -205,13 +206,13 @@ public class FirebaseFirestoreService {
 
     private void joinUserReturnFail(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
         Log.d("INFO", "Failed to join event: " + eventTitle + "!");
-        Toast.makeText(context, context.getResources().getString(R.string.event_detailed_join_fail) + eventTitle + "!", Toast.LENGTH_SHORT).show();
+        CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.event_detailed_join_fail) + eventTitle + "!");
         setUserInteractEventCallback.onResponse(false);
     }
 
     private void joinUserReturnSuccess(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
         Log.d("INFO", "You joined event: " + eventTitle + "!");
-        Toast.makeText(context, context.getResources().getString(R.string.event_detailed_join_success) + eventTitle + "!", Toast.LENGTH_SHORT).show();
+        CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.event_detailed_join_success) + eventTitle + "!");
         setUserInteractEventCallback.onResponse(true);
     }
 
@@ -237,13 +238,13 @@ public class FirebaseFirestoreService {
 
     private void leaveUserReturnFail(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
         Log.d("INFO", "Failed to leave event: " + eventTitle + "!");
-        Toast.makeText(context, context.getResources().getString(R.string.event_detailed_leave_fail) + eventTitle + "!", Toast.LENGTH_SHORT).show();
+        CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.event_detailed_leave_fail) + eventTitle + "!");
         setUserInteractEventCallback.onResponse(false);
     }
 
     private void leaveUserReturnSuccess(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
         Log.d("INFO", "You left event: " + eventTitle + "!");
-        Toast.makeText(context, context.getResources().getString(R.string.event_detailed_leave_success) + eventTitle + "!", Toast.LENGTH_SHORT).show();
+        CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.event_detailed_leave_success) + eventTitle + "!");
         setUserInteractEventCallback.onResponse(true);
     }
 

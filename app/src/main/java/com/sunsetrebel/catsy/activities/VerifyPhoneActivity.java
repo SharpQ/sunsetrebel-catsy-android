@@ -22,6 +22,7 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.LoginType;
 
 import java.util.Locale;
@@ -124,7 +125,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
 
         @Override
         public void onVerificationFailed(FirebaseException e) {
-            Toast.makeText(VerifyPhoneActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            CustomToastUtil.showFailToast(getApplicationContext(), e.getMessage());
         }
     };
 
@@ -149,7 +150,7 @@ public class VerifyPhoneActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             } else {
-                Toast.makeText(VerifyPhoneActivity.this, "OTP authentication failed!", Toast.LENGTH_SHORT).show();
+                CustomToastUtil.showFailToast(getApplicationContext(), "OTP authentication failed!");
             }
         });
     }

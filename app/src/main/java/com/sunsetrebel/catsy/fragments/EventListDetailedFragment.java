@@ -1,6 +1,5 @@
 package com.sunsetrebel.catsy.fragments;
 
-import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -25,7 +24,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.utils.EventThemes;
-import com.sunsetrebel.catsy.utils.EventThemesService;
+import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
 import com.sunsetrebel.catsy.utils.ImageUtils;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
@@ -49,7 +48,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             tvEventParticipants, tvEventMinAge, tvEventMaxAge, tvEventMaxPerson;
     private LinearLayout linearLayout;
     private Random rand = new Random();
-    private EventThemesService eventThemesService;
+    private EventThemesUtil eventThemesUtil;
     private Map<Enum<?>, String> eventThemesEnumList;
     private boolean isUserJoinedToEvent;
     private boolean isUserEventHost;
@@ -69,8 +68,8 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         eventListViewModel.init();
         eventModel = eventListViewModel.getSelectedEvent();
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
-        eventThemesService = new EventThemesService(getContext().getResources());
-        eventThemesEnumList = eventThemesService.getEventThemesList();
+        eventThemesUtil = new EventThemesUtil(getContext().getResources());
+        eventThemesEnumList = eventThemesUtil.getEventThemesList();
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragment_event_detailed_map);
         mapFragment.getMapAsync(this);

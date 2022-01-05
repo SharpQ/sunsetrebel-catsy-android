@@ -13,6 +13,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.LoginType;
 
 public class FirebaseAuthService {
@@ -22,10 +23,6 @@ public class FirebaseAuthService {
     private FirebaseAuth fAuth;
     private final static int RC_SIGN_IN = 123;
     private FirebaseUser user;
-
-    public interface CreateUserCallback {
-        void onResponse(Boolean isResponseSuccessful);
-    }
 
     public FirebaseAuthService() {
         fAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
@@ -122,7 +119,7 @@ public class FirebaseAuthService {
                 account = task.getResult(ApiException.class);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                CustomToastUtil.showFailToast(context, e.getMessage());
             }
         }
         return account;
