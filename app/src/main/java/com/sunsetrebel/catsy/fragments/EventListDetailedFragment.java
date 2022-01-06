@@ -1,5 +1,6 @@
 package com.sunsetrebel.catsy.fragments;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
@@ -197,6 +198,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         joinButton.setEnabled(true);
         joinButton.setVisibility(View.VISIBLE);
         joinButton.setText(getContext().getString(R.string.event_detailed_joined_button_leave_state));
+        joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryLightColor)));
     }
 
     private void setJoinButtonAsGuest() {
@@ -204,6 +206,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         joinButton.setEnabled(true);
         joinButton.setVisibility(View.VISIBLE);
         joinButton.setText(getContext().getString(R.string.event_detailed_join_button));
+        joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
     }
 
     private void setIntegerTextFields(Integer integer, TextView textView) {
