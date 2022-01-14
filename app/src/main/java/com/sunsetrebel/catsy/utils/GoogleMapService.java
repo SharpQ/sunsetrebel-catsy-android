@@ -38,6 +38,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.models.EventModel;
 
 import java.util.Locale;
 
@@ -100,11 +101,11 @@ public class GoogleMapService {
         googleMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromBitmap(mapMarkerDefault)).title(marketTitle)).showInfoWindow();
     }
 
-    public static void setEventMarker(GoogleMap googleMap, LatLng eventLatLng, String marketTitle, String marketSubTitle, String eventAvatarURL, Context context) {
+    public static void setEventMarker(GoogleMap googleMap, EventModel eventModel, Context context) {
         if (context != null) {
             ImageUtils.loadBitmapMapIcons(scaledBitmap -> {
-                googleMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromBitmap(scaledBitmap)).title(marketTitle).snippet(marketSubTitle));
-            }, context, eventAvatarURL);
+                googleMap.addMarker(new MarkerOptions().position(eventModel.getEventGeoLocation()).icon(BitmapDescriptorFactory.fromBitmap(scaledBitmap))).setTag(eventModel); //.title(eventModel.getEventTitle()).snippet(context.getString(R.string.event_list_host_placeholder) + eventModel.getHostName())
+            }, context, eventModel.getEventAvatar());
         }
     }
 
