@@ -12,7 +12,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -21,14 +20,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.Marker;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
@@ -118,7 +115,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         }
 
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-        View popupView = layoutInflater.inflate(R.layout.popup_event_map_fragment, null);
+        View popupView = layoutInflater.inflate(R.layout.item_map_fragment, null);
         TextView tvEventTitle = popupView.findViewById(R.id.textViewEventTitle);
         TextView tvHostName = popupView.findViewById(R.id.textViewHostName);
         TextView tvStartTime = popupView.findViewById(R.id.til_start_time);
