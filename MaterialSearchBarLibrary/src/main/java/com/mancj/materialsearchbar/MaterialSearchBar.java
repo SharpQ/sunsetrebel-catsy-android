@@ -84,6 +84,7 @@ public class MaterialSearchBar extends FrameLayout implements View.OnClickListen
     private int maxSuggestionCount;
     private boolean navButtonEnabled;
     private boolean roundedSearchBarEnabled;
+    private boolean arrowButtonEnabled;
     private int dividerColor;
     private int searchBarColor;
 
@@ -133,6 +134,7 @@ public class MaterialSearchBar extends FrameLayout implements View.OnClickListen
         speechMode = array.getBoolean(R.styleable.MaterialSearchBar_mt_speechMode, false);
         maxSuggestionCount = array.getInt(R.styleable.MaterialSearchBar_mt_maxSuggestionsCount, 3);
         navButtonEnabled = array.getBoolean(R.styleable.MaterialSearchBar_mt_navIconEnabled, false);
+        arrowButtonEnabled = array.getBoolean(R.styleable.MaterialSearchBar_mt_arrowIconEnabled, true);
         roundedSearchBarEnabled = array.getBoolean(R.styleable.MaterialSearchBar_mt_roundedSearchBarEnabled, false);
         dividerColor = array.getColor(R.styleable.MaterialSearchBar_mt_dividerColor, ContextCompat.getColor(getContext(), R.color.searchBarDividerColor));
         searchBarColor = array.getColor(R.styleable.MaterialSearchBar_mt_searchBarColor, ContextCompat.getColor(getContext(), R.color.searchBarPrimaryColor));
@@ -326,6 +328,7 @@ public class MaterialSearchBar extends FrameLayout implements View.OnClickListen
         navIconResId = R.drawable.ic_menu_animated;
         this.navIcon.setImageResource(navIconResId);
         setNavButtonEnabled(navButtonEnabled);
+        setArrowButtonEnabled(arrowButtonEnabled);
 
         //Menu
         if (popupMenu == null) {
@@ -833,6 +836,18 @@ public class MaterialSearchBar extends FrameLayout implements View.OnClickListen
         }
         navIcon.requestLayout();
         placeHolder.requestLayout();
+        arrowIcon.requestLayout();
+    }
+
+    public void setArrowButtonEnabled(boolean arrowButtonEnabled) {
+        this.arrowButtonEnabled = arrowButtonEnabled;
+        if (arrowButtonEnabled) {
+            arrowIcon.setVisibility(VISIBLE);
+            arrowIcon.setEnabled(true);
+        } else {
+            arrowIcon.setVisibility(GONE);
+            arrowIcon.setClickable(false);
+        }
         arrowIcon.requestLayout();
     }
 
