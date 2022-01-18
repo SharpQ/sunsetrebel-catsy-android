@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.EventListAdapter;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
@@ -22,6 +23,7 @@ public class EventListFragment extends Fragment {
     private EventListViewModel eventListViewModel;
     private EventListAdapter eventListAdapter;
     private ProgressBar progressBar;
+    private MaterialSearchBar materialSearchBar;
 
     public EventListFragment() {
         // Required empty public constructor
@@ -36,6 +38,7 @@ public class EventListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_event_list, container, false);
         eventRecycler = v.findViewById(R.id.recyclerViewEventList);
         progressBar = v.findViewById(R.id.pb_event_list);
+        materialSearchBar = v.findViewById(R.id.searchViewEventList);
         progressBar.setVisibility(View.VISIBLE);
         eventRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         //Init viewmodel

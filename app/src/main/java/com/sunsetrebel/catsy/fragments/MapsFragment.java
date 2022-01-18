@@ -12,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -175,6 +176,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         infoPopup.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         infoPopup.setOutsideTouchable(true);
+        infoPopup.setAnimationStyle(R.style.popup_window_animation);
         infoPopup.showAtLocation(view, Gravity.TOP, 0, 0);
     }
 }
