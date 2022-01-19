@@ -288,7 +288,7 @@ public class MaterialSearchBar extends FrameLayout implements View.OnClickListen
      * Setup editText coloring and drawables
      */
     private void setupSearchEditText() {
-        setupCursorColor();
+//        setupCursorColor();
         searchEdit.setHighlightColor(highlightedTextColor);
 
         if (hintText != null)
@@ -985,6 +985,8 @@ public class MaterialSearchBar extends FrameLayout implements View.OnClickListen
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         if (listenerExists())
             onSearchActionListener.onSearchConfirmed(searchEdit.getText());
         if (suggestionsVisible)

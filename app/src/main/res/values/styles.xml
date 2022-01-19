@@ -133,7 +133,6 @@
         <item name="mt_clearIconTint">@color/searchBarPrimaryColor</item>
         <item name="mt_menuIconTint">@color/searchBarPrimaryColor</item>
         <item name="mt_backIconTint">@color/searchBarPrimaryColor</item>
-        <item name="mt_textCursorTint">@color/searchBarPrimaryColor</item>
         <item name="mt_textColor">@color/searchBarPrimaryColor</item>
         <item name="mt_hintColor">@color/searchBarPrimaryColor</item>
         <item name="mt_placeholderColor">@color/searchBarPrimaryColor</item>

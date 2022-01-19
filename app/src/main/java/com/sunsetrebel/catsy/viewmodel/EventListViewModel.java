@@ -3,26 +3,25 @@ package com.sunsetrebel.catsy.viewmodel;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.models.UserProfileModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class EventListViewModel extends ViewModel {
-    private LiveData<List<EventModel>> eventList;
+    private MediatorLiveData<List<EventModel>> filteredEventList = new MediatorLiveData<>();
+    private MutableLiveData<String> searchRequest = new MutableLiveData<>();
+    private LiveData<List<EventModel>> initialEventList;
     private static FirebaseFirestoreService firebaseFirestoreService;
-    private static UserProfileService userProfileService;
     private EventModel selectedEvent;
     private static UserProfileModel userProfileModel;
-
-    public void init() {
-        userProfileService = UserProfileService.getInstance();
-        userProfileModel = userProfileService.getUserProfile();
-        firebaseFirestoreService = FirebaseFirestoreService.getInstance();
-        eventList = firebaseFirestoreService.getEventListMutableLiveData();
-    }
 
     public interface SetUserInteractEventCallback {
         void onResponse(Boolean isResponseSuccessful);
@@ -32,8 +31,51 @@ public class EventListViewModel extends ViewModel {
         void onResponse(List<String> value);
     }
 
+    public void init() {
+        UserProfileService userProfileService = UserProfileService.getInstance();
+        userProfileModel = userProfileService.getUserProfile();
+        firebaseFirestoreService = FirebaseFirestoreService.getInstance();
+        initialEventList = firebaseFirestoreService.getEventListMutableLiveData();
+        filteredEventList.addSource(initialEventList, new Observer<List<EventModel>>() {
+            @Override
+            public void onChanged(List<EventModel> eventModels) {
+                combine(eventModels, searchRequest.getValue());
+            }
+        });
+
+        filteredEventList.addSource(searchRequest, new Observer<String>() {
+            @Override
+            public void onChanged(String search) {
+                combine(initialEventList.getValue(), search);
+            }
+        });
+    }
+
+    public void setSearchMutableLiveData(String search) {
+        searchRequest.setValue(search);
+    }
+
+    private void combine(List<EventModel> eventModels, String searchRequest) {
+        if (eventModels == null) {
+            return;
+        }
+
+        if (searchRequest != null) {
+            List<EventModel> eventModelsSort = new ArrayList<>();
+            for (EventModel event : eventModels) {
+                if (event.getEventTitle().contains(searchRequest) || event.getHostName().contains(searchRequest)
+                        || event.getEventDescr().contains(searchRequest)) {
+                    eventModelsSort.add(event);
+                }
+            }
+            filteredEventList.setValue(eventModelsSort);
+        } else {
+            filteredEventList.setValue(eventModels);
+        }
+    }
+
     public LiveData<List<EventModel>> getLiveEventListData() {
-        return eventList;
+        return filteredEventList;
     }
 
     public EventModel getSelectedEvent() {
@@ -46,6 +88,8 @@ public class EventListViewModel extends ViewModel {
 
     public void removeEventListListener() {
         firebaseFirestoreService.removeEventListListener();
+        filteredEventList.removeSource(initialEventList);
+        filteredEventList.removeSource(searchRequest);
     }
 
     public boolean isUserEventHost(EventModel event) {

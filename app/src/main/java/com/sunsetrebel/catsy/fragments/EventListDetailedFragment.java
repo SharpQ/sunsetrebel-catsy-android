@@ -24,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
@@ -66,7 +67,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_event_list_detailed, container, false);
         eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
-        eventListViewModel.init();
         eventModel = eventListViewModel.getSelectedEvent();
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
         eventThemesUtil = new EventThemesUtil(getContext().getResources());
@@ -177,10 +177,12 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         likeButton.setOnClickListener(v13 -> eventListViewModel.likeEvent(value -> {
             if (value) {
                 likeButton.setVisibility(View.INVISIBLE);
-                Log.d("INFO", "Event added to liked: " + eventModel.getEventId());
+                CustomToastUtil.showSuccessToast(getContext(), getContext().getResources().getText(R.string.event_liked_success).toString() + eventModel.getEventTitle());
+                Log.d("INFO", "You liked event: " + eventModel.getEventId());
             } else {
                 likeButton.setVisibility(View.VISIBLE);
-                Log.d("INFO", "Failed to add event as liked: " + eventModel.getEventId());
+                CustomToastUtil.showFailToast(getContext(), getContext().getResources().getText(R.string.event_liked_fail).toString() + eventModel.getEventTitle());
+                Log.d("INFO", "Failed to like event: " + eventModel.getEventId());
             }
         }, eventModel.getEventId()));
 

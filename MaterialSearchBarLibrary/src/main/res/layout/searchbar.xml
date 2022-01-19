@@ -84,10 +84,11 @@
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
                     android:hint=""
+                    android:textCursorDrawable="@drawable/edit_cursor"
                     android:textStyle="normal"
                     android:textSize="16sp"
                     android:fontFamily="@font/audiowide"
-                    android:imeOptions="flagNoExtractUi|actionSearch"
+                    android:imeOptions="actionDone"
                     android:inputType="textVisiblePassword|textNoSuggestions"
                     android:maxLines="1"
                     android:textAppearance="?android:attr/textAppearanceMedium" />

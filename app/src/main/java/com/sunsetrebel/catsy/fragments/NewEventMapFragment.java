@@ -149,20 +149,19 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
         materialSearchBar.setSuggestionsClickListener(new SuggestionsAdapter.OnItemViewClickListener() {
             @Override
             public void OnItemClickListener(int position, View v) {
+                materialSearchBar.closeSearch();
+                materialSearchBar.hideSuggestionsList();
+
                 if (position >= predictionList.size()) {
                     return;
                 }
                 AutocompletePrediction selectedPrediction = predictionList.get(position);
                 eventAddress = materialSearchBar.getLastSuggestions().get(position).toString();
-                materialSearchBar.setText(eventAddress);
+                materialSearchBar.clearSuggestions();
 
                 //Fill bottom text with address
                 locationConfirmText.setText(eventAddress);
-                
-                materialSearchBar.clearSuggestions();
-                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null)
-                    imm.hideSoftInputFromWindow(materialSearchBar.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+
                 final String placeId = selectedPrediction.getPlaceId();
                 List<Place.Field> placeFields = Arrays.asList(Place.Field.LAT_LNG);
 
@@ -249,7 +248,9 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
                     eventAddress = addresses.get(0).getAddressLine(0);
                     GoogleMapService.clearAndSetMarker(mMap, latLng, mMap.getCameraPosition().zoom, eventAddress, getContext());
                     locationConfirmText.setText(eventAddress);
-                    materialSearchBar.setText(eventAddress);
+                    materialSearchBar.hideSuggestionsList();
+                    materialSearchBar.clearSuggestions();
+                    materialSearchBar.closeSearch();
                 } else {
                     String eventAddressError = (String) getResources().getText(R.string.new_event_maps_popup_error_text);
                     GoogleMapService.clearAndSetMarker(mMap, latLng, mMap.getCameraPosition().zoom, eventAddressError, getContext());
