@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment mapsfragment = new MapsFragment();
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, mapsfragment)
-                .commit();
+                .commitAllowingStateLoss();
 
         animatedBottomBar = findViewById(R.id.animatedBottomBar);
         animatedBottomBar.selectTabById(R.id.navigationBarMap, true);
@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment = new AccountFragment();
                     break;
             }
-            fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, fragment).commitAllowingStateLoss();
             MediaPlayerService.playNavigation(this);
         });
     }

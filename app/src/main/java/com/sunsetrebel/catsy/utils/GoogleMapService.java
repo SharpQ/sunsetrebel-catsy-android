@@ -72,9 +72,6 @@ public class GoogleMapService {
                 zoomToUserLocation(context, googleMap);
             } else {
                 PermissionUtils.requestLocationPermissions(isActivity, screen);
-                if (PermissionUtils.isLocationPermissionEnabled(context)) {
-                    zoomToUserLocation(context, googleMap);
-                }
             }
         }
     }
