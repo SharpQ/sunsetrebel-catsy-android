@@ -40,6 +40,10 @@ public class FirebaseFirestoreService {
     private FirebaseFirestore fStore;
     private static MutableLiveData<List<EventModel>> eventListMutableLiveData = new MutableLiveData<>();
     private ListenerRegistration eventListListener = null;
+    private static boolean instanceJoinLeave = false;
+    private static boolean instanceLike = false;
+    private static boolean instanceCreateEvent = false;
+
 
     public FirebaseFirestoreService() {
         fStore = FirebaseFirestore.getInstance();
@@ -132,6 +136,10 @@ public class FirebaseFirestoreService {
     public void createNewEvent(Context context, String hostId, String hostName, String hostProfileImg, String eventTitle, String eventLocation, LatLng eventGeoLocation,
                                Date eventStartTime, Date eventEndTime, AccessType eventAccessType, String eventDescr, Integer eventMinAge,
                                Integer eventMaxAge, Integer eventMaxPerson, String eventAvatar, List<Enum<?>> eventThemes, Timestamp createTS, Timestamp updateTS) {
+        if (instanceCreateEvent) {
+            return;
+        }
+        instanceCreateEvent = true;
         String eventId = null;
         if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
             eventId = getIdForPublicEventDocRef();
@@ -174,15 +182,21 @@ public class FirebaseFirestoreService {
         }
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2, task3);
         allTasks.addOnSuccessListener(querySnapshots -> {
+            instanceCreateEvent = false;
             Log.d("INFO", "New event created! EventId: " + finalEventId);
             CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.new_event_event_created_notification));
         }).addOnFailureListener(e -> {
+            instanceCreateEvent = false;
             Log.d("INFO", "Failed to create new event!");
             CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.new_event_event_failed_create_notification));
         });
     }
 
     public void setUserJoinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, String userId) {
+        if (instanceJoinLeave) {
+            return;
+        }
+        instanceJoinLeave = true;
         String eventTitle = event.getEventTitle();
         String eventId = event.getEventId();
         String hostId = event.getHostId();
@@ -207,16 +221,22 @@ public class FirebaseFirestoreService {
     private void joinUserReturnFail(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
         Log.d("INFO", "Failed to join event: " + eventTitle + "!");
         CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.event_detailed_join_fail) + eventTitle + "!");
+        instanceJoinLeave = false;
         setUserInteractEventCallback.onResponse(false);
     }
 
     private void joinUserReturnSuccess(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
         Log.d("INFO", "You joined event: " + eventTitle + "!");
         CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.event_detailed_join_success) + eventTitle + "!");
+        instanceJoinLeave = false;
         setUserInteractEventCallback.onResponse(true);
     }
 
     public void setUserLeaveEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, String userId) {
+        if (instanceJoinLeave) {
+            return;
+        }
+        instanceJoinLeave = true;
         String eventTitle = event.getEventTitle();
         String eventId = event.getEventId();
         String hostId = event.getHostId();
@@ -239,12 +259,14 @@ public class FirebaseFirestoreService {
     private void leaveUserReturnFail(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
         Log.d("INFO", "Failed to leave event: " + eventTitle + "!");
         CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.event_detailed_leave_fail) + eventTitle + "!");
+        instanceJoinLeave = false;
         setUserInteractEventCallback.onResponse(false);
     }
 
     private void leaveUserReturnSuccess(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
         Log.d("INFO", "You left event: " + eventTitle + "!");
         CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.event_detailed_leave_success) + eventTitle + "!");
+        instanceJoinLeave = false;
         setUserInteractEventCallback.onResponse(true);
     }
 
