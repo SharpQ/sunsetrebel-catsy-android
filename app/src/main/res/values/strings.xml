@@ -14,11 +14,17 @@
     <string name="verify_button_resent_code">Resent code</string>
     <string name="verify_button_resent_link">Resent link</string>
     <string name="login_title">Sign in</string>
+    <string name="forgot_password_title">Forgot password</string>
+    <string name="forgot_password_description">Please enter email to reset password</string>
+    <string name="forgot_password_button">Reset password</string>
+    <string name="forgot_password_success_notific">Password successfully reset!</string>
+    <string name="forgot_password_fail_notific">Failed to reset password!</string>
     <string name="verify_phone_title">Verify phone</string>
     <string name="verify_phone_email">Verify email</string>
     <string name="verify_phone_description">Verification code sent to:\n</string>
     <string name="verify_email_description">Verification link sent to:\n</string>
     <string name="login_button_login">Login</string>
+    <string name="login_button_forgot_password">Forgot password</string>
     <string name="main_button_logout">Logout, BITCH!</string>
     <string name="text_slide_1">Always be on the wave of fun around</string>
     <string name="text_slide_2">Get together with those who share your interests</string>

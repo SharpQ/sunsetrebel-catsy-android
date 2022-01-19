@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView slideImageEmail, slideImagePhone;
     private LinearLayout countryAndPhone;
     private Switch switchLogin;
-    private Button mLoginBtn, mGoogleAuthBtn, mFacebookAuthBtn;
+    private Button mLoginBtn, mGoogleAuthBtn, mFacebookAuthBtn, mForgotPasswordBtn;
     private ProgressBar progressBar;
     private int RC_SIGN_IN;
     private boolean isGoogleAuth = false;
@@ -92,6 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         mEditPassword = findViewById(R.id.inputEditUserPassword);
         progressBar = findViewById(R.id.progressBarLogin);
         mLoginBtn = findViewById(R.id.buttonLogin);
+        mForgotPasswordBtn = findViewById(R.id.button_forgot_password);
         mGoogleAuthBtn = findViewById(R.id.buttonLoginGoogle);
         mFacebookAuthBtn = findViewById(R.id.buttonLoginFacebook);
         switchLogin = findViewById(R.id.switchLogin);
@@ -142,6 +143,11 @@ public class LoginActivity extends AppCompatActivity {
             isGoogleAuth = true;
             }
         );
+
+        mForgotPasswordBtn.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), ForgotEmailActivity.class));
+            Animatoo.animateFade(this);  //fire the zoom animation
+        });
 
         mLoginBtn.setOnClickListener(v -> {
             String email = mEditEmail.getText().toString().trim();

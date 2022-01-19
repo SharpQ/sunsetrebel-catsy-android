@@ -41,6 +41,7 @@
 
         <activity android:name=".activities.VerifyPhoneActivity" />
         <activity android:name=".activities.VerifyEmailActivity" />
+        <activity android:name=".activities.ForgotEmailActivity" />
         <activity
             android:name=".activities.MainActivity"
             android:windowSoftInputMode="adjustPan" />

@@ -118,7 +118,6 @@ public class VerifyPhoneActivity extends AppCompatActivity {
         public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
             String code = phoneAuthCredential.getSmsCode();
             if (code != null) {
-                progressBar.setVisibility(View.VISIBLE);
                 verifyCode(code);
             }
         }
