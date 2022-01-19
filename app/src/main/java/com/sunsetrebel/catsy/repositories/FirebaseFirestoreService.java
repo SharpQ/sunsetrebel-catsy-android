@@ -130,7 +130,7 @@ public class FirebaseFirestoreService {
         user.put("joinedEvents", null);
         user.put("hostedPublicEvents", null);
         user.put("hostedPrivateEvents", null);
-        getUserProfileDocRef(userId).set(user).addOnSuccessListener(aVoid -> Log.d("INFO", "User profile created! UserID: " + userId));
+        getUserProfileDocRef(userId).set(user).addOnSuccessListener(aVoid -> Log.d("DEBUG", "User profile created! UserID: " + userId));
     }
 
     public void createNewEvent(Context context, String hostId, String hostName, String hostProfileImg, String eventTitle, String eventLocation, LatLng eventGeoLocation,
@@ -183,11 +183,11 @@ public class FirebaseFirestoreService {
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2, task3);
         allTasks.addOnSuccessListener(querySnapshots -> {
             instanceCreateEvent = false;
-            Log.d("INFO", "New event created! EventId: " + finalEventId);
+            Log.d("DEBUG", "New event created! EventId: " + finalEventId);
             CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.new_event_event_created_notification));
         }).addOnFailureListener(e -> {
             instanceCreateEvent = false;
-            Log.d("INFO", "Failed to create new event!");
+            Log.d("DEBUG", "Failed to create new event!");
             CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.new_event_event_failed_create_notification));
         });
     }
@@ -219,14 +219,14 @@ public class FirebaseFirestoreService {
     }
 
     private void joinUserReturnFail(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
-        Log.d("INFO", "Failed to join event: " + eventTitle + "!");
+        Log.d("DEBUG", "Failed to join event: " + eventTitle + "!");
         CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.event_detailed_join_fail) + eventTitle + "!");
         instanceJoinLeave = false;
         setUserInteractEventCallback.onResponse(false);
     }
 
     private void joinUserReturnSuccess(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
-        Log.d("INFO", "You joined event: " + eventTitle + "!");
+        Log.d("DEBUG", "You joined event: " + eventTitle + "!");
         CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.event_detailed_join_success) + eventTitle + "!");
         instanceJoinLeave = false;
         setUserInteractEventCallback.onResponse(true);
@@ -257,14 +257,14 @@ public class FirebaseFirestoreService {
     }
 
     private void leaveUserReturnFail(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
-        Log.d("INFO", "Failed to leave event: " + eventTitle + "!");
+        Log.d("DEBUG", "Failed to leave event: " + eventTitle + "!");
         CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.event_detailed_leave_fail) + eventTitle + "!");
         instanceJoinLeave = false;
         setUserInteractEventCallback.onResponse(false);
     }
 
     private void leaveUserReturnSuccess(Context context, String eventTitle, SetUserInteractEventCallback setUserInteractEventCallback) {
-        Log.d("INFO", "You left event: " + eventTitle + "!");
+        Log.d("DEBUG", "You left event: " + eventTitle + "!");
         CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.event_detailed_leave_success) + eventTitle + "!");
         instanceJoinLeave = false;
         setUserInteractEventCallback.onResponse(true);
@@ -302,6 +302,7 @@ public class FirebaseFirestoreService {
 
     public MutableLiveData<List<EventModel>> getEventListMutableLiveData() {
         eventListListener = getPublicEventList().addSnapshotListener((value, error) -> {
+            Log.d("DEBUG", "ADDED SNAPSHOT LISTENER");
             List<EventModel> eventList = new ArrayList<>();
             for (QueryDocumentSnapshot document : value) {
                 if (document != null) {
@@ -316,6 +317,7 @@ public class FirebaseFirestoreService {
 
     public void removeEventListListener() {
         if (eventListListener != null) {
+            Log.d("DEBUG", "REMOVED SNAPSHOT LISTENER");
             eventListListener.remove();
         }
     }

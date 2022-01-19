@@ -137,7 +137,7 @@ public class NewEventFinalFragment extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 pickImageFromGallery();
             } else {
-                Log.e("INFO", "Permissions not granted");
+                Log.d("DEBUG", "Permissions not granted");
             }
         }
     }

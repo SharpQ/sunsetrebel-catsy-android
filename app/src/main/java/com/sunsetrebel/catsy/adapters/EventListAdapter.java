@@ -126,11 +126,11 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             if (value) {
                 holder.likeButton.setVisibility(View.INVISIBLE);
                 CustomToastUtil.showSuccessToast(context, context.getResources().getText(R.string.event_liked_success).toString() + eventList.get(position).getEventTitle());
-                Log.d("INFO", "You liked event: " + eventList.get(position).getEventId());
+                Log.d("DEBUG", "You liked event: " + eventList.get(position).getEventId());
             } else {
                 holder.likeButton.setVisibility(View.VISIBLE);
                 CustomToastUtil.showFailToast(context, context.getResources().getText(R.string.event_liked_fail).toString() + eventList.get(position).getEventTitle());
-                Log.d("INFO", "Failed to like event: " + eventList.get(position).getEventId());
+                Log.d("DEBUG", "Failed to like event: " + eventList.get(position).getEventId());
             }
         }, eventList.get(position).getEventId()));
     }

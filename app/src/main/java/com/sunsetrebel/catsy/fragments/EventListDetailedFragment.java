@@ -178,11 +178,11 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             if (value) {
                 likeButton.setVisibility(View.INVISIBLE);
                 CustomToastUtil.showSuccessToast(getContext(), getContext().getResources().getText(R.string.event_liked_success).toString() + eventModel.getEventTitle());
-                Log.d("INFO", "You liked event: " + eventModel.getEventId());
+                Log.d("DEBUG", "You liked event: " + eventModel.getEventId());
             } else {
                 likeButton.setVisibility(View.VISIBLE);
                 CustomToastUtil.showFailToast(getContext(), getContext().getResources().getText(R.string.event_liked_fail).toString() + eventModel.getEventTitle());
-                Log.d("INFO", "Failed to like event: " + eventModel.getEventId());
+                Log.d("DEBUG", "Failed to like event: " + eventModel.getEventId());
             }
         }, eventModel.getEventId()));
 

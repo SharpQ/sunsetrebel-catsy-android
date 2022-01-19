@@ -134,7 +134,7 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
                                 }
                             }
                         } else {
-                            Log.i("INFO", "prediction fetching task unsuccessful");
+                            Log.d("DEBUG", "prediction fetching task unsuccessful");
                         }
                     }
                 });
@@ -171,7 +171,7 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
                     public void onSuccess(FetchPlaceResponse fetchPlaceResponse) {
                         Place place = fetchPlaceResponse.getPlace();
 
-                        Log.i("INFO", "Place found: " + place.getName());
+                        Log.d("DEBUG", "Place found: " + place.getName());
                         eventLatLng = place.getLatLng();
                         if (eventLatLng != null) {
                             GoogleMapService.clearAndSetMarker(mMap, eventLatLng, mMap.getCameraPosition().zoom, eventAddress, getContext());
@@ -184,8 +184,8 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
                             ApiException apiException = (ApiException) e;
                             apiException.printStackTrace();
                             int statusCode = apiException.getStatusCode();
-                            Log.i("INFO", "place not found: " + e.getMessage());
-                            Log.i("INFO", "status code: " + statusCode);
+                            Log.d("DEBUG", "place not found: " + e.getMessage());
+                            Log.d("DEBUG", "status code: " + statusCode);
                         }
                     }
                 });
@@ -239,7 +239,7 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
 
                 try {
                     addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                    Log.d("INFO", "List of addresses from users mark: " + String.valueOf(addresses));
+                    Log.d("DEBUG", "List of addresses from users mark: " + String.valueOf(addresses));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -267,7 +267,7 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 GoogleMapService.zoomToUserLocation(getContext(), mMap);
             } else {
-                Log.e("INFO", "Permissions not granted");
+                Log.d("DEBUG", "Permissions not granted");
             }
         }
     }

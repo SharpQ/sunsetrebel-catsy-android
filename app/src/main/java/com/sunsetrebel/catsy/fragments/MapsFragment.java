@@ -105,7 +105,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 GoogleMapService.zoomToUserLocation(getContext(), mMap);
             } else {
-                Log.e("INFO", "Permissions not granted");
+                Log.d("DEBUG", "Permissions not granted");
             }
         }
     }
