@@ -117,7 +117,7 @@ public class VerifyEmailActivity extends AppCompatActivity {
             firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.EMAIL, fullName);
             Intent intent;
             if (isTutorialNextPage) {
-                intent = new Intent(getApplicationContext(), TutorialActivity.class);
+                intent = new Intent(getApplicationContext(), MainActivity.class);
             }
             else {
                 intent = new Intent(getApplicationContext(), MainActivity.class);

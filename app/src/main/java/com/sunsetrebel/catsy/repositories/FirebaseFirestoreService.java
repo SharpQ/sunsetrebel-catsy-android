@@ -345,10 +345,19 @@ public class FirebaseFirestoreService {
     }
 
     public void setEventAsLikedByUser(SetUserInteractEventCallback setUserInteractEventCallback, String userId, String eventId) {
+        if (instanceLike) {
+            return;
+        }
+        instanceLike = true;
         Task<Void> task1 = getUserProfileDocRef(userId).update("likedEvents", FieldValue.arrayUnion(eventId));
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1);
-        allTasks.addOnSuccessListener(querySnapshots -> setUserInteractEventCallback.onResponse(true))
-                .addOnFailureListener(e -> setUserInteractEventCallback.onResponse(false));
+        allTasks.addOnSuccessListener(querySnapshots -> {
+            instanceLike = false;
+            setUserInteractEventCallback.onResponse(true);
+        }).addOnFailureListener(e -> {
+            instanceLike = false;
+            setUserInteractEventCallback.onResponse(false);
+        });
     }
 
     private EventModel convertEventDocumentToModel(Map<String, Object> map) {

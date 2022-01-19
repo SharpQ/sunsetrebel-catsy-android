@@ -186,7 +186,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         if (fAuth.getCurrentUser().isEmailVerified()) {
                             firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.EMAIL, fullName);
-                            startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
+                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             Animatoo.animateFade(this);  //fire the zoom animation
                             finish();
                         } else {
@@ -285,7 +285,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.GOOGLE, fAuth.getCurrentUser().getDisplayName());
-                        startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {
@@ -303,7 +303,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.FACEBOOK, fAuth.getCurrentUser().getDisplayName());
-                        startActivity(new Intent(getApplicationContext(), TutorialActivity.class));
+                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
                     } else {
