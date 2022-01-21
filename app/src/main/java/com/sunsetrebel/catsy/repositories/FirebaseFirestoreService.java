@@ -192,7 +192,7 @@ public class FirebaseFirestoreService {
         });
     }
 
-    public void setUserJoinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, String userId) {
+    public void setUserJoinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, UserProfileModel userProfileModel) {
         if (instanceJoinLeave) {
             return;
         }
@@ -200,9 +200,14 @@ public class FirebaseFirestoreService {
         String eventTitle = event.getEventTitle();
         String eventId = event.getEventId();
         String hostId = event.getHostId();
+        String userId = userProfileModel.getUserId();
+        String userFullName = userProfileModel.getUserFullName();
+        String userProfileImg = userProfileModel.getUserProfileImg();
         AccessType accessType = event.getAccessType();
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("userId", userId);
+        userMap.put("userFullName", userFullName);
+        userMap.put("userProfileImg", userProfileImg);
 
         Task<Void> task1 = null, task2 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
@@ -232,7 +237,7 @@ public class FirebaseFirestoreService {
         setUserInteractEventCallback.onResponse(true);
     }
 
-    public void setUserLeaveEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, String userId) {
+    public void setUserLeaveEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, UserProfileModel userProfileModel) {
         if (instanceJoinLeave) {
             return;
         }
@@ -240,6 +245,7 @@ public class FirebaseFirestoreService {
         String eventTitle = event.getEventTitle();
         String eventId = event.getEventId();
         String hostId = event.getHostId();
+        String userId = userProfileModel.getUserId();
         AccessType accessType = event.getAccessType();
 
         Task<Void> task1 = null, task2 = null;

@@ -51,7 +51,7 @@ public class GoogleMapService {
         return geocoder = new Geocoder(context, Locale.getDefault());
     }
 
-    private static FusedLocationProviderClient getFusedLocationProviderInstance(Context context) {
+    public static FusedLocationProviderClient getFusedLocationProviderInstance(Context context) {
         if (fusedLocationProviderClient == null) {
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context);
         }

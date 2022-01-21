@@ -115,13 +115,13 @@ public class EventListViewModel extends ViewModel {
     public void joinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel eventModel) {
         firebaseFirestoreService.setUserJoinEvent(value -> {
             setUserInteractEventCallback.onResponse(value);
-        }, context, eventModel, userProfileModel.getUserId());
+        }, context, eventModel, userProfileModel);
     }
 
     public void leaveEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel eventModel) {
         firebaseFirestoreService.setUserLeaveEvent(value -> {
             setUserInteractEventCallback.onResponse(value);
-        }, context, eventModel, userProfileModel.getUserId());
+        }, context, eventModel, userProfileModel);
     }
 
     public void likeEvent(SetUserInteractEventCallback setUserInteractEventCallback, String eventId) {

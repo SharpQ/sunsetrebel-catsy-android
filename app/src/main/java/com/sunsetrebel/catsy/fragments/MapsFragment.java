@@ -5,14 +5,15 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,9 +25,21 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
+import com.directions.route.AbstractRouting;
+import com.directions.route.Route;
+import com.directions.route.RouteException;
+import com.directions.route.Routing;
+import com.directions.route.RoutingListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
@@ -37,13 +50,14 @@ import com.sunsetrebel.catsy.utils.ImageUtils;
 import com.sunsetrebel.catsy.utils.PermissionUtils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
+public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, RoutingListener {
     private GoogleMap mMap;
     private FirebaseFirestoreService firebaseFirestoreService;
     private String hostPlaceholder;
@@ -52,6 +66,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
     private Random rand = new Random();
     private EventThemesUtil eventThemesUtil;
     private Map<Enum<?>, String> eventThemesEnumList;
+    private List<Polyline> polylines = null;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -64,6 +80,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragmentGoogleMaps);
         mapFragment.getMapAsync(this);
+        fusedLocationProviderClient = GoogleMapService.getFusedLocationProviderInstance(getContext());
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
         hostPlaceholder = getContext().getString(R.string.event_list_host_placeholder);
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
@@ -93,6 +110,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMarkerClickListener(marker -> {
             EventModel event = (EventModel) marker.getTag();
             showPopup(getView(), event);
+            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+                if (location != null) {
+                    drawPrimaryLinePath(new LatLng(location.getLatitude(), location.getLongitude()), event.getEventGeoLocation());
+                }
+            });
             return false;
         });
     }
@@ -178,5 +200,84 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
         infoPopup.setOutsideTouchable(true);
         infoPopup.setAnimationStyle(R.style.popup_window_animation);
         infoPopup.showAtLocation(view, Gravity.TOP, 0, 0);
+
+        infoPopup.setTouchInterceptor(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                    infoPopup.dismiss();
+                    clearPolylines();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
+
+    private void drawPrimaryLinePath(LatLng start, LatLng end)
+    {
+        if (mMap == null) {
+            return;
+        }
+        clearPolylines();
+        findroutes(start, end);
+    }
+
+    public void findroutes(LatLng Start, LatLng End)
+    {
+        if (Start==null || End==null) {
+            return;
+        }
+        else
+        {
+            Routing routing = new Routing.Builder()
+                    .travelMode(AbstractRouting.TravelMode.DRIVING)
+                    .withListener(this)
+                    .alternativeRoutes(true)
+                    .waypoints(Start, End)
+                    .key(getResources().getString(R.string.google_maps_key))  //also define your api key here.
+                    .build();
+            routing.execute();
+        }
+    }
+
+    private void clearPolylines() {
+        if (polylines != null) {
+            for(Polyline line : polylines)
+            {
+                line.remove();
+            }
+            polylines.clear();
+        }
+    }
+
+    @Override
+    public void onRoutingSuccess(ArrayList<Route> route, int shortestRouteIndex) {
+        PolylineOptions polyOptions = new PolylineOptions();
+        polylines = new ArrayList<>();
+        //add route(s) to the map using polyline
+        for (int i = 0; i <route.size(); i++) {
+            if (i==shortestRouteIndex)
+            {
+                polyOptions.color(getResources().getColor(R.color.primaryLightColor));
+                polyOptions.width(7);
+                polyOptions.addAll(route.get(shortestRouteIndex).getPoints());
+                Polyline polyline = mMap.addPolyline(polyOptions);
+                polylines.add(polyline);
+            }
+        }
+    }
+
+    @Override
+    public void onRoutingFailure(RouteException e) {}
+
+    @Override
+    public void onRoutingStart() {}
+
+    @Override
+    public void onRoutingCancelled() {}
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
+
 }
