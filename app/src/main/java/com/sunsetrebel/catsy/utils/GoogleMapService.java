@@ -93,8 +93,8 @@ public class GoogleMapService {
             initMarkerDrawable(context);
         }
         googleMap.clear();
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, zoom));
-//        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, zoom));
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, zoom));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(eventLatLng, zoom));
         googleMap.addMarker(new MarkerOptions().position(eventLatLng).icon(BitmapDescriptorFactory.fromBitmap(mapMarkerDefault)).title(marketTitle)).showInfoWindow();
     }
 
