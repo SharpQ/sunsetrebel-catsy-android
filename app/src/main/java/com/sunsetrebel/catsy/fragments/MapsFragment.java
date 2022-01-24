@@ -113,12 +113,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onStop() {
         super.onStop();
-        if (infoPopup != null) {
-            infoPopup.dismiss();
-            selectedEvent = null;
-            fab.setEnabled(false);
-            fab.setVisibility(View.INVISIBLE);
-        }
+        closePopup();
     }
 
 
@@ -135,18 +130,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             }
         });
         mMap.setOnMapClickListener(latLng -> {
-            if (infoPopup != null) {
-                infoPopup.dismiss();
-                selectedEvent = null;
-                fab.setEnabled(false);
-                fab.setVisibility(View.INVISIBLE);
-            }
+            closePopup();
         });
 
         mMap.setOnMarkerClickListener(marker -> {
             EventModel event = (EventModel) marker.getTag();
             selectedEvent = event;
             showPopup(getView(), event);
+            clearPolylines();
             fab.setEnabled(true);
             fab.setVisibility(View.VISIBLE);
             return false;
@@ -232,6 +223,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         infoPopup.setAnimationStyle(R.style.popup_window_animation);
         infoPopup.showAtLocation(view, Gravity.TOP, 0, 0);
+    }
+
+    private void closePopup() {
+        if (infoPopup != null) {
+            infoPopup.dismiss();
+            selectedEvent = null;
+            fab.setEnabled(false);
+            fab.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void drawPrimaryLinePath(LatLng start, LatLng end)

@@ -15,17 +15,17 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_header"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07">
+        app:layout_constraintVertical_bias="0.06">
 
         <ImageButton
             android:id="@+id/ib_back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:background="?android:selectableItemBackground"
             app:srcCompat="@drawable/ic_baseline_keyboard_arrow_left_45"
             app:layout_constraintBottom_toBottomOf="@id/cl_header"
@@ -37,8 +37,8 @@
 
         <ImageButton
             android:id="@+id/ib_extra"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
             android:background="?android:selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="@id/cl_header"
             app:layout_constraintEnd_toEndOf="@id/cl_header"
@@ -563,7 +563,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_footer"
         android:layout_width="match_parent"
-        android:layout_height="55dp"
+        android:layout_height="48dp"
         android:background="@color/blackHalfTransparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -572,8 +572,8 @@
 
         <ImageButton
             android:id="@+id/ib_share"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="10dp"
             android:background="?android:selectableItemBackground"
             app:srcCompat="@drawable/ic_baseline_share_30"
@@ -586,8 +586,9 @@
 
         <ImageButton
             android:id="@+id/ib_like"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="5dp"
             android:layout_marginStart="10dp"
             android:background="?android:selectableItemBackground"
             android:scaleType="fitXY"
@@ -602,6 +603,9 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_join"
             style="@style/DefaultButton"
+            android:layout_height="48dp"
+            android:layout_width="wrap_content"
+            android:drawablePadding="40dp"
             android:enabled="false"
             android:text="@string/event_detailed_join_button"
             android:layout_marginStart="10dp"
@@ -610,6 +614,7 @@
             app:layout_constraintEnd_toEndOf="@id/cl_footer"
             app:layout_constraintStart_toEndOf="@id/ib_like"
             app:layout_constraintTop_toTopOf="@id/cl_footer"
+            app:layout_constraintHorizontal_bias="0.9"
             app:layout_constraintVertical_bias="0.5" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
