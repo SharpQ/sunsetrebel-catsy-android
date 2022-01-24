@@ -17,6 +17,28 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_draw_route"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:fabCustomSize="70dp"
+        app:maxImageSize="40dp"
+        app:srcCompat="@drawable/ic_draw_route_scale"
+        android:scaleType="center"
+        app:tint="@null"
+        app:borderWidth="0dp"
+        android:enabled="false"
+        android:visibility="invisible"
+        android:backgroundTint="@color/primaryDarkColor"
+        android:layout_marginBottom="15dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1"
+        app:layout_constraintHorizontal_bias="1"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

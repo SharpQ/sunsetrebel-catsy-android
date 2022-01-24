@@ -3,6 +3,7 @@ package com.sunsetrebel.catsy.fragments;
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
@@ -60,6 +62,7 @@ import java.util.Random;
 public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, RoutingListener {
     private GoogleMap mMap;
     private FirebaseFirestoreService firebaseFirestoreService;
+    private FloatingActionButton fab;
     private String hostPlaceholder;
     private PopupWindow infoPopup = null;
     private SimpleDateFormat simpleDateFormat;
@@ -68,6 +71,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private Map<Enum<?>, String> eventThemesEnumList;
     private List<Polyline> polylines = null;
     private FusedLocationProviderClient fusedLocationProviderClient;
+    private EventModel selectedEvent = null;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -80,18 +84,41 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragmentGoogleMaps);
         mapFragment.getMapAsync(this);
+        fab = v.findViewById(R.id.fab_draw_route);
         fusedLocationProviderClient = GoogleMapService.getFusedLocationProviderInstance(getContext());
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
         hostPlaceholder = getContext().getString(R.string.event_list_host_placeholder);
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
         eventThemesUtil = new EventThemesUtil(getContext().getResources());
         eventThemesEnumList = eventThemesUtil.getEventThemesList();
+        fab.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onClick(View v) {
+                fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+                    if (location != null && selectedEvent != null) {
+                        drawPrimaryLinePath(new LatLng(location.getLatitude(), location.getLongitude()), selectedEvent.getEventGeoLocation());
+                    }
+                });
+            }
+        });
         return v;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (infoPopup != null) {
+            infoPopup.dismiss();
+            selectedEvent = null;
+            fab.setEnabled(false);
+            fab.setVisibility(View.INVISIBLE);
+        }
     }
 
 
@@ -107,14 +134,21 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
                 }
             }
         });
+        mMap.setOnMapClickListener(latLng -> {
+            if (infoPopup != null) {
+                infoPopup.dismiss();
+                selectedEvent = null;
+                fab.setEnabled(false);
+                fab.setVisibility(View.INVISIBLE);
+            }
+        });
+
         mMap.setOnMarkerClickListener(marker -> {
             EventModel event = (EventModel) marker.getTag();
+            selectedEvent = event;
             showPopup(getView(), event);
-            fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
-                if (location != null) {
-                    drawPrimaryLinePath(new LatLng(location.getLatitude(), location.getLongitude()), event.getEventGeoLocation());
-                }
-            });
+            fab.setEnabled(true);
+            fab.setVisibility(View.VISIBLE);
             return false;
         });
     }
@@ -196,22 +230,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         infoPopup = new PopupWindow(popupView,
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        infoPopup.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        infoPopup.setOutsideTouchable(true);
         infoPopup.setAnimationStyle(R.style.popup_window_animation);
         infoPopup.showAtLocation(view, Gravity.TOP, 0, 0);
-
-        infoPopup.setTouchInterceptor(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
-                    infoPopup.dismiss();
-                    clearPolylines();
-                    return true;
-                }
-                return false;
-            }
-        });
     }
 
     private void drawPrimaryLinePath(LatLng start, LatLng end)
