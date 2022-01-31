@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.fragments.AccountFragment;
+import com.sunsetrebel.catsy.fragments.ProfileMainFragment;
 import com.sunsetrebel.catsy.fragments.NewEventPrimaryFragment;
 import com.sunsetrebel.catsy.fragments.EventListFragment;
 import com.sunsetrebel.catsy.fragments.MapsFragment;
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                     fragment = new NewEventPrimaryFragment();
                     break;
                 case R.id.navigationBarAccount:
-                    fragment = new AccountFragment();
+                    fragment = new ProfileMainFragment();
                     break;
             }
             fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, fragment).commitAllowingStateLoss();

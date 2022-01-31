@@ -79,6 +79,10 @@
     <string name="event_detailed_leave_fail">Failed to leave event:\u0020</string>
     <string name="event_liked_success">You liked event:\u0020</string>
     <string name="event_liked_fail">Failed to like event:\u0020</string>
+    <string name="profile_id_placeholder">ID:\u0020</string>
+    <string name="profile_tab_title_main">Personal Info</string>
+    <string name="profile_tab_title_events">Events</string>
+    <string name="profile_tab_title_friends">Friends</string>
     <string name="event_theme_sport">Sport</string>
     <string name="event_theme_music">Music</string>
     <string name="event_theme_art">Art</string>

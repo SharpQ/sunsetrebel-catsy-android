@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_centerInParent="true"
+    android:gravity="center">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/profile_image"
+        android:background="@color/primaryLightColor"
+        app:shapeAppearanceOverlay="@style/EventListHostAvatar"
+        android:elevation="15dp"
+        android:padding="5dp"
+        android:layout_centerHorizontal="true"
+        android:layout_width="98dp"
+        android:layout_height="98dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:cardBackgroundColor="@color/primaryColor"
+            app:cardCornerRadius="15dp"
+            app:cardElevation="10dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1">
+
+            <TextView
+                android:id="@+id/profile_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp"
+                android:gravity="center"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:fontFamily="@font/audiowide"/>
+
+            <TextView
+                android:id="@+id/profile_userid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="90dp"
+                android:gravity="center"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="14sp"
+                android:textStyle="normal"
+                android:fontFamily="@font/audiowide"/>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tl_profile"
+                android:layout_height="50dp"
+                android:layout_width="match_parent"
+                android:layout_marginTop="110dp"
+                android:background="@color/primaryColor"
+                app:tabTextColor="@color/primaryTextColor"
+                app:tabSelectedTextColor="@color/primaryLightColor"
+                app:tabIndicatorColor="@color/primaryLightColor">
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_height="50dp"
+                    android:layout_width="wrap_content"
+                    android:text="@string/profile_tab_title_main"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_height="50dp"
+                    android:layout_width="wrap_content"
+                    android:text="@string/profile_tab_title_events"/>
+
+                <com.google.android.material.tabs.TabItem
+                    android:layout_height="50dp"
+                    android:layout_width="wrap_content"
+                    android:text="@string/profile_tab_title_friends"/>
+
+            </com.google.android.material.tabs.TabLayout>
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
