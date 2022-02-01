@@ -13,5 +13,6 @@
         android:orientation="vertical">
         <include layout="@layout/item_profile_phone" />
         <include layout="@layout/item_profile_email" />
+        <include layout="@layout/item_profile_social_networks" />
     </LinearLayout>
 </ScrollView>

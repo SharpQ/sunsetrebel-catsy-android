@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="@color/primaryColor"
     app:cardCornerRadius="15dp"
     app:cardElevation="10dp"
@@ -12,15 +12,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:padding="5dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="5dp">
 
         <ImageView
-            android:id="@+id/iv_phone"
+            android:id="@+id/iv_socials"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:padding="2dp"
-            android:src="@drawable/ic_baseline_phone_iphone_24"
+            android:src="@drawable/ic_baseline_webhook_24"
             android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -29,26 +29,32 @@
             app:layout_constraintVertical_bias="0"
             app:layout_constraintHorizontal_bias="0"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <TextView
             style="@style/ProfileItemTitle"
-            android:id="@+id/tv_phone_title"
-            android:text="@string/registration_hint_phone"
+            android:id="@+id/tv_socials_title"
+            android:text="@string/profile_info_title_social_networks"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_phone"
+            app:layout_constraintStart_toEndOf="@id/iv_socials"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0"
             app:layout_constraintHorizontal_bias="0"/>
 
-        <androidx.appcompat.widget.AppCompatTextView
-            style="@style/ProfileItemValue"
-            android:id="@+id/tv_phone_value"
+        <LinearLayout
+            android:id="@+id/ll_socials"
+            android:layout_height="60dp"
+            android:layout_width="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/iv_phone"
-            app:layout_constraintTop_toBottomOf="@+id/tv_phone_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_socials_title"
             app:layout_constraintVertical_bias="0"
-            app:layout_constraintHorizontal_bias="0"/>
+            app:layout_constraintHorizontal_bias="0.5"
+            android:orientation="horizontal" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.cardview.widget.CardView>

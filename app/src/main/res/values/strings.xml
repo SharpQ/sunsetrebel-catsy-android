@@ -83,6 +83,8 @@
     <string name="profile_tab_title_main">Personal Info</string>
     <string name="profile_tab_title_events">Events</string>
     <string name="profile_tab_title_friends">Friends</string>
+    <string name="profile_button_logout">Logout</string>
+    <string name="profile_info_title_social_networks">Social networks</string>
     <string name="event_theme_sport">Sport</string>
     <string name="event_theme_music">Music</string>
     <string name="event_theme_art">Art</string>

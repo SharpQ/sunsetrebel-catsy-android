@@ -130,6 +130,10 @@ public class FirebaseFirestoreService {
         user.put("joinedEvents", null);
         user.put("hostedPublicEvents", null);
         user.put("hostedPrivateEvents", null);
+        user.put("userLinkTelegram", null);
+        user.put("userLinkTikTok", null);
+        user.put("userLinkInstagram", null);
+        user.put("userLinkFacebook", null);
         getUserProfileDocRef(userId).set(user).addOnSuccessListener(aVoid -> Log.d("DEBUG", "User profile created! UserID: " + userId));
     }
 
@@ -418,7 +422,11 @@ public class FirebaseFirestoreService {
                 convertUserProfileEvents((ArrayList<Object[]>) map.get("joinedEvents")),
                 convertUserProfileEvents((ArrayList<Object[]>) map.get("hostedPublicEvents")),
                 convertUserProfileEvents((ArrayList<Object[]>) map.get("hostedPrivateEvents")),
-                convertUserProfileEvents((ArrayList<Object[]>) map.get("likedEvents")));
+                convertUserProfileEvents((ArrayList<Object[]>) map.get("likedEvents")),
+                convertObjectToString(map.get("userLinkTelegram")),
+                convertObjectToString(map.get("userLinkTikTok")),
+                convertObjectToString(map.get("userLinkInstagram")),
+                convertObjectToString(map.get("userLinkFacebook")));
     }
 
     private List<String> convertUserProfileEvents(ArrayList<Object[]> userEventsObjects) {
