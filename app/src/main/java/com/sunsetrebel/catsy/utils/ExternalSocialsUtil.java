@@ -12,7 +12,7 @@ public class ExternalSocialsUtil {
     public static final String defaultInstagramWeb = "http://instagram.com/";
     public static final String defaultInstagramMobile = "http://instagram.com/_u/";
     public static final String defaultFacebookWeb = "https://m.facebook.com/";
-    public static final String defaultFacebookMobile = "fb://page/";
+    public static final String defaultFacebookMobile = "fb://facewebmodal/f?href=https://www.facebook.com/"; //"fb://page/"
     public static final String defaultTelegramWeb = "https://t.me/";
     public static final String defaultTelegramMobile = "https://t.me/";
     public static final String defaultTikTokWeb = "https://www.tiktok.com/@";

@@ -8,10 +8,11 @@ import android.text.Html;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.viewpager.widget.ViewPager;
+
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.firebase.auth.AuthCredential;
@@ -19,10 +20,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.SliderAdapter;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
-import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.LoginType;
-import com.sunsetrebel.catsy.utils.MediaPlayerService;
 
 public class OnboardingActivity extends AppCompatActivity {
 

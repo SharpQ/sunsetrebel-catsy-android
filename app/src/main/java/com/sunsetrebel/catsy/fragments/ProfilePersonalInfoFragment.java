@@ -82,6 +82,7 @@ public class ProfilePersonalInfoFragment extends Fragment {
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(160,160);
         params.setMargins(15,0,15,0);
         imageButton.setLayoutParams(params);
+        imageButton.setAdjustViewBounds(true);
         imageButton.setScaleType(ImageView.ScaleType.FIT_XY);
         imageButton.setPadding(0,0,0,0);
         linearLayout.addView(imageButton);
