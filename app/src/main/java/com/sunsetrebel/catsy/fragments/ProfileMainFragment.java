@@ -54,6 +54,7 @@ public class ProfileMainFragment extends Fragment {
 
         logoutButton.setOnClickListener(v1 -> {
             firebaseAuthService.signOutFirebase();
+            userProfileService.setUserProfile(null);
             startActivity(new Intent(getContext(), LoginActivity.class));
             Animatoo.animateFade(getContext());  //fire the zoom animation
             getActivity().finish();

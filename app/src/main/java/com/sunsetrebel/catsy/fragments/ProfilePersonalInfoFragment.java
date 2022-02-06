@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
 import com.sunsetrebel.catsy.R;
@@ -27,6 +31,9 @@ public class ProfilePersonalInfoFragment extends Fragment {
     private TextView profileEmail, profilePhone;
     private LinearLayout linearLayout;
     private static UserProfileModel userProfileModel;
+    private LinearLayout linearLayoutExtra;
+    private ConstraintLayout rootConstraintLayout;
+    private int imageSizeDP;
 
 
     public ProfilePersonalInfoFragment() {
@@ -37,6 +44,7 @@ public class ProfilePersonalInfoFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile_personal_info, container, false);
+        rootConstraintLayout = v.findViewById(R.id.cl_root);
         profileEmail = v.findViewById(R.id.tv_email_value);
         profilePhone = v.findViewById(R.id.tv_phone_value);
         linearLayout = v.findViewById(R.id.ll_socials);
@@ -52,6 +60,7 @@ public class ProfilePersonalInfoFragment extends Fragment {
         String userIdTelegram = userProfileModel.getLinkTelegram();
         setTextViewInfo(userEmail, profileEmail);
         setTextViewInfo(userPhone, profilePhone);
+        imageSizeDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55, getResources().getDisplayMetrics());
 
         if (userIdFacebook != null) {
             setSocialImageButton(R.drawable.im_facebook_link_profile, userIdFacebook, ExternalSocialsUtil.facebookPackageName,
@@ -79,14 +88,50 @@ public class ProfilePersonalInfoFragment extends Fragment {
         ImageButton imageButton = new ImageButton(getContext());
         imageButton.setImageResource(resId);
         imageButton.setBackgroundColor(getResources().getColor(R.color.primaryColor));
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(160,160);
-        params.setMargins(15,0,15,0);
+//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imageSizeDP, imageSizeDP);
+        params.setMargins(10,0,10,0);
         imageButton.setLayoutParams(params);
         imageButton.setAdjustViewBounds(true);
         imageButton.setScaleType(ImageView.ScaleType.FIT_XY);
         imageButton.setPadding(0,0,0,0);
-        linearLayout.addView(imageButton);
+
+        if (linearLayout.getChildCount() < 4) {
+            linearLayout.addView(imageButton);
+        } else {
+            addToExtraLinear(imageButton);
+        }
+
         imageButton.setOnClickListener(v -> ExternalSocialsUtil.openLink(getContext(), userId, packageName, defaultWebLink, defaultMobileLink));
+    }
+
+    private void addToExtraLinear(ImageButton imageButton) {
+        if (linearLayoutExtra == null) {
+            setUpNewLinear();
+        }
+        linearLayoutExtra.addView(imageButton);
+    }
+
+    private void setUpNewLinear() {
+        linearLayoutExtra = new LinearLayout(getContext());
+        LinearLayout.LayoutParams paramsExtraLinear = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, imageSizeDP);
+        paramsExtraLinear.setMargins(10, 5, 10, 5);
+        linearLayoutExtra.setLayoutParams(paramsExtraLinear);
+        linearLayoutExtra.setGravity(LinearLayout.HORIZONTAL);
+        linearLayoutExtra.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayoutExtra.setId(View.generateViewId());
+        rootConstraintLayout.addView(linearLayoutExtra);
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(rootConstraintLayout);
+        constraintSet.connect(linearLayoutExtra.getId(), ConstraintSet.TOP, linearLayout.getId(),
+                ConstraintSet.BOTTOM, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()));
+        constraintSet.connect(linearLayoutExtra.getId(), ConstraintSet.BOTTOM, rootConstraintLayout.getId(), ConstraintSet.BOTTOM,5);
+        constraintSet.connect(linearLayoutExtra.getId(), ConstraintSet.START, rootConstraintLayout.getId(), ConstraintSet.START,0);
+        constraintSet.connect(linearLayoutExtra.getId(), ConstraintSet.END, rootConstraintLayout.getId(), ConstraintSet.END,0);
+        constraintSet.setVerticalBias(linearLayoutExtra.getId(), 0f);
+        constraintSet.setHorizontalBias(linearLayoutExtra.getId(), 0.5f);
+        constraintSet.applyTo(rootConstraintLayout);
     }
 
     private void setTextViewInfo(String info, TextView tv) {
