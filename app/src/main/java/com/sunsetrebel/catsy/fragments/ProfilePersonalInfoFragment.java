@@ -88,8 +88,6 @@ public class ProfilePersonalInfoFragment extends Fragment {
         ImageButton imageButton = new ImageButton(getContext());
         imageButton.setImageResource(resId);
         imageButton.setBackgroundColor(getResources().getColor(R.color.primaryColor));
-//        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imageSizeDP, imageSizeDP);
         params.setMargins(10,0,10,0);
         imageButton.setLayoutParams(params);

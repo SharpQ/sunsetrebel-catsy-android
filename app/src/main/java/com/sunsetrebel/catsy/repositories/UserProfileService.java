@@ -54,4 +54,9 @@ public class UserProfileService {
     public void updateUserProfile() {
         firebaseFirestoreService.getUserProfile(userProfile -> setUserProfile(userProfile), fAuth.getUid());
     }
+
+    public void removeInstance() {
+        setUserProfile(null);
+        instance = null;
+    }
 }
