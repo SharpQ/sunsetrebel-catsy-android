@@ -56,11 +56,9 @@ public class VerifyEmailActivity extends AppCompatActivity {
         hideSystemUI();
         fAuth = firebaseAuthService.getFirebaseClient();
 
-        progressBar = findViewById(R.id.progressBarVerify);
         textVerifyPhoneDescription = findViewById(R.id.tvVerifyEmailDescription);
         textResetCountdown = findViewById(R.id.textResetCountdown);
         resentCodeBtn = findViewById(R.id.buttonResentLink);
-        progressBar.setVisibility(View.GONE);
 
         email = getIntent().getStringExtra("email");
         fullName = getIntent().getStringExtra("fullName");

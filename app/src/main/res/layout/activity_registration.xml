@@ -1,232 +1,241 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/im_background_general"
-    tools:context=".activities.RegistrationActivity">
+    android:overScrollMode="never"
+    android:scrollbars="vertical"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/textRegisterTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/audiowide"
-        android:text="@string/registration_title"
-        android:textAlignment="center"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/im_background_general"
+        tools:context=".activities.RegistrationActivity">
 
-    <ImageView
-        android:id="@+id/slideImageEmail"
-        android:visibility="invisible"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/registration_hint_email"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toEndOf="@+id/switchRegister"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
-        app:layout_constraintVertical_bias="0.07"
-        app:srcCompat="@drawable/ic_baseline_mark_email_read_24" />
-
-    <ImageView
-        android:id="@+id/slideImagePhone"
-        android:visibility="visible"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"
-        android:contentDescription="@string/registration_hint_phone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/switchRegister"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
-        app:layout_constraintVertical_bias="0.07"
-        app:srcCompat="@drawable/ic_baseline_phone_iphone_24" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/InitialFlowTextInputLayout"
-        android:id="@+id/inputLayoutUserFullName"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switchRegister"
-        app:layout_constraintVertical_bias="0.1">
-
-        <com.google.android.material.textfield.TextInputEditText
-            style="@style/InitialFlowTextEdit"
-            android:id="@+id/inputEditUserFullName"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/registration_hint_user_name"
-            android:inputType="textPersonName" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/InitialFlowTextInputLayout"
-        android:id="@+id/inputLayoutUserEmail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserFullName"
-        app:layout_constraintVertical_bias="0.07">
-
-        <com.google.android.material.textfield.TextInputEditText
-            style="@style/InitialFlowTextEdit"
-            android:id="@+id/inputEditUserEmail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/registration_hint_email"
-            android:inputType="textEmailSubject" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <LinearLayout
-        android:id="@+id/linearEditPhone"
-        android:enabled="true"
-        android:visibility="visible"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserFullName"
-        app:layout_constraintVertical_bias="0.07"
-        android:orientation="horizontal">
-
-        <com.hbb20.CountryCodePicker
-            android:id="@+id/ddlCountryCode"
-            app:ccp_autoDetectCountry="true"
-            app:ccp_showArrow="false"
+        <TextView
+            android:id="@+id/textRegisterTitle"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:ccp_textSize="20sp"
+            android:layout_height="wrap_content"
             android:fontFamily="@font/audiowide"
-            android:gravity="center"
-            android:background="@color/blackHalfTransparent"
-            app:ccp_contentColor="@color/primaryTextColor"
-            app:ccpDialog_allowSearch="true"
-            app:ccpDialog_backgroundColor="@color/primaryDarkColor"
-            app:ccpDialog_textColor="@color/primaryTextColor"
-            app:ccpDialog_showTitle="false"/>
+            android:text="@string/registration_title"
+            android:textAlignment="center"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.07" />
+
+        <ImageView
+            android:id="@+id/slideImageEmail"
+            android:visibility="invisible"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:contentDescription="@string/registration_hint_email"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintStart_toEndOf="@+id/switchRegister"
+            app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
+            app:layout_constraintVertical_bias="0.07"
+            app:srcCompat="@drawable/ic_baseline_mark_email_read_24" />
+
+        <ImageView
+            android:id="@+id/slideImagePhone"
+            android:visibility="visible"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="10dp"
+            android:contentDescription="@string/registration_hint_phone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/switchRegister"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
+            app:layout_constraintVertical_bias="0.07"
+            app:srcCompat="@drawable/ic_baseline_phone_iphone_24" />
 
         <com.google.android.material.textfield.TextInputLayout
             style="@style/InitialFlowTextInputLayout"
-            android:id="@+id/inputLayoutUserPhone"
-            android:layout_width="match_parent"
+            android:id="@+id/inputLayoutUserFullName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
-            app:layout_constraintStart_toEndOf="@+id/ddlCountryCode">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switchRegister"
+            app:layout_constraintVertical_bias="0.1">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/InitialFlowTextEdit"
-                android:id="@+id/inputEditUserPhone"
+                android:id="@+id/inputEditUserFullName"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/registration_hint_phone"
-                android:inputType="phone" />
+                android:hint="@string/registration_hint_user_name"
+                android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/InitialFlowTextInputLayout"
-        android:id="@+id/inputLayoutUserPassword"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:enabled="false"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserEmail"
-        app:layout_constraintVertical_bias="0.09"
-        app:passwordToggleEnabled="true">
-        <com.google.android.material.textfield.TextInputEditText
-            style="@style/InitialFlowTextEdit"
-            android:id="@+id/inputEditUserPassword"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/registration_hint_password"
-            android:inputType="none|textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InitialFlowTextInputLayout"
+            android:id="@+id/inputLayoutUserEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserFullName"
+            app:layout_constraintVertical_bias="0.07">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonRegister"
-        style="@style/DefaultButton"
-        android:text="@string/registration_button_register"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserPassword"
-        app:layout_constraintVertical_bias="0.9" />
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/InitialFlowTextEdit"
+                android:id="@+id/inputEditUserEmail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/registration_hint_email"
+                android:inputType="textEmailSubject" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonRegisterGoogle"
-        style="@style/GoogleButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textRegisterTitle"
-        app:layout_constraintVertical_bias="0.05" />
+        <LinearLayout
+            android:id="@+id/linearEditPhone"
+            android:enabled="true"
+            android:visibility="visible"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserFullName"
+            app:layout_constraintVertical_bias="0.07"
+            android:orientation="horizontal">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonRegisterFacebook"
-        style="@style/FacebookButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRegisterGoogle"
-        app:layout_constraintVertical_bias="0.015" />
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/ddlCountryCode"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_showArrow="false"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:ccp_textSize="20sp"
+                android:fontFamily="@font/audiowide"
+                android:gravity="center"
+                android:background="@color/blackHalfTransparent"
+                app:ccp_contentColor="@color/primaryTextColor"
+                app:ccpDialog_allowSearch="true"
+                app:ccpDialog_backgroundColor="@color/primaryDarkColor"
+                app:ccpDialog_textColor="@color/primaryTextColor"
+                app:ccpDialog_showTitle="false"/>
 
-    <ProgressBar
-        android:id="@+id/progressBarRegister"
-        style="?android:attr/progressBarStyle"
-        android:indeterminateDrawable="@drawable/ui_progress_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserPassword"
-        app:layout_constraintVertical_bias="0.5" />
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/InitialFlowTextInputLayout"
+                android:id="@+id/inputLayoutUserPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="0dp"
+                android:layout_marginEnd="0dp"
+                app:layout_constraintStart_toEndOf="@+id/ddlCountryCode">
 
-    <Switch
-        android:id="@+id/switchRegister"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:checked="false"
-        android:track="@drawable/ui_track_selector"
-        android:thumb="@drawable/ic_baseline_brightness_1_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
-        app:layout_constraintVertical_bias="0.07"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/InitialFlowTextEdit"
+                    android:id="@+id/inputEditUserPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/registration_hint_phone"
+                    android:inputType="phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/InitialFlowTextInputLayout"
+            android:id="@+id/inputLayoutUserPassword"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserEmail"
+            app:layout_constraintVertical_bias="0.09"
+            app:passwordToggleEnabled="true">
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/InitialFlowTextEdit"
+                android:id="@+id/inputEditUserPassword"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/registration_hint_password"
+                android:inputType="none|textPassword" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonRegister"
+            style="@style/DefaultButton"
+            android:text="@string/registration_button_register"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserPassword"
+            app:layout_constraintVertical_bias="0.9" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonRegisterGoogle"
+            style="@style/GoogleButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textRegisterTitle"
+            app:layout_constraintVertical_bias="0.05" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonRegisterFacebook"
+            style="@style/FacebookButton"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonRegisterGoogle"
+            app:layout_constraintVertical_bias="0.015" />
+
+        <ProgressBar
+            android:id="@+id/progressBarRegister"
+            style="?android:attr/progressBarStyle"
+            android:indeterminateDrawable="@drawable/ui_progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/buttonRegister"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputLayoutUserPassword"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <Switch
+            android:id="@+id/switchRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:checked="false"
+            android:track="@drawable/ui_track_selector"
+            android:thumb="@drawable/ic_baseline_brightness_1_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonRegisterFacebook"
+            app:layout_constraintVertical_bias="0.07"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

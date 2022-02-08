@@ -99,6 +99,7 @@ public class OnboardingActivity extends AppCompatActivity {
             mDots[i].setText(Html.fromHtml("&#8226;"));
             mDots[i].setTextSize(35);
             mDots[i].setGravity(View.TEXT_ALIGNMENT_CENTER);
+            mDots[i].setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
             mDots[i].setTextColor(getResources().getColor(R.color.primaryLightColor));
             mDotLayout.addView(mDots[i]);
         }

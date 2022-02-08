@@ -39,9 +39,11 @@
         <activity android:name=".activities.ForgotEmailActivity" />
         <activity
             android:name=".activities.MainActivity"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.RegistrationActivity" />
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activities.LoginActivity"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activities.RegistrationActivity"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.OnboardingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
