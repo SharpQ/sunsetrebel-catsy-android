@@ -27,14 +27,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.07" />
+        app:layout_constraintVertical_bias="0.1" />
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_event_avatar"
         app:shapeAppearanceOverlay="@style/CornerSize10Percent"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="30dp"
         android:background="@color/blackHalfTransparent"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_final_page_title"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.08"/>
+        app:layout_constraintVertical_bias="0"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/mtv_event_avatar"
@@ -74,11 +74,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/til_max_age_limit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_event_avatar"
-        app:layout_constraintVertical_bias="0.03">
+        app:layout_constraintVertical_bias="0">
 
     <com.google.android.material.textfield.TextInputEditText
         style="@style/NewEventTextEdit"
@@ -96,11 +97,12 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/til_min_age_limit"
         app:layout_constraintTop_toBottomOf="@id/iv_event_avatar"
-        app:layout_constraintVertical_bias="0.03">
+        app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.textfield.TextInputEditText
             style="@style/NewEventTextEdit"
@@ -117,11 +119,12 @@
         android:id="@+id/til_event_max_people"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/til_min_age_limit"
-        app:layout_constraintVertical_bias="0.05">
+        app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.textfield.TextInputEditText
             style="@style/NewEventTextEdit"
@@ -138,11 +141,12 @@
         style="@style/NewEventTextInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         app:layout_constraintBottom_toTopOf="@id/guideline_new_event_final"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/til_event_max_people"
-        app:layout_constraintVertical_bias="0.08">
+        app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.textfield.TextInputEditText
             style="@style/NewEventTextEdit"
@@ -168,8 +172,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/button_create_new_event"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_event_description"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintTop_toBottomOf="@id/guideline_new_event_final"
+        app:layout_constraintVertical_bias="0.5" />
 
     <androidx.appcompat.widget.AppCompatButton
         style="@style/DefaultButton"
@@ -181,8 +185,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/button_back_new_event_final"
-        app:layout_constraintTop_toBottomOf="@id/til_event_description"
-        app:layout_constraintVertical_bias="0.9" />
+        app:layout_constraintTop_toBottomOf="@id/guideline_new_event_final"
+        app:layout_constraintVertical_bias="0.5" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline_new_event_final"

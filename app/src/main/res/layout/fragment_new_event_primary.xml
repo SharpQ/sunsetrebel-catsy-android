@@ -40,13 +40,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
             android:gravity="center_vertical|center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_event_title"
-            app:layout_constraintVertical_bias="0.03"
+            app:layout_constraintVertical_bias="0"
             app:selectionRequired="true"
             app:singleSelection="true">
 
@@ -122,11 +123,12 @@
             style="@style/NewEventTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_title"
-            app:layout_constraintVertical_bias="0.08">
+            app:layout_constraintVertical_bias="0">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_event_title"
@@ -144,11 +146,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="5dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/til_end_time"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_access_description"
-            app:layout_constraintVertical_bias="0.05">
+            app:layout_constraintVertical_bias="0">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_start_time"
@@ -168,11 +171,12 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/til_start_time"
             app:layout_constraintTop_toBottomOf="@id/tv_access_description"
-            app:layout_constraintVertical_bias="0.05">
+            app:layout_constraintVertical_bias="0">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_end_time"
@@ -191,11 +195,12 @@
             style="@style/NewEventTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             app:layout_constraintBottom_toTopOf="@id/guideline_new_event_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/til_end_time"
-            app:layout_constraintVertical_bias="0.08">
+            app:layout_constraintVertical_bias="0">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tiet_event_themes"
@@ -218,8 +223,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/til_event_themes"
-            app:layout_constraintVertical_bias="0.9" />
+            app:layout_constraintTop_toBottomOf="@id/guideline_new_event_primary"
+            app:layout_constraintVertical_bias="0.5" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline_new_event_primary"
