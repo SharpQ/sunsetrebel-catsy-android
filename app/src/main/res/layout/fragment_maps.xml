@@ -20,10 +20,10 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_draw_route"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        app:fabCustomSize="70dp"
-        app:maxImageSize="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:fabCustomSize="60dp"
+        app:maxImageSize="35dp"
         app:srcCompat="@drawable/ic_draw_route_scale"
         android:scaleType="center"
         app:tint="@null"

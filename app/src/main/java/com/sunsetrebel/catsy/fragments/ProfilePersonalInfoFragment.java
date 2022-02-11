@@ -87,7 +87,7 @@ public class ProfilePersonalInfoFragment extends Fragment {
     private void setSocialImageButton(int resId, String userId, String packageName, String defaultWebLink, String defaultMobileLink) {
         ImageButton imageButton = new ImageButton(getContext());
         imageButton.setImageResource(resId);
-        imageButton.setBackgroundColor(getResources().getColor(R.color.primaryColor));
+        imageButton.setBackgroundColor(getResources().getColor(R.color.primaryDarkColor));
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imageSizeDP, imageSizeDP);
         params.setMargins(10,0,10,0);
         imageButton.setLayoutParams(params);

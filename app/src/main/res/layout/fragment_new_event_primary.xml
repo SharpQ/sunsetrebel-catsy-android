@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/im_background_concert"
+        android:background="@drawable/im_background_new_event"
         android:fitsSystemWindows="false"
         android:orientation="vertical"
         android:requiresFadingEdge="none">

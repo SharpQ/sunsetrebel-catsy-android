@@ -84,7 +84,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            app:cardBackgroundColor="@color/primaryColor"
+            app:cardBackgroundColor="@color/primaryDarkColor"
             app:cardCornerRadius="15dp"
             app:cardElevation="10dp"
             app:cardUseCompatPadding="true"
@@ -121,7 +121,7 @@
                 android:layout_height="50dp"
                 android:layout_width="match_parent"
                 android:layout_marginTop="110dp"
-                android:background="@color/primaryColor"
+                android:background="@color/primaryDarkColor"
                 app:tabTextColor="@color/primaryTextColor"
                 app:tabSelectedTextColor="@color/primaryLightColor"
                 app:tabIndicatorColor="@color/primaryLightColor">
