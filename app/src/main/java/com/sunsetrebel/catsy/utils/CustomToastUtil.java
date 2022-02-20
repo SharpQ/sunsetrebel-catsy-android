@@ -27,7 +27,7 @@ public class CustomToastUtil {
         if (customToastUtilInstance == null) {
             customToastUtilInstance = new CustomToastUtil(context);
         }
-        Toasty.custom(context, toastText, R.drawable.im_kitty_toast_success_64, R.color.successToastColor,
+        Toasty.custom(context, toastText, R.drawable.im_kitty_toast_success_64, R.color.successGreenColor,
                 Toast.LENGTH_SHORT, true, true).show();
     }
 
@@ -35,7 +35,7 @@ public class CustomToastUtil {
         if (customToastUtilInstance == null) {
             customToastUtilInstance = new CustomToastUtil(context);
         }
-        Toasty.custom(context, toastText, R.drawable.im_kitty_toast_fail_64, R.color.redError,
+        Toasty.custom(context, toastText, R.drawable.im_kitty_toast_fail_64, R.color.failRedColor,
                 Toast.LENGTH_SHORT, true, true).show();
     }
 }

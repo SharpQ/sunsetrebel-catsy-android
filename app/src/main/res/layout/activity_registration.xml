@@ -134,7 +134,7 @@
                 app:ccp_textSize="20sp"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center"
-                android:background="@color/blackHalfTransparent"
+                android:background="@color/black70Transparent"
                 app:ccp_contentColor="@color/primaryTextColor"
                 app:ccpDialog_allowSearch="true"
                 app:ccpDialog_backgroundColor="@color/primaryDarkColor"

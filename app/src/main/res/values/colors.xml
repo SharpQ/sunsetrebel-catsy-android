@@ -8,13 +8,11 @@
     <color name="white">#FFFFFF</color>
     <color name="googleBtnColor">#4286F5</color>
     <color name="facebookBtnColor">#4867AA</color>
-    <color name="blackHalfTransparent">#80000000</color>
-    <color name="blackQuoterTransparent">#40000000</color>
+    <color name="black25Transparent">#40000000</color>
     <color name="black70Transparent">#99000000</color>
-    <color name="primaryColorTransparent">#906a1b9a</color>
+    <color name="primaryColorTransparent">#996a1b9a</color>
     <color name="primaryLightColorTransparent">#80C2476E</color>
-    <color name="redError">#C60000</color>
     <color name="greyBackground">#111111</color>
-    <color name="greyBackgroundEventItem">#161616</color>
-    <color name="successToastColor">#008008</color>
+    <color name="failRedColor">#C60000</color>
+    <color name="successGreenColor">#008008</color>
 </resources>

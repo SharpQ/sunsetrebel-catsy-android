@@ -4,8 +4,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ScaleDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -86,6 +83,8 @@ public class NewEventPrimaryFragment extends Fragment {
         buttonPublic.setChecked(true);
         eventAccessValue = AccessType.PUBLIC;
         buttonPublic.setBackgroundColor(getResources().getColor(R.color.primaryColorTransparent));
+        buttonPrivate.setBackgroundColor(getResources().getColor(R.color.black70Transparent));
+        buttonSelective.setBackgroundColor(getResources().getColor(R.color.black70Transparent));
         eventAccessDescr.setText(getResources().getText(R.string.event_access_public_description));
         eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caticorn_public_scale, 0, 0, 0);
 
@@ -93,8 +92,8 @@ public class NewEventPrimaryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 eventAccessValue = AccessType.PUBLIC;
-                buttonPrivate.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
-                buttonSelective.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
+                buttonPrivate.setBackgroundColor(getResources().getColor(R.color.black70Transparent));
+                buttonSelective.setBackgroundColor(getResources().getColor(R.color.black70Transparent));
                 buttonPublic.setBackgroundColor(getResources().getColor(R.color.primaryColorTransparent));
                 eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caticorn_public_scale, 0, 0, 0);
                 eventAccessDescr.setText(getResources().getText(R.string.event_access_public_description));
@@ -105,8 +104,8 @@ public class NewEventPrimaryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 eventAccessValue = AccessType.PRIVATE;
-                buttonPublic.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
-                buttonSelective.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
+                buttonPublic.setBackgroundColor(getResources().getColor(R.color.black70Transparent));
+                buttonSelective.setBackgroundColor(getResources().getColor(R.color.black70Transparent));
                 buttonPrivate.setBackgroundColor(getResources().getColor(R.color.primaryColorTransparent));
                 eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caticorn_private_scale, 0, 0, 0);
                 eventAccessDescr.setText(getResources().getText(R.string.event_access_private_description));
@@ -117,8 +116,8 @@ public class NewEventPrimaryFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 eventAccessValue = AccessType.SELECTIVE;
-                buttonPublic.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
-                buttonPrivate.setBackgroundColor(getResources().getColor(R.color.blackQuoterTransparent));
+                buttonPublic.setBackgroundColor(getResources().getColor(R.color.black70Transparent));
+                buttonPrivate.setBackgroundColor(getResources().getColor(R.color.black70Transparent));
                 buttonSelective.setBackgroundColor(getResources().getColor(R.color.primaryColorTransparent));
                 eventAccessDescr.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_caticorn_selective_scale, 0, 0, 0);
                 eventAccessDescr.setText(getResources().getText(R.string.event_access_selective_description));
