@@ -3,18 +3,18 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scroll_view_new_event"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:overScrollMode="never"
+    android:scrollbars="vertical"
+    android:fitsSystemWindows="false"
+    android:orientation="vertical"
     android:fillViewport="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/im_background_new_event"
-        android:fitsSystemWindows="false"
-        android:orientation="vertical"
-        android:requiresFadingEdge="none">
+        android:background="@drawable/im_background_new_event">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_title"

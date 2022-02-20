@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,11 +141,10 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.MATCH_PARENT
                 );
-                params.setMargins(0,0,0,0);
+                params.setMargins(0,0,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()),0);
                 tv.setLayoutParams(params);
-                tv.setPadding(1,1,5,1);
                 tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                tv.setTextSize(14);
+                tv.setTextSize(16);
                 tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

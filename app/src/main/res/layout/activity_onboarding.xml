@@ -12,7 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/im_background_general"
+        android:background="@drawable/im_background_onboarding"
         tools:context=".activities.OnboardingActivity">
 
         <androidx.viewpager.widget.ViewPager

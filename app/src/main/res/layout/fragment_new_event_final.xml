@@ -1,197 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
+    android:overScrollMode="never"
     android:orientation="vertical"
+    android:scrollbars="vertical"
+    android:fitsSystemWindows="false"
     android:requiresFadingEdge="none"
-    android:background="@drawable/im_background_new_event">
+    android:fillViewport="true">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_final_page_title"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_vertical"
-        android:fontFamily="@font/audiowide"
-        android:text="@string/new_event_final_page_title"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="23sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
+        android:layout_height="match_parent"
+        android:background="@drawable/im_background_new_event">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_event_avatar"
-        app:shapeAppearanceOverlay="@style/CornerSize10Percent"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginTop="30dp"
-        android:background="@color/black70Transparent"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_final_page_title"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0"/>
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/mtv_event_avatar"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:enabled="false"
-        android:background="@drawable/ui_rounded_corners_grey"
-        android:drawableStart="@drawable/ic_library_add_black_24dp"
-        android:drawablePadding="10dp"
-        android:fontFamily="@font/audiowide"
-        android:layout_margin="12dp"
-        android:padding="10dp"
-        android:alpha="0.9"
-        android:radius="100dip"
-        android:text="@string/new_event_final_avatar_hint"
-        android:textSize="18sp"
-        android:gravity="center_horizontal|center_vertical"
-        android:textColor="@color/primaryTextColor"
-        app:layout_constraintBottom_toBottomOf="@id/iv_event_avatar"
-        app:layout_constraintEnd_toEndOf="@id/iv_event_avatar"
-        app:layout_constraintStart_toStartOf="@id/iv_event_avatar"
-        app:layout_constraintTop_toTopOf="@id/iv_event_avatar"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.5" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/NewEventTextInputLayout"
-        android:id="@+id/til_min_age_limit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/til_max_age_limit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_event_avatar"
-        app:layout_constraintVertical_bias="0">
-
-    <com.google.android.material.textfield.TextInputEditText
-        style="@style/NewEventTextEdit"
-        android:id="@+id/tiet_min_age_limit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/new_event_event_min_age"
-        android:inputType="number"/>
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/NewEventTextInputLayout"
-        android:id="@+id/til_max_age_limit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/til_min_age_limit"
-        app:layout_constraintTop_toBottomOf="@id/iv_event_avatar"
-        app:layout_constraintVertical_bias="0">
-
-        <com.google.android.material.textfield.TextInputEditText
-            style="@style/NewEventTextEdit"
-            android:id="@+id/tiet_max_age_limit"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_final_page_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/new_event_event_max_age"
-            android:inputType="number"/>
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/audiowide"
+            android:text="@string/new_event_final_page_title"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="23sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_event_avatar"
+            app:shapeAppearanceOverlay="@style/CornerSize10Percent"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/black70Transparent"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_final_page_title"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0"/>
 
-    <com.google.android.material.textfield.TextInputLayout
-        style="@style/NewEventTextInputLayout"
-        android:id="@+id/til_event_max_people"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_min_age_limit"
-        app:layout_constraintVertical_bias="0">
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/mtv_event_avatar"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:enabled="false"
+            android:background="@drawable/ui_rounded_corners_grey"
+            android:drawableStart="@drawable/ic_library_add_black_24dp"
+            android:drawablePadding="10dp"
+            android:fontFamily="@font/audiowide"
+            android:layout_margin="12dp"
+            android:padding="10dp"
+            android:alpha="0.9"
+            android:radius="100dip"
+            android:text="@string/new_event_final_avatar_hint"
+            android:textSize="18sp"
+            android:gravity="center_horizontal|center_vertical"
+            android:textColor="@color/primaryTextColor"
+            app:layout_constraintBottom_toBottomOf="@id/iv_event_avatar"
+            app:layout_constraintEnd_toEndOf="@id/iv_event_avatar"
+            app:layout_constraintStart_toStartOf="@id/iv_event_avatar"
+            app:layout_constraintTop_toTopOf="@id/iv_event_avatar"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/NewEventTextInputLayout"
+            android:id="@+id/til_min_age_limit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/til_max_age_limit"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_event_avatar"
+            app:layout_constraintVertical_bias="0">
 
         <com.google.android.material.textfield.TextInputEditText
             style="@style/NewEventTextEdit"
-            android:id="@+id/tiet_event_max_people"
+            android:id="@+id/tiet_min_age_limit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/new_event_event_attendees"
+            android:hint="@string/new_event_event_min_age"
             android:inputType="number"/>
 
-    </com.google.android.material.textfield.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_event_description"
-        style="@style/NewEventTextInputLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintBottom_toTopOf="@id/guideline_new_event_final"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/til_event_max_people"
-        app:layout_constraintVertical_bias="0">
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/NewEventTextInputLayout"
+            android:id="@+id/til_max_age_limit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/til_min_age_limit"
+            app:layout_constraintTop_toBottomOf="@id/iv_event_avatar"
+            app:layout_constraintVertical_bias="0">
 
-        <com.google.android.material.textfield.TextInputEditText
-            style="@style/NewEventTextEdit"
-            android:id="@+id/tiet_event_description"
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/NewEventTextEdit"
+                android:id="@+id/tiet_max_age_limit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_event_event_max_age"
+                android:inputType="number"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/NewEventTextInputLayout"
+            android:id="@+id/til_event_max_people"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:hint="@string/new_event_event_description"
-            android:gravity="top"
-            android:inputType="textImeMultiLine"
-            android:imeOptions="actionDone"
-            android:minLines="1"
-            android:maxLines="3"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_min_age_limit"
+            app:layout_constraintVertical_bias="0">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/NewEventTextEdit"
+                android:id="@+id/tiet_event_max_people"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/new_event_event_attendees"
+                android:inputType="number"/>
 
-    <androidx.appcompat.widget.AppCompatButton
-        style="@style/DefaultButton"
-        android:id="@+id/button_back_new_event_final"
-        android:text="@string/new_event_back_btn"
-        android:drawableStart="@drawable/ic_baseline_keyboard_arrow_left_24"
-        android:layout_marginEnd="10dp"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button_create_new_event"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/guideline_new_event_final"
-        app:layout_constraintVertical_bias="0.5" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.appcompat.widget.AppCompatButton
-        style="@style/DefaultButton"
-        android:drawableEnd="#00000000"
-        android:id="@+id/button_create_new_event"
-        android:text="@string/new_event_create_btn"
-        android:layout_marginStart="10dp"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/button_back_new_event_final"
-        app:layout_constraintTop_toBottomOf="@id/guideline_new_event_final"
-        app:layout_constraintVertical_bias="0.5" />
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_event_description"
+            style="@style/NewEventTextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintBottom_toTopOf="@id/guideline_new_event_final"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/til_event_max_people"
+            app:layout_constraintVertical_bias="0">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline_new_event_final"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.9" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/NewEventTextEdit"
+                android:id="@+id/tiet_event_description"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/new_event_event_description"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:imeOptions="actionNext"
+                android:maxLength="280"
+                android:minLines="2"
+                android:maxLines="3"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/DefaultButton"
+            android:id="@+id/button_back_new_event_final"
+            android:text="@string/new_event_back_btn"
+            android:drawableStart="@drawable/ic_baseline_keyboard_arrow_left_24"
+            android:layout_marginEnd="10dp"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/button_create_new_event"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline_new_event_final"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            style="@style/DefaultButton"
+            android:drawableEnd="#00000000"
+            android:id="@+id/button_create_new_event"
+            android:text="@string/new_event_create_btn"
+            android:layout_marginStart="10dp"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/button_back_new_event_final"
+            app:layout_constraintTop_toBottomOf="@id/guideline_new_event_final"
+            app:layout_constraintVertical_bias="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_new_event_final"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.9" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
