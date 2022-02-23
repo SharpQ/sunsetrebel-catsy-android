@@ -60,7 +60,9 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private Map<Enum<?>, String> eventThemesEnumList;
     private boolean isUserJoinedToEvent;
     private boolean isUserEventHost;
-    private int imageSizeUsersProfile, imageMarginUsersProfile, maxUsersToDisplayInLinear = 3;
+    private int imageSizeUsersProfile;
+    private int imageMarginUsersProfile;
+    private final int maxUsersToDisplayInLinear = 6;
 
     public EventListDetailedFragment() {
         // Required empty public constructor
