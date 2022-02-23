@@ -161,7 +161,6 @@
                 android:id="@+id/tv_event_detailed_participants_value"
                 android:layout_width="55dp"
                 android:layout_height="35dp"
-                android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/audiowide"
@@ -185,15 +184,15 @@
                 android:id="@+id/ll_event_users"
                 android:layout_width="wrap_content"
                 android:layout_height="35dp"
-                android:layout_marginStart="5dp"
                 android:layout_marginTop="10dp"
                 android:clickable="false"
-                app:layout_constraintHorizontal_weight="2"
+                app:layout_constraintHorizontal_weight="0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/tv_event_detailed_participants_value"
-                app:layout_constraintStart_toEndOf="@id/iv_participants"
+                app:layout_constraintStart_toEndOf="@id/iv_event_avatar"
                 app:layout_constraintTop_toBottomOf="@id/tv_host_name"
                 android:orientation="horizontal"
+                app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintVertical_bias="0"/>
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -202,7 +201,7 @@
                 android:layout_height="25dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:fontFamily="@font/audiowide"
                 android:gravity="center_vertical"
                 android:inputType="textVisiblePassword|textNoSuggestions"
@@ -215,7 +214,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@+id/iv_start_time"
-                app:layout_constraintTop_toBottomOf="@+id/iv_participants"
+                app:layout_constraintTop_toBottomOf="@+id/ll_event_users"
                 app:layout_constraintVertical_bias="0" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -286,7 +285,7 @@
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="5dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/ic_baseline_access_time_30"
                 android:clickable="false"
@@ -295,7 +294,7 @@
                 app:layout_constraintEnd_toStartOf="@id/tv_start_time"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintStart_toEndOf="@+id/iv_event_avatar"
-                app:layout_constraintTop_toBottomOf="@+id/iv_participants"
+                app:layout_constraintTop_toBottomOf="@+id/ll_event_users"
                 app:layout_constraintVertical_bias="0" />
 
             <ImageView
@@ -374,22 +373,22 @@
                 android:orientation="vertical"
                 app:layout_constraintGuide_percent="0.5" />
 
-            <ImageView
-                android:id="@+id/iv_participants"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="15dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_baseline_supervised_user_circle_30"
-                android:clickable="false"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/ll_event_users"
-                app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintVertical_bias="0"
-                app:layout_constraintStart_toEndOf="@id/iv_event_avatar"
-                app:layout_constraintTop_toBottomOf="@+id/tv_host_name" />
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_participants"-->
+<!--                android:layout_width="25dp"-->
+<!--                android:layout_height="25dp"-->
+<!--                android:layout_marginStart="5dp"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:scaleType="fitCenter"-->
+<!--                android:src="@drawable/ic_baseline_supervised_user_circle_30"-->
+<!--                android:clickable="false"-->
+<!--                app:layout_constraintHorizontal_chainStyle="packed"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toStartOf="@id/ll_event_users"-->
+<!--                app:layout_constraintHorizontal_bias="0"-->
+<!--                app:layout_constraintVertical_bias="0"-->
+<!--                app:layout_constraintStart_toEndOf="@id/iv_event_avatar"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/tv_host_name" />-->
 
 <!--            <androidx.appcompat.widget.AppCompatTextView-->
 <!--                android:id="@+id/tv_event_detailed_participants"-->

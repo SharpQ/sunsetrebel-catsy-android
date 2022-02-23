@@ -82,7 +82,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
                 .findFragmentById(R.id.fragment_event_detailed_map);
         mapFragment.getMapAsync(this);
         imageSizeUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35, getResources().getDisplayMetrics());
-        imageMarginUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
+        imageMarginUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
 
         backButton = v.findViewById(R.id.ib_back);
         likeButton = v.findViewById(R.id.ib_like);
@@ -114,7 +114,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         tvEventStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
         tvEventEndTime.setText(simpleDateFormat.format(eventModel.getEventEndTime()));
         tvEventDescription.setText(eventModel.getEventDescr());
-        SpannableString content = new SpannableString("+ " + String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants() - maxUsersToDisplayInLinear));
+        SpannableString content = new SpannableString("+" + String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants() - maxUsersToDisplayInLinear));
         content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
         tvEventParticipants.setText(content);
         setIntegerTextFields(eventModel.getEventMinAge(), tvEventMinAge);
