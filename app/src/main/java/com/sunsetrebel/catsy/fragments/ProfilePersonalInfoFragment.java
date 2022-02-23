@@ -1,11 +1,5 @@
 package com.sunsetrebel.catsy.fragments;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -21,16 +15,14 @@ import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.models.UserProfileModel;
+import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
 import com.sunsetrebel.catsy.utils.ExternalSocialsUtil;
-
-import java.util.List;
 
 public class ProfilePersonalInfoFragment extends Fragment {
     private TextView profileEmail, profilePhone;
     private LinearLayout linearLayout;
-    private static UserProfileModel userProfileModel;
+    private static MainUserProfileModel mainUserProfileModel;
     private LinearLayout linearLayoutExtra;
     private ConstraintLayout rootConstraintLayout;
     private int imageSizeDP;
@@ -50,14 +42,14 @@ public class ProfilePersonalInfoFragment extends Fragment {
         linearLayout = v.findViewById(R.id.ll_socials);
 
         UserProfileService userProfileService = UserProfileService.getInstance();
-        userProfileModel = userProfileService.getUserProfile();
+        mainUserProfileModel = userProfileService.getUserProfile();
 
-        String userEmail = userProfileModel.getUserEmail();
-        String userPhone = userProfileModel.getUserPhone();
-        String userIdFacebook = userProfileModel.getLinkFacebook();
-        String userIdInstagram = userProfileModel.getLinkInstagram();
-        String userIdTikTok = userProfileModel.getLinkTikTok();
-        String userIdTelegram = userProfileModel.getLinkTelegram();
+        String userEmail = mainUserProfileModel.getUserEmail();
+        String userPhone = mainUserProfileModel.getUserPhone();
+        String userIdFacebook = mainUserProfileModel.getLinkFacebook();
+        String userIdInstagram = mainUserProfileModel.getLinkInstagram();
+        String userIdTikTok = mainUserProfileModel.getLinkTikTok();
+        String userIdTelegram = mainUserProfileModel.getLinkTelegram();
         setTextViewInfo(userEmail, profileEmail);
         setTextViewInfo(userPhone, profilePhone);
         imageSizeDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55, getResources().getDisplayMetrics());

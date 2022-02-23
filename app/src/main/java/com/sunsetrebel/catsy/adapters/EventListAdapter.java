@@ -72,7 +72,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         //Set host avatar
         ImageUtils.loadImageView(context, eventList.get(position).getHostProfileImg(), holder.ivHostAvatar, R.drawable.im_cat_hearts);
         holder.tvEventTitle.setText(eventList.get(position).getEventTitle());
-        holder.tvHostName.setText(context.getString(R.string.event_list_host_placeholder) + eventList.get(position).getHostName());
+        holder.tvHostName.setText(eventList.get(position).getHostName());
         holder.tvEventStartTime.setText(simpleDateFormat.format(eventList.get(position).getEventStartTime()));
         holder.tvEventLocation.setText(eventList.get(position).getEventLocation());
         holder.tvEventDescription.setText(eventList.get(position).getEventDescr());

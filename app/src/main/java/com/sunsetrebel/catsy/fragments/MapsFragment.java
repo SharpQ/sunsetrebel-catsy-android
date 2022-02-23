@@ -61,7 +61,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private GoogleMap mMap;
     private FirebaseFirestoreService firebaseFirestoreService;
     private FloatingActionButton fab;
-    private String hostPlaceholder;
     private PopupWindow infoPopup = null;
     private SimpleDateFormat simpleDateFormat;
     private Random rand = new Random();
@@ -85,7 +84,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         fab = v.findViewById(R.id.fab_draw_route);
         fusedLocationProviderClient = GoogleMapService.getFusedLocationProviderInstance(getContext());
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
-        hostPlaceholder = getContext().getString(R.string.event_list_host_placeholder);
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
         eventThemesUtil = new EventThemesUtil(getContext().getResources());
         eventThemesEnumList = eventThemesUtil.getEventThemesList();
@@ -179,7 +177,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         //Set host avatar
         ImageUtils.loadImageView(getContext(), eventModel.getHostProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
         tvEventTitle.setText(eventModel.getEventTitle());
-        tvHostName.setText(hostPlaceholder + eventModel.getHostName());
+        tvHostName.setText(eventModel.getHostName());
         tvStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
         tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants()));
         tvEventDescription.setText(eventModel.getEventDescr());

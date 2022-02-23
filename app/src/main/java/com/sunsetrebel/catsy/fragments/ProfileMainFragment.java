@@ -15,7 +15,7 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.material.tabs.TabLayout;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.activities.LoginActivity;
-import com.sunsetrebel.catsy.models.UserProfileModel;
+import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
 import com.sunsetrebel.catsy.utils.ImageUtils;
@@ -25,7 +25,7 @@ public class ProfileMainFragment extends Fragment {
     private ImageView profileImage;
     private TextView profileId, profileUserName;
     private AppCompatButton logoutButton;
-    private static UserProfileModel userProfileModel;
+    private static MainUserProfileModel mainUserProfileModel;
     private TabLayout tabLayout;
     private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
 
@@ -47,10 +47,10 @@ public class ProfileMainFragment extends Fragment {
         getChildFragmentManager().beginTransaction().replace(R.id.fl_profile, personalInfoFragment).commit();
 
         UserProfileService userProfileService = UserProfileService.getInstance();
-        userProfileModel = userProfileService.getUserProfile();
-        ImageUtils.loadImageView(getContext(), userProfileModel.getUserProfileImg(), profileImage, R.drawable.im_cat_hearts);
-        profileUserName.setText(userProfileModel.getUserFullName());
-        profileId.setText(getContext().getString(R.string.profile_id_placeholder) + userProfileModel.getUserId());
+        mainUserProfileModel = userProfileService.getUserProfile();
+        ImageUtils.loadImageView(getContext(), mainUserProfileModel.getUserProfileImg(), profileImage, R.drawable.im_cat_hearts);
+        profileUserName.setText(mainUserProfileModel.getUserFullName());
+        profileId.setText(getContext().getString(R.string.profile_id_placeholder) + mainUserProfileModel.getUserId());
 
         logoutButton.setOnClickListener(v1 -> {
             firebaseAuthService.signOutFirebase();

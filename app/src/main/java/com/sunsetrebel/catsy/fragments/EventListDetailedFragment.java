@@ -1,16 +1,20 @@
 package com.sunsetrebel.catsy.fragments;
 
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,6 +28,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.EventThemes;
@@ -49,12 +54,13 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private ImageView ivHostAvatar, ivEventAvatar;
     private TextView tvEventTitle, tvHostName, tvEventStartTime, tvEventEndTime, tvEventDescription,
             tvEventParticipants, tvEventMinAge, tvEventMaxAge, tvEventMaxPerson;
-    private LinearLayout linearLayout;
+    private LinearLayout linearLayoutThemes, linearLayoutParticipants;
     private Random rand = new Random();
     private EventThemesUtil eventThemesUtil;
     private Map<Enum<?>, String> eventThemesEnumList;
     private boolean isUserJoinedToEvent;
     private boolean isUserEventHost;
+    private int imageSizeUsersProfile, imageMarginUsersProfile, maxUsersToDisplayInLinear = 3;
 
     public EventListDetailedFragment() {
         // Required empty public constructor
@@ -75,6 +81,8 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragment_event_detailed_map);
         mapFragment.getMapAsync(this);
+        imageSizeUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35, getResources().getDisplayMetrics());
+        imageMarginUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics());
 
         backButton = v.findViewById(R.id.ib_back);
         likeButton = v.findViewById(R.id.ib_like);
@@ -92,7 +100,8 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         tvEventMinAge = v.findViewById(R.id.tv_event_detailed_min_age_value);
         tvEventMaxAge = v.findViewById(R.id.tv_event_detailed_max_age_value);
         tvEventMaxPerson = v.findViewById(R.id.tv_event_detailed_max_people_value);
-        linearLayout = v.findViewById(R.id.ll_event_detailed_tags);
+        linearLayoutThemes = v.findViewById(R.id.ll_event_detailed_tags);
+        linearLayoutParticipants = v.findViewById(R.id.ll_event_users);
 
         backButton.setOnClickListener(v1 -> getParentFragmentManager().popBackStack());
 
@@ -101,11 +110,13 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         //Set host avatar
         ImageUtils.loadImageView(getContext(), eventModel.getHostProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
         tvEventTitle.setText(eventModel.getEventTitle());
-        tvHostName.setText(getContext().getString(R.string.event_list_host_placeholder) + eventModel.getHostName());
+        tvHostName.setText(eventModel.getHostName());
         tvEventStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
         tvEventEndTime.setText(simpleDateFormat.format(eventModel.getEventEndTime()));
         tvEventDescription.setText(eventModel.getEventDescr());
-        tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants()));
+        SpannableString content = new SpannableString("+ " + String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants() - maxUsersToDisplayInLinear));
+        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
+        tvEventParticipants.setText(content);
         setIntegerTextFields(eventModel.getEventMinAge(), tvEventMinAge);
         setIntegerTextFields(eventModel.getEventMaxAge(), tvEventMaxAge);
         setIntegerTextFields(eventModel.getEventMaxPerson(), tvEventMaxPerson);
@@ -130,33 +141,8 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             } else if (!isUserEventHost && !isUserJoinedToEvent) {
                 setJoinButtonAsGuest();
             }
+            setEventUsers(value);
         }, eventModel);
-
-        List<EventThemes> eventThemes = eventModel.getEventThemes();
-        if (eventThemes != null) {
-            for (EventThemes theme : eventThemes) {
-                TextView tv = new TextView(getContext());
-                tv.setText("#" + eventThemesEnumList.get(theme));
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                );
-                params.setMargins(0,0,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()),0);
-                tv.setLayoutParams(params);
-                tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                tv.setTextSize(16);
-                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    tv.setTextColor(Color.rgb(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-                } else {
-                    tv.setTextColor(getContext().getResources().getColor(R.color.primaryTextColor));
-                }
-                Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.audiowide);
-                tv.setTypeface(typeface);
-                linearLayout.addView(tv);
-            }
-        }
 
         joinButton.setOnClickListener(v12 -> {
             if (isUserJoinedToEvent) {
@@ -186,7 +172,70 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             }
         }, eventModel.getEventId()));
 
+        setEventTags();
         return v;
+    }
+
+    private void setEventUsers(List<CommonUserModel> eventParticipants) {
+        if (eventParticipants.size() > 0) {
+            if (eventParticipants.size() <= maxUsersToDisplayInLinear) {
+                tvEventParticipants.setVisibility(View.INVISIBLE);
+                tvEventParticipants.setEnabled(false);
+                for (CommonUserModel userProfile : eventParticipants) {
+                    setParticipantsImageButton(getContext(), userProfile);
+                }
+            } else {
+                tvEventParticipants.setVisibility(View.VISIBLE);
+                tvEventParticipants.setEnabled(true);
+                for (int i = 0; i<maxUsersToDisplayInLinear; i++) {
+                    setParticipantsImageButton(getContext(), eventParticipants.get(i));
+                }
+            }
+        }
+    }
+
+    private void setParticipantsImageButton(Context context, CommonUserModel userProfile) {
+        ImageButton imageButton = new ImageButton(context);
+        imageButton.setBackgroundColor(getResources().getColor(R.color.primaryDarkColor));
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imageSizeUsersProfile, imageSizeUsersProfile);
+        params.setMargins(imageMarginUsersProfile,0,imageMarginUsersProfile,0);
+        imageButton.setLayoutParams(params);
+        imageButton.setAdjustViewBounds(true);
+        imageButton.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageButton.setPadding(0,0,0,0);
+        imageButton.setBackgroundColor(Color.TRANSPARENT);
+        linearLayoutParticipants.addView(imageButton);
+        ImageUtils.loadRoundedImageView(getContext(), userProfile.getUserProfileImg(), imageButton, R.drawable.im_cat_hearts);
+
+//        imageButton.setOnClickListener(v -> ExternalSocialsUtil.openLink(getContext(), userId, packageName, defaultWebLink, defaultMobileLink));
+    }
+
+    private void setEventTags() {
+        List<EventThemes> eventThemes = eventModel.getEventThemes();
+        if (eventThemes != null) {
+            for (EventThemes theme : eventThemes) {
+                TextView tv = new TextView(getContext());
+                tv.setText("#" + eventThemesEnumList.get(theme));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
+                );
+                params.setMargins(0,0,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()),0);
+                tv.setLayoutParams(params);
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                tv.setTextSize(16);
+                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    tv.setTextColor(Color.rgb(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+                } else {
+                    tv.setTextColor(getContext().getResources().getColor(R.color.primaryTextColor));
+                }
+                Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.audiowide);
+                tv.setTypeface(typeface);
+                linearLayoutThemes.addView(tv);
+            }
+        }
     }
 
     private void setJoinButtonAsHost() {

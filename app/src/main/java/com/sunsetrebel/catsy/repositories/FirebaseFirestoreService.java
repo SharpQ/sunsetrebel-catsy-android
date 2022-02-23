@@ -2,13 +2,10 @@ package com.sunsetrebel.catsy.repositories;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.Timestamp;
@@ -22,8 +19,9 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
-import com.sunsetrebel.catsy.models.UserProfileModel;
+import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.utils.AccessType;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.EventThemes;
@@ -61,7 +59,7 @@ public class FirebaseFirestoreService {
     }
 
     public interface GetUserProfileCallback {
-        void onResponse(UserProfileModel userProfile);
+        void onResponse(MainUserProfileModel userProfile);
     }
 
     public interface GetEventListCallback {
@@ -69,7 +67,7 @@ public class FirebaseFirestoreService {
     }
 
     public interface GetEventParticipantsCallback {
-        void onResponse(List<String> value);
+        void onResponse(List<CommonUserModel> value);
     }
 
     public interface SetUserInteractEventCallback {
@@ -196,7 +194,7 @@ public class FirebaseFirestoreService {
         });
     }
 
-    public void setUserJoinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, UserProfileModel userProfileModel) {
+    public void setUserJoinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, MainUserProfileModel mainUserProfileModel) {
         if (instanceJoinLeave) {
             return;
         }
@@ -204,10 +202,11 @@ public class FirebaseFirestoreService {
         String eventTitle = event.getEventTitle();
         String eventId = event.getEventId();
         String hostId = event.getHostId();
-        String userId = userProfileModel.getUserId();
-        String userFullName = userProfileModel.getUserFullName();
-        String userProfileImg = userProfileModel.getUserProfileImg();
+        String userId = mainUserProfileModel.getUserId();
+        String userFullName = mainUserProfileModel.getUserFullName();
+        String userProfileImg = mainUserProfileModel.getUserProfileImg();
         AccessType accessType = event.getAccessType();
+
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("userId", userId);
         userMap.put("userFullName", userFullName);
@@ -241,7 +240,7 @@ public class FirebaseFirestoreService {
         setUserInteractEventCallback.onResponse(true);
     }
 
-    public void setUserLeaveEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, UserProfileModel userProfileModel) {
+    public void setUserLeaveEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, MainUserProfileModel mainUserProfileModel) {
         if (instanceJoinLeave) {
             return;
         }
@@ -249,7 +248,7 @@ public class FirebaseFirestoreService {
         String eventTitle = event.getEventTitle();
         String eventId = event.getEventId();
         String hostId = event.getHostId();
-        String userId = userProfileModel.getUserId();
+        String userId = mainUserProfileModel.getUserId();
         AccessType accessType = event.getAccessType();
 
         Task<Void> task1 = null, task2 = null;
@@ -344,10 +343,11 @@ public class FirebaseFirestoreService {
         }
 
         task.addOnSuccessListener(queryDocumentSnapshots -> {
-            List<String> usersList = new ArrayList<>();
+            List<CommonUserModel> usersList = new ArrayList<>();
             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                 if (document != null) {
-                    usersList.add(document.getId());
+                    CommonUserModel userProfile = convertCommonUserProfileDocumentToModel(document.getData());
+                    usersList.add(userProfile);
                 }
             }
             getEventParticipantsCallback.onResponse(usersList);
@@ -415,13 +415,25 @@ public class FirebaseFirestoreService {
         return convertedEventThemeServices;
     }
 
-    private UserProfileModel convertUserProfileDocumentToModel(Map<String, Object> map) {
-        return new UserProfileModel(map.get("userId").toString(), convertObjectToString(map.get("userEmail")),
+    private MainUserProfileModel convertUserProfileDocumentToModel(Map<String, Object> map) {
+        return new MainUserProfileModel(map.get("userId").toString(), convertObjectToString(map.get("userEmail")),
                 convertObjectToString(map.get("userPhone")), map.get("userFullName").toString(),
                 convertObjectToString(map.get("userProfileImg")),
                 convertUserProfileEvents((ArrayList<Object[]>) map.get("joinedEvents")),
                 convertUserProfileEvents((ArrayList<Object[]>) map.get("hostedPublicEvents")),
                 convertUserProfileEvents((ArrayList<Object[]>) map.get("hostedPrivateEvents")),
+                convertUserProfileEvents((ArrayList<Object[]>) map.get("likedEvents")),
+                convertObjectToString(map.get("userLinkTelegram")),
+                convertObjectToString(map.get("userLinkTikTok")),
+                convertObjectToString(map.get("userLinkInstagram")),
+                convertObjectToString(map.get("userLinkFacebook")));
+    }
+
+    private CommonUserModel convertCommonUserProfileDocumentToModel(Map<String, Object> map) {
+        return new CommonUserModel(map.get("userId").toString(), map.get("userFullName").toString(),
+                convertObjectToString(map.get("userProfileImg")),
+                convertUserProfileEvents((ArrayList<Object[]>) map.get("joinedEvents")),
+                convertUserProfileEvents((ArrayList<Object[]>) map.get("hostedPublicEvents")),
                 convertUserProfileEvents((ArrayList<Object[]>) map.get("likedEvents")),
                 convertObjectToString(map.get("userLinkTelegram")),
                 convertObjectToString(map.get("userLinkTikTok")),

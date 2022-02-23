@@ -34,6 +34,16 @@ public class ImageUtils {
                 .into(imageView);
     }
 
+    public static void loadRoundedImageView(Context context, String imageURL, ImageView imageView, int errorDrawableResourceId) {
+        RequestOptions defaultOptionsEventAvatar = new RequestOptions()
+                .error(errorDrawableResourceId);
+        Glide.with(context)
+                .setDefaultRequestOptions(defaultOptionsEventAvatar)
+                .load(imageURL)
+                .apply(RequestOptions.circleCropTransform())
+                .into(imageView);
+    }
+
     public static void loadBitmapMapIcons(IconLoadCallback iconLoadCallback, Context context, String eventAvatarURL) {
         final float scale = context.getResources().getDisplayMetrics().density;
         int pixels = (int) (35 * scale + 0.5f);

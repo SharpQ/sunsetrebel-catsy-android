@@ -1,8 +1,6 @@
 package com.sunsetrebel.catsy.repositories;
 
-import android.util.Log;
-
-import com.sunsetrebel.catsy.models.UserProfileModel;
+import com.sunsetrebel.catsy.models.MainUserProfileModel;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,13 +10,13 @@ public class UserProfileService {
     private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
     private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private com.google.firebase.auth.FirebaseAuth fAuth;
-    private static UserProfileModel userProfileModel;
+    private static MainUserProfileModel mainUserProfileModel;
     private static UserProfileService instance;
     private ScheduledExecutorService executorService;
 
     public UserProfileService() {
         fAuth = firebaseAuthService.getFirebaseClient();
-        if (userProfileModel == null) {
+        if (mainUserProfileModel == null) {
             executorService = Executors.newSingleThreadScheduledExecutor();
             executorService.scheduleAtFixedRate(getUserProfileRunnable, 0, 2, TimeUnit.SECONDS);
         }
@@ -43,12 +41,12 @@ public class UserProfileService {
         return instance;
     }
 
-    public UserProfileModel getUserProfile() {
-        return userProfileModel;
+    public MainUserProfileModel getUserProfile() {
+        return mainUserProfileModel;
     }
 
-    public void setUserProfile(UserProfileModel userProfileModel) {
-        UserProfileService.userProfileModel = userProfileModel;
+    public void setUserProfile(MainUserProfileModel mainUserProfileModel) {
+        UserProfileService.mainUserProfileModel = mainUserProfileModel;
     }
 
     public void updateUserProfile() {

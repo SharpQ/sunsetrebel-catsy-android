@@ -7,8 +7,10 @@ import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
+
+import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
-import com.sunsetrebel.catsy.models.UserProfileModel;
+import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
 
@@ -21,19 +23,19 @@ public class EventListViewModel extends ViewModel {
     private LiveData<List<EventModel>> initialEventList;
     private static FirebaseFirestoreService firebaseFirestoreService;
     private EventModel selectedEvent;
-    private static UserProfileModel userProfileModel;
+    private static MainUserProfileModel mainUserProfileModel;
 
     public interface SetUserInteractEventCallback {
         void onResponse(Boolean isResponseSuccessful);
     }
 
     public interface GetEventParticipantsCallback {
-        void onResponse(List<String> value);
+        void onResponse(List<CommonUserModel> value);
     }
 
     public void init() {
         UserProfileService userProfileService = UserProfileService.getInstance();
-        userProfileModel = userProfileService.getUserProfile();
+        mainUserProfileModel = userProfileService.getUserProfile();
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
         initialEventList = firebaseFirestoreService.getEventListMutableLiveData();
         filteredEventList.addSource(initialEventList, new Observer<List<EventModel>>() {
@@ -93,7 +95,7 @@ public class EventListViewModel extends ViewModel {
     }
 
     public boolean isUserEventHost(EventModel event) {
-        return userProfileModel.getUserId().equals(event.getHostId());
+        return mainUserProfileModel.getUserId().equals(event.getHostId());
     }
 
     public void getEventParticipants(GetEventParticipantsCallback getEventParticipantsCallback, EventModel eventModel) {
@@ -103,9 +105,9 @@ public class EventListViewModel extends ViewModel {
         }, eventModel);
     }
 
-    public boolean isUserJoinedToEvent(List<String> joinedUsers) {
-        for (String user : joinedUsers) {
-            if (userProfileModel.getUserId().equals(user)) {
+    public boolean isUserJoinedToEvent(List<CommonUserModel> joinedUsers) {
+        for (CommonUserModel user : joinedUsers) {
+            if (mainUserProfileModel.getUserId().equals(user.getUserId())) {
                 return true;
             }
         }
@@ -115,26 +117,26 @@ public class EventListViewModel extends ViewModel {
     public void joinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel eventModel) {
         firebaseFirestoreService.setUserJoinEvent(value -> {
             setUserInteractEventCallback.onResponse(value);
-        }, context, eventModel, userProfileModel);
+        }, context, eventModel, mainUserProfileModel);
     }
 
     public void leaveEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel eventModel) {
         firebaseFirestoreService.setUserLeaveEvent(value -> {
             setUserInteractEventCallback.onResponse(value);
-        }, context, eventModel, userProfileModel);
+        }, context, eventModel, mainUserProfileModel);
     }
 
     public void likeEvent(SetUserInteractEventCallback setUserInteractEventCallback, String eventId) {
         firebaseFirestoreService.setEventAsLikedByUser(value -> {
             if (value) {
-                userProfileModel.addLikedEvents(eventId);
+                mainUserProfileModel.addLikedEvents(eventId);
             }
             setUserInteractEventCallback.onResponse(value);
-        }, userProfileModel.getUserId(), eventId);
+        }, mainUserProfileModel.getUserId(), eventId);
     }
 
     public boolean isEventLikedByUser(String eventId) {
-        List<String> likedEvents = userProfileModel.getLikedEvents();
+        List<String> likedEvents = mainUserProfileModel.getLikedEvents();
         if (likedEvents.size() > 0) {
             for (String user : likedEvents) {
                 if (eventId.equals(user)) {

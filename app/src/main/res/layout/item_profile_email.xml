@@ -20,7 +20,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:padding="2dp"
-            android:src="@drawable/ic_baseline_mail_outline_28_white"
+            android:src="@drawable/ic_baseline_mail_outline_28"
             android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

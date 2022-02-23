@@ -2,35 +2,30 @@ package com.sunsetrebel.catsy.models;
 
 import java.util.List;
 
-public class UserProfileModel {
+public class CommonUserModel {
     private String userId;
-    private String userEmail;
-    private String userPhone;
     private String userFullName;
     private String userProfileImg;
     private List<String> joinedEvents;
     private List<String> hostedPublicEvents;
-    private List<String> hostedPrivateEvents;
     private List<String> likedEvents;
     private String linkTelegram;
     private String linkTikTok;
     private String linkInstagram;
     private String linkFacebook;
 
-    public UserProfileModel() {
+    public CommonUserModel() {
     }
 
-    public UserProfileModel(String userId, String userEmail, String userPhone, String userFullName, String userProfileImg,
-                            List<String> joinedEvents, List<String> hostedPublicEvents, List<String> hostedPrivateEvents,
-                            List<String> likedEvents, String linkTelegram, String linkTikTok, String linkInstagram, String linkFacebook) {
+    public CommonUserModel(String userId, String userFullName, String userProfileImg,
+                           List<String> joinedEvents, List<String> hostedPublicEvents,
+                           List<String> likedEvents, String linkTelegram, String linkTikTok,
+                           String linkInstagram, String linkFacebook) {
         this.userId = userId;
-        this.userEmail = userEmail;
-        this.userPhone = userPhone;
         this.userFullName = userFullName;
         this.userProfileImg = userProfileImg;
         this.joinedEvents = joinedEvents;
         this.hostedPublicEvents = hostedPublicEvents;
-        this.hostedPrivateEvents = hostedPrivateEvents;
         this.likedEvents = likedEvents;
         this.linkTelegram = linkTelegram;
         this.linkTikTok = linkTikTok;
@@ -41,14 +36,6 @@ public class UserProfileModel {
     public String getUserId() { return userId; }
 
     public void setUserId(String userId) { this.userId = userId; }
-
-    public String getUserEmail() { return userEmail; }
-
-    public void setUserEmail(String userEmail) { this.userEmail = userEmail; }
-
-    public String getUserPhone() { return userPhone; }
-
-    public void setUserPhone(String userPhone) { this.userPhone = userPhone; }
 
     public String getUserFullName() { return userFullName; }
 
@@ -65,10 +52,6 @@ public class UserProfileModel {
     public List<String> getHostedPublicEvents() { return hostedPublicEvents; }
 
     public void setHostedPublicEvents(List<String> hostedPublicEvents) { this.hostedPublicEvents = hostedPublicEvents; }
-
-    public List<String> getHostedPrivateEvents() { return hostedPrivateEvents; }
-
-    public void setHostedPrivateEvents(List<String> hostedPrivateEvents) { this.hostedPrivateEvents = hostedPrivateEvents; }
 
     public List<String> getLikedEvents() { return likedEvents; }
 

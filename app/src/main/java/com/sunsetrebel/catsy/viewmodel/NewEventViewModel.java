@@ -3,14 +3,13 @@ package com.sunsetrebel.catsy.viewmodel;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
-import com.sunsetrebel.catsy.models.UserProfileModel;
+import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.repositories.FirebaseStorageService;
@@ -31,13 +30,13 @@ public class NewEventViewModel extends ViewModel {
     private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private final FirebaseStorageService firebaseStorageService = FirebaseStorageService.getInstance();
     private final UserProfileService userProfileService = UserProfileService.getInstance();
-    private UserProfileModel userProfileModel;
+    private MainUserProfileModel mainUserProfileModel;
 
 
     public void init() {
         eventModel = new EventModel();
         fAuth = firebaseAuthService.getFirebaseClient();
-        userProfileModel = userProfileService.getUserProfile();
+        mainUserProfileModel = userProfileService.getUserProfile();
     }
 
     public void setNewEventPrimaryInfo(String eventTitle, AccessType accessType, Date eventStartTime,
@@ -64,8 +63,8 @@ public class NewEventViewModel extends ViewModel {
         eventModel.setEventMaxAge(eventMaxAgeValue);
         eventModel.setEventMaxPerson(eventMaxPeopleValue);
         eventModel.setHostId(fAuth.getCurrentUser().getUid());
-        eventModel.setHostName(userProfileModel.getUserFullName());
-        eventModel.setHostProfileImg(userProfileModel.getUserProfileImg());
+        eventModel.setHostName(mainUserProfileModel.getUserFullName());
+        eventModel.setHostProfileImg(mainUserProfileModel.getUserProfileImg());
         if (eventAvatarURI != null) {
             firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
                 createEvent(context, downloadUrl);

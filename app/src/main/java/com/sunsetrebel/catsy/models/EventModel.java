@@ -24,7 +24,7 @@ public class EventModel {
     private Integer eventMinAge;
     private Integer eventMaxAge;
     private Integer eventParticipants;
-    private List<String> joinedUsersList;
+    private List<CommonUserModel> joinedUsersList;
     private Integer eventMaxPerson;
     private String eventAvatar;
     private List<EventThemes> eventThemes;
@@ -37,7 +37,7 @@ public class EventModel {
     public EventModel(String hostId, String hostName, String hostProfileImg, String eventId,
                       String eventTitle, String eventLocation, LatLng eventGeoLocation,
                       Date eventStartTime, Date eventEndTime, AccessType accessType,
-                      String eventDescr, Integer eventMinAge, Integer eventMaxAge, Integer eventParticipants, List<String> joinedUsersList,
+                      String eventDescr, Integer eventMinAge, Integer eventMaxAge, Integer eventParticipants, List<CommonUserModel> joinedUsersList,
                       Integer eventMaxPerson, String eventAvatar, List<EventThemes> eventThemes, Timestamp createTS, Timestamp updateTS) {
         this.hostId = hostId;
         this.hostName = hostName;
@@ -141,9 +141,9 @@ public class EventModel {
 
     public void setEventParticipants(Integer eventParticipants) { this.eventParticipants = eventParticipants; }
 
-    public List<String> getJoinedUsersList() { return joinedUsersList; }
+    public List<CommonUserModel> getJoinedUsersList() { return joinedUsersList; }
 
-    public void setJoinedUsersList(List<String> joinedUsersList) { this.joinedUsersList = joinedUsersList; }
+    public void setJoinedUsersList(List<CommonUserModel> joinedUsersList) { this.joinedUsersList = joinedUsersList; }
 
     public Integer getEventMaxPerson() { return eventMaxPerson; }
 
