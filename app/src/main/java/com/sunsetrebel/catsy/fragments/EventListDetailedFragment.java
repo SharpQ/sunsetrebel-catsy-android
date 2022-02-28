@@ -53,7 +53,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private AppCompatButton joinButton;
     private ImageView ivHostAvatar, ivEventAvatar;
     private TextView tvEventTitle, tvHostName, tvEventStartTime, tvEventEndTime, tvEventDescription,
-            tvEventParticipants, tvEventMinAge, tvEventMaxAge, tvEventMaxPerson;
+            tvEventParticipants, tvAgeLimit, tvEventMaxAge, tvEventMaxPerson;
     private LinearLayout linearLayoutThemes, linearLayoutParticipants;
     private Random rand = new Random();
     private EventThemesUtil eventThemesUtil;
@@ -62,7 +62,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private boolean isUserEventHost;
     private int imageSizeUsersProfile;
     private int imageMarginUsersProfile;
-    private final int maxUsersToDisplayInLinear = 6;
+    private final int maxUsersToDisplayInLinear = 3;
 
     public EventListDetailedFragment() {
         // Required empty public constructor
@@ -99,14 +99,40 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         tvEventEndTime = v.findViewById(R.id.tv_end_time_value);
         tvEventDescription = v.findViewById(R.id.tv_event_description);
         tvEventParticipants = v.findViewById(R.id.tv_event_detailed_participants_value);
-        tvEventMinAge = v.findViewById(R.id.tv_event_detailed_min_age_value);
-        tvEventMaxAge = v.findViewById(R.id.tv_event_detailed_max_age_value);
-        tvEventMaxPerson = v.findViewById(R.id.tv_event_detailed_max_people_value);
+        tvAgeLimit = v.findViewById(R.id.tv_event_detailed_age_limit_value);
         linearLayoutThemes = v.findViewById(R.id.ll_event_detailed_tags);
         linearLayoutParticipants = v.findViewById(R.id.ll_event_users);
 
         backButton.setOnClickListener(v1 -> getParentFragmentManager().popBackStack());
 
+        //Get event values
+        String usersCountValue = String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants());
+        Integer eventMaxPersonInt = eventModel.getEventMaxPerson();
+        if (eventMaxPersonInt != null) {
+            String eventMaxPersonString = String.format(Locale.getDefault(), "%d", eventMaxPersonInt);
+            usersCountValue = usersCountValue.concat(" / ").concat(eventMaxPersonString);
+        }
+        SpannableString usersCountSpan = new SpannableString(usersCountValue);
+        usersCountSpan.setSpan(new UnderlineSpan(), 0, usersCountSpan.length(), 0);
+        Integer eventMinAgeInt = eventModel.getEventMinAge();
+        Integer eventMaxAgeInt = eventModel.getEventMaxAge();
+        String eventAgeLimitStr = "", eventMinAgeStr, eventMaxAgeStr;
+        if (eventMinAgeInt != null && eventMaxAgeInt != null) {
+            eventMinAgeStr = String.format(Locale.getDefault(), "%d", eventMinAgeInt);
+            eventMaxAgeStr = String.format(Locale.getDefault(), "%d", eventMaxAgeInt);
+            eventAgeLimitStr = eventAgeLimitStr.concat(eventMinAgeStr).concat(" - ").concat(eventMaxAgeStr)
+                    .concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_years).toString());
+        } else if (eventMinAgeInt == null && eventMaxAgeInt == null) {
+            eventAgeLimitStr = "N/A";
+        } else if (eventMinAgeInt != null && eventMaxAgeInt == null) {
+            eventMinAgeStr = String.format(Locale.getDefault(), "%d", eventMinAgeInt);
+            eventAgeLimitStr = eventAgeLimitStr.concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_more).toString())
+                    .concat(eventMinAgeStr).concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_years).toString());
+        } else if (eventMinAgeInt == null && eventMaxAgeInt != null) {
+            eventMaxAgeStr = String.format(Locale.getDefault(), "%d", eventMaxAgeInt);
+            eventAgeLimitStr = eventAgeLimitStr.concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_less).toString())
+                    .concat(eventMaxAgeStr).concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_years).toString());
+        }
         //Set event avatar
         ImageUtils.loadImageView(getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
         //Set host avatar
@@ -116,12 +142,9 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         tvEventStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
         tvEventEndTime.setText(simpleDateFormat.format(eventModel.getEventEndTime()));
         tvEventDescription.setText(eventModel.getEventDescr());
-        SpannableString content = new SpannableString("+" + String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants() - maxUsersToDisplayInLinear));
-        content.setSpan(new UnderlineSpan(), 0, content.length(), 0);
-        tvEventParticipants.setText(content);
-        setIntegerTextFields(eventModel.getEventMinAge(), tvEventMinAge);
-        setIntegerTextFields(eventModel.getEventMaxAge(), tvEventMaxAge);
-        setIntegerTextFields(eventModel.getEventMaxPerson(), tvEventMaxPerson);
+        tvEventParticipants.setText(usersCountSpan);
+
+        tvAgeLimit.setText(eventAgeLimitStr);
         if (eventListViewModel.isEventLikedByUser(eventModel.getEventId())) {
             likeButton.setVisibility(View.INVISIBLE);
             likeButton.setEnabled(false);
@@ -260,14 +283,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         joinButton.setVisibility(View.VISIBLE);
         joinButton.setText(getContext().getString(R.string.event_detailed_join_button));
         joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
-    }
-
-    private void setIntegerTextFields(Integer integer, TextView textView) {
-        if (integer != null) {
-            textView.setText(String.format(Locale.getDefault(), "%d", integer));
-        } else {
-            textView.setText("N/A");
-        }
     }
 
     @Override
