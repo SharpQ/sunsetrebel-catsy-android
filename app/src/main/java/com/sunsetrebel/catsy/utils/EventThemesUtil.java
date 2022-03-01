@@ -10,14 +10,9 @@ import java.util.Map;
 import java.util.Objects;
 
 public class EventThemesUtil extends Application {
-    Resources resources;
-    Map<Enum<?>, String> eventThemesList;
+    private static Map<Enum<?>, String> eventThemesList;
 
-    public EventThemesUtil(Resources resources) {
-        this.resources = resources;
-    }
-
-    public Map<Enum<?>, String> getEventThemesList() {
+    public static Map<Enum<?>, String> getEventThemesList(Resources resources) {
         if (eventThemesList == null) {
             Map<Enum<?>, String> aMap = new HashMap<>();
             aMap.put(EventThemes.SPORT, resources.getString(R.string.event_theme_sport));

@@ -42,7 +42,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     private List<EventModel> eventList;
     private Context context;
     private SimpleDateFormat simpleDateFormat;
-    private EventThemesUtil eventThemesUtil;
     private Map<Enum<?>, String> eventThemesEnumList;
     private Random rand = new Random();
     private EventListViewModel eventListViewModel;
@@ -52,8 +51,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         this.eventList = eventList;
         this.context = context;
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
-        eventThemesUtil = new EventThemesUtil(context.getResources());
-        eventThemesEnumList = eventThemesUtil.getEventThemesList();
+        eventThemesEnumList = EventThemesUtil.getEventThemesList(context.getResources());
         eventListViewModel = new ViewModelProvider(fragmentActivity).get(EventListViewModel.class);
     }
 
@@ -67,6 +65,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        String usersCountValue = String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants());
+        Integer eventMaxPersonInt = eventList.get(position).getEventMaxPerson();
+        if (eventMaxPersonInt != null) {
+            String eventMaxPersonString = String.format(Locale.getDefault(), "%d", eventMaxPersonInt);
+            usersCountValue = usersCountValue.concat(" / ").concat(eventMaxPersonString);
+        }
         //Set event avatar
         ImageUtils.loadImageView(context, eventList.get(position).getEventAvatar(), holder.ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
         //Set host avatar
@@ -76,7 +80,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         holder.tvEventStartTime.setText(simpleDateFormat.format(eventList.get(position).getEventStartTime()));
         holder.tvEventLocation.setText(eventList.get(position).getEventLocation());
         holder.tvEventDescription.setText(eventList.get(position).getEventDescr());
-        holder.tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventList.get(position).getEventParticipants()));
+        holder.tvEventParticipants.setText(usersCountValue);
         if (eventListViewModel.isEventLikedByUser(eventList.get(position).getEventId())) {
             holder.likeButton.setVisibility(View.INVISIBLE);
             holder.likeButton.setEnabled(false);

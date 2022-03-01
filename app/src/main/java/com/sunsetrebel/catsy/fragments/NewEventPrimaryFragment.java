@@ -129,8 +129,7 @@ public class NewEventPrimaryFragment extends Fragment {
         eventEndTime.setOnClickListener(v16 -> showDateTimeDialog(eventEndTime, false));
 
         //Initialize themes array
-        EventThemesUtil eventThemesUtilList = new EventThemesUtil(getActivity().getResources());
-        Map<Enum<?>, String> themesArray = eventThemesUtilList.getEventThemesList();
+        Map<Enum<?>, String> themesArray = EventThemesUtil.getEventThemesList(getActivity().getResources());
         String[] themesArrayValues = themesArray.values().toArray(new String[0]);
         ArrayList<Integer> chosenThemesArray = new ArrayList<>();
         selectedTheme = new boolean[themesArray.size()];

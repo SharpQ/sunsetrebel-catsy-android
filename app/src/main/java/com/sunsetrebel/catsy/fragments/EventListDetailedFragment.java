@@ -53,10 +53,9 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private AppCompatButton joinButton;
     private ImageView ivHostAvatar, ivEventAvatar;
     private TextView tvEventTitle, tvHostName, tvEventStartTime, tvEventEndTime, tvEventDescription,
-            tvEventParticipants, tvAgeLimit, tvEventMaxAge, tvEventMaxPerson;
+            tvEventParticipants, tvAgeLimit;
     private LinearLayout linearLayoutThemes, linearLayoutParticipants;
     private Random rand = new Random();
-    private EventThemesUtil eventThemesUtil;
     private Map<Enum<?>, String> eventThemesEnumList;
     private boolean isUserJoinedToEvent;
     private boolean isUserEventHost;
@@ -78,8 +77,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         eventModel = eventListViewModel.getSelectedEvent();
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
-        eventThemesUtil = new EventThemesUtil(getContext().getResources());
-        eventThemesEnumList = eventThemesUtil.getEventThemesList();
+        eventThemesEnumList = EventThemesUtil.getEventThemesList(getContext().getResources());
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragment_event_detailed_map);
         mapFragment.getMapAsync(this);
