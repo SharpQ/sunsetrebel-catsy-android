@@ -3,8 +3,8 @@ package com.sunsetrebel.catsy.models;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.Timestamp;
-import com.sunsetrebel.catsy.utils.AccessType;
-import com.sunsetrebel.catsy.utils.EventThemes;
+import com.sunsetrebel.catsy.enums.AccessType;
+import com.sunsetrebel.catsy.enums.EventThemes;
 
 import java.util.Date;
 import java.util.List;

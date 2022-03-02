@@ -8,7 +8,6 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,11 +15,10 @@ import androidx.appcompat.widget.AppCompatButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.PhoneAuthCredential;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.LoginType;
+import com.sunsetrebel.catsy.enums.LoginType;
 
 import java.util.Locale;
 import java.util.concurrent.Executors;

@@ -2,8 +2,12 @@ package com.sunsetrebel.catsy.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +32,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
@@ -46,6 +51,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     private List<Polyline> polylines = null;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private EventModel selectedEvent = null;
+    private int width, height;
 
     public MapsFragment() {
         // Required empty public constructor
@@ -62,6 +68,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         fab = v.findViewById(R.id.fab_draw_route);
         fusedLocationProviderClient = GoogleMapService.getFusedLocationProviderInstance(getContext());
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
+        getDisplaySize();
         fab.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("MissingPermission")
             @Override
@@ -74,6 +81,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             }
         });
         return v;
+    }
+
+    private void getDisplaySize() {
+        Display display = this.getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        width = size.x;
+        height = size.y;
     }
 
     @Override
@@ -113,7 +128,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         mMap.setOnMarkerClickListener(marker -> {
             EventModel event = (EventModel) marker.getTag();
             selectedEvent = event;
-            popupService.showPopupMapFragment(getView(), event, this);
+            popupService.showPopupMapFragment(this, event, PopupType.EVENT_MAPS,
+                    width - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
+                    getContext().getResources().getDisplayMetrics()), null, R.style.popup_window_animation, Gravity.TOP);
             clearPolylines();
             fab.setEnabled(true);
             fab.setVisibility(View.VISIBLE);

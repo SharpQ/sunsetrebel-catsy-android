@@ -3,14 +3,11 @@ package com.sunsetrebel.catsy.fragments;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +17,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -31,7 +27,6 @@ import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
 import com.sunsetrebel.catsy.utils.ImageUtils;
@@ -40,8 +35,6 @@ import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
 
 
 public class EventListDetailedFragment extends Fragment implements OnMapReadyCallback {
@@ -55,13 +48,12 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private TextView tvEventTitle, tvHostName, tvEventStartTime, tvEventEndTime, tvEventDescription,
             tvEventParticipants, tvAgeLimit;
     private LinearLayout linearLayoutThemes, linearLayoutParticipants;
-    private Random rand = new Random();
-    private Map<Enum<?>, String> eventThemesEnumList;
     private boolean isUserJoinedToEvent;
     private boolean isUserEventHost;
     private int imageSizeUsersProfile;
     private int imageMarginUsersProfile;
     private final int maxUsersToDisplayInLinear = 3;
+    private EventThemesUtil eventThemesUtil;
 
     public EventListDetailedFragment() {
         // Required empty public constructor
@@ -77,7 +69,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         eventModel = eventListViewModel.getSelectedEvent();
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
-        eventThemesEnumList = EventThemesUtil.getEventThemesList(getContext().getResources());
+        eventThemesUtil = EventThemesUtil.getInstance(getContext().getResources());
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragment_event_detailed_map);
         mapFragment.getMapAsync(this);
@@ -195,7 +187,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             }
         }, eventModel.getEventId()));
 
-        setEventTags();
+        eventThemesUtil.setEventThemesUI(eventModel.getEventThemes(), this, linearLayoutThemes, null);
         return v;
     }
 
@@ -231,34 +223,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         ImageUtils.loadRoundedImageView(getContext(), userProfile.getUserProfileImg(), imageButton, R.drawable.im_cat_hearts);
 
 //        imageButton.setOnClickListener(v -> ExternalSocialsUtil.openLink(getContext(), userId, packageName, defaultWebLink, defaultMobileLink));
-    }
-
-    private void setEventTags() {
-        List<EventThemes> eventThemes = eventModel.getEventThemes();
-        if (eventThemes != null) {
-            for (EventThemes theme : eventThemes) {
-                TextView tv = new TextView(getContext());
-                tv.setText("#" + eventThemesEnumList.get(theme));
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                );
-                params.setMargins(0,0,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()),0);
-                tv.setLayoutParams(params);
-                tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                tv.setTextSize(16);
-                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    tv.setTextColor(Color.rgb(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-                } else {
-                    tv.setTextColor(getContext().getResources().getColor(R.color.primaryTextColor));
-                }
-                Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.audiowide);
-                tv.setTypeface(typeface);
-                linearLayoutThemes.addView(tv);
-            }
-        }
     }
 
     private void setJoinButtonAsHost() {

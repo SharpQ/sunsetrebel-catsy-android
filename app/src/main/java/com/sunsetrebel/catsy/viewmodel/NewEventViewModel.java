@@ -14,9 +14,9 @@ import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.repositories.FirebaseStorageService;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
-import com.sunsetrebel.catsy.utils.AccessType;
+import com.sunsetrebel.catsy.enums.AccessType;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.EventThemes;
+import com.sunsetrebel.catsy.enums.EventThemes;
 
 import com.google.firebase.Timestamp;
 import java.util.ArrayList;

@@ -21,7 +21,7 @@ import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.SliderAdapter;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.LoginType;
+import com.sunsetrebel.catsy.enums.LoginType;
 
 public class OnboardingActivity extends AppCompatActivity {
 

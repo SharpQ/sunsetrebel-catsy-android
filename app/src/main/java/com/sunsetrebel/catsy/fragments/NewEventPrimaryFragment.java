@@ -22,9 +22,9 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.utils.AccessType;
+import com.sunsetrebel.catsy.enums.AccessType;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.EventThemes;
+import com.sunsetrebel.catsy.enums.EventThemes;
 import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
 
@@ -51,6 +51,7 @@ public class NewEventPrimaryFragment extends Fragment {
     private List<EventThemes> eventThemes;
     private TextInputEditText eventTheme;
     private NewEventViewModel newEventViewModel;
+    private EventThemesUtil eventThemesUtil;
 
     public NewEventPrimaryFragment() {
         // Required empty public constructor
@@ -65,6 +66,7 @@ public class NewEventPrimaryFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_new_event_primary, container, false);
         newEventViewModel = new ViewModelProvider(requireActivity()).get(NewEventViewModel.class);
         newEventViewModel.init();
+        eventThemesUtil = EventThemesUtil.getInstance(getResources());
 
         eventTitle = v.findViewById(R.id.tiet_event_title);
         eventTitleLayout = v.findViewById(R.id.til_event_title);
@@ -129,10 +131,10 @@ public class NewEventPrimaryFragment extends Fragment {
         eventEndTime.setOnClickListener(v16 -> showDateTimeDialog(eventEndTime, false));
 
         //Initialize themes array
-        Map<Enum<?>, String> themesArray = EventThemesUtil.getEventThemesList(getActivity().getResources());
-        String[] themesArrayValues = themesArray.values().toArray(new String[0]);
+        Map<Enum<?>, String> themesMap = eventThemesUtil.getEventThemesMap();
+        String[] themesArrayValues = themesMap.values().toArray(new String[0]);
         ArrayList<Integer> chosenThemesArray = new ArrayList<>();
-        selectedTheme = new boolean[themesArray.size()];
+        selectedTheme = new boolean[themesMap.size()];
 
         eventTheme.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,7 +176,7 @@ public class NewEventPrimaryFragment extends Fragment {
                             maxQuantity = chosenThemesArray.size();
                         }
                         for (int j = 0; j < maxQuantity; j++) {
-                            eventThemes.add((EventThemes) EventThemesUtil.getKeyByValue(themesArray, themesArrayValues[chosenThemesArray.get(j)]));
+                            eventThemes.add((EventThemes) eventThemesUtil.getKeyByValue(themesMap, themesArrayValues[chosenThemesArray.get(j)]));
                             //Concat array value
                             stringBuilder.append(themesArrayValues[chosenThemesArray.get(j)]);
                             if (j != maxQuantity - 1) {
@@ -183,7 +185,7 @@ public class NewEventPrimaryFragment extends Fragment {
                         }
                         //Clear all checkboxes and chosen list
                         chosenThemesArray.clear();
-                        selectedTheme = new boolean[themesArray.size()];
+                        selectedTheme = new boolean[themesMap.size()];
                         //Set text on textview
                         eventTheme.setText(stringBuilder.toString());
                     }

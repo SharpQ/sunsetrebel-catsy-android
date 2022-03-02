@@ -1,19 +1,45 @@
 package com.sunsetrebel.catsy.utils;
 import android.app.Application;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.os.Build;
+import android.util.TypedValue;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.core.content.res.ResourcesCompat;
+import androidx.fragment.app.Fragment;
 
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.enums.EventThemes;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 
 public class EventThemesUtil extends Application {
-    private static Map<Enum<?>, String> eventThemesList;
+    private static EventThemesUtil instance;
+    private static Map<Enum<?>, String> eventThemesMap;
 
-    public static Map<Enum<?>, String> getEventThemesList(Resources resources) {
-        if (eventThemesList == null) {
+    public EventThemesUtil(Resources resources) {
+        initEventThemesMap(resources);
+    }
+
+    public static EventThemesUtil getInstance(Resources resources) {
+        if (instance == null) {
+            instance = new EventThemesUtil(resources);
+        }
+        return instance;
+    }
+
+    private void initEventThemesMap(Resources resources) {
+        if (eventThemesMap == null) {
             Map<Enum<?>, String> aMap = new HashMap<>();
             aMap.put(EventThemes.SPORT, resources.getString(R.string.event_theme_sport));
             aMap.put(EventThemes.MUSIC, resources.getString(R.string.event_theme_music));
@@ -52,17 +78,56 @@ public class EventThemesUtil extends Application {
             aMap.put(EventThemes.LGBTQ, resources.getString(R.string.event_theme_lgbtq));
             aMap.put(EventThemes.STUDY, resources.getString(R.string.event_theme_study));
             aMap.put(EventThemes.BOOKS, resources.getString(R.string.event_theme_books));
-            eventThemesList = Collections.unmodifiableMap(aMap);
+            eventThemesMap = Collections.unmodifiableMap(aMap);
         }
-        return eventThemesList;
     }
 
-    public static <T, E> T getKeyByValue(Map<T, E> map, E value) {
+    public Map<Enum<?>, String> getEventThemesMap() {
+        return eventThemesMap;
+    }
+
+    public <T, E> T getKeyByValue(Map<T, E> map, E value) {
         for (Map.Entry<T, E> entry : map.entrySet()) {
             if (Objects.equals(value, entry.getValue())) {
                 return entry.getKey();
             }
         }
         return null;
+    }
+
+    public void setEventThemesUI(List<EventThemes> eventThemes, Fragment fragment,
+                                 LinearLayout linearLayout, Integer textLimit) {
+        if (eventThemes != null) {
+            Random rand = new Random();
+            int tvCurrentSize = 0;
+            for (EventThemes theme : eventThemes) {
+                tvCurrentSize = tvCurrentSize + theme.toString().length();
+                TextView tv = new TextView(fragment.getContext());
+                tv.setText("#" + eventThemesMap.get(theme));
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT
+                );
+                params.setMargins(0,0,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
+                        fragment.getContext().getResources().getDisplayMetrics()),0);
+                tv.setLayoutParams(params);
+                tv.setGravity(Gravity.CENTER_HORIZONTAL);
+                tv.setTextSize(14);
+                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    tv.setTextColor(Color.rgb(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+                } else {
+                    tv.setTextColor(fragment.getContext().getResources().getColor(R.color.primaryTextColor));
+                }
+                Typeface typeface = ResourcesCompat.getFont(fragment.getContext(), R.font.audiowide);
+                tv.setTypeface(typeface);
+                if (textLimit == null) {
+                    linearLayout.addView(tv);
+                } else if (textLimit != null && tvCurrentSize < textLimit) {
+                    linearLayout.addView(tv);
+                }
+            }
+        }
     }
 }

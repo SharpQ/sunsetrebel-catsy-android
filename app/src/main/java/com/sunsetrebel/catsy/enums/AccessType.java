@@ -1,4 +1,4 @@
-package com.sunsetrebel.catsy.utils;
+package com.sunsetrebel.catsy.enums;
 
 public enum AccessType {
     PUBLIC,

@@ -22,9 +22,9 @@ import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.models.MainUserProfileModel;
-import com.sunsetrebel.catsy.utils.AccessType;
+import com.sunsetrebel.catsy.enums.AccessType;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.EventThemes;
+import com.sunsetrebel.catsy.enums.EventThemes;
 
 import java.util.ArrayList;
 import java.util.Date;

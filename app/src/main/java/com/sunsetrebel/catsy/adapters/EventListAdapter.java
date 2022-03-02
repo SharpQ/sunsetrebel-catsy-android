@@ -1,12 +1,7 @@
 package com.sunsetrebel.catsy.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Typeface;
-import android.os.Build;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +12,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +21,6 @@ import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.EventListDetailedFragment;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.EventThemes;
 import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.utils.ImageUtils;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
@@ -35,24 +28,23 @@ import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.ViewHolder> {
     private List<EventModel> eventList;
     private Context context;
+    private Fragment fragment;
     private SimpleDateFormat simpleDateFormat;
-    private Map<Enum<?>, String> eventThemesEnumList;
-    private Random rand = new Random();
     private EventListViewModel eventListViewModel;
+    private EventThemesUtil eventThemesUtil;
 
 
-    public EventListAdapter(Context context, FragmentActivity fragmentActivity, List<EventModel> eventList) {
+    public EventListAdapter(Fragment fragment, List<EventModel> eventList) {
         this.eventList = eventList;
-        this.context = context;
+        this.context = fragment.getContext();
+        this.fragment = fragment;
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
-        eventThemesEnumList = EventThemesUtil.getEventThemesList(context.getResources());
-        eventListViewModel = new ViewModelProvider(fragmentActivity).get(EventListViewModel.class);
+        eventThemesUtil = EventThemesUtil.getInstance(context.getResources());
+        eventListViewModel = new ViewModelProvider(fragment.requireActivity()).get(EventListViewModel.class);
     }
 
     @Override
@@ -89,35 +81,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             holder.likeButton.setEnabled(true);
         }
 
-        List<EventThemes> eventThemes = eventList.get(position).getEventThemes();
-        if (eventThemes != null) {
-            int tvCurrentSize = 0;
-            for (EventThemes theme : eventThemes) {
-                tvCurrentSize = tvCurrentSize + theme.toString().length();
-                TextView tv = new TextView(context);
-                tv.setText("#" + eventThemesEnumList.get(theme));
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                );
-                params.setMargins(0,0,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, context.getResources().getDisplayMetrics()),0);
-                tv.setLayoutParams(params);
-                tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                tv.setTextSize(14);
-                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    tv.setTextColor(Color.rgb(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-                } else {
-                    tv.setTextColor(context.getResources().getColor(R.color.primaryTextColor));
-                }
-                Typeface typeface = ResourcesCompat.getFont(context, R.font.audiowide);
-                tv.setTypeface(typeface);
-                if (tvCurrentSize < 15) {
-                    holder.linearLayout.addView(tv);
-                }
-            }
-        }
+        eventThemesUtil.setEventThemesUI(eventList.get(position).getEventThemes(), fragment, holder.linearLayout, null);
 
         holder.itemLayout.setOnClickListener(v -> {
             eventListViewModel.setSelectedEvent(eventList.get(position));

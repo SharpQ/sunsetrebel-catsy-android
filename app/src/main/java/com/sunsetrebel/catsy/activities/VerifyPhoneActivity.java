@@ -12,7 +12,6 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -23,7 +22,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.LoginType;
+import com.sunsetrebel.catsy.enums.LoginType;
 
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;

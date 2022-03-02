@@ -1,13 +1,6 @@
 package com.sunsetrebel.catsy.utils;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.graphics.Typeface;
-import android.os.Build;
-import android.util.TypedValue;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,27 +10,24 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.EventModel;
 
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Random;
 
 public class PopupService {
     private static PopupService instance;
     private PopupWindow infoPopup;
     private SimpleDateFormat simpleDateFormat;
-    private Map<Enum<?>, String> eventThemesEnumList;
+    private EventThemesUtil eventThemesUtil;
 
     public PopupService(Context context) {
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
-        eventThemesEnumList = EventThemesUtil.getEventThemesList(context.getResources());
+        eventThemesUtil = EventThemesUtil.getInstance(context.getResources());
     }
 
     public static PopupService getInstance(Context context) {
@@ -47,8 +37,35 @@ public class PopupService {
         return instance;
     }
 
-    public void showPopupMapFragment(View view, EventModel eventModel, Fragment fragment) {
+    public void showPopupMapFragment(Fragment fragment, EventModel eventModel, PopupType popupType,
+                                     Integer customWidth, Integer customHeight, int animationStyle, int gravity) {
         closePopup();
+        View popupView = null;
+        switch (popupType) {
+            case EVENT_MAPS:
+                popupView = setupViewMapsFragment(fragment, eventModel);
+                break;
+            case USER_EVENT_DETAILED:
+                popupView = setupViewUserEventDetailed(fragment);
+                break;
+            default:
+                break;
+        }
+
+        infoPopup = new PopupWindow(popupView,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        if (customWidth != null) {
+            infoPopup.setWidth(customWidth);
+        }
+        if (customHeight != null) {
+            infoPopup.setHeight(customHeight);
+        }
+        infoPopup.setAnimationStyle(animationStyle);
+        infoPopup.showAtLocation(fragment.getView(), gravity, 0, 0);
+    }
+
+    private View setupViewMapsFragment(Fragment fragment, EventModel eventModel) {
         LayoutInflater layoutInflater = LayoutInflater.from(fragment.getActivity());
         View popupView = layoutInflater.inflate(R.layout.item_event_map_fragment, null);
         TextView tvEventTitle = popupView.findViewById(R.id.textViewEventTitle);
@@ -77,47 +94,14 @@ public class PopupService {
         likeButton.setVisibility(View.INVISIBLE);
         shareButton.setEnabled(false);
         shareButton.setVisibility(View.INVISIBLE);
+        eventThemesUtil.setEventThemesUI(eventModel.getEventThemes(), fragment, linearLayout, null);
+        return popupView;
+    }
 
-        List<EventThemes> eventThemes = eventModel.getEventThemes();
-        if (eventThemes != null) {
-            Random rand = new Random();
-            for (EventThemes theme : eventThemes) {
-                TextView tv = new TextView(fragment.getContext());
-                tv.setText("#" + eventThemesEnumList.get(theme));
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                );
-                params.setMargins(0,0,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
-                        fragment.getContext().getResources().getDisplayMetrics()),0);
-                tv.setLayoutParams(params);
-                tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                tv.setTextSize(14);
-                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    tv.setTextColor(Color.rgb(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
-                } else {
-                    tv.setTextColor(fragment.getContext().getResources().getColor(R.color.primaryTextColor));
-                }
-                Typeface typeface = ResourcesCompat.getFont(fragment.getContext(), R.font.audiowide);
-                tv.setTypeface(typeface);
-                linearLayout.addView(tv);
-            }
-        }
-
-        infoPopup = new PopupWindow(popupView,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-
-        Display display = fragment.getActivity().getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        int width = size.x;
-        infoPopup.setWidth(width - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
-                fragment.getContext().getResources().getDisplayMetrics()));
-        infoPopup.setAnimationStyle(R.style.popup_window_animation);
-        infoPopup.showAtLocation(view, Gravity.TOP, 0, 0);
+    public View setupViewUserEventDetailed(Fragment fragment) {
+        LayoutInflater layoutInflater = LayoutInflater.from(fragment.getActivity());
+        View popupView = layoutInflater.inflate(R.layout.item_event_map_fragment, null);
+        return popupView;
     }
 
     public void closePopup() {

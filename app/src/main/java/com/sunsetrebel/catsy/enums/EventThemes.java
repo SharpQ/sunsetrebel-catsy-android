@@ -1,4 +1,4 @@
-package com.sunsetrebel.catsy.utils;
+package com.sunsetrebel.catsy.enums;
 
 public enum EventThemes {
     SPORT, MUSIC, ART, QUEST, HOOKAH, SHOPPING, FILM, BIRTHDAY, WALKING, JOB, JOGGING,

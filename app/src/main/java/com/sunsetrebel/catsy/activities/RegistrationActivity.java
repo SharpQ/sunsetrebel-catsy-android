@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
-import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
@@ -30,9 +30,8 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.hbb20.CountryCodePicker;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
-import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.LoginType;
+import com.sunsetrebel.catsy.enums.LoginType;
 
 import java.util.Arrays;
 import java.util.Objects;
