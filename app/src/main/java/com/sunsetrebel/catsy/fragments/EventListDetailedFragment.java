@@ -8,6 +8,7 @@ import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,12 +25,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
 import com.sunsetrebel.catsy.utils.ImageUtils;
+import com.sunsetrebel.catsy.utils.PopupService;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
 import java.text.SimpleDateFormat;
@@ -54,6 +57,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private int imageMarginUsersProfile;
     private final int maxUsersToDisplayInLinear = 3;
     private EventThemesUtil eventThemesUtil;
+    private PopupService popupService;
 
     public EventListDetailedFragment() {
         // Required empty public constructor
@@ -73,6 +77,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragment_event_detailed_map);
         mapFragment.getMapAsync(this);
+        popupService = PopupService.getInstance(getContext());
         imageSizeUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35, getResources().getDisplayMetrics());
         imageMarginUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
 
@@ -191,6 +196,12 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         return v;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        popupService.closePopup();
+    }
+
     private void setEventUsers(List<CommonUserModel> eventParticipants) {
         if (eventParticipants.size() > 0) {
             if (eventParticipants.size() <= maxUsersToDisplayInLinear) {
@@ -222,7 +233,8 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         linearLayoutParticipants.addView(imageButton);
         ImageUtils.loadRoundedImageView(getContext(), userProfile.getUserProfileImg(), imageButton, R.drawable.im_cat_hearts);
 
-//        imageButton.setOnClickListener(v -> ExternalSocialsUtil.openLink(getContext(), userId, packageName, defaultWebLink, defaultMobileLink));
+        imageButton.setOnClickListener(v -> popupService.showPopup(this, userProfile,
+                PopupType.USER_EVENT_DETAILED, null, null, R.style.popup_window_animation, Gravity.CENTER, true));
     }
 
     private void setJoinButtonAsHost() {

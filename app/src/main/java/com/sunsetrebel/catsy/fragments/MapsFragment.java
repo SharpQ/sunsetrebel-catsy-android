@@ -32,6 +32,7 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.activities.MainActivity;
 import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
@@ -128,9 +129,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         mMap.setOnMarkerClickListener(marker -> {
             EventModel event = (EventModel) marker.getTag();
             selectedEvent = event;
-            popupService.showPopupMapFragment(this, event, PopupType.EVENT_MAPS,
+            popupService.showPopup(this, event, PopupType.EVENT_MAPS,
                     width - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
-                    getContext().getResources().getDisplayMetrics()), null, R.style.popup_window_animation, Gravity.TOP);
+                    getContext().getResources().getDisplayMetrics()), null,
+                    R.style.popup_window_animation, Gravity.TOP, false);
             clearPolylines();
             fab.setEnabled(true);
             fab.setVisibility(View.VISIBLE);

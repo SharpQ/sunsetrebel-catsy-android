@@ -1,29 +1,36 @@
 package com.sunsetrebel.catsy.utils;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.enums.PopupType;
+import com.sunsetrebel.catsy.fragments.MapsFragment;
+import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
+
 public class PopupService {
     private static PopupService instance;
     private PopupWindow infoPopup;
-    private SimpleDateFormat simpleDateFormat;
-    private EventThemesUtil eventThemesUtil;
+    private final SimpleDateFormat simpleDateFormat;
+    private final EventThemesUtil eventThemesUtil;
 
     public PopupService(Context context) {
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
@@ -37,16 +44,17 @@ public class PopupService {
         return instance;
     }
 
-    public void showPopupMapFragment(Fragment fragment, EventModel eventModel, PopupType popupType,
-                                     Integer customWidth, Integer customHeight, int animationStyle, int gravity) {
+    public void showPopup(Fragment fragment, Object dataModel, PopupType popupType,
+                          Integer customWidth, Integer customHeight, int animationStyle, int gravity,
+                          boolean isOutsideTouchable) {
         closePopup();
         View popupView = null;
         switch (popupType) {
             case EVENT_MAPS:
-                popupView = setupViewMapsFragment(fragment, eventModel);
+                popupView = setupViewMapsFragment(fragment, (EventModel) dataModel);
                 break;
             case USER_EVENT_DETAILED:
-                popupView = setupViewUserEventDetailed(fragment);
+                popupView = setupViewUserEventDetailed(fragment, (CommonUserModel) dataModel);
                 break;
             default:
                 break;
@@ -61,13 +69,27 @@ public class PopupService {
         if (customHeight != null) {
             infoPopup.setHeight(customHeight);
         }
+        if (isOutsideTouchable) {
+            infoPopup.setOutsideTouchable(true);
+//            dimBehind(infoPopup);
+//            infoPopup.setBackgroundDrawable(new ColorDrawable(fragment.getResources().getColor(R.color.black70Transparent)));
+        }
         infoPopup.setAnimationStyle(animationStyle);
         infoPopup.showAtLocation(fragment.getView(), gravity, 0, 0);
     }
 
+    public static void dimBehind(PopupWindow popupWindow) {
+        View container = popupWindow.getContentView().getRootView();
+        Context context = popupWindow.getContentView().getContext();
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
+        p.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+        p.dimAmount = 0.3f;
+        wm.updateViewLayout(container, p);
+    }
+
     private View setupViewMapsFragment(Fragment fragment, EventModel eventModel) {
-        LayoutInflater layoutInflater = LayoutInflater.from(fragment.getActivity());
-        View popupView = layoutInflater.inflate(R.layout.item_event_map_fragment, null);
+        View popupView = LayoutInflater.from(fragment.getContext()).inflate(R.layout.popup_event_map_fragment, null, false);
         TextView tvEventTitle = popupView.findViewById(R.id.textViewEventTitle);
         TextView tvHostName = popupView.findViewById(R.id.textViewHostName);
         TextView tvStartTime = popupView.findViewById(R.id.til_start_time);
@@ -98,10 +120,57 @@ public class PopupService {
         return popupView;
     }
 
-    public View setupViewUserEventDetailed(Fragment fragment) {
-        LayoutInflater layoutInflater = LayoutInflater.from(fragment.getActivity());
-        View popupView = layoutInflater.inflate(R.layout.item_event_map_fragment, null);
+    private View setupViewUserEventDetailed(Fragment fragment, CommonUserModel userProfile) {
+        View popupView = LayoutInflater.from(fragment.getContext()).inflate(R.layout.popup_common_user, null, false);
+        TextView tvUserName = popupView.findViewById(R.id.profile_username);
+        TextView tvUserId = popupView.findViewById(R.id.profile_userid);
+        AppCompatButton btnAddToFriends = popupView.findViewById(R.id.button_add_friend);
+        AppCompatButton btnBlockUser = popupView.findViewById(R.id.button_block_user);
+        ImageView ivUserAvatar = popupView.findViewById(R.id.profile_image_user);
+        LinearLayout linearUserSocials = popupView.findViewById(R.id.ll_user_socials);
+
+        tvUserName.setText(userProfile.getUserFullName());
+        tvUserId.setText(userProfile.getUserId());
+        ImageUtils.loadImageView(fragment.getContext(), userProfile.getUserProfileImg(), ivUserAvatar, R.drawable.im_cat_hearts);
+
+        if (userProfile.getLinkFacebook() != null) {
+            setSocialImageButton(R.drawable.im_facebook_link_profile, userProfile.getLinkFacebook(), ExternalSocialsUtil.facebookPackageName,
+                    ExternalSocialsUtil.defaultFacebookWeb, ExternalSocialsUtil.defaultFacebookMobile, fragment, linearUserSocials);
+        }
+
+        if (userProfile.getLinkInstagram() != null) {
+            setSocialImageButton(R.drawable.im_instagram_link_profile, userProfile.getLinkInstagram(), ExternalSocialsUtil.instagramPackageName,
+                    ExternalSocialsUtil.defaultInstagramWeb, ExternalSocialsUtil.defaultInstagramMobile, fragment, linearUserSocials);
+        }
+
+        if (userProfile.getLinkTikTok() != null) {
+            setSocialImageButton(R.drawable.im_tiktok_link_profile, userProfile.getLinkTikTok(), ExternalSocialsUtil.tikTokPackageName,
+                    ExternalSocialsUtil.defaultTikTokWeb, ExternalSocialsUtil.defaultTikTokMobile, fragment, linearUserSocials);
+        }
+
+        if (userProfile.getLinkTelegram() != null) {
+            setSocialImageButton(R.drawable.im_telegram_link_profile, userProfile.getLinkTelegram(), ExternalSocialsUtil.telegramPackageName,
+                    ExternalSocialsUtil.defaultTelegramWeb, ExternalSocialsUtil.defaultTelegramMobile, fragment, linearUserSocials);
+        }
         return popupView;
+    }
+
+    private void setSocialImageButton(int resId, String userId, String packageName, String defaultWebLink,
+                                      String defaultMobileLink, Fragment fragment, LinearLayout linearLayout) {
+        ImageButton imageButton = new ImageButton(fragment.getContext());
+        imageButton.setImageResource(resId);
+        imageButton.setBackgroundColor(fragment.getResources().getColor(R.color.primaryDarkColor));
+        int imageSizeDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55, fragment.getResources().getDisplayMetrics());
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imageSizeDP, imageSizeDP);
+        params.setMargins(10,0,10,0);
+        imageButton.setLayoutParams(params);
+        imageButton.setAdjustViewBounds(true);
+        imageButton.setScaleType(ImageView.ScaleType.FIT_XY);
+        imageButton.setPadding(0,0,0,0);
+
+        linearLayout.addView(imageButton);
+
+        imageButton.setOnClickListener(v -> ExternalSocialsUtil.openLink(fragment.getContext(), userId, packageName, defaultWebLink, defaultMobileLink));
     }
 
     public void closePopup() {
