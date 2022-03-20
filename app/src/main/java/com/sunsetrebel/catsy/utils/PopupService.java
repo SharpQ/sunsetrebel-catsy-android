@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +32,7 @@ public class PopupService {
     private PopupWindow infoPopup;
     private final SimpleDateFormat simpleDateFormat;
     private final EventThemesUtil eventThemesUtil;
+    private FrameLayout frameLayout;
 
     public PopupService(Context context) {
         simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
@@ -46,7 +48,7 @@ public class PopupService {
 
     public void showPopup(Fragment fragment, Object dataModel, PopupType popupType,
                           Integer customWidth, Integer customHeight, int animationStyle, int gravity,
-                          boolean isOutsideTouchable) {
+                          boolean isFocusable) {
         closePopup();
         View popupView = null;
         switch (popupType) {
@@ -69,23 +71,14 @@ public class PopupService {
         if (customHeight != null) {
             infoPopup.setHeight(customHeight);
         }
-        if (isOutsideTouchable) {
-            infoPopup.setOutsideTouchable(true);
-//            dimBehind(infoPopup);
-//            infoPopup.setBackgroundDrawable(new ColorDrawable(fragment.getResources().getColor(R.color.black70Transparent)));
+        if (isFocusable) {
+            infoPopup.setFocusable(true);
+            frameLayout = fragment.getActivity().findViewById(R.id.frameLayoutMain);
+            frameLayout.getForeground().setAlpha(180);
+            infoPopup.setOnDismissListener(() -> frameLayout.getForeground().setAlpha(0));
         }
         infoPopup.setAnimationStyle(animationStyle);
         infoPopup.showAtLocation(fragment.getView(), gravity, 0, 0);
-    }
-
-    public static void dimBehind(PopupWindow popupWindow) {
-        View container = popupWindow.getContentView().getRootView();
-        Context context = popupWindow.getContentView().getContext();
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
-        p.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
-        p.dimAmount = 0.3f;
-        wm.updateViewLayout(container, p);
     }
 
     private View setupViewMapsFragment(Fragment fragment, EventModel eventModel) {

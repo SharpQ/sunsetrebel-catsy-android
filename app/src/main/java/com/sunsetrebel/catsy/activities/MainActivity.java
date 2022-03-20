@@ -3,6 +3,8 @@ package com.sunsetrebel.catsy.activities;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -21,6 +23,7 @@ import nl.joery.animatedbottombar.AnimatedBottomBar;
 public class MainActivity extends AppCompatActivity {
     AnimatedBottomBar animatedBottomBar;
     FragmentManager fragmentManager;
+    FrameLayout frameLayoutMain;
 
     private void hideSystemUI() {
         View decorView = getWindow().getDecorView();
@@ -43,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         hideSystemUI();
         UserProfileService.getInstance();
         Fragment mapsfragment = new MapsFragment();
+        frameLayoutMain = (FrameLayout) findViewById(R.id.frameLayoutMain);
+        frameLayoutMain.getForeground().setAlpha(0);
         fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frameLayoutMain, mapsfragment)
                 .commitAllowingStateLoss();
