@@ -32,7 +32,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.activities.MainActivity;
 import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
@@ -47,7 +46,6 @@ import java.util.List;
 public class MapsFragment extends Fragment implements OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener, RoutingListener {
     private GoogleMap mMap;
     private FirebaseFirestoreService firebaseFirestoreService;
-    private PopupService popupService;
     private FloatingActionButton fab;
     private List<Polyline> polylines = null;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -64,12 +62,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         View v = inflater.inflate(R.layout.fragment_maps, container, false);
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragmentGoogleMaps);
-        popupService = PopupService.getInstance(getContext());
         mapFragment.getMapAsync(this);
+
         fab = v.findViewById(R.id.fab_draw_route);
         fusedLocationProviderClient = GoogleMapService.getFusedLocationProviderInstance(getContext());
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
         getDisplaySize();
+
         fab.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("MissingPermission")
             @Override
@@ -100,7 +99,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     @Override
     public void onStop() {
         super.onStop();
-        popupService.closePopup();
+        PopupService.closePopup();
         selectedEvent = null;
         fab.setEnabled(false);
         fab.setVisibility(View.INVISIBLE);
@@ -120,7 +119,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
             }
         });
         mMap.setOnMapClickListener(latLng -> {
-            popupService.closePopup();
+            PopupService.closePopup();
             selectedEvent = null;
             fab.setEnabled(false);
             fab.setVisibility(View.INVISIBLE);
@@ -129,10 +128,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         mMap.setOnMarkerClickListener(marker -> {
             EventModel event = (EventModel) marker.getTag();
             selectedEvent = event;
-            popupService.showPopup(this, event, PopupType.EVENT_MAPS,
-                    width - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
-                    getContext().getResources().getDisplayMetrics()), null,
-                    R.style.popup_window_animation, Gravity.TOP, false);
+            PopupService.showPopup(new PopupService.PopupBuilder(this, event, PopupType.EVENT_MAPS)
+                    .width(width - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
+                            getContext().getResources().getDisplayMetrics()))
+                    .animationStyle(R.style.popup_window_animation)
+                    .setFocusable(false)
+                    .build(), this, Gravity.TOP);
             clearPolylines();
             fab.setEnabled(true);
             fab.setVisibility(View.VISIBLE);

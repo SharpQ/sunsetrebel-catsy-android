@@ -57,7 +57,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private int imageMarginUsersProfile;
     private final int maxUsersToDisplayInLinear = 3;
     private EventThemesUtil eventThemesUtil;
-    private PopupService popupService;
 
     public EventListDetailedFragment() {
         // Required empty public constructor
@@ -77,7 +76,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragment_event_detailed_map);
         mapFragment.getMapAsync(this);
-        popupService = PopupService.getInstance(getContext());
         imageSizeUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35, getResources().getDisplayMetrics());
         imageMarginUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
 
@@ -199,7 +197,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     @Override
     public void onStop() {
         super.onStop();
-        popupService.closePopup();
+        PopupService.closePopup();
     }
 
     private void setEventUsers(List<CommonUserModel> eventParticipants) {
@@ -233,8 +231,9 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         linearLayoutParticipants.addView(imageButton);
         ImageUtils.loadRoundedImageView(getContext(), userProfile.getUserProfileImg(), imageButton, R.drawable.im_cat_hearts);
 
-        imageButton.setOnClickListener(v -> popupService.showPopup(this, userProfile,
-                PopupType.USER_EVENT_DETAILED, null, null, R.style.popup_window_animation, Gravity.CENTER, true));
+        imageButton.setOnClickListener(v -> PopupService.showPopup(new PopupService.PopupBuilder(this, userProfile,
+                PopupType.USER_EVENT_DETAILED)
+                .animationStyle(R.style.popup_window_animation).setFocusable(true).setForeground().build(), this, Gravity.CENTER));
     }
 
     private void setJoinButtonAsHost() {
