@@ -98,7 +98,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
 
         backButton.setOnClickListener(v1 -> getParentFragmentManager().popBackStack());
 
-        //Get event values
+        //Set tv joined users
         String usersCountValue = String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants());
         Integer eventMaxPersonInt = eventModel.getEventMaxPerson();
         if (eventMaxPersonInt != null) {
@@ -107,6 +107,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         }
         SpannableString usersCountSpan = new SpannableString(usersCountValue);
         usersCountSpan.setSpan(new UnderlineSpan(), 0, usersCountSpan.length(), 0);
+        //Set tv age limit
         Integer eventMinAgeInt = eventModel.getEventMinAge();
         Integer eventMaxAgeInt = eventModel.getEventMaxAge();
         String eventAgeLimitStr = "", eventMinAgeStr, eventMaxAgeStr;
@@ -136,7 +137,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         tvEventEndTime.setText(simpleDateFormat.format(eventModel.getEventEndTime()));
         tvEventDescription.setText(eventModel.getEventDescr());
         tvEventParticipants.setText(usersCountSpan);
-
         tvAgeLimit.setText(eventAgeLimitStr);
         if (eventListViewModel.isEventLikedByUser(eventModel.getEventId())) {
             likeButton.setVisibility(View.INVISIBLE);
@@ -203,14 +203,10 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private void setEventUsers(List<CommonUserModel> eventParticipants) {
         if (eventParticipants.size() > 0) {
             if (eventParticipants.size() <= maxUsersToDisplayInLinear) {
-                tvEventParticipants.setVisibility(View.INVISIBLE);
-                tvEventParticipants.setEnabled(false);
                 for (CommonUserModel userProfile : eventParticipants) {
                     setParticipantsImageButton(getContext(), userProfile);
                 }
             } else {
-                tvEventParticipants.setVisibility(View.VISIBLE);
-                tvEventParticipants.setEnabled(true);
                 for (int i = 0; i<maxUsersToDisplayInLinear; i++) {
                     setParticipantsImageButton(getContext(), eventParticipants.get(i));
                 }

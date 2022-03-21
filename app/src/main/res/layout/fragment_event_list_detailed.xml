@@ -186,16 +186,13 @@
                 android:textColor="@color/primaryTextColor"
                 android:textSize="16sp"
                 android:longClickable="false"
-                android:clickable="false"
-                android:visibility="invisible"
-                android:enabled="false"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/ll_event_users"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintVertical_bias="0"
                 app:layout_constraintStart_toEndOf="@id/iv_participants"
-                app:layout_constraintTop_toBottomOf="@id/tv_host_name"/>
+                app:layout_constraintTop_toBottomOf="@id/tv_host_name" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_time_title"
@@ -435,6 +432,7 @@
                 android:layout_height="48dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="?android:selectableItemBackgroundBorderless"
                 app:srcCompat="@drawable/ic_baseline_share_30"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -452,6 +450,7 @@
                 android:padding="5dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 android:background="?android:selectableItemBackgroundBorderless"
                 android:scaleType="fitXY"
                 app:srcCompat="@drawable/im_paw_like_64p"
@@ -473,6 +472,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
                 app:layout_constraintHorizontal_weight="1"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

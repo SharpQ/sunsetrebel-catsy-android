@@ -194,7 +194,8 @@ public class FirebaseFirestoreService {
         });
     }
 
-    public void setUserJoinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel event, MainUserProfileModel mainUserProfileModel) {
+    public void setUserJoinEvent(SetUserInteractEventCallback setUserInteractEventCallback,
+                                 Context context, EventModel event, MainUserProfileModel mainUserProfileModel) {
         if (instanceJoinLeave) {
             return;
         }
@@ -205,12 +206,20 @@ public class FirebaseFirestoreService {
         String userId = mainUserProfileModel.getUserId();
         String userFullName = mainUserProfileModel.getUserFullName();
         String userProfileImg = mainUserProfileModel.getUserProfileImg();
+        String userLinkFacebook = mainUserProfileModel.getLinkFacebook();
+        String userLinkInstagram = mainUserProfileModel.getLinkInstagram();
+        String userLinkTelegram = mainUserProfileModel.getLinkTelegram();
+        String userLinkTikTok = mainUserProfileModel.getLinkTikTok();
         AccessType accessType = event.getAccessType();
 
         Map<String, Object> userMap = new HashMap<>();
         userMap.put("userId", userId);
         userMap.put("userFullName", userFullName);
         userMap.put("userProfileImg", userProfileImg);
+        userMap.put("userLinkFacebook", userLinkFacebook);
+        userMap.put("userLinkInstagram", userLinkInstagram);
+        userMap.put("userLinkTelegram", userLinkTelegram);
+        userMap.put("userLinkTikTok", userLinkTikTok);
 
         Task<Void> task1 = null, task2 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
