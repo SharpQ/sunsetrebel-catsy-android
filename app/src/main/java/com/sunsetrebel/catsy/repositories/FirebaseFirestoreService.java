@@ -42,10 +42,9 @@ public class FirebaseFirestoreService {
     private static boolean instanceCreateEvent = false;
     //COLLECTIONS NAMES
     public static final String COLLECTION_USER_PROFILES = "userProfiles";
-    public static final String COLLECTION_EVENT_LIST = "eventList";
+    public static final String COLLECTION_PUBLIC_EVENTS = "publicEvents";
     public static final String COLLECTION_EVENT_USERS_JOINED = "usersJoined";
-    public static final String COLLECTION_USER_PRIVATE_EVENTS = "privateEvents";
-    public static final String COLLECTION_USER_HOSTED_EVENTS = "userEvents";
+    public static final String COLLECTION_PRIVATE_EVENTS = "privateEvents";
     //DOCUMENTS PROPERTIES NAMES
     public static final String DOCUMENT_USER_ID = "userId";
     public static final String DOCUMENT_USER_FULL_NAME = "userFullName";
@@ -114,44 +113,44 @@ public class FirebaseFirestoreService {
     }
 
     //COLLECTION PATH
-    private CollectionReference getPublicEventList() {
-        return fStore.collection(COLLECTION_EVENT_LIST);
+    private CollectionReference getPublicEventsCollection() {
+        return fStore.collection(COLLECTION_PUBLIC_EVENTS);
     }
 
-    private DocumentReference getUserProfileDocRef(String userId) {
+    private DocumentReference getUserProfileDocument(String userId) {
         return fStore.collection(COLLECTION_USER_PROFILES).document(userId);
     }
 
-    private DocumentReference getPublicEventDocRef(String eventId) {
-        return getPublicEventList().document(eventId);
+    private DocumentReference getPublicEventDocument(String eventId) {
+        return getPublicEventsCollection().document(eventId);
     }
 
-    private CollectionReference getPublicEventParticipants(String eventId) {
-        return getPublicEventDocRef(eventId).collection(COLLECTION_EVENT_USERS_JOINED);
+    private CollectionReference getPublicEventParticipantsCollection(String eventId) {
+        return getPublicEventDocument(eventId).collection(COLLECTION_EVENT_USERS_JOINED);
     }
 
-    private DocumentReference getPublicEventJoinedUserDocRef(String eventId, String userId) {
-        return getPublicEventParticipants(eventId).document(userId);
+    private DocumentReference getPublicEventJoinedUserDocument(String eventId, String userId) {
+        return getPublicEventParticipantsCollection(eventId).document(userId);
     }
 
-    private DocumentReference getPrivateEventDocRef(String hostId, String eventId) {
-        return getUserProfileDocRef(hostId).collection(COLLECTION_USER_PRIVATE_EVENTS).document(eventId);
+    private DocumentReference getPrivateEventDocument(String eventId) {
+        return fStore.collection(COLLECTION_PRIVATE_EVENTS).document(eventId);
     }
 
-    private DocumentReference getPrivateEventJoinedUserDocRef(String hostId, String eventId, String userId) {
-        return getPrivateEventDocRef(hostId, eventId).collection(COLLECTION_EVENT_USERS_JOINED).document(userId);
+    private CollectionReference getPrivateEventParticipantsCollection(String eventId) {
+        return getPrivateEventDocument(eventId).collection(COLLECTION_EVENT_USERS_JOINED);
     }
 
-    private CollectionReference getPrivateEventParticipants(String hostId, String eventId) {
-        return getUserProfileDocRef(hostId).collection(COLLECTION_USER_HOSTED_EVENTS).document(eventId).collection(COLLECTION_EVENT_USERS_JOINED);
+    private DocumentReference getPrivateEventJoinedUserDocument(String eventId, String userId) {
+        return getPrivateEventParticipantsCollection(eventId).document(userId);
     }
 
-    private String getIdForPublicEventDocRef() {
-        return getPublicEventList().document().getId();
+    private String getIdForPublicEventDocument() {
+        return getPublicEventsCollection().document().getId();
     }
 
-    private String getIdForPrivateEventDocRef(String hostId) {
-        return getUserProfileDocRef(hostId).collection(COLLECTION_USER_HOSTED_EVENTS).document().getId();
+    private String getIdForPrivateEventDocument() {
+        return fStore.collection(COLLECTION_PRIVATE_EVENTS).document().getId();
     }
 
     public void createNewUser(String userId, String fullName, String email, String phone, String profileUrl) {
@@ -172,55 +171,60 @@ public class FirebaseFirestoreService {
         user.put(DOCUMENT_USER_LINK_TIKTOK, null);
         user.put(DOCUMENT_USER_LINK_INSTAGRAM, null);
         user.put(DOCUMENT_USER_LINK_FACEBOOK, null);
-        getUserProfileDocRef(userId).set(user).addOnSuccessListener(aVoid -> Log.d("DEBUG", "User profile created! UserID: " + userId));
+        getUserProfileDocument(userId).set(user).addOnSuccessListener(aVoid -> Log.d("DEBUG", "User profile created! UserID: " + userId));
     }
 
-    public void createNewEvent(Context context, String hostId, String hostName, String hostProfileImg, String eventTitle, String eventLocation, LatLng eventGeoLocation,
-                               Date eventStartTime, Date eventEndTime, AccessType eventAccessType, String eventDescr, Integer eventMinAge,
-                               Integer eventMaxAge, Integer eventMaxPerson, String eventAvatar, List<Enum<?>> eventThemes, Timestamp createTS, Timestamp updateTS) {
+    public void createNewEvent(Context context, EventModel eventModel, MainUserProfileModel mainUserProfileModel) {
         if (instanceCreateEvent) {
             return;
         }
         instanceCreateEvent = true;
         String eventId = null;
+        AccessType eventAccessType = eventModel.getAccessType();
         if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
-            eventId = getIdForPublicEventDocRef();
+            eventId = getIdForPublicEventDocument();
         } else if (eventAccessType == AccessType.PRIVATE) {
-            eventId = getIdForPrivateEventDocRef(hostId);
+            eventId = getIdForPrivateEventDocument();
         }
         String finalEventId = eventId;
         Map<String, Object> event = new HashMap<>();
         event.put(DOCUMENT_EVENT_ID, eventId);
-        event.put(DOCUMENT_EVENT_TITLE, eventTitle);
-        event.put(DOCUMENT_EVENT_LOCATION, eventLocation);
-        event.put(DOCUMENT_EVENT_GEOLOCATION, eventGeoLocation);
-        event.put(DOCUMENT_EVENT_START_TIME, eventStartTime);
-        event.put(DOCUMENT_EVENT_END_TIME, eventEndTime);
+        event.put(DOCUMENT_EVENT_TITLE, eventModel.getEventTitle());
+        event.put(DOCUMENT_EVENT_LOCATION, eventModel.getEventLocation());
+        event.put(DOCUMENT_EVENT_GEOLOCATION, eventModel.getEventGeoLocation());
+        event.put(DOCUMENT_EVENT_START_TIME, eventModel.getEventStartTime());
+        event.put(DOCUMENT_EVENT_END_TIME, eventModel.getEventEndTime());
         event.put(DOCUMENT_EVENT_ACCESS_TYPE, eventAccessType);
-        event.put(DOCUMENT_EVENT_DESCRIPTION, eventDescr);
-        event.put(DOCUMENT_EVENT_MIN_AGE, eventMinAge);
-        event.put(DOCUMENT_EVENT_MAX_AGE, eventMaxAge);
-        event.put(DOCUMENT_EVENT_MAX_PERSON, eventMaxPerson);
-        event.put(DOCUMENT_EVENT_AVATAR, eventAvatar);
-        event.put(DOCUMENT_EVENT_THEMES, eventThemes);
+        event.put(DOCUMENT_EVENT_DESCRIPTION, eventModel.getEventDescr());
+        event.put(DOCUMENT_EVENT_MIN_AGE, eventModel.getEventMinAge());
+        event.put(DOCUMENT_EVENT_MAX_AGE, eventModel.getEventMaxAge());
+        event.put(DOCUMENT_EVENT_MAX_PERSON, eventModel.getEventMaxPerson());
+        event.put(DOCUMENT_EVENT_AVATAR, eventModel.getEventAvatar());
+        event.put(DOCUMENT_EVENT_THEMES, eventModel.getEventThemes());
         event.put(DOCUMENT_EVENT_PARTICIPANTS, 1);
-        event.put(DOCUMENT_EVENT_HOST_ID, hostId);
-        event.put(DOCUMENT_EVENT_HOST_NAME, hostName);
-        event.put(DOCUMENT_EVENT_HOST_PROFILE_IMG, hostProfileImg);
-        event.put(DOCUMENT_EVENT_CREATE_TS, createTS);
-        event.put(DOCUMENT_EVENT_UPDATE_TS, updateTS);
+        event.put(DOCUMENT_EVENT_HOST_ID, eventModel.getHostId());
+        event.put(DOCUMENT_EVENT_HOST_NAME, eventModel.getHostName());
+        event.put(DOCUMENT_EVENT_HOST_PROFILE_IMG, eventModel.getHostProfileImg());
+        event.put(DOCUMENT_EVENT_CREATE_TS, eventModel.getCreateTS());
+        event.put(DOCUMENT_EVENT_UPDATE_TS, eventModel.getUpdateTS());
         Map<String, Object> firstUserMap = new HashMap<>();
-        firstUserMap.put(DOCUMENT_USER_ID, hostId);
+        firstUserMap.put(DOCUMENT_USER_ID, eventModel.getHostId());
+        firstUserMap.put(DOCUMENT_USER_FULL_NAME, eventModel.getHostName());
+        firstUserMap.put(DOCUMENT_USER_PROFILE_IMG, eventModel.getHostProfileImg());
+        firstUserMap.put(DOCUMENT_USER_LINK_FACEBOOK, mainUserProfileModel.getLinkFacebook());
+        firstUserMap.put(DOCUMENT_USER_LINK_INSTAGRAM, mainUserProfileModel.getLinkInstagram());
+        firstUserMap.put(DOCUMENT_USER_LINK_TELEGRAM, mainUserProfileModel.getLinkTelegram());
+        firstUserMap.put(DOCUMENT_USER_LINK_TIKTOK, mainUserProfileModel.getLinkTikTok());
 
         Task<Void> task1 = null, task2 = null, task3 = null;
         if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
-            task1 = getPublicEventDocRef(eventId).set(event);
-            task2 = getPublicEventJoinedUserDocRef(eventId, hostId).set(firstUserMap);
-            task3 = getUserProfileDocRef(hostId).update(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS, FieldValue.arrayUnion(eventId));
+            task1 = getPublicEventDocument(eventId).set(event);
+            task2 = getPublicEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap);
+            task3 = getUserProfileDocument(eventModel.getHostId()).update(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS, FieldValue.arrayUnion(eventId));
         } else if (eventAccessType == AccessType.PRIVATE) {
-            task1 = getPrivateEventDocRef(hostId, eventId).set(event);
-            task2 = getPrivateEventJoinedUserDocRef(hostId, eventId, hostId).set(firstUserMap);
-            task3 = getUserProfileDocRef(hostId).update(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS, FieldValue.arrayUnion(eventId));
+            task1 = getPrivateEventDocument(eventId).set(event);
+            task2 = getPrivateEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap);
+            task3 = getUserProfileDocument(eventModel.getHostId()).update(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS, FieldValue.arrayUnion(eventId));
         }
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2, task3);
         allTasks.addOnSuccessListener(querySnapshots -> {
@@ -242,7 +246,6 @@ public class FirebaseFirestoreService {
         instanceJoinLeave = true;
         String eventTitle = event.getEventTitle();
         String eventId = event.getEventId();
-        String hostId = event.getHostId();
         String userId = mainUserProfileModel.getUserId();
         String userFullName = mainUserProfileModel.getUserFullName();
         String userProfileImg = mainUserProfileModel.getUserProfileImg();
@@ -263,13 +266,13 @@ public class FirebaseFirestoreService {
 
         Task<Void> task1 = null, task2 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
-            task1 = getPublicEventJoinedUserDocRef(eventId, userId).set(userMap);
-            task2 = getPublicEventDocRef(eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(1));
+            task1 = getPublicEventJoinedUserDocument(eventId, userId).set(userMap);
+            task2 = getPublicEventDocument(eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(1));
         } else if (accessType == AccessType.PRIVATE) {
-            task1 = getPrivateEventJoinedUserDocRef(hostId, eventId, userId).set(userMap);
-            task2 = getPrivateEventDocRef(hostId, eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(1));
+            task1 = getPrivateEventJoinedUserDocument(eventId, userId).set(userMap);
+            task2 = getPrivateEventDocument(eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(1));
         }
-        Task<Void> task3 = getUserProfileDocRef(userId).update(DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayUnion(eventId));
+        Task<Void> task3 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayUnion(eventId));
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2, task3);
         allTasks.addOnSuccessListener(querySnapshots -> joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
                 .addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
@@ -296,19 +299,18 @@ public class FirebaseFirestoreService {
         instanceJoinLeave = true;
         String eventTitle = event.getEventTitle();
         String eventId = event.getEventId();
-        String hostId = event.getHostId();
         String userId = mainUserProfileModel.getUserId();
         AccessType accessType = event.getAccessType();
 
         Task<Void> task1 = null, task2 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
-            task1 = getPublicEventJoinedUserDocRef(eventId, userId).delete();
-            task2 = getPublicEventDocRef(eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(-1));
+            task1 = getPublicEventJoinedUserDocument(eventId, userId).delete();
+            task2 = getPublicEventDocument(eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(-1));
         } else if (accessType == AccessType.PRIVATE) {
-            task1 = getPrivateEventJoinedUserDocRef(hostId, eventId, userId).delete();
-            task2 = getPrivateEventDocRef(hostId, eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(-1));
+            task1 = getPrivateEventJoinedUserDocument(eventId, userId).delete();
+            task2 = getPrivateEventDocument(eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(-1));
         }
-        Task<Void> task3 = getUserProfileDocRef(userId).update(DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayRemove(eventId));
+        Task<Void> task3 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayRemove(eventId));
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2, task3);
         allTasks.addOnSuccessListener(querySnapshots -> leaveUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
                 .addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
@@ -329,14 +331,14 @@ public class FirebaseFirestoreService {
     }
 
     public void isUserRegistered(GetUserCallback getUserCallback, String userId){
-        getUserProfileDocRef(userId).get(Source.SERVER).addOnCompleteListener(task -> {
+        getUserProfileDocument(userId).get(Source.SERVER).addOnCompleteListener(task -> {
             DocumentSnapshot document = task.getResult();
             getUserCallback.onResponse(document.exists());
         });
     }
 
     public void getUserProfile(GetUserProfileCallback getUserProfileCallback, String userId) {
-        getUserProfileDocRef(userId).get().addOnSuccessListener(documentSnapshot -> {
+        getUserProfileDocument(userId).get().addOnSuccessListener(documentSnapshot -> {
             if (documentSnapshot.getData() != null) {
                 getUserProfileCallback.onResponse(convertUserProfileDocumentToModel(documentSnapshot.getData()));
             } else {
@@ -346,7 +348,7 @@ public class FirebaseFirestoreService {
     }
 
     public void getEventList(GetEventListCallback getEventListCallback) {
-        getPublicEventList().get().addOnSuccessListener(queryDocumentSnapshots -> {
+        getPublicEventsCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<EventModel> eventList = new ArrayList<>();
             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                 if (document != null) {
@@ -359,7 +361,7 @@ public class FirebaseFirestoreService {
     }
 
     public MutableLiveData<List<EventModel>> getEventListMutableLiveData() {
-        eventListListener = getPublicEventList().addSnapshotListener((value, error) -> {
+        eventListListener = getPublicEventsCollection().addSnapshotListener((value, error) -> {
             Log.d("DEBUG", "ADDED SNAPSHOT LISTENER");
             List<EventModel> eventList = new ArrayList<>();
             for (QueryDocumentSnapshot document : value) {
@@ -381,14 +383,13 @@ public class FirebaseFirestoreService {
     }
 
     public void getEventParticipants(GetEventParticipantsCallback getEventParticipantsCallback, EventModel eventModel) {
-        String hostId = eventModel.getHostId();
         String eventId = eventModel.getEventId();
         Task<QuerySnapshot> task = null;
 
         if (eventModel.getAccessType() == AccessType.PUBLIC || eventModel.getAccessType() == AccessType.SELECTIVE) {
-            task = getPublicEventParticipants(eventId).get();
+            task = getPublicEventParticipantsCollection(eventId).get();
         } else {
-            task = getPrivateEventParticipants(hostId, eventId).get();
+            task = getPrivateEventParticipantsCollection(eventId).get();
         }
 
         task.addOnSuccessListener(queryDocumentSnapshots -> {
@@ -408,7 +409,7 @@ public class FirebaseFirestoreService {
             return;
         }
         instanceLike = true;
-        Task<Void> task1 = getUserProfileDocRef(userId).update(DOCUMENT_USER_LIKED_EVENTS, FieldValue.arrayUnion(eventId));
+        Task<Void> task1 = getUserProfileDocument(userId).update(DOCUMENT_USER_LIKED_EVENTS, FieldValue.arrayUnion(eventId));
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1);
         allTasks.addOnSuccessListener(querySnapshots -> {
             instanceLike = false;

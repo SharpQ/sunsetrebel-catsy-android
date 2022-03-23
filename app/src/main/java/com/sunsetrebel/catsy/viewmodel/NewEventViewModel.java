@@ -67,20 +67,17 @@ public class NewEventViewModel extends ViewModel {
         eventModel.setHostProfileImg(mainUserProfileModel.getUserProfileImg());
         if (eventAvatarURI != null) {
             firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
-                createEvent(context, downloadUrl);
+                eventModel.setEventAvatar(downloadUrl);
+                createEvent(context);
             }, fAuth.getUid(), eventAvatarURI);
         } else {
-            createEvent(context, null);
+            createEvent(context);
         }
     }
 
-    private void createEvent(Context context, String eventAvatarDownloadURI) {
+    private void createEvent(Context context) {
         if (validNewEventParams()) {
-            firebaseFirestoreService.createNewEvent(context, eventModel.getHostId(), eventModel.getHostName(), eventModel.getHostProfileImg(),
-                    eventModel.getEventTitle(), eventModel.getEventLocation(), eventModel.getEventGeoLocation(), eventModel.getEventStartTime(),
-                    eventModel.getEventEndTime(), eventModel.getAccessType(), eventModel.getEventDescr(),
-                    eventModel.getEventMinAge(), eventModel.getEventMaxAge(), eventModel.getEventMaxPerson(), eventAvatarDownloadURI, getConvertedEventThemes(),
-                    eventModel.getCreateTS(), eventModel.getUpdateTS());
+            firebaseFirestoreService.createNewEvent(context, eventModel, mainUserProfileModel);
         } else {
             CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.new_event_event_failed_create_notification));
         }
@@ -94,12 +91,12 @@ public class NewEventViewModel extends ViewModel {
                 && eventModel.getEventGeoLocation() != null;
     }
 
-    private List<Enum<?>> getConvertedEventThemes() {
-        List<EventThemes> eventThemesBefore = eventModel.getEventThemes();
-        List<Enum<?>> eventThemesAfter = new ArrayList<>();
-        if (eventThemesBefore != null) {
-            eventThemesAfter.addAll(eventThemesBefore);
-        }
-        return eventThemesAfter;
-    }
+//    private List<Enum<?>> getConvertedEventThemes() {
+//        List<EventThemes> eventThemesBefore = eventModel.getEventThemes();
+//        List<Enum<?>> eventThemesAfter = new ArrayList<>();
+//        if (eventThemesBefore != null) {
+//            eventThemesAfter.addAll(eventThemesBefore);
+//        }
+//        return eventThemesAfter;
+//    }
 }
