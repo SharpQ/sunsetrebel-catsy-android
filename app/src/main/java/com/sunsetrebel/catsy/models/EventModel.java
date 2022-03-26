@@ -30,6 +30,7 @@ public class EventModel {
     private List<EventThemes> eventThemes;
     private Timestamp createTS;
     private Timestamp updateTS;
+    private List<String> invitedUsers;
 
     public EventModel() {
     }
@@ -37,8 +38,10 @@ public class EventModel {
     public EventModel(String hostId, String hostName, String hostProfileImg, String eventId,
                       String eventTitle, String eventLocation, LatLng eventGeoLocation,
                       Date eventStartTime, Date eventEndTime, AccessType accessType,
-                      String eventDescr, Integer eventMinAge, Integer eventMaxAge, Integer eventParticipants, List<CommonUserModel> joinedUsersList,
-                      Integer eventMaxPerson, String eventAvatar, List<EventThemes> eventThemes, Timestamp createTS, Timestamp updateTS) {
+                      String eventDescr, Integer eventMinAge, Integer eventMaxAge,
+                      Integer eventParticipants, List<CommonUserModel> joinedUsersList,
+                      Integer eventMaxPerson, String eventAvatar, List<EventThemes> eventThemes,
+                      Timestamp createTS, Timestamp updateTS, List<String> invitedUsers) {
         this.hostId = hostId;
         this.hostName = hostName;
         this.hostProfileImg = hostProfileImg;
@@ -59,6 +62,7 @@ public class EventModel {
         this.eventThemes = eventThemes;
         this.createTS = createTS;
         this.updateTS = updateTS;
+        this.invitedUsers = invitedUsers;
     }
 
     public String getHostId() { return hostId; }
@@ -167,10 +171,13 @@ public class EventModel {
 
     public void setCreateTS(Timestamp createTS) { this.createTS = createTS; }
 
-    public Timestamp getUpdateTS() {
-        return updateTS;
-    }
+    public Timestamp getUpdateTS() { return updateTS; }
 
     public void setUpdateTS(Timestamp updateTS) { this.updateTS = updateTS; }
 
+    public List<String> getInvitedUsers() {
+        return invitedUsers;
+    }
+
+    public void setInvitedUsers(List<String> invitedUsers) { this.invitedUsers = invitedUsers; }
 }

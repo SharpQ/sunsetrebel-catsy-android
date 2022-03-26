@@ -41,43 +41,44 @@ public class FirebaseFirestoreService {
     private static boolean instanceLike = false;
     private static boolean instanceCreateEvent = false;
     //COLLECTIONS NAMES
-    public static final String COLLECTION_USER_PROFILES = "userProfiles";
-    public static final String COLLECTION_PUBLIC_EVENTS = "publicEvents";
-    public static final String COLLECTION_EVENT_USERS_JOINED = "usersJoined";
-    public static final String COLLECTION_PRIVATE_EVENTS = "privateEvents";
+    private final String COLLECTION_USER_PROFILES = "userProfiles";
+    private final String COLLECTION_PUBLIC_EVENTS = "publicEvents";
+    private final String COLLECTION_EVENT_USERS_JOINED = "usersJoined";
+    private final String COLLECTION_PRIVATE_EVENTS = "privateEvents";
     //DOCUMENTS PROPERTIES NAMES
-    public static final String DOCUMENT_USER_ID = "userId";
-    public static final String DOCUMENT_USER_FULL_NAME = "userFullName";
-    public static final String DOCUMENT_USER_EMAIL = "userEmail";
-    public static final String DOCUMENT_USER_PHONE = "userPhone";
-    public static final String DOCUMENT_USER_PROFILE_IMG = "userProfileImg";
-    public static final String DOCUMENT_USER_JOINED_EVENTS = "joinedEvents";
-    public static final String DOCUMENT_USER_LIKED_EVENTS = "likedEvents";
-    public static final String DOCUMENT_USER_HOSTED_PUBLIC_EVENTS = "hostedPublicEvents";
-    public static final String DOCUMENT_USER_HOSTED_PRIVATE_EVENTS = "hostedPrivateEvents";
-    public static final String DOCUMENT_USER_LINK_TELEGRAM = "userLinkTelegram";
-    public static final String DOCUMENT_USER_LINK_TIKTOK = "userLinkTikTok";
-    public static final String DOCUMENT_USER_LINK_INSTAGRAM = "userLinkInstagram";
-    public static final String DOCUMENT_USER_LINK_FACEBOOK = "userLinkFacebook";
-    public static final String DOCUMENT_EVENT_ID = "eventId";
-    public static final String DOCUMENT_EVENT_TITLE = "eventTitle";
-    public static final String DOCUMENT_EVENT_LOCATION = "eventLocation";
-    public static final String DOCUMENT_EVENT_GEOLOCATION = "eventGeoLocation";
-    public static final String DOCUMENT_EVENT_START_TIME = "eventStartTime";
-    public static final String DOCUMENT_EVENT_END_TIME = "eventEndTime";
-    public static final String DOCUMENT_EVENT_ACCESS_TYPE = "eventAccessType";
-    public static final String DOCUMENT_EVENT_DESCRIPTION = "eventDescription";
-    public static final String DOCUMENT_EVENT_MIN_AGE = "eventMinAge";
-    public static final String DOCUMENT_EVENT_MAX_AGE = "eventMaxAge";
-    public static final String DOCUMENT_EVENT_MAX_PERSON = "eventMaxPerson";
-    public static final String DOCUMENT_EVENT_AVATAR = "eventAvatar";
-    public static final String DOCUMENT_EVENT_THEMES = "eventThemes";
-    public static final String DOCUMENT_EVENT_PARTICIPANTS = "eventParticipants";
-    public static final String DOCUMENT_EVENT_HOST_ID = "hostId";
-    public static final String DOCUMENT_EVENT_HOST_NAME = "hostName";
-    public static final String DOCUMENT_EVENT_HOST_PROFILE_IMG = "hostProfileImg";
-    public static final String DOCUMENT_EVENT_CREATE_TS = "createTS";
-    public static final String DOCUMENT_EVENT_UPDATE_TS = "updateTS";
+    private final String DOCUMENT_USER_ID = "userId";
+    private final String DOCUMENT_USER_FULL_NAME = "userFullName";
+    private final String DOCUMENT_USER_EMAIL = "userEmail";
+    private final String DOCUMENT_USER_PHONE = "userPhone";
+    private final String DOCUMENT_USER_PROFILE_IMG = "userProfileImg";
+    private final String DOCUMENT_USER_JOINED_EVENTS = "joinedEvents";
+    private final String DOCUMENT_USER_LIKED_EVENTS = "likedEvents";
+    private final String DOCUMENT_USER_HOSTED_PUBLIC_EVENTS = "hostedPublicEvents";
+    private final String DOCUMENT_USER_HOSTED_PRIVATE_EVENTS = "hostedPrivateEvents";
+    private final String DOCUMENT_USER_LINK_TELEGRAM = "userLinkTelegram";
+    private final String DOCUMENT_USER_LINK_TIKTOK = "userLinkTikTok";
+    private final String DOCUMENT_USER_LINK_INSTAGRAM = "userLinkInstagram";
+    private final String DOCUMENT_USER_LINK_FACEBOOK = "userLinkFacebook";
+    private final String DOCUMENT_EVENT_ID = "eventId";
+    private final String DOCUMENT_EVENT_TITLE = "eventTitle";
+    private final String DOCUMENT_EVENT_LOCATION = "eventLocation";
+    private final String DOCUMENT_EVENT_GEOLOCATION = "eventGeoLocation";
+    private final String DOCUMENT_EVENT_START_TIME = "eventStartTime";
+    private final String DOCUMENT_EVENT_END_TIME = "eventEndTime";
+    private final String DOCUMENT_EVENT_ACCESS_TYPE = "eventAccessType";
+    private final String DOCUMENT_EVENT_DESCRIPTION = "eventDescription";
+    private final String DOCUMENT_EVENT_MIN_AGE = "eventMinAge";
+    private final String DOCUMENT_EVENT_MAX_AGE = "eventMaxAge";
+    private final String DOCUMENT_EVENT_MAX_PERSON = "eventMaxPerson";
+    private final String DOCUMENT_EVENT_AVATAR = "eventAvatar";
+    private final String DOCUMENT_EVENT_THEMES = "eventThemes";
+    private final String DOCUMENT_EVENT_PARTICIPANTS = "eventParticipants";
+    private final String DOCUMENT_EVENT_HOST_ID = "hostId";
+    private final String DOCUMENT_EVENT_HOST_NAME = "hostName";
+    private final String DOCUMENT_EVENT_HOST_PROFILE_IMG = "hostProfileImg";
+    private final String DOCUMENT_EVENT_CREATE_TS = "createTS";
+    private final String DOCUMENT_EVENT_UPDATE_TS = "updateTS";
+    private final String DOCUMENT_EVENT_INVITED_USERS = "invitedUsers";
 
     //INSTANCE
     public FirebaseFirestoreService() {
@@ -201,12 +202,15 @@ public class FirebaseFirestoreService {
         event.put(DOCUMENT_EVENT_MAX_PERSON, eventModel.getEventMaxPerson());
         event.put(DOCUMENT_EVENT_AVATAR, eventModel.getEventAvatar());
         event.put(DOCUMENT_EVENT_THEMES, eventModel.getEventThemes());
-        event.put(DOCUMENT_EVENT_PARTICIPANTS, 1);
+        event.put(DOCUMENT_EVENT_PARTICIPANTS, 0);
         event.put(DOCUMENT_EVENT_HOST_ID, eventModel.getHostId());
         event.put(DOCUMENT_EVENT_HOST_NAME, eventModel.getHostName());
         event.put(DOCUMENT_EVENT_HOST_PROFILE_IMG, eventModel.getHostProfileImg());
         event.put(DOCUMENT_EVENT_CREATE_TS, eventModel.getCreateTS());
         event.put(DOCUMENT_EVENT_UPDATE_TS, eventModel.getUpdateTS());
+        if (eventAccessType == AccessType.PRIVATE) {
+            event.put(DOCUMENT_EVENT_INVITED_USERS, eventModel.getInvitedUsers());
+        }
         Map<String, Object> firstUserMap = new HashMap<>();
         firstUserMap.put(DOCUMENT_USER_ID, eventModel.getHostId());
         firstUserMap.put(DOCUMENT_USER_FULL_NAME, eventModel.getHostName());
@@ -264,16 +268,14 @@ public class FirebaseFirestoreService {
         userMap.put(DOCUMENT_USER_LINK_TELEGRAM, userLinkTelegram);
         userMap.put(DOCUMENT_USER_LINK_TIKTOK, userLinkTikTok);
 
-        Task<Void> task1 = null, task2 = null;
+        Task<Void> task1 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
             task1 = getPublicEventJoinedUserDocument(eventId, userId).set(userMap);
-            task2 = getPublicEventDocument(eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(1));
         } else if (accessType == AccessType.PRIVATE) {
             task1 = getPrivateEventJoinedUserDocument(eventId, userId).set(userMap);
-            task2 = getPrivateEventDocument(eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(1));
         }
-        Task<Void> task3 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayUnion(eventId));
-        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2, task3);
+        Task<Void> task2 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayUnion(eventId));
+        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
         allTasks.addOnSuccessListener(querySnapshots -> joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
                 .addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
     }
@@ -302,16 +304,14 @@ public class FirebaseFirestoreService {
         String userId = mainUserProfileModel.getUserId();
         AccessType accessType = event.getAccessType();
 
-        Task<Void> task1 = null, task2 = null;
+        Task<Void> task1 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
             task1 = getPublicEventJoinedUserDocument(eventId, userId).delete();
-            task2 = getPublicEventDocument(eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(-1));
         } else if (accessType == AccessType.PRIVATE) {
             task1 = getPrivateEventJoinedUserDocument(eventId, userId).delete();
-            task2 = getPrivateEventDocument(eventId).update(DOCUMENT_EVENT_PARTICIPANTS, FieldValue.increment(-1));
         }
-        Task<Void> task3 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayRemove(eventId));
-        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2, task3);
+        Task<Void> task2 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayRemove(eventId));
+        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
         allTasks.addOnSuccessListener(querySnapshots -> leaveUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
                 .addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
     }
@@ -432,7 +432,7 @@ public class FirebaseFirestoreService {
                 convertObjectToInteger(map.get(DOCUMENT_EVENT_MIN_AGE)), convertObjectToInteger(map.get(DOCUMENT_EVENT_MAX_AGE)),
                 convertObjectToInteger(map.get(DOCUMENT_EVENT_PARTICIPANTS)), null, convertObjectToInteger(map.get(DOCUMENT_EVENT_MAX_PERSON)),
                 convertObjectToString(map.get(DOCUMENT_EVENT_AVATAR)), convertEventThemes((ArrayList<Object[]>) map.get(DOCUMENT_EVENT_THEMES)),
-                ((Timestamp) map.get(DOCUMENT_EVENT_CREATE_TS)), ((Timestamp) map.get(DOCUMENT_EVENT_UPDATE_TS)));
+                ((Timestamp) map.get(DOCUMENT_EVENT_CREATE_TS)), ((Timestamp) map.get(DOCUMENT_EVENT_UPDATE_TS)), null);
     }
 
     private String convertObjectToString(Object object) {
