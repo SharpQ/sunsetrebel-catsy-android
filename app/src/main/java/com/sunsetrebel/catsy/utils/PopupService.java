@@ -1,5 +1,6 @@
 package com.sunsetrebel.catsy.utils;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,9 @@ import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
+import com.sunsetrebel.catsy.models.MainUserProfileModel;
+import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
+import com.sunsetrebel.catsy.repositories.UserProfileService;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -139,10 +143,59 @@ public class PopupService {
             AppCompatButton btnBlockUser = popupView.findViewById(R.id.button_block_user);
             ImageView ivUserAvatar = popupView.findViewById(R.id.profile_image_user);
             LinearLayout linearUserSocials = popupView.findViewById(R.id.ll_user_socials);
+            FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
+            UserProfileService userProfileService = UserProfileService.getInstance();
+            MainUserProfileModel mainUserProfileModel = userProfileService.getUserProfile();
+
+            if (mainUserProfileModel.getUserFriends().contains(userProfile.getUserId()) || mainUserProfileModel.getUserId().equals(userProfile.getUserId())) {
+                btnAddToFriends.setEnabled(false);
+                btnAddToFriends.setVisibility(View.INVISIBLE);
+            } else {
+                btnAddToFriends.setEnabled(true);
+                btnAddToFriends.setVisibility(View.VISIBLE);
+            }
+
+            if (mainUserProfileModel.getBlockedUsers().contains(userProfile.getUserId()) || mainUserProfileModel.getUserId().equals(userProfile.getUserId())) {
+                btnBlockUser.setEnabled(false);
+                btnBlockUser.setVisibility(View.INVISIBLE);
+            } else {
+                btnBlockUser.setEnabled(true);
+                btnBlockUser.setVisibility(View.VISIBLE);
+            }
 
             tvUserName.setText(userProfile.getUserFullName());
             tvUserId.setText(userProfile.getUserId());
             ImageUtils.loadImageView(fragment.getContext(), userProfile.getUserProfileImg(), ivUserAvatar, R.drawable.im_cat_hearts);
+
+            btnAddToFriends.setOnClickListener(v -> {
+                firebaseFirestoreService.sendFriendRequest(value -> {
+                    if (value) {
+                        btnAddToFriends.setEnabled(false);
+                        btnAddToFriends.setVisibility(View.INVISIBLE);
+                        CustomToastUtil.showSuccessToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_friend_request_success).toString() + userProfile.getUserId());
+                        Log.d("DEBUG", "Friend request sent: " + userProfile.getUserId());
+                    } else {
+                        btnAddToFriends.setEnabled(true);
+                        btnAddToFriends.setVisibility(View.VISIBLE);
+                        CustomToastUtil.showSuccessToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_friend_request_fail).toString() + userProfile.getUserId());
+                        Log.d("DEBUG", "Failed to send friend request: " + userProfile.getUserId());
+                    }
+                }, mainUserProfileModel.getUserId(), userProfile.getUserId());
+            });
+
+            btnBlockUser.setOnClickListener(v -> {
+                firebaseFirestoreService.setUserToBlocked(value -> {
+                    if (value) {
+                        btnBlockUser.setEnabled(false);
+                        btnBlockUser.setVisibility(View.INVISIBLE);
+                        CustomToastUtil.showSuccessToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_blocked_success).toString() + userProfile.getUserId());
+                        Log.d("DEBUG", "Success block user: " + userProfile.getUserId());
+                    } else {
+                        CustomToastUtil.showFailToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_blocked_fail).toString() + userProfile.getUserId());
+                        Log.d("DEBUG", "Fail block user: " + userProfile.getUserId());
+                    }
+                }, mainUserProfileModel.getUserId(), userProfile.getUserId());
+            });
 
             if (userProfile.getLinkFacebook() != null) {
                 setSocialImageButton(R.drawable.im_facebook_link_profile, userProfile.getLinkFacebook(), ExternalSocialsUtil.facebookPackageName,

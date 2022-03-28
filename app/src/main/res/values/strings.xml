@@ -80,6 +80,10 @@
     <string name="event_detailed_leave_fail">Failed to leave event:\u0020</string>
     <string name="event_liked_success">You liked event:\u0020</string>
     <string name="event_liked_fail">Failed to like event:\u0020</string>
+    <string name="user_blocked_success">User blocked:\u0020</string>
+    <string name="user_blocked_fail">Fail block user:\u0020</string>
+    <string name="user_friend_request_success">Friend request sent to user:\u0020</string>
+    <string name="user_friend_request_fail">Failed to send friend request:\u0020</string>
     <string name="profile_id_placeholder">ID:\u0020</string>
     <string name="profile_tab_title_main">Personal Info</string>
     <string name="profile_tab_title_events">Events</string>
@@ -87,7 +91,7 @@
     <string name="profile_button_logout">Logout</string>
     <string name="profile_info_title_social_networks">Social networks</string>
     <string name="popup_user_add">Add to friends</string>
-    <string name="popup_user_report">Report user</string>
+    <string name="popup_user_block">Block user</string>
     <string name="event_theme_sport">Sport</string>
     <string name="event_theme_music">Music</string>
     <string name="event_theme_art">Art</string>

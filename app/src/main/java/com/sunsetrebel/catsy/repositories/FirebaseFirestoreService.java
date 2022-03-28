@@ -27,7 +27,6 @@ import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.enums.EventThemes;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,11 +39,15 @@ public class FirebaseFirestoreService {
     private static boolean instanceJoinLeave = false;
     private static boolean instanceLike = false;
     private static boolean instanceCreateEvent = false;
+    private static boolean instanceBlockUser = false;
+    private static boolean instanceFriendRequest = false;
     //COLLECTIONS NAMES
     private final String COLLECTION_USER_PROFILES = "userProfiles";
     private final String COLLECTION_PUBLIC_EVENTS = "publicEvents";
     private final String COLLECTION_EVENT_USERS_JOINED = "usersJoined";
     private final String COLLECTION_PRIVATE_EVENTS = "privateEvents";
+    private final String COLLECTION_USER_OUTCOME_REQUESTS = "outcomeRequests";
+    private final String COLLECTION_USER_INCOME_REQUESTS = "incomeRequests";
     //DOCUMENTS PROPERTIES NAMES
     private final String DOCUMENT_USER_ID = "userId";
     private final String DOCUMENT_USER_FULL_NAME = "userFullName";
@@ -55,6 +58,8 @@ public class FirebaseFirestoreService {
     private final String DOCUMENT_USER_LIKED_EVENTS = "likedEvents";
     private final String DOCUMENT_USER_HOSTED_PUBLIC_EVENTS = "hostedPublicEvents";
     private final String DOCUMENT_USER_HOSTED_PRIVATE_EVENTS = "hostedPrivateEvents";
+    private final String DOCUMENT_USER_FRIENDS = "userFriends";
+    private final String DOCUMENT_USER_BLOCKED_USERS = "blockedUsers";
     private final String DOCUMENT_USER_LINK_TELEGRAM = "userLinkTelegram";
     private final String DOCUMENT_USER_LINK_TIKTOK = "userLinkTikTok";
     private final String DOCUMENT_USER_LINK_INSTAGRAM = "userLinkInstagram";
@@ -79,6 +84,9 @@ public class FirebaseFirestoreService {
     private final String DOCUMENT_EVENT_CREATE_TS = "createTS";
     private final String DOCUMENT_EVENT_UPDATE_TS = "updateTS";
     private final String DOCUMENT_EVENT_INVITED_USERS = "invitedUsers";
+    private final String DOCUMENT_FRIEND_REQUEST_SENDER = "senderId";
+    private final String DOCUMENT_FRIEND_REQUEST_RECIPIENT = "recipientId";
+    private final String DOCUMENT_FRIEND_REQUEST_ACTION = "action";
 
     //INSTANCE
     public FirebaseFirestoreService() {
@@ -120,6 +128,18 @@ public class FirebaseFirestoreService {
 
     private DocumentReference getUserProfileDocument(String userId) {
         return fStore.collection(COLLECTION_USER_PROFILES).document(userId);
+    }
+
+    private DocumentReference getUserProfileOutcomeRequestDocument(String userId,
+                                                                   String anotherUserId) {
+        return getUserProfileDocument(userId).collection(COLLECTION_USER_OUTCOME_REQUESTS)
+                .document(anotherUserId);
+    }
+
+    private DocumentReference getUserProfileIncomeRequestDocument(String userId,
+                                                                  String anotherUserId) {
+        return getUserProfileDocument(userId).collection(COLLECTION_USER_INCOME_REQUESTS)
+                .document(anotherUserId);
     }
 
     private DocumentReference getPublicEventDocument(String eventId) {
@@ -164,6 +184,8 @@ public class FirebaseFirestoreService {
         user.put(DOCUMENT_USER_EMAIL, email);
         user.put(DOCUMENT_USER_PHONE, phone);
         user.put(DOCUMENT_USER_PROFILE_IMG, profileUrl);
+        user.put(DOCUMENT_USER_FRIENDS, null);
+        user.put(DOCUMENT_USER_BLOCKED_USERS, null);
         user.put(DOCUMENT_USER_JOINED_EVENTS, null);
         user.put(DOCUMENT_USER_LIKED_EVENTS, null);
         user.put(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS, null);
@@ -420,6 +442,114 @@ public class FirebaseFirestoreService {
         });
     }
 
+    public void sendFriendRequest(SetUserInteractEventCallback setUserInteractEventCallback,
+                                  String userId, String anotherUserId) {
+        if (instanceFriendRequest) {
+            return;
+        }
+        instanceFriendRequest = true;
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_SENDER, userId);
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_RECIPIENT, anotherUserId);
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_ACTION, "ADD");
+        Task<Void> task = getUserProfileOutcomeRequestDocument(userId, anotherUserId).set(requestBody);
+        task.addOnSuccessListener(querySnapshots -> {
+            instanceFriendRequest = false;
+            setUserInteractEventCallback.onResponse(true);
+        }).addOnFailureListener(e -> {
+            instanceFriendRequest = false;
+            setUserInteractEventCallback.onResponse(false);
+        });
+    }
+
+    public void removeFriendRequest(SetUserInteractEventCallback setUserInteractEventCallback,
+                                  String userId, String anotherUserId) {
+        if (instanceFriendRequest) {
+            return;
+        }
+        instanceFriendRequest = true;
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_SENDER, userId);
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_RECIPIENT, anotherUserId);
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_ACTION, "REMOVE");
+        Task<Void> task1 = getUserProfileDocument(userId).update(DOCUMENT_USER_FRIENDS, FieldValue.arrayRemove(anotherUserId));
+        Task<Void> task2 = getUserProfileOutcomeRequestDocument(userId, anotherUserId).set(requestBody);
+        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
+        allTasks.addOnSuccessListener(querySnapshots -> {
+            instanceFriendRequest = false;
+            setUserInteractEventCallback.onResponse(true);
+        }).addOnFailureListener(e -> {
+            instanceFriendRequest = false;
+            setUserInteractEventCallback.onResponse(false);
+        });
+    }
+
+    public void acceptFriendRequest(SetUserInteractEventCallback setUserInteractEventCallback,
+                                    String userId, String anotherUserId) {
+        if (instanceFriendRequest) {
+            return;
+        }
+        instanceFriendRequest = true;
+        Task<Void> task1 = getUserProfileDocument(userId).update(DOCUMENT_USER_FRIENDS, FieldValue.arrayUnion(anotherUserId));
+        Task<Void> task2 = getUserProfileIncomeRequestDocument(userId, anotherUserId).delete();
+        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
+        allTasks.addOnSuccessListener(querySnapshots -> {
+            instanceFriendRequest = false;
+            setUserInteractEventCallback.onResponse(true);
+        }).addOnFailureListener(e -> {
+            instanceFriendRequest = false;
+            setUserInteractEventCallback.onResponse(false);
+        });
+    }
+
+    public void declineFriendRequest(SetUserInteractEventCallback setUserInteractEventCallback,
+                                    String userId, String anotherUserId) {
+        if (instanceFriendRequest) {
+            return;
+        }
+        instanceFriendRequest = true;
+        Task<Void> task1 = getUserProfileDocument(userId).update(DOCUMENT_USER_FRIENDS, FieldValue.arrayRemove(anotherUserId));
+        Task<Void> task2 = getUserProfileIncomeRequestDocument(userId, anotherUserId).delete();
+        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
+        allTasks.addOnSuccessListener(querySnapshots -> {
+            instanceFriendRequest = false;
+            setUserInteractEventCallback.onResponse(true);
+        }).addOnFailureListener(e -> {
+            instanceFriendRequest = false;
+            setUserInteractEventCallback.onResponse(false);
+        });
+    }
+
+    public void setUserToBlocked(SetUserInteractEventCallback setUserInteractEventCallback, String userId, String userBlockedId) {
+        if (instanceBlockUser) {
+            return;
+        }
+        instanceBlockUser = true;
+        Task<Void> task = getUserProfileDocument(userId).update(DOCUMENT_USER_BLOCKED_USERS, FieldValue.arrayUnion(userBlockedId));
+        task.addOnSuccessListener(querySnapshots -> {
+            instanceBlockUser = false;
+            setUserInteractEventCallback.onResponse(true);
+        }).addOnFailureListener(e -> {
+            instanceBlockUser = false;
+            setUserInteractEventCallback.onResponse(false);
+        });
+    }
+
+    public void removeUserFromBlocked(SetUserInteractEventCallback setUserInteractEventCallback, String userId, String userBlockedId) {
+        if (instanceBlockUser) {
+            return;
+        }
+        instanceBlockUser = true;
+        Task<Void> task = getUserProfileDocument(userId).update(DOCUMENT_USER_BLOCKED_USERS, FieldValue.arrayRemove(userBlockedId));
+        task.addOnSuccessListener(querySnapshots -> {
+            instanceBlockUser = false;
+            setUserInteractEventCallback.onResponse(true);
+        }).addOnFailureListener(e -> {
+            instanceBlockUser = false;
+            setUserInteractEventCallback.onResponse(false);
+        });
+    }
+
     private EventModel convertEventDocumentToModel(Map<String, Object> map) {
         return new EventModel(map.get(DOCUMENT_EVENT_HOST_ID).toString(), map.get(DOCUMENT_EVENT_HOST_NAME).toString(),
                 convertObjectToString(map.get(DOCUMENT_EVENT_HOST_PROFILE_IMG)), map.get(DOCUMENT_EVENT_ID).toString(),
@@ -469,35 +599,37 @@ public class FirebaseFirestoreService {
         return new MainUserProfileModel(map.get(DOCUMENT_USER_ID).toString(), convertObjectToString(map.get(DOCUMENT_USER_EMAIL)),
                 convertObjectToString(map.get(DOCUMENT_USER_PHONE)), map.get(DOCUMENT_USER_FULL_NAME).toString(),
                 convertObjectToString(map.get(DOCUMENT_USER_PROFILE_IMG)),
-                convertUserProfileEvents((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_EVENTS)),
-                convertUserProfileEvents((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
-                convertUserProfileEvents((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS)),
-                convertUserProfileEvents((ArrayList<Object[]>) map.get(DOCUMENT_USER_LIKED_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_LIKED_EVENTS)),
                 convertObjectToString(map.get(DOCUMENT_USER_LINK_TELEGRAM)),
                 convertObjectToString(map.get(DOCUMENT_USER_LINK_TIKTOK)),
                 convertObjectToString(map.get(DOCUMENT_USER_LINK_INSTAGRAM)),
-                convertObjectToString(map.get(DOCUMENT_USER_LINK_FACEBOOK)));
+                convertObjectToString(map.get(DOCUMENT_USER_LINK_FACEBOOK)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_FRIENDS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_BLOCKED_USERS)));
     }
 
     private CommonUserModel convertCommonUserProfileDocumentToModel(Map<String, Object> map) {
         return new CommonUserModel(map.get(DOCUMENT_USER_ID).toString(), map.get(DOCUMENT_USER_FULL_NAME).toString(),
                 convertObjectToString(map.get(DOCUMENT_USER_PROFILE_IMG)),
-                convertUserProfileEvents((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_EVENTS)),
-                convertUserProfileEvents((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
-                convertUserProfileEvents((ArrayList<Object[]>) map.get(DOCUMENT_USER_LIKED_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_LIKED_EVENTS)),
                 convertObjectToString(map.get(DOCUMENT_USER_LINK_TELEGRAM)),
                 convertObjectToString(map.get(DOCUMENT_USER_LINK_TIKTOK)),
                 convertObjectToString(map.get(DOCUMENT_USER_LINK_INSTAGRAM)),
                 convertObjectToString(map.get(DOCUMENT_USER_LINK_FACEBOOK)));
     }
 
-    private List<String> convertUserProfileEvents(ArrayList<Object[]> userEventsObjects) {
-        List<String> userEvents = new ArrayList<>();
-        if (userEventsObjects != null) {
-            for (Object object : userEventsObjects) {
-                userEvents.add(object.toString());
+    private List<String> convertToStringList(ArrayList<Object[]> objectList) {
+        List<String> stringList = new ArrayList<>();
+        if (objectList != null) {
+            for (Object object : objectList) {
+                stringList.add(object.toString());
             }
         }
-        return userEvents;
+        return stringList;
     }
 }

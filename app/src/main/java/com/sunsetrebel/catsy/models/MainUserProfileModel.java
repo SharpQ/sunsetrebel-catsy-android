@@ -16,13 +16,16 @@ public class MainUserProfileModel {
     private String linkTikTok;
     private String linkInstagram;
     private String linkFacebook;
+    private List<String> userFriends;
+    private List<String> blockedUsers;
 
     public MainUserProfileModel() {
     }
 
     public MainUserProfileModel(String userId, String userEmail, String userPhone, String userFullName, String userProfileImg,
                                 List<String> joinedEvents, List<String> hostedPublicEvents, List<String> hostedPrivateEvents,
-                                List<String> likedEvents, String linkTelegram, String linkTikTok, String linkInstagram, String linkFacebook) {
+                                List<String> likedEvents, String linkTelegram, String linkTikTok, String linkInstagram, String linkFacebook,
+                                List<String> userFriends, List<String> blockedUsers) {
         this.userId = userId;
         this.userEmail = userEmail;
         this.userPhone = userPhone;
@@ -36,6 +39,8 @@ public class MainUserProfileModel {
         this.linkTikTok = linkTikTok;
         this.linkInstagram = linkInstagram;
         this.linkFacebook = linkFacebook;
+        this.userFriends = userFriends;
+        this.blockedUsers = blockedUsers;
     }
 
     public String getUserId() { return userId; }
@@ -93,4 +98,12 @@ public class MainUserProfileModel {
     public String getLinkFacebook() { return linkFacebook; }
 
     public void setLinkFacebook(String linkFacebook) { this.linkFacebook = linkFacebook; }
+
+    public List<String> getUserFriends() { return userFriends; }
+
+    public void setUserFriends(List<String> userFriends) { this.userFriends = userFriends; }
+
+    public List<String> getBlockedUsers() { return blockedUsers; }
+
+    public void setBlockedUsers(List<String> blockedUsers) { this.blockedUsers = blockedUsers; }
 }
