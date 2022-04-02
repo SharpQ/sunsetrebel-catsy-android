@@ -49,6 +49,7 @@ public class FirebaseFirestoreService {
     private final String COLLECTION_USER_OUTCOME_REQUESTS = "outcomeRequests";
     private final String COLLECTION_USER_INCOME_REQUESTS = "incomeRequests";
     //DOCUMENTS PROPERTIES NAMES
+    //PROPERTIES USER PROFILE
     private final String DOCUMENT_USER_ID = "userId";
     private final String DOCUMENT_USER_FULL_NAME = "userFullName";
     private final String DOCUMENT_USER_EMAIL = "userEmail";
@@ -64,6 +65,7 @@ public class FirebaseFirestoreService {
     private final String DOCUMENT_USER_LINK_TIKTOK = "userLinkTikTok";
     private final String DOCUMENT_USER_LINK_INSTAGRAM = "userLinkInstagram";
     private final String DOCUMENT_USER_LINK_FACEBOOK = "userLinkFacebook";
+    //PROPERTIES EVENT
     private final String DOCUMENT_EVENT_ID = "eventId";
     private final String DOCUMENT_EVENT_TITLE = "eventTitle";
     private final String DOCUMENT_EVENT_LOCATION = "eventLocation";
@@ -84,6 +86,7 @@ public class FirebaseFirestoreService {
     private final String DOCUMENT_EVENT_CREATE_TS = "createTS";
     private final String DOCUMENT_EVENT_UPDATE_TS = "updateTS";
     private final String DOCUMENT_EVENT_INVITED_USERS = "invitedUsers";
+    //PROPERTIES FRIEND REQUEST
     private final String DOCUMENT_FRIEND_REQUEST_SENDER = "senderId";
     private final String DOCUMENT_FRIEND_REQUEST_RECIPIENT = "recipientId";
     private final String DOCUMENT_FRIEND_REQUEST_ACTION = "action";

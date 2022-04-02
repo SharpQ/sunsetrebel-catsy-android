@@ -6,6 +6,7 @@ import com.google.firebase.Timestamp;
 import com.sunsetrebel.catsy.enums.AccessType;
 import com.sunsetrebel.catsy.enums.EventThemes;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class EventModel {
     private Integer eventMaxAge;
     private Integer eventParticipants;
     private List<CommonUserModel> joinedUsersList;
+    private List<CommonUserModel> joinedUsersListWithoutHost;
+    private CommonUserModel hostProfile;
     private Integer eventMaxPerson;
     private String eventAvatar;
     private List<EventThemes> eventThemes;
@@ -147,7 +150,37 @@ public class EventModel {
 
     public List<CommonUserModel> getJoinedUsersList() { return joinedUsersList; }
 
-    public void setJoinedUsersList(List<CommonUserModel> joinedUsersList) { this.joinedUsersList = joinedUsersList; }
+    public void setJoinedUsersList(List<CommonUserModel> joinedUsersList) {
+        this.joinedUsersList = joinedUsersList;
+        setJoinedUsersListWithoutHost(joinedUsersList);
+    }
+
+    public CommonUserModel getHostProfile() {
+        if (this.joinedUsersList != null) {
+            for (CommonUserModel user : this.joinedUsersList) {
+                if (user.getUserId().equals(getHostId())) {
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<CommonUserModel> getJoinedUsersListWithoutHost() {
+       return joinedUsersListWithoutHost;
+    }
+
+    public void setJoinedUsersListWithoutHost(List<CommonUserModel> joinedUsersList) {
+        if (joinedUsersList != null) {
+            List<CommonUserModel> joinedUsersListWithoutHost = new ArrayList<>();
+            for (CommonUserModel user : joinedUsersList) {
+                if (!user.getUserId().equals(getHostId())) {
+                    joinedUsersListWithoutHost.add(user);
+                }
+            }
+            this.joinedUsersListWithoutHost = joinedUsersListWithoutHost;
+        }
+    }
 
     public Integer getEventMaxPerson() { return eventMaxPerson; }
 

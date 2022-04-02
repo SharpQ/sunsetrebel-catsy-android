@@ -55,7 +55,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private boolean isUserEventHost;
     private int imageSizeUsersProfile;
     private int imageMarginUsersProfile;
-    private final int maxUsersToDisplayInLinear = 3;
+    private final int maxUsersToDisplayInLinear = 5;
     private EventThemesUtil eventThemesUtil;
 
     public EventListDetailedFragment() {
@@ -159,7 +159,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             } else if (!isUserEventHost && !isUserJoinedToEvent) {
                 setJoinButtonAsGuest();
             }
-            setEventUsers(value);
+            setEventUsers(eventModel.getJoinedUsersListWithoutHost());
         }, eventModel);
 
         joinButton.setOnClickListener(v12 -> {
@@ -189,6 +189,23 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
                 Log.d("DEBUG", "Failed to like event: " + eventModel.getEventId());
             }
         }, eventModel.getEventId()));
+
+        tvEventParticipants.setOnClickListener(v14 -> {
+            int popupHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 500, getContext().getResources().getDisplayMetrics());
+                PopupService.showPopup(new PopupService.PopupBuilder(this,
+                        eventModel.getJoinedUsersListWithoutHost(), PopupType.EVENT_PARTICIPANTS,
+                        ViewGroup.LayoutParams.MATCH_PARENT, popupHeight)
+                        .animationStyle(R.style.popup_window_animation)
+                        .setFocusable(true)
+                        .setForeground().build(), this, Gravity.CENTER);
+        });
+
+        ivHostAvatar.setOnClickListener(v15 -> {
+            PopupService.showPopup(
+                    new PopupService.PopupBuilder(this, eventModel.getHostProfile(),
+                            PopupType.USER_EVENT_DETAILED, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                            .animationStyle(R.style.popup_window_animation).setFocusable(true).setForeground().build(), this, Gravity.CENTER);
+        });
 
         eventThemesUtil.setEventThemesUI(eventModel.getEventThemes(), this, linearLayoutThemes, null);
         return v;
@@ -227,8 +244,9 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         linearLayoutParticipants.addView(imageButton);
         ImageUtils.loadRoundedImageView(getContext(), userProfile.getUserProfileImg(), imageButton, R.drawable.im_cat_hearts);
 
-        imageButton.setOnClickListener(v -> PopupService.showPopup(new PopupService.PopupBuilder(this, userProfile,
-                PopupType.USER_EVENT_DETAILED)
+        imageButton.setOnClickListener(v -> PopupService.showPopup(
+                new PopupService.PopupBuilder(this, userProfile,
+                        PopupType.USER_EVENT_DETAILED, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                 .animationStyle(R.style.popup_window_animation).setFocusable(true).setForeground().build(), this, Gravity.CENTER));
     }
 

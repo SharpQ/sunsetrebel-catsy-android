@@ -128,9 +128,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
         mMap.setOnMarkerClickListener(marker -> {
             EventModel event = (EventModel) marker.getTag();
             selectedEvent = event;
-            PopupService.showPopup(new PopupService.PopupBuilder(this, event, PopupType.EVENT_MAPS)
-                    .width(width - (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
-                            getContext().getResources().getDisplayMetrics()))
+            PopupService.showPopup(new PopupService.PopupBuilder(this, event,
+                    PopupType.EVENT_MAPS, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
                     .animationStyle(R.style.popup_window_animation)
                     .setFocusable(false)
                     .build(), this, Gravity.TOP);

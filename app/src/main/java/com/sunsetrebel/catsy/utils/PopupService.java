@@ -14,8 +14,12 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.adapters.EventListAdapter;
+import com.sunsetrebel.catsy.adapters.PopupEventParticipantsAdapter;
 import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
@@ -24,6 +28,7 @@ import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
 
 import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.Locale;
 
 public class PopupService {
@@ -50,7 +55,8 @@ public class PopupService {
         private View popupView;
 
 
-        public PopupBuilder(Fragment fragment, Object dataModel, PopupType popupType) {
+        public PopupBuilder(Fragment fragment, Object dataModel, PopupType popupType, int width,
+                            int height) {
             this.fragment = fragment;
             this.simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
             this.eventThemesUtil = EventThemesUtil.getInstance(fragment.getContext().getResources());
@@ -62,14 +68,16 @@ public class PopupService {
                 case USER_EVENT_DETAILED:
                     popupView = setupViewUserEventDetailed(fragment, (CommonUserModel) dataModel);
                     break;
+                case EVENT_PARTICIPANTS:
+                    popupView = setupViewEventParticipants(fragment, (List<CommonUserModel>) dataModel);
+                    break;
                 default:
                     popupView = null;
                     break;
             }
-
             this.infoPopup = new PopupWindow(popupView,
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
+                    width,
+                    height);
         }
 
         public PopupBuilder width(int width) {
@@ -191,6 +199,8 @@ public class PopupService {
                         CustomToastUtil.showSuccessToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_blocked_success).toString() + userProfile.getUserId());
                         Log.d("DEBUG", "Success block user: " + userProfile.getUserId());
                     } else {
+                        btnBlockUser.setEnabled(true);
+                        btnBlockUser.setVisibility(View.VISIBLE);
                         CustomToastUtil.showFailToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_blocked_fail).toString() + userProfile.getUserId());
                         Log.d("DEBUG", "Fail block user: " + userProfile.getUserId());
                     }
@@ -216,6 +226,15 @@ public class PopupService {
                 setSocialImageButton(R.drawable.im_telegram_link_profile, userProfile.getLinkTelegram(), ExternalSocialsUtil.telegramPackageName,
                         ExternalSocialsUtil.defaultTelegramWeb, ExternalSocialsUtil.defaultTelegramMobile, fragment, linearUserSocials);
             }
+            return popupView;
+        }
+
+        private View setupViewEventParticipants(Fragment fragment, List<CommonUserModel> userProfiles) {
+            View popupView = LayoutInflater.from(fragment.getContext()).inflate(R.layout.popup_event_participants, null, false);
+            RecyclerView recyclerParticipants = popupView.findViewById(R.id.recycler_event_participants);
+            recyclerParticipants.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+            PopupEventParticipantsAdapter participantsAdapter = new PopupEventParticipantsAdapter(fragment, userProfiles);
+            recyclerParticipants.setAdapter(participantsAdapter);
             return popupView;
         }
 

@@ -98,7 +98,8 @@ public class EventListViewModel extends ViewModel {
         return mainUserProfileModel.getUserId().equals(event.getHostId());
     }
 
-    public void getEventParticipants(GetEventParticipantsCallback getEventParticipantsCallback, EventModel eventModel) {
+    public void getEventParticipants(GetEventParticipantsCallback getEventParticipantsCallback,
+                                     EventModel eventModel) {
         firebaseFirestoreService.getEventParticipants(value -> {
             eventModel.setJoinedUsersList(value);
             getEventParticipantsCallback.onResponse(value);

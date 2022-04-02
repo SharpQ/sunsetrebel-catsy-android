@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.EventListAdapter;
-import com.sunsetrebel.catsy.repositories.UserProfileService;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
 
