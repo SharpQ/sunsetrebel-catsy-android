@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -66,6 +67,14 @@ public class EventListFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true
+        ) {
+            @Override
+            public void handleOnBackPressed() {
 
             }
         });
