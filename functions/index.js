@@ -9,16 +9,20 @@ exports.publicEventsUsersWriteListener = functions.firestore
 	const eventId = context.params.eventId;
     const docRef = admin.firestore().collection('publicEvents').doc(eventId);
 
-    if (!change.before.exists) {
-      // New document Created : add one to count
-      return docRef.update({ eventParticipants: fieldValue.increment(1) });
-    } else if (change.before.exists && change.after.exists) {
-      // Updating existing document : Do nothing
-    } else if (!change.after.exists) {
-      // Deleting document : subtract one from count
-      return docRef.update({ eventParticipants: fieldValue.increment(-1) });
-    }
-
+	admin.firestore().collection('publicEvents').doc(eventId).get().then(function(doc) {
+		if (doc.exists) {
+			 if (!change.before.exists) {
+			  // New document Created : add one to count
+			  return docRef.update({ eventParticipants: fieldValue.increment(1) });
+			} else if (change.before.exists && change.after.exists) {
+			  // Updating existing document : Do nothing
+			} else if (!change.after.exists) {
+			  // Deleting document : subtract one from count
+			  return docRef.update({ eventParticipants: fieldValue.increment(-1) });
+			}
+		}
+	});
+   
     return;
   });
 
@@ -28,15 +32,19 @@ exports.privateEventsUsersWriteListener = functions.firestore
 	const eventId = context.params.eventId;
     const docRef = admin.firestore().collection('privateEvents').doc(eventId);
 
-    if (!change.before.exists) {
-      // New document Created : add one to count
-      return docRef.update({ eventParticipants: fieldValue.increment(1) });
-    } else if (change.before.exists && change.after.exists) {
-      // Updating existing document : Do nothing
-    } else if (!change.after.exists) {
-      // Deleting document : subtract one from count
-      return docRef.update({ eventParticipants: fieldValue.increment(-1) });
-    }
+    admin.firestore().collection('privateEvents').doc(eventId).get().then(function(doc) {
+		if (doc.exists) {
+			 if (!change.before.exists) {
+			  // New document Created : add one to count
+			  return docRef.update({ eventParticipants: fieldValue.increment(1) });
+			} else if (change.before.exists && change.after.exists) {
+			  // Updating existing document : Do nothing
+			} else if (!change.after.exists) {
+			  // Deleting document : subtract one from count
+			  return docRef.update({ eventParticipants: fieldValue.increment(-1) });
+			}
+		}
+	});
 
     return;
   });

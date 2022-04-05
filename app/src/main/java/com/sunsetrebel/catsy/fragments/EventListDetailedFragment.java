@@ -35,6 +35,8 @@ import com.sunsetrebel.catsy.utils.ImageUtils;
 import com.sunsetrebel.catsy.utils.PopupService;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -49,7 +51,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private AppCompatButton joinButton;
     private ImageView ivHostAvatar, ivEventAvatar;
     private TextView tvEventTitle, tvHostName, tvEventStartTime, tvEventEndTime, tvEventDescription,
-            tvEventParticipants, tvAgeLimit;
+            tvEventParticipants, tvAgeLimit, tvMaxMembersReached;
     private LinearLayout linearLayoutThemes, linearLayoutParticipants;
     private boolean isUserJoinedToEvent;
     private boolean isUserEventHost;
@@ -95,8 +97,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         tvAgeLimit = v.findViewById(R.id.tv_event_detailed_age_limit_value);
         linearLayoutThemes = v.findViewById(R.id.ll_event_detailed_tags);
         linearLayoutParticipants = v.findViewById(R.id.ll_event_users);
-
-        backButton.setOnClickListener(v1 -> getParentFragmentManager().popBackStack());
+        tvMaxMembersReached = v.findViewById(R.id.tv_no_free_slot);
 
         //Set tv joined users
         String usersCountValue = String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants());
@@ -127,6 +128,9 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             eventAgeLimitStr = eventAgeLimitStr.concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_less).toString())
                     .concat(eventMaxAgeStr).concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_years).toString());
         }
+
+        //UI setup
+        backButton.setOnClickListener(v1 -> getParentFragmentManager().popBackStack());
         //Set event avatar
         ImageUtils.loadImageView(getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
         //Set host avatar
@@ -163,6 +167,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         }, eventModel);
 
         joinButton.setOnClickListener(v12 -> {
+            joinButton.setEnabled(false);
             if (isUserJoinedToEvent) {
                 eventListViewModel.leaveEvent(isResponseSuccessful -> {
                     if (isResponseSuccessful) {
@@ -192,12 +197,12 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
 
         tvEventParticipants.setOnClickListener(v14 -> {
             int popupHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 500, getContext().getResources().getDisplayMetrics());
-                PopupService.showPopup(new PopupService.PopupBuilder(this,
-                        eventModel.getJoinedUsersListWithoutHost(), PopupType.EVENT_PARTICIPANTS,
-                        ViewGroup.LayoutParams.MATCH_PARENT, popupHeight)
-                        .animationStyle(R.style.popup_window_animation)
-                        .setFocusable(true)
-                        .setForeground().build(), this, Gravity.CENTER);
+            PopupService.showPopup(new PopupService.PopupBuilder(this,
+                    eventModel.getJoinedUsersListWithoutHost(), PopupType.EVENT_PARTICIPANTS,
+                    ViewGroup.LayoutParams.MATCH_PARENT, popupHeight)
+                    .animationStyle(R.style.popup_window_animation)
+                    .setFocusable(true)
+                    .setForeground().build(), this, Gravity.CENTER);
         });
 
         ivHostAvatar.setOnClickListener(v15 -> {
@@ -250,6 +255,21 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
                 .animationStyle(R.style.popup_window_animation).setFocusable(true).setForeground().build(), this, Gravity.CENTER));
     }
 
+    private void checkFreeSlotJoinBtn() {
+        Integer eventMaxPersonInt = eventModel.getEventMaxPerson();
+        if (eventMaxPersonInt != null && eventModel.getEventParticipants() >= eventMaxPersonInt) {
+            joinButton.setVisibility(View.INVISIBLE);
+            joinButton.setEnabled(false);
+            tvMaxMembersReached.setVisibility(View.VISIBLE);
+            tvMaxMembersReached.setEnabled(true);
+        } else if (eventMaxPersonInt == null || (eventMaxPersonInt != null && eventModel.getEventParticipants() < eventMaxPersonInt)) {
+            joinButton.setVisibility(View.VISIBLE);
+            joinButton.setEnabled(true);
+            tvMaxMembersReached.setVisibility(View.INVISIBLE);
+            tvMaxMembersReached.setEnabled(false);
+        }
+    }
+
     private void setJoinButtonAsHost() {
         isUserJoinedToEvent = true;
         joinButton.setEnabled(false);
@@ -266,14 +286,13 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
 
     private void setJoinButtonAsGuest() {
         isUserJoinedToEvent = false;
-        joinButton.setEnabled(true);
-        joinButton.setVisibility(View.VISIBLE);
+        checkFreeSlotJoinBtn();
         joinButton.setText(getContext().getString(R.string.event_detailed_join_button));
         joinButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.primaryColor)));
     }
 
     @Override
-    public void onMapReady(GoogleMap googleMap) {
+    public void onMapReady(@NotNull GoogleMap googleMap) {
         mMap = googleMap;
         GoogleMapService.setupMap(googleMap, getContext(), false, false, EventListDetailedFragment.this);
         GoogleMapService.clearAndSetMarker(mMap, eventModel.getEventGeoLocation(), 12, eventModel.getEventLocation(), getContext());

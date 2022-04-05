@@ -71,13 +71,13 @@ public class EventListFragment extends Fragment {
             }
         });
 
-        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true
-        ) {
-            @Override
-            public void handleOnBackPressed() {
-
-            }
-        });
+//        requireActivity().getOnBackPressedDispatcher().addCallback(new OnBackPressedCallback(true
+//        ) {
+//            @Override
+//            public void handleOnBackPressed() {
+//
+//            }
+//        });
 
         return v;
     }

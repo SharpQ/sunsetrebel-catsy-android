@@ -22,7 +22,7 @@
         app:mt_navIconEnabled="false"
         app:mt_placeholder="@string/new_event_maps_search_bar_placeholder"
         app:mt_roundedSearchBarEnabled="false"
-        app:mt_searchBarColor="@color/greyBackground"
+        app:mt_searchBarColor="@color/black70Transparent"
         app:mt_speechMode="false"
         android:focusable="auto"
         android:gravity="center|fill_horizontal"

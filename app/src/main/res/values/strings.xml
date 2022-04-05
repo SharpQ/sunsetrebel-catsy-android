@@ -25,7 +25,6 @@
     <string name="verify_email_description">Verification link sent to:\n</string>
     <string name="login_button_login">Login</string>
     <string name="login_button_forgot_password">Forgot password</string>
-    <string name="main_button_logout">Logout, BITCH!</string>
     <string name="text_slide_1">Always be on the wave of fun around</string>
     <string name="text_slide_2">Get together with those who share your interests</string>
     <string name="text_slide_3">Have an amazing \n experience!</string>
@@ -78,6 +77,7 @@
     <string name="event_detailed_join_fail">Failed to join event:\u0020</string>
     <string name="event_detailed_leave_success">You left event:\u0020</string>
     <string name="event_detailed_leave_fail">Failed to leave event:\u0020</string>
+    <string name="event_detailed_no_free_slot">Maximum limit of members reached!</string>
     <string name="event_liked_success">You liked event:\u0020</string>
     <string name="event_liked_fail">Failed to like event:\u0020</string>
     <string name="user_blocked_success">User blocked:\u0020</string>
