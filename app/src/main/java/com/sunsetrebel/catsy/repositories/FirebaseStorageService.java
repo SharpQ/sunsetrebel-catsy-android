@@ -1,15 +1,10 @@
 package com.sunsetrebel.catsy.repositories;
 
 import android.net.Uri;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.sunsetrebel.catsy.models.EventModel;
 
 import java.util.UUID;
 
@@ -36,20 +31,20 @@ public class FirebaseStorageService {
         return fStorage;
     }
 
-    public interface GetAvatarStorageReference {
+    public interface LoadEventAvatarCallback {
         void onResponse(String downloadUrl);
     }
 
-    public void getAvatarStorageReference(GetAvatarStorageReference getAvatarStorageReference, String userId, Uri uri) {
+    public void loadEventAvatar(LoadEventAvatarCallback loadEventAvatarCallback, EventModel eventModel, Uri uri) {
         fStorage = getFirebaseStorageClient();
-        StorageReference storageReference = fStorage.getReference("events/" + userId + "/" + UUID.randomUUID().toString() + ".jpg");
+        StorageReference storageReference = fStorage.getReference("userProfiles/" + eventModel.getHostId() + "/" + UUID.randomUUID().toString() + ".jpg");
         storageReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
             storageReference.getDownloadUrl().addOnSuccessListener(uri1 -> {
                 String downloadUrl = uri1.toString();
-                getAvatarStorageReference.onResponse(downloadUrl);
+                loadEventAvatarCallback.onResponse(downloadUrl);
             });
-            storageReference.getDownloadUrl().addOnFailureListener(e -> getAvatarStorageReference.onResponse(null));
+            storageReference.getDownloadUrl().addOnFailureListener(e -> loadEventAvatarCallback.onResponse(null));
         });
-        storageReference.putFile(uri).addOnFailureListener(e -> getAvatarStorageReference.onResponse(null));
+        storageReference.putFile(uri).addOnFailureListener(e -> loadEventAvatarCallback.onResponse(null));
     }
 }

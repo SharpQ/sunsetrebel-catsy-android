@@ -19,7 +19,7 @@ import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.enums.EventThemes;
 
 import com.google.firebase.Timestamp;
-import java.util.ArrayList;
+
 import java.util.Date;
 import java.util.List;
 
@@ -66,10 +66,10 @@ public class NewEventViewModel extends ViewModel {
         eventModel.setHostName(mainUserProfileModel.getUserFullName());
         eventModel.setHostProfileImg(mainUserProfileModel.getUserProfileImg());
         if (eventAvatarURI != null) {
-            firebaseStorageService.getAvatarStorageReference(downloadUrl -> {
+            firebaseStorageService.loadEventAvatar(downloadUrl -> {
                 eventModel.setEventAvatar(downloadUrl);
                 createEvent(context);
-            }, fAuth.getUid(), eventAvatarURI);
+            }, eventModel, eventAvatarURI);
         } else {
             createEvent(context);
         }
