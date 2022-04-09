@@ -81,4 +81,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.8.0' //for settings images
     implementation 'com.github.GrenderG:Toasty:1.5.0' //toast notifications
     implementation 'com.github.jd-alexander:library:1.1.0' //draw route on google map
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.+' //image crop
 }

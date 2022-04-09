@@ -25,8 +25,12 @@ import com.google.android.material.textview.MaterialTextView;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.PermissionUtils;
 import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
+
+import static android.app.Activity.RESULT_OK;
 
 
 public class NewEventFinalFragment extends Fragment {
@@ -95,14 +99,10 @@ public class NewEventFinalFragment extends Fragment {
         });
 
         mAvatarImageView.setOnClickListener(v17 -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (PermissionUtils.isGalleryPermissionEnabled(getContext())) {
-                    pickImageFromGallery();
-                } else {
-                    PermissionUtils.requestGalleryPermissionsFragment(NewEventFinalFragment.this);
-                }
-            } else {
+            if (PermissionUtils.isGalleryPermissionEnabled(getContext())) {
                 pickImageFromGallery();
+            } else {
+                PermissionUtils.requestGalleryPermissionsFragment(NewEventFinalFragment.this);
             }
         });
         return v;
@@ -113,16 +113,33 @@ public class NewEventFinalFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == IMAGE_PICK_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                eventAvatarURI = data.getData();
-                mAvatarImageView.setImageURI(data.getData());
-                mAddImageLabel.setVisibility(View.INVISIBLE);
-            }
+        switch(requestCode) {
+            case IMAGE_PICK_CODE: //When image picked
+                if (resultCode == RESULT_OK && data != null) {
+                    Uri selectedImage = data.getData();
+                    CropImage.activity(selectedImage)
+                            .setGuidelines(CropImageView.Guidelines.ON)
+                            .setMinCropResultSize(100, 100)
+                            .setMaxCropResultSize(2000, 2000)
+                            .setAspectRatio(1, 1)
+                            .start(getContext(), this);
+                }
+                break;
+            case CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE: //When image is cropped
+                CropImage.ActivityResult result = CropImage.getActivityResult(data);
+                if (resultCode == RESULT_OK) {
+                    Uri resultUri = result.getUri();
+                    eventAvatarURI = resultUri;
+                    mAvatarImageView.setImageURI(resultUri);
+                    mAddImageLabel.setVisibility(View.INVISIBLE);
+                } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                    Exception error = result.getError();
+                    Log.d("DEBUG", error.toString());
+                }
+                break;
         }
     }
 
@@ -138,8 +155,7 @@ public class NewEventFinalFragment extends Fragment {
     }
 
     private void pickImageFromGallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType("image/*");
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, IMAGE_PICK_CODE);
     }
 }

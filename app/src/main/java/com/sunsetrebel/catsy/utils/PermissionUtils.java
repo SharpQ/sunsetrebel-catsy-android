@@ -28,11 +28,7 @@ public class PermissionUtils extends Fragment {
     }
 
     public static boolean isGalleryPermissionEnabled(android.content.Context context) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
     }
 
     public static void requestLocationPermissions(Boolean isActivity, Object screen) {
