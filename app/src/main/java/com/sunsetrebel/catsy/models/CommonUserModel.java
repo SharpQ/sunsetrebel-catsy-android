@@ -6,7 +6,7 @@ public class CommonUserModel {
     private String userId;
     private String userFullName;
     private String userProfileImg;
-    private List<String> joinedEvents;
+    private List<String> joinedPublicEvents;
     private List<String> hostedPublicEvents;
     private List<String> likedEvents;
     private String linkTelegram;
@@ -18,13 +18,13 @@ public class CommonUserModel {
     }
 
     public CommonUserModel(String userId, String userFullName, String userProfileImg,
-                           List<String> joinedEvents, List<String> hostedPublicEvents,
+                           List<String> joinedPublicEvents, List<String> hostedPublicEvents,
                            List<String> likedEvents, String linkTelegram, String linkTikTok,
                            String linkInstagram, String linkFacebook) {
         this.userId = userId;
         this.userFullName = userFullName;
         this.userProfileImg = userProfileImg;
-        this.joinedEvents = joinedEvents;
+        this.joinedPublicEvents = joinedPublicEvents;
         this.hostedPublicEvents = hostedPublicEvents;
         this.likedEvents = likedEvents;
         this.linkTelegram = linkTelegram;
@@ -45,9 +45,9 @@ public class CommonUserModel {
 
     public void setUserProfileImg(String userProfileImg) { this.userProfileImg = userProfileImg; }
 
-    public List<String> getJoinedEvents() { return joinedEvents; }
+    public List<String> getJoinedPublicEvents() { return joinedPublicEvents; }
 
-    public void setJoinedEvents(List<String> joinedEvents) { this.joinedEvents = joinedEvents; }
+    public void setJoinedPublicEvents(List<String> joinedPublicEvents) { this.joinedPublicEvents = joinedPublicEvents; }
 
     public List<String> getHostedPublicEvents() { return hostedPublicEvents; }
 

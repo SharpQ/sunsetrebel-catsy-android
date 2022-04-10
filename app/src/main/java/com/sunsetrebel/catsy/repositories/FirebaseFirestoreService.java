@@ -55,7 +55,8 @@ public class FirebaseFirestoreService {
     private final String DOCUMENT_USER_EMAIL = "userEmail";
     private final String DOCUMENT_USER_PHONE = "userPhone";
     private final String DOCUMENT_USER_PROFILE_IMG = "userProfileImg";
-    private final String DOCUMENT_USER_JOINED_EVENTS = "joinedEvents";
+    private final String DOCUMENT_USER_JOINED_PUBLIC_EVENTS = "joinedPublicEvents";
+    private final String DOCUMENT_USER_JOINED_PRIVATE_EVENTS = "joinedPrivateEvents";
     private final String DOCUMENT_USER_LIKED_EVENTS = "likedEvents";
     private final String DOCUMENT_USER_HOSTED_PUBLIC_EVENTS = "hostedPublicEvents";
     private final String DOCUMENT_USER_HOSTED_PRIVATE_EVENTS = "hostedPrivateEvents";
@@ -189,7 +190,8 @@ public class FirebaseFirestoreService {
         user.put(DOCUMENT_USER_PROFILE_IMG, profileUrl);
         user.put(DOCUMENT_USER_FRIENDS, null);
         user.put(DOCUMENT_USER_BLOCKED_USERS, null);
-        user.put(DOCUMENT_USER_JOINED_EVENTS, null);
+        user.put(DOCUMENT_USER_JOINED_PUBLIC_EVENTS, null);
+        user.put(DOCUMENT_USER_JOINED_PRIVATE_EVENTS, null);
         user.put(DOCUMENT_USER_LIKED_EVENTS, null);
         user.put(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS, null);
         user.put(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS, null);
@@ -293,13 +295,14 @@ public class FirebaseFirestoreService {
         userMap.put(DOCUMENT_USER_LINK_TELEGRAM, userLinkTelegram);
         userMap.put(DOCUMENT_USER_LINK_TIKTOK, userLinkTikTok);
 
-        Task<Void> task1 = null;
+        Task<Void> task1 = null, task2 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
             task1 = getPublicEventJoinedUserDocument(eventId, userId).set(userMap);
+            task2 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_PUBLIC_EVENTS, FieldValue.arrayUnion(eventId));
         } else if (accessType == AccessType.PRIVATE) {
             task1 = getPrivateEventJoinedUserDocument(eventId, userId).set(userMap);
+            task2 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_PRIVATE_EVENTS, FieldValue.arrayUnion(eventId));
         }
-        Task<Void> task2 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayUnion(eventId));
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
         allTasks.addOnSuccessListener(querySnapshots -> joinUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
                 .addOnFailureListener(e -> joinUserReturnFail(context, eventTitle, setUserInteractEventCallback));
@@ -329,13 +332,14 @@ public class FirebaseFirestoreService {
         String userId = mainUserProfileModel.getUserId();
         AccessType accessType = event.getAccessType();
 
-        Task<Void> task1 = null;
+        Task<Void> task1 = null, task2 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
             task1 = getPublicEventJoinedUserDocument(eventId, userId).delete();
+            task2 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_PUBLIC_EVENTS, FieldValue.arrayRemove(eventId));
         } else if (accessType == AccessType.PRIVATE) {
             task1 = getPrivateEventJoinedUserDocument(eventId, userId).delete();
+            task2 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_PRIVATE_EVENTS, FieldValue.arrayRemove(eventId));
         }
-        Task<Void> task2 = getUserProfileDocument(userId).update(DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayRemove(eventId));
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
         allTasks.addOnSuccessListener(querySnapshots -> leaveUserReturnSuccess(context, eventTitle, setUserInteractEventCallback))
                 .addOnFailureListener(e -> leaveUserReturnFail(context, eventTitle, setUserInteractEventCallback));
@@ -602,7 +606,8 @@ public class FirebaseFirestoreService {
         return new MainUserProfileModel(map.get(DOCUMENT_USER_ID).toString(), convertObjectToString(map.get(DOCUMENT_USER_EMAIL)),
                 convertObjectToString(map.get(DOCUMENT_USER_PHONE)), map.get(DOCUMENT_USER_FULL_NAME).toString(),
                 convertObjectToString(map.get(DOCUMENT_USER_PROFILE_IMG)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_PUBLIC_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_PRIVATE_EVENTS)),
                 convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
                 convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS)),
                 convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_LIKED_EVENTS)),
@@ -617,7 +622,7 @@ public class FirebaseFirestoreService {
     private CommonUserModel convertCommonUserProfileDocumentToModel(Map<String, Object> map) {
         return new CommonUserModel(map.get(DOCUMENT_USER_ID).toString(), map.get(DOCUMENT_USER_FULL_NAME).toString(),
                 convertObjectToString(map.get(DOCUMENT_USER_PROFILE_IMG)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_PUBLIC_EVENTS)),
                 convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
                 convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_LIKED_EVENTS)),
                 convertObjectToString(map.get(DOCUMENT_USER_LINK_TELEGRAM)),

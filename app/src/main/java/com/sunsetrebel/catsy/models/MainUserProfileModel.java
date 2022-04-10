@@ -8,7 +8,8 @@ public class MainUserProfileModel {
     private String userPhone;
     private String userFullName;
     private String userProfileImg;
-    private List<String> joinedEvents;
+    private List<String> joinedPublicEvents;
+    private List<String> joinedPrivateEvents;
     private List<String> hostedPublicEvents;
     private List<String> hostedPrivateEvents;
     private List<String> likedEvents;
@@ -23,7 +24,8 @@ public class MainUserProfileModel {
     }
 
     public MainUserProfileModel(String userId, String userEmail, String userPhone, String userFullName, String userProfileImg,
-                                List<String> joinedEvents, List<String> hostedPublicEvents, List<String> hostedPrivateEvents,
+                                List<String> joinedPublicEvents, List<String> joinedPrivateEvents,
+                                List<String> hostedPublicEvents, List<String> hostedPrivateEvents,
                                 List<String> likedEvents, String linkTelegram, String linkTikTok, String linkInstagram, String linkFacebook,
                                 List<String> userFriends, List<String> blockedUsers) {
         this.userId = userId;
@@ -31,7 +33,8 @@ public class MainUserProfileModel {
         this.userPhone = userPhone;
         this.userFullName = userFullName;
         this.userProfileImg = userProfileImg;
-        this.joinedEvents = joinedEvents;
+        this.joinedPublicEvents = joinedPublicEvents;
+        this.joinedPrivateEvents = joinedPrivateEvents;
         this.hostedPublicEvents = hostedPublicEvents;
         this.hostedPrivateEvents = hostedPrivateEvents;
         this.likedEvents = likedEvents;
@@ -63,9 +66,13 @@ public class MainUserProfileModel {
 
     public void setUserProfileImg(String userProfileImg) { this.userProfileImg = userProfileImg; }
 
-    public List<String> getJoinedEvents() { return joinedEvents; }
+    public List<String> getJoinedPublicEvents() { return joinedPublicEvents; }
 
-    public void setJoinedEvents(List<String> joinedEvents) { this.joinedEvents = joinedEvents; }
+    public void setJoinedPublicEvents(List<String> joinedPublicEvents) { this.joinedPublicEvents = joinedPublicEvents; }
+
+    public List<String> getJoinedPrivateEvents() { return joinedPrivateEvents; }
+
+    public void setJoinedPrivateEvents(List<String> joinedPrivateEvents) { this.joinedPrivateEvents = joinedPrivateEvents; }
 
     public List<String> getHostedPublicEvents() { return hostedPublicEvents; }
 
