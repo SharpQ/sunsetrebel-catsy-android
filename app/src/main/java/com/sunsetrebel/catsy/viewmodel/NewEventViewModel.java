@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
@@ -37,6 +38,10 @@ public class NewEventViewModel extends ViewModel {
         eventModel = new EventModel();
         fAuth = firebaseAuthService.getFirebaseClient();
         mainUserProfileModel = userProfileService.getUserProfile();
+    }
+
+    public interface GetUserFriendsCallback {
+        void onResponse(List<CommonUserModel> value);
     }
 
     public void setNewEventPrimaryInfo(String eventTitle, AccessType accessType, Date eventStartTime,
@@ -91,12 +96,9 @@ public class NewEventViewModel extends ViewModel {
                 && eventModel.getEventGeoLocation() != null;
     }
 
-//    private List<Enum<?>> getConvertedEventThemes() {
-//        List<EventThemes> eventThemesBefore = eventModel.getEventThemes();
-//        List<Enum<?>> eventThemesAfter = new ArrayList<>();
-//        if (eventThemesBefore != null) {
-//            eventThemesAfter.addAll(eventThemesBefore);
-//        }
-//        return eventThemesAfter;
-//    }
+    public void getUserFriends(GetUserFriendsCallback getUserFriendsCallback) {
+        firebaseFirestoreService.getMultipleUsersProfile(value -> {
+            getUserFriendsCallback.onResponse(value);
+        }, mainUserProfileModel.getUserFriends());
+    }
 }

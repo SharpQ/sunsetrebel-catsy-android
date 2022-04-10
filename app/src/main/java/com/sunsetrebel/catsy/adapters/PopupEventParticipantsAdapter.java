@@ -65,7 +65,7 @@ public class PopupEventParticipantsAdapter extends RecyclerView.Adapter<PopupEve
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         ImageUtils.loadImageView(context, listOfUsers.get(position).getUserProfileImg(),
-                holder.imageUserProfile, R.drawable.im_event_avatar_placeholder_64);
+                holder.imageUserProfile, R.drawable.im_cat_hearts);
         holder.tvUsername.setText(listOfUsers.get(position).getUserFullName());
         holder.tvUserId.setText(listOfUsers.get(position).getUserId());
 

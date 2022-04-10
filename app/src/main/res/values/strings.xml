@@ -43,6 +43,7 @@
     <string name="new_event_primary_page_title">Step 1 \u2022 Primary info</string>
     <string name="new_event_maps_popup_title">Step 2 \u2022 Pick event address</string>
     <string name="new_event_final_page_title">Step 3 \u2022 Additional info</string>
+    <string name="new_event_btn_invite_friends">Invite friends</string>
     <string name="new_event_create_btn">Create</string>
     <string name="new_event_back_btn">Back</string>
     <string name="new_event_event_title">Title</string>

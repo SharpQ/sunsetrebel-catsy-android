@@ -376,6 +376,24 @@ public class FirebaseFirestoreService {
         }).addOnFailureListener(e -> getUserProfileCallback.onResponse(null));
     }
 
+    public void getMultipleUsersProfile(GetEventParticipantsCallback getEventParticipantsCallback,
+                                        List<String> multipleUserId) {
+        List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
+        for (String userId : multipleUserId) {
+            tasks.add(getUserProfileDocument(userId).get());
+        }
+        Task<List<DocumentSnapshot>> allTasks = Tasks.whenAllSuccess(tasks);
+        allTasks.addOnSuccessListener(documentSnapshots -> {
+            List<CommonUserModel> usersList = new ArrayList<>();
+            for (DocumentSnapshot document : documentSnapshots) {
+                if (document.getData() != null) {
+                    usersList.add(convertCommonUserProfileDocumentToModel(document.getData()));
+                }
+            }
+            getEventParticipantsCallback.onResponse(usersList);
+        }).addOnFailureListener(e -> getEventParticipantsCallback.onResponse(null));
+    }
+
     public void getEventList(GetEventListCallback getEventListCallback) {
         getPublicEventsCollection().get().addOnSuccessListener(queryDocumentSnapshots -> {
             List<EventModel> eventList = new ArrayList<>();
