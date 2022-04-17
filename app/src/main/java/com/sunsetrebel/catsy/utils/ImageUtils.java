@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -54,7 +55,7 @@ public class ImageUtils {
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onLoadFailed(@Nullable Drawable errorDrawable) {
-                        Bitmap errowDrawable = ((BitmapDrawable) context.getDrawable(R.drawable.im_event_avatar_placeholder_64)).getBitmap();
+                        Bitmap errowDrawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.im_event_avatar_placeholder_64)).getBitmap();
                         errowDrawable = ImageUtils.getCroppedBitmap(errowDrawable);
                         Bitmap scaledBitmap = Bitmap.createScaledBitmap(errowDrawable, pixels, pixels, true);
                         iconLoadCallback.onLoad(scaledBitmap);

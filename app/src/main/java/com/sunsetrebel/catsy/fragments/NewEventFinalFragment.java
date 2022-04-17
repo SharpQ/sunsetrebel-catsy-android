@@ -2,6 +2,7 @@ package com.sunsetrebel.catsy.fragments;
 
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,8 +17,10 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +36,7 @@ import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import nl.joery.animatedbottombar.AnimatedBottomBar;
@@ -77,33 +81,36 @@ public class NewEventFinalFragment extends Fragment {
         inviteFriendsButton = v.findViewById(R.id.button_invite_friends);
         inviteFriendsRecycler = v.findViewById(R.id.recycler_event_invite_friends);
 
-        backButton.setOnClickListener(v12 -> {
-            getParentFragmentManager().popBackStack();
+        //Invite friends recycler
+        Drawable arrowUp = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_arrow_drop_up_35);
+        Drawable arrowDown = ContextCompat.getDrawable(getContext(), R.drawable.ic_baseline_arrow_drop_down_35);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
+        inviteFriendsRecycler.setLayoutManager(layoutManager);
+        List<CommonUserModel> userFriendsProfiles = new ArrayList<>();
+        InviteFriendsAdapter inviteFriendsAdapter = new InviteFriendsAdapter(this, userFriendsProfiles);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(inviteFriendsRecycler.getContext(),
+                layoutManager.getOrientation());
+        inviteFriendsRecycler.addItemDecoration(dividerItemDecoration);
+        inviteFriendsRecycler.setAdapter(inviteFriendsAdapter);
+
+        newEventViewModel.getUserFriends(value -> {
+            userFriendsProfiles.addAll(value);
+            inviteFriendsAdapter.notifyDataSetChanged();
         });
+
+        backButton.setOnClickListener(v12 -> getParentFragmentManager().popBackStack());
 
         inviteFriendsButton.setOnClickListener(v13 -> {
             if (inviteFriendsRecycler.getVisibility() == View.GONE) {
                 TransitionManager.beginDelayedTransition(container, new AutoTransition());
                 inviteFriendsRecycler.setVisibility(View.VISIBLE);
-                inviteFriendsButton.setCompoundDrawables(null, null,
-                        getContext().getDrawable(R.drawable.ic_baseline_arrow_drop_up_35), null);
-                inviteFriendsRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
-                if (userFriendsProfiles == null) {
-                    newEventViewModel.getUserFriends(value -> {
-                        userFriendsProfiles = value;
-                        InviteFriendsAdapter inviteFriendsAdapter = new InviteFriendsAdapter(this, userFriendsProfiles);
-                        inviteFriendsRecycler.setAdapter(inviteFriendsAdapter);
-                    });
-                } else {
-                    InviteFriendsAdapter inviteFriendsAdapter = new InviteFriendsAdapter(this, userFriendsProfiles);
-                    inviteFriendsRecycler.setAdapter(inviteFriendsAdapter);
-                }
-
+                inviteFriendsButton.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                        arrowUp, null);
             } else {
                 TransitionManager.beginDelayedTransition(container, new AutoTransition());
                 inviteFriendsRecycler.setVisibility(View.GONE);
-                inviteFriendsButton.setCompoundDrawables(null, null,
-                        getContext().getDrawable(R.drawable.ic_baseline_arrow_drop_down_35), null);
+                inviteFriendsButton.setCompoundDrawablesWithIntrinsicBounds(null, null,
+                        arrowDown, null);
             }
         });
 

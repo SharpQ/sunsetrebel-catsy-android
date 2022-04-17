@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -232,8 +233,12 @@ public class PopupService {
         private View setupViewEventParticipants(Fragment fragment, List<CommonUserModel> userProfiles) {
             View popupView = LayoutInflater.from(fragment.getContext()).inflate(R.layout.popup_event_participants, null, false);
             RecyclerView recyclerParticipants = popupView.findViewById(R.id.recycler_event_participants);
-            recyclerParticipants.setLayoutManager(new LinearLayoutManager(fragment.getContext()));
+            LinearLayoutManager layoutManager = new LinearLayoutManager(fragment.getContext());
+            recyclerParticipants.setLayoutManager(layoutManager);
             PopupEventParticipantsAdapter participantsAdapter = new PopupEventParticipantsAdapter(fragment, userProfiles);
+            DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerParticipants.getContext(),
+                    layoutManager.getOrientation());
+            recyclerParticipants.addItemDecoration(dividerItemDecoration);
             recyclerParticipants.setAdapter(participantsAdapter);
             return popupView;
         }

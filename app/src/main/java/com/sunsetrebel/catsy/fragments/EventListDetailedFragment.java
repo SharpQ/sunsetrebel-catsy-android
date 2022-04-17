@@ -196,20 +196,27 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         }, eventModel.getEventId()));
 
         tvEventParticipants.setOnClickListener(v14 -> {
-            int popupHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 500, getContext().getResources().getDisplayMetrics());
-            PopupService.showPopup(new PopupService.PopupBuilder(this,
-                    eventModel.getJoinedUsersListWithoutHost(), PopupType.EVENT_PARTICIPANTS,
-                    ViewGroup.LayoutParams.MATCH_PARENT, popupHeight)
-                    .animationStyle(R.style.popup_window_animation)
-                    .setFocusable(true)
-                    .setForeground().build(), this, Gravity.CENTER);
+            if (eventModel.getJoinedUsersListWithoutHost() != null) {
+                int popupHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 500, getContext().getResources().getDisplayMetrics());
+                if (eventModel.getJoinedUsersListWithoutHost().size() < 3) {
+                    popupHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
+                }
+                PopupService.showPopup(new PopupService.PopupBuilder(this,
+                        eventModel.getJoinedUsersListWithoutHost(), PopupType.EVENT_PARTICIPANTS,
+                        ViewGroup.LayoutParams.MATCH_PARENT, popupHeight)
+                        .animationStyle(R.style.popup_window_animation)
+                        .setFocusable(true)
+                        .setForeground().build(), this, Gravity.CENTER);
+            }
         });
 
         ivHostAvatar.setOnClickListener(v15 -> {
-            PopupService.showPopup(
-                    new PopupService.PopupBuilder(this, eventModel.getHostProfile(),
-                            PopupType.USER_EVENT_DETAILED, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-                            .animationStyle(R.style.popup_window_animation).setFocusable(true).setForeground().build(), this, Gravity.CENTER);
+            if (eventModel.getHostProfile() != null) {
+                PopupService.showPopup(
+                        new PopupService.PopupBuilder(this, eventModel.getHostProfile(),
+                                PopupType.USER_EVENT_DETAILED, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+                                .animationStyle(R.style.popup_window_animation).setFocusable(true).setForeground().build(), this, Gravity.CENTER);
+            }
         });
 
         eventThemesUtil.setEventThemesUI(eventModel.getEventThemes(), this, linearLayoutThemes, null);

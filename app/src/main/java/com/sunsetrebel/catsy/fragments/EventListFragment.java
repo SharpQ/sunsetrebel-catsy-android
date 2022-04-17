@@ -11,6 +11,7 @@ import android.widget.ProgressBar;
 import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,7 +43,11 @@ public class EventListFragment extends Fragment {
         progressBar = v.findViewById(R.id.pb_event_list);
         materialSearchBar = v.findViewById(R.id.searchViewEventList);
         progressBar.setVisibility(View.VISIBLE);
-        eventRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        eventRecycler.setLayoutManager(layoutManager);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(eventRecycler.getContext(),
+                layoutManager.getOrientation());
+        eventRecycler.addItemDecoration(dividerItemDecoration);
         //Init viewmodel
         eventListViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
         eventListViewModel.init();

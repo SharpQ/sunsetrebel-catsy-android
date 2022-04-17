@@ -3,6 +3,7 @@ package com.sunsetrebel.catsy.viewmodel;
 import android.content.Context;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.lifecycle.ViewModel;
 
@@ -21,6 +22,7 @@ import com.sunsetrebel.catsy.enums.EventThemes;
 
 import com.google.firebase.Timestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -32,12 +34,14 @@ public class NewEventViewModel extends ViewModel {
     private final FirebaseStorageService firebaseStorageService = FirebaseStorageService.getInstance();
     private final UserProfileService userProfileService = UserProfileService.getInstance();
     private MainUserProfileModel mainUserProfileModel;
+    private List<String> invitedUsersList;
 
 
     public void init() {
         eventModel = new EventModel();
         fAuth = firebaseAuthService.getFirebaseClient();
         mainUserProfileModel = userProfileService.getUserProfile();
+        invitedUsersList = new ArrayList<>();
     }
 
     public interface GetUserFriendsCallback {
@@ -58,7 +62,9 @@ public class NewEventViewModel extends ViewModel {
         eventModel.setEventGeoLocation(eventGeoLocation);
     }
 
-    public void completeNewEventInfo(Context context, String eventDescrValue, Uri eventAvatarURI, Integer eventMinAgeValue, Integer eventMaxAgeValue, Integer eventMaxPeopleValue) {
+    public void completeNewEventInfo(Context context, String eventDescrValue, Uri eventAvatarURI,
+                                     Integer eventMinAgeValue, Integer eventMaxAgeValue,
+                                     Integer eventMaxPeopleValue) {
         Date date = new Date();
         Timestamp createTS = new Timestamp(date);
         eventModel.setCreateTS(createTS);
@@ -67,6 +73,7 @@ public class NewEventViewModel extends ViewModel {
         eventModel.setEventMinAge(eventMinAgeValue);
         eventModel.setEventMaxAge(eventMaxAgeValue);
         eventModel.setEventMaxPerson(eventMaxPeopleValue);
+        eventModel.setInvitedUsers(invitedUsersList);
         eventModel.setHostId(fAuth.getCurrentUser().getUid());
         eventModel.setHostName(mainUserProfileModel.getUserFullName());
         eventModel.setHostProfileImg(mainUserProfileModel.getUserProfileImg());
@@ -100,5 +107,13 @@ public class NewEventViewModel extends ViewModel {
         firebaseFirestoreService.getMultipleUsersProfile(value -> {
             getUserFriendsCallback.onResponse(value);
         }, mainUserProfileModel.getUserFriends());
+    }
+
+    public void addUserToInvited(CommonUserModel user) {
+        invitedUsersList.add(user.getUserId());
+    }
+
+    public void removeUserToInvited(CommonUserModel user) {
+        invitedUsersList.remove(user.getUserId());
     }
 }

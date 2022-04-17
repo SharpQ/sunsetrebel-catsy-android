@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         app:cardBackgroundColor="@color/primaryDarkColor"
         app:cardCornerRadius="15dp"
-        app:cardElevation="0dp"
+        card_view:cardElevation="0dp"
         app:cardUseCompatPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

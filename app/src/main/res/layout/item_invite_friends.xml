@@ -5,77 +5,91 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    card_view:cardElevation="1dp"
-    android:backgroundTint="@android:color/transparent">
+    android:layout_height="80dp"
+    card_view:cardElevation="0dp"
+    card_view:cardBackgroundColor="@android:color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_item_invite_friends"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="80dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image_invite_friends"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
             android:background="@color/primaryLightColor"
             app:shapeAppearanceOverlay="@style/EventListHostAvatar"
             android:elevation="15dp"
             android:padding="5dp"
-            android:layout_width="98dp"
-            android:layout_height="98dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintVertical_bias="0"/>
+            app:layout_constraintVertical_bias="0.5"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_username_invite_friends"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/primaryTextColor"
-            android:textSize="18sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:longClickable="false"
             android:clickable="false"
             android:singleLine="true"
             android:maxLines="1"
             android:fontFamily="@font/audiowide"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_userid_invite_friends"
+            app:layout_constraintEnd_toStartOf="@id/guideline_item_invite_friends"
             app:layout_constraintStart_toEndOf="@id/image_invite_friends"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintVertical_bias="0"/>
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintVertical_bias="0.25"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_userid_invite_friends"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:textColor="@color/primaryTextColor"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textStyle="normal"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:longClickable="false"
             android:clickable="false"
             android:singleLine="true"
             android:maxLines="1"
             android:fontFamily="@font/audiowide"
-            android:layout_marginTop="5dp"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline_item_invite_friends"
             app:layout_constraintStart_toEndOf="@id/image_invite_friends"
             app:layout_constraintTop_toBottomOf="@id/tv_username_invite_friends"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintVertical_bias="0"/>
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintVertical_bias="0.75"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_item_invite_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.85" />
+
+        <CheckBox
+            android:id="@+id/checkbox_item_invite_friends"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
+            android:button="@drawable/ui_checkbox_selector"
+            android:buttonTint="@color/primaryLightColor"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline_item_invite_friends" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

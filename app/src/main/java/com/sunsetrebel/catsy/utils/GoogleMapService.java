@@ -18,6 +18,7 @@ import android.media.ThumbnailUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.RoundedBitmapDrawable;
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
 import androidx.fragment.app.Fragment;
@@ -107,7 +108,8 @@ public class GoogleMapService {
     }
 
     private static void initMarkerDrawable(Context context) {
-        Bitmap errowDrawable = ((BitmapDrawable) context.getDrawable(R.drawable.im_cat_market_default_512p)).getBitmap();
+        Bitmap errowDrawable = ((BitmapDrawable) ContextCompat.getDrawable(context,
+                R.drawable.im_cat_market_default_512p)).getBitmap();
         mapMarkerDefault = Bitmap.createScaledBitmap(errowDrawable, 100, 100, true);
     }
 }

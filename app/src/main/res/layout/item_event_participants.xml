@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardElevation="1dp"
+    card_view:cardElevation="0dp"
     android:backgroundTint="@android:color/transparent">
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -45,6 +45,7 @@ public class FirebaseFirestoreService {
     private final String COLLECTION_USER_PROFILES = "userProfiles";
     private final String COLLECTION_PUBLIC_EVENTS = "publicEvents";
     private final String COLLECTION_EVENT_USERS_JOINED = "usersJoined";
+    private final String COLLECTION_EVENT_INVITES = "invites";
     private final String COLLECTION_PRIVATE_EVENTS = "privateEvents";
     private final String COLLECTION_USER_OUTCOME_REQUESTS = "outcomeRequests";
     private final String COLLECTION_USER_INCOME_REQUESTS = "incomeRequests";
@@ -91,6 +92,10 @@ public class FirebaseFirestoreService {
     private final String DOCUMENT_FRIEND_REQUEST_SENDER = "senderId";
     private final String DOCUMENT_FRIEND_REQUEST_RECIPIENT = "recipientId";
     private final String DOCUMENT_FRIEND_REQUEST_ACTION = "action";
+    //PROPERTIES INVITE USER
+    private final String DOCUMENT_INVITE_REQUEST_EVENT_ID = "eventId";
+    private final String DOCUMENT_FRIEND_REQUEST_HOST_ID = "hostId";
+    private final String DOCUMENT_FRIEND_REQUEST_INVITED_USERS_ID = "invitedUsersId";
 
     //INSTANCE
     public FirebaseFirestoreService() {
@@ -162,6 +167,16 @@ public class FirebaseFirestoreService {
         return fStore.collection(COLLECTION_PRIVATE_EVENTS).document(eventId);
     }
 
+    private DocumentReference getInvitedUserDocument(String eventId, AccessType accessType) {
+        DocumentReference eventDocRef;
+        if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
+            eventDocRef = getPublicEventDocument(eventId);
+        } else {
+            eventDocRef = getPrivateEventDocument(eventId);
+        }
+        return eventDocRef.collection(COLLECTION_EVENT_INVITES).document(eventId);
+    }
+
     private CollectionReference getPrivateEventParticipantsCollection(String eventId) {
         return getPrivateEventDocument(eventId).collection(COLLECTION_EVENT_USERS_JOINED);
     }
@@ -202,7 +217,8 @@ public class FirebaseFirestoreService {
         getUserProfileDocument(userId).set(user).addOnSuccessListener(aVoid -> Log.d("DEBUG", "User profile created! UserID: " + userId));
     }
 
-    public void createNewEvent(Context context, EventModel eventModel, MainUserProfileModel mainUserProfileModel) {
+    public void createNewEvent(Context context, EventModel eventModel,
+                               MainUserProfileModel mainUserProfileModel) {
         if (instanceCreateEvent) {
             return;
         }
@@ -247,17 +263,25 @@ public class FirebaseFirestoreService {
         firstUserMap.put(DOCUMENT_USER_LINK_TELEGRAM, mainUserProfileModel.getLinkTelegram());
         firstUserMap.put(DOCUMENT_USER_LINK_TIKTOK, mainUserProfileModel.getLinkTikTok());
 
-        Task<Void> task1 = null, task2 = null, task3 = null;
+        List<Task<Void>> tasks = new ArrayList<>();
         if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
-            task1 = getPublicEventDocument(eventId).set(event);
-            task2 = getPublicEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap);
-            task3 = getUserProfileDocument(eventModel.getHostId()).update(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS, FieldValue.arrayUnion(eventId));
+            tasks.add(getPublicEventDocument(eventId).set(event));
+            tasks.add(getPublicEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap));
+            tasks.add(getUserProfileDocument(eventModel.getHostId()).update(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS, FieldValue.arrayUnion(eventId)));
         } else if (eventAccessType == AccessType.PRIVATE) {
-            task1 = getPrivateEventDocument(eventId).set(event);
-            task2 = getPrivateEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap);
-            task3 = getUserProfileDocument(eventModel.getHostId()).update(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS, FieldValue.arrayUnion(eventId));
+            tasks.add(getPrivateEventDocument(eventId).set(event));
+            tasks.add(getPrivateEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap));
+            tasks.add(getUserProfileDocument(eventModel.getHostId()).update(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS, FieldValue.arrayUnion(eventId)));
         }
-        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2, task3);
+        if (eventModel.getInvitedUsers().size() > 0) {
+            Map<String, Object> inviteRequest = new HashMap<>();
+            inviteRequest.put(DOCUMENT_INVITE_REQUEST_EVENT_ID, eventId);
+            inviteRequest.put(DOCUMENT_FRIEND_REQUEST_HOST_ID, eventModel.getHostId());
+            inviteRequest.put(DOCUMENT_EVENT_ACCESS_TYPE, eventAccessType);
+            inviteRequest.put(DOCUMENT_FRIEND_REQUEST_INVITED_USERS_ID, eventModel.getInvitedUsers());
+            tasks.add(getInvitedUserDocument(eventId, eventAccessType).set(inviteRequest));
+        }
+        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(tasks);
         allTasks.addOnSuccessListener(querySnapshots -> {
             instanceCreateEvent = false;
             Log.d("DEBUG", "New event created! EventId: " + finalEventId);
@@ -476,7 +500,7 @@ public class FirebaseFirestoreService {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put(DOCUMENT_FRIEND_REQUEST_SENDER, userId);
         requestBody.put(DOCUMENT_FRIEND_REQUEST_RECIPIENT, anotherUserId);
-        requestBody.put(DOCUMENT_FRIEND_REQUEST_ACTION, "ADD");
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_ACTION, "ADD_FRIEND");
         Task<Void> task = getUserProfileOutcomeRequestDocument(userId, anotherUserId).set(requestBody);
         task.addOnSuccessListener(querySnapshots -> {
             instanceFriendRequest = false;
@@ -496,7 +520,7 @@ public class FirebaseFirestoreService {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put(DOCUMENT_FRIEND_REQUEST_SENDER, userId);
         requestBody.put(DOCUMENT_FRIEND_REQUEST_RECIPIENT, anotherUserId);
-        requestBody.put(DOCUMENT_FRIEND_REQUEST_ACTION, "REMOVE");
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_ACTION, "REMOVE_FRIEND");
         Task<Void> task1 = getUserProfileDocument(userId).update(DOCUMENT_USER_FRIENDS, FieldValue.arrayRemove(anotherUserId));
         Task<Void> task2 = getUserProfileOutcomeRequestDocument(userId, anotherUserId).set(requestBody);
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
