@@ -133,54 +133,64 @@ exports.responseIncomeRequest = functions.firestore
 
 exports.publicEventInviteRequest = functions.firestore
   .document('publicEvents/{eventId}/invites/{inviteId}')
-  .onCreate((snap, context) => {
-	const inviteId = context.params.inviteId;
-	const hostId = snap.data().hostId;
-	const eventId = snap.data().eventId;
-	const invitedUsersId = snap.data().invitedUsersId.values();
-	const eventAccessType = snap.data().eventAccessType;
+  .onWrite((change, context) => {
+    if (!change.before.exists || (change.before.exists && change.after.exists)) {
+      // New document Created
+      const inviteId = context.params.inviteId;
+      const hostId = change.after.data().hostId;
+      const eventId = change.after.data().eventId;
+      const invitedUsersIdAfter = change.after.data().invitedUsersId.values();
+      const eventAccessType = change.after.data().eventAccessType;
 
-    if (invitedUsersId.length < 1 || invitedUsersId == null) {
-        return;
+      if (invitedUsersIdAfter.length < 1 || invitedUsersIdAfter == null) {
+              return;
+      }
+
+      for (const userId of invitedUsersIdAfter) {
+          var requestObjects = {
+               eventId : eventId,
+               eventAccessType : eventAccessType,
+               senderId : hostId,
+               recipientId : userId,
+               action : "EVENT_INVITE",
+          };
+          admin.firestore().collection('userProfiles').doc(userId).collection('incomeRequests').doc(inviteId).set(requestObjects);
+      }
+      return;
+    } else if (!change.after.exists) {
+      // Deleting document
+      return;
     }
-
-    for (const userId of invitedUsersId) {
-        var requestObjects = {
-             eventId : eventId,
-             eventAccessType : eventAccessType,
-             senderId : hostId,
-             recipientId : userId,
-             action : "EVENT_INVITE",
-        };
-        admin.firestore().collection('userProfiles').doc(userId).collection('incomeRequests').doc(inviteId).set(requestObjects);
-    }
-
-    return;
   });
 
 exports.privateEventInviteRequest = functions.firestore
   .document('privateEvents/{eventId}/invites/{inviteId}')
-  .onCreate((snap, context) => {
-	const inviteId = context.params.inviteId;
-	const hostId = snap.data().hostId;
-	const eventId = snap.data().eventId;
-	const invitedUsersId = snap.data().invitedUsersId.values();
-	const eventAccessType = snap.data().eventAccessType;
+  .onWrite((snap, context) => {
+	if (!change.before.exists || (change.before.exists && change.after.exists)) {
+      // New document Created
+      const inviteId = context.params.inviteId;
+      const hostId = change.after.data().hostId;
+      const eventId = change.after.data().eventId;
+      const invitedUsersIdAfter = change.after.data().invitedUsersId.values();
+      const eventAccessType = change.after.data().eventAccessType;
 
-    if (invitedUsersId.length < 1 || invitedUsersId == null) {
-        return;
+      if (invitedUsersIdAfter.length < 1 || invitedUsersIdAfter == null) {
+              return;
+      }
+
+      for (const userId of invitedUsersIdAfter) {
+          var requestObjects = {
+               eventId : eventId,
+               eventAccessType : eventAccessType,
+               senderId : hostId,
+               recipientId : userId,
+               action : "EVENT_INVITE",
+          };
+          admin.firestore().collection('userProfiles').doc(userId).collection('incomeRequests').doc(inviteId).set(requestObjects);
+      }
+      return;
+    } else if (!change.after.exists) {
+      // Deleting document
+      return;
     }
-
-    for (const userId of invitedUsersId) {
-        var requestObjects = {
-             eventId : eventId,
-             eventAccessType : eventAccessType,
-             senderId : hostId,
-             recipientId : userId,
-             action : "EVENT_INVITE",
-        };
-        admin.firestore().collection('userProfiles').doc(userId).collection('incomeRequests').doc(inviteId).set(requestObjects);
-    }
-
-    return;
   });
