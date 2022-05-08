@@ -91,6 +91,10 @@
     <string name="profile_tab_title_friends">Friends</string>
     <string name="profile_button_logout">Logout</string>
     <string name="profile_info_title_social_networks">Social networks</string>
+    <string name="profile_notifications_title">Notifications</string>
+    <string name="profile_no_new_notifications_label">No new notifications</string>
+    <string name="notifications_tab_title_events">Events</string>
+    <string name="notifications_tab_title_friends">Friends</string>
     <string name="popup_user_add">Add to friends</string>
     <string name="popup_user_block">Block user</string>
     <string name="event_theme_sport">Sport</string>

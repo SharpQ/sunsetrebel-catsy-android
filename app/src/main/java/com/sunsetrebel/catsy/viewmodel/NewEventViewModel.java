@@ -28,8 +28,6 @@ import java.util.List;
 
 public class NewEventViewModel extends ViewModel {
     private EventModel eventModel;
-    private com.google.firebase.auth.FirebaseAuth fAuth;
-    private final FirebaseAuthService firebaseAuthService = FirebaseAuthService.getInstance();
     private final FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
     private final FirebaseStorageService firebaseStorageService = FirebaseStorageService.getInstance();
     private final UserProfileService userProfileService = UserProfileService.getInstance();
@@ -39,7 +37,6 @@ public class NewEventViewModel extends ViewModel {
 
     public void init() {
         eventModel = new EventModel();
-        fAuth = firebaseAuthService.getFirebaseClient();
         mainUserProfileModel = userProfileService.getUserProfile();
         invitedUsersList = new ArrayList<>();
     }
@@ -65,16 +62,12 @@ public class NewEventViewModel extends ViewModel {
     public void completeNewEventInfo(Context context, String eventDescrValue, Uri eventAvatarURI,
                                      Integer eventMinAgeValue, Integer eventMaxAgeValue,
                                      Integer eventMaxPeopleValue) {
-        Date date = new Date();
-        Timestamp createTS = new Timestamp(date);
-        eventModel.setCreateTS(createTS);
-        eventModel.setUpdateTS(createTS);
         eventModel.setEventDescr(eventDescrValue);
         eventModel.setEventMinAge(eventMinAgeValue);
         eventModel.setEventMaxAge(eventMaxAgeValue);
         eventModel.setEventMaxPerson(eventMaxPeopleValue);
         eventModel.setInvitedUsers(invitedUsersList);
-        eventModel.setHostId(fAuth.getCurrentUser().getUid());
+        eventModel.setHostId(mainUserProfileModel.getUserId());
         eventModel.setHostName(mainUserProfileModel.getUserFullName());
         eventModel.setHostProfileImg(mainUserProfileModel.getUserProfileImg());
         if (eventAvatarURI != null) {

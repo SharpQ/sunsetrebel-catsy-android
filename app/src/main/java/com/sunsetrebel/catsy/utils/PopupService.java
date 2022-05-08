@@ -189,7 +189,7 @@ public class PopupService {
                         CustomToastUtil.showSuccessToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_friend_request_fail).toString() + userProfile.getUserId());
                         Log.d("DEBUG", "Failed to send friend request: " + userProfile.getUserId());
                     }
-                }, mainUserProfileModel.getUserId(), userProfile.getUserId());
+                }, mainUserProfileModel, userProfile.getUserId());
             });
 
             btnBlockUser.setOnClickListener(v -> {

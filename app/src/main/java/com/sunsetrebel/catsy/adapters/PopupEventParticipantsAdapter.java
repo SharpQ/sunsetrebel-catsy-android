@@ -120,7 +120,7 @@ public class PopupEventParticipantsAdapter extends RecyclerView.Adapter<PopupEve
                     CustomToastUtil.showSuccessToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_friend_request_fail).toString() + listOfUsers.get(position).getUserId());
                     Log.d("DEBUG", "Failed to send friend request: " + listOfUsers.get(position).getUserId());
                 }
-            }, mainUserProfileModel.getUserId(), listOfUsers.get(position).getUserId());
+            }, mainUserProfileModel, listOfUsers.get(position).getUserId());
         });
 
         holder.buttonBlockUser.setOnClickListener(v -> {

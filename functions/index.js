@@ -52,15 +52,21 @@ exports.privateEventsUsersWriteListener = functions.firestore
 exports.sendFriendRequest = functions.firestore
   .document('userProfiles/{userId}/outcomeRequests/{anotherUserId}')
   .onCreate((snap, context) => {
+    const action = snap.data().action;
 	const senderId = context.params.userId;
+	const senderName = snap.data().senderName;
+	const senderProfileImg = snap.data().senderProfileImg;
 	const recipientId = context.params.anotherUserId;
-	const action = snap.data().action;
+	const createTS = snap.data().createTS;
 	
 	if (action == "ADD_FRIEND") {
 		var requestObject = {
-         senderId : senderId,
-         recipientId : recipientId,
-		 action : action,
+             action : action,
+             senderId : senderId,
+             senderName: senderName,
+             senderProfileImg: senderProfileImg,
+             recipientId : recipientId,
+             createTS: createTS
 		};
 		
 		return admin.firestore().collection('userProfiles').doc(recipientId).collection('incomeRequests').doc(senderId).set(requestObject);
@@ -135,12 +141,19 @@ exports.publicEventInviteRequest = functions.firestore
   .document('publicEvents/{eventId}/invites/{inviteId}')
   .onWrite((change, context) => {
     if (!change.before.exists || (change.before.exists && change.after.exists)) {
-      // New document Created
+      // New document Created OR Document updated
       const inviteId = context.params.inviteId;
-      const hostId = change.after.data().hostId;
+      const senderId = change.after.data().senderId;
+      const senderName = change.after.data().senderName;
+      const senderProfileImg = change.after.data().senderProfileImg;
       const eventId = change.after.data().eventId;
-      const invitedUsersIdAfter = change.after.data().invitedUsersId.values();
+      const eventTitle = change.after.data().eventTitle;
+      const eventDescription = change.after.data().eventDescription;
+      const eventLocation = change.after.data().eventLocation;
+      const eventAvatar = change.after.data().eventAvatar;
       const eventAccessType = change.after.data().eventAccessType;
+      const invitedUsersIdAfter = change.after.data().invitedUsersId.values();
+      const createTS = change.after.data().createTS;
 
       if (invitedUsersIdAfter.length < 1 || invitedUsersIdAfter == null) {
               return;
@@ -148,11 +161,18 @@ exports.publicEventInviteRequest = functions.firestore
 
       for (const userId of invitedUsersIdAfter) {
           var requestObjects = {
-               eventId : eventId,
-               eventAccessType : eventAccessType,
-               senderId : hostId,
-               recipientId : userId,
                action : "EVENT_INVITE",
+               senderId : senderId,
+               senderName: senderName,
+               senderProfileImg: senderProfileImg,
+               eventId : eventId,
+               eventTitle : eventTitle,
+               eventDescription : eventDescription,
+               eventLocation : eventLocation,
+               eventAvatar : eventAvatar,
+               eventAccessType : eventAccessType,
+               recipientId : userId,
+               createTS: createTS
           };
           admin.firestore().collection('userProfiles').doc(userId).collection('incomeRequests').doc(inviteId).set(requestObjects);
       }
@@ -167,30 +187,44 @@ exports.privateEventInviteRequest = functions.firestore
   .document('privateEvents/{eventId}/invites/{inviteId}')
   .onWrite((snap, context) => {
 	if (!change.before.exists || (change.before.exists && change.after.exists)) {
-      // New document Created
-      const inviteId = context.params.inviteId;
-      const hostId = change.after.data().hostId;
-      const eventId = change.after.data().eventId;
-      const invitedUsersIdAfter = change.after.data().invitedUsersId.values();
-      const eventAccessType = change.after.data().eventAccessType;
+          // New document Created OR Document updated
+          const inviteId = context.params.inviteId;
+          const senderId = change.after.data().senderId;
+          const senderName = change.after.data().senderName;
+          const senderProfileImg = change.after.data().senderProfileImg;
+          const eventId = change.after.data().eventId;
+          const eventTitle = change.after.data().eventTitle;
+          const eventDescription = change.after.data().eventDescription;
+          const eventLocation = change.after.data().eventLocation;
+          const eventAvatar = change.after.data().eventAvatar;
+          const eventAccessType = change.after.data().eventAccessType;
+          const invitedUsersIdAfter = change.after.data().invitedUsersId.values();
+          const createTS = change.after.data().createTS;
 
-      if (invitedUsersIdAfter.length < 1 || invitedUsersIdAfter == null) {
-              return;
-      }
+          if (invitedUsersIdAfter.length < 1 || invitedUsersIdAfter == null) {
+                  return;
+          }
 
-      for (const userId of invitedUsersIdAfter) {
-          var requestObjects = {
-               eventId : eventId,
-               eventAccessType : eventAccessType,
-               senderId : hostId,
-               recipientId : userId,
-               action : "EVENT_INVITE",
-          };
-          admin.firestore().collection('userProfiles').doc(userId).collection('incomeRequests').doc(inviteId).set(requestObjects);
-      }
-      return;
-    } else if (!change.after.exists) {
-      // Deleting document
-      return;
-    }
+          for (const userId of invitedUsersIdAfter) {
+              var requestObjects = {
+                   action : "EVENT_INVITE",
+                   senderId : senderId,
+                   senderName: senderName,
+                   senderProfileImg: senderProfileImg,
+                   eventId : eventId,
+                   eventTitle : eventTitle,
+                   eventDescription : eventDescription,
+                   eventLocation : eventLocation,
+                   eventAvatar : eventAvatar,
+                   eventAccessType : eventAccessType,
+                   recipientId : userId,
+                   createTS: createTS
+              };
+              admin.firestore().collection('userProfiles').doc(userId).collection('incomeRequests').doc(inviteId).set(requestObjects);
+          }
+          return;
+        } else if (!change.after.exists) {
+          // Deleting document
+          return;
+        }
   });

@@ -54,7 +54,6 @@ public class NewEventFinalFragment extends Fragment {
     private static final int IMAGE_PICK_CODE = 1000;
     private Uri eventAvatarURI;
     private NewEventViewModel newEventViewModel;
-    private List<CommonUserModel> userFriendsProfiles = null;
 
     public NewEventFinalFragment() {
         // Required empty public constructor

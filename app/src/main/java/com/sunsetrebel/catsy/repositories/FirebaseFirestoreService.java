@@ -21,12 +21,15 @@ import com.google.firebase.firestore.Source;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
+import com.sunsetrebel.catsy.models.InviteToEventModel;
+import com.sunsetrebel.catsy.models.InviteToFriendsListModel;
 import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.enums.AccessType;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.enums.EventThemes;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +39,8 @@ public class FirebaseFirestoreService {
     private FirebaseFirestore fStore;
     private static MutableLiveData<List<EventModel>> eventListMutableLiveData = new MutableLiveData<>();
     private ListenerRegistration eventListListener = null;
+    private static MutableLiveData<List<Object>> notificationsMutableLiveData = new MutableLiveData<>();
+    private ListenerRegistration notificationsListener = null;
     private static boolean instanceJoinLeave = false;
     private static boolean instanceLike = false;
     private static boolean instanceCreateEvent = false;
@@ -89,13 +94,25 @@ public class FirebaseFirestoreService {
     private final String DOCUMENT_EVENT_UPDATE_TS = "updateTS";
     private final String DOCUMENT_EVENT_INVITED_USERS = "invitedUsers";
     //PROPERTIES FRIEND REQUEST
-    private final String DOCUMENT_FRIEND_REQUEST_SENDER = "senderId";
-    private final String DOCUMENT_FRIEND_REQUEST_RECIPIENT = "recipientId";
     private final String DOCUMENT_FRIEND_REQUEST_ACTION = "action";
-    //PROPERTIES INVITE USER
+    private final String DOCUMENT_FRIEND_REQUEST_SENDER_ID = "senderId";
+    private final String DOCUMENT_FRIEND_REQUEST_SENDER_NAME = "senderName";
+    private final String DOCUMENT_FRIEND_REQUEST_SENDER_PROFILE_IMG = "senderProfileImg";
+    private final String DOCUMENT_FRIEND_REQUEST_RECIPIENT = "recipientId";
+    private final String DOCUMENT_FRIEND_REQUEST_CREATE_TS = "createTS";
+    //PROPERTIES INVITE EVENT
+    private final String DOCUMENT_INVITE_REQUEST_ACTION = "action";
     private final String DOCUMENT_INVITE_REQUEST_EVENT_ID = "eventId";
-    private final String DOCUMENT_FRIEND_REQUEST_HOST_ID = "hostId";
-    private final String DOCUMENT_FRIEND_REQUEST_INVITED_USERS_ID = "invitedUsersId";
+    private final String DOCUMENT_INVITE_REQUEST_EVENT_TITLE = "eventTitle";
+    private final String DOCUMENT_INVITE_REQUEST_EVENT_DESCR = "eventDescription";
+    private final String DOCUMENT_INVITE_REQUEST_EVENT_LOCATION = "eventLocation";
+    private final String DOCUMENT_INVITE_REQUEST_EVENT_AVATAR = "eventAvatar";
+    private final String DOCUMENT_INVITE_REQUEST_EVENT_ACCESS_TYPE = "eventAccessType";
+    private final String DOCUMENT_INVITE_REQUEST_SENDER_ID = "senderId";
+    private final String DOCUMENT_INVITE_REQUEST_SENDER_NAME = "senderName";
+    private final String DOCUMENT_INVITE_REQUEST_SENDER_PROFILE_IMG = "senderProfileImg";
+    private final String DOCUMENT_INVITE_REQUEST_RECIPIENT = "recipientId";
+    private final String DOCUMENT_INVITE_REQUEST_CREATE_TS = "createTS";
 
     //INSTANCE
     public FirebaseFirestoreService() {
@@ -130,33 +147,39 @@ public class FirebaseFirestoreService {
         void onResponse(Boolean isResponseSuccessful);
     }
 
-    //COLLECTION PATH
+    //COLLECTION REFS
     private CollectionReference getPublicEventsCollection() {
         return fStore.collection(COLLECTION_PUBLIC_EVENTS);
     }
 
+    private CollectionReference getPublicEventParticipantsCollection(String eventId) {
+        return getPublicEventDocument(eventId).collection(COLLECTION_EVENT_USERS_JOINED);
+    }
+
+    private CollectionReference getPrivateEventParticipantsCollection(String eventId) {
+        return getPrivateEventDocument(eventId).collection(COLLECTION_EVENT_USERS_JOINED);
+    }
+
+    private CollectionReference getIncomeInvitesCollection(String userId) {
+        return getUserProfileDocument(userId).collection(COLLECTION_USER_INCOME_REQUESTS);
+    }
+
+    //DOCUMENTS REFS
     private DocumentReference getUserProfileDocument(String userId) {
         return fStore.collection(COLLECTION_USER_PROFILES).document(userId);
     }
 
     private DocumentReference getUserProfileOutcomeRequestDocument(String userId,
                                                                    String anotherUserId) {
-        return getUserProfileDocument(userId).collection(COLLECTION_USER_OUTCOME_REQUESTS)
-                .document(anotherUserId);
+        return getUserProfileDocument(userId).collection(COLLECTION_USER_OUTCOME_REQUESTS).document(anotherUserId);
     }
 
-    private DocumentReference getUserProfileIncomeRequestDocument(String userId,
-                                                                  String anotherUserId) {
-        return getUserProfileDocument(userId).collection(COLLECTION_USER_INCOME_REQUESTS)
-                .document(anotherUserId);
+    private DocumentReference getUserProfileIncomeRequestDocument(String userId, String inviteId) {
+        return getIncomeInvitesCollection(userId).document(inviteId);
     }
 
     private DocumentReference getPublicEventDocument(String eventId) {
         return getPublicEventsCollection().document(eventId);
-    }
-
-    private CollectionReference getPublicEventParticipantsCollection(String eventId) {
-        return getPublicEventDocument(eventId).collection(COLLECTION_EVENT_USERS_JOINED);
     }
 
     private DocumentReference getPublicEventJoinedUserDocument(String eventId, String userId) {
@@ -167,32 +190,19 @@ public class FirebaseFirestoreService {
         return fStore.collection(COLLECTION_PRIVATE_EVENTS).document(eventId);
     }
 
-    private DocumentReference getInvitedUserDocument(String eventId, AccessType accessType) {
-        DocumentReference eventDocRef;
-        if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
-            eventDocRef = getPublicEventDocument(eventId);
-        } else {
-            eventDocRef = getPrivateEventDocument(eventId);
-        }
-        return eventDocRef.collection(COLLECTION_EVENT_INVITES).document(eventId);
-    }
-
-    private CollectionReference getPrivateEventParticipantsCollection(String eventId) {
-        return getPrivateEventDocument(eventId).collection(COLLECTION_EVENT_USERS_JOINED);
-    }
-
     private DocumentReference getPrivateEventJoinedUserDocument(String eventId, String userId) {
         return getPrivateEventParticipantsCollection(eventId).document(userId);
     }
 
-    private String getIdForPublicEventDocument() {
-        return getPublicEventsCollection().document().getId();
+    private String getIdForEventDocument(AccessType eventAccessType) {
+        if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
+            return fStore.collection(COLLECTION_PUBLIC_EVENTS).document().getId();
+        } else {
+            return fStore.collection(COLLECTION_PRIVATE_EVENTS).document().getId();
+        }
     }
 
-    private String getIdForPrivateEventDocument() {
-        return fStore.collection(COLLECTION_PRIVATE_EVENTS).document().getId();
-    }
-
+    //FIRESTORE METHODS
     public void createNewUser(String userId, String fullName, String email, String phone, String profileUrl) {
         Map<String, Object> user = new HashMap<>();
         if (fullName == null) {
@@ -223,14 +233,10 @@ public class FirebaseFirestoreService {
             return;
         }
         instanceCreateEvent = true;
-        String eventId = null;
-        AccessType eventAccessType = eventModel.getAccessType();
-        if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
-            eventId = getIdForPublicEventDocument();
-        } else if (eventAccessType == AccessType.PRIVATE) {
-            eventId = getIdForPrivateEventDocument();
-        }
-        String finalEventId = eventId;
+        Timestamp createTS = new Timestamp(new Date());
+        eventModel.setCreateTS(createTS);
+        eventModel.setUpdateTS(createTS);
+        String eventId = getIdForEventDocument(eventModel.getAccessType());
         Map<String, Object> event = new HashMap<>();
         event.put(DOCUMENT_EVENT_ID, eventId);
         event.put(DOCUMENT_EVENT_TITLE, eventModel.getEventTitle());
@@ -238,7 +244,7 @@ public class FirebaseFirestoreService {
         event.put(DOCUMENT_EVENT_GEOLOCATION, eventModel.getEventGeoLocation());
         event.put(DOCUMENT_EVENT_START_TIME, eventModel.getEventStartTime());
         event.put(DOCUMENT_EVENT_END_TIME, eventModel.getEventEndTime());
-        event.put(DOCUMENT_EVENT_ACCESS_TYPE, eventAccessType);
+        event.put(DOCUMENT_EVENT_ACCESS_TYPE, eventModel.getAccessType());
         event.put(DOCUMENT_EVENT_DESCRIPTION, eventModel.getEventDescr());
         event.put(DOCUMENT_EVENT_MIN_AGE, eventModel.getEventMinAge());
         event.put(DOCUMENT_EVENT_MAX_AGE, eventModel.getEventMaxAge());
@@ -251,7 +257,7 @@ public class FirebaseFirestoreService {
         event.put(DOCUMENT_EVENT_HOST_PROFILE_IMG, eventModel.getHostProfileImg());
         event.put(DOCUMENT_EVENT_CREATE_TS, eventModel.getCreateTS());
         event.put(DOCUMENT_EVENT_UPDATE_TS, eventModel.getUpdateTS());
-        if (eventAccessType == AccessType.PRIVATE) {
+        if (eventModel.getAccessType() == AccessType.PRIVATE) {
             event.put(DOCUMENT_EVENT_INVITED_USERS, eventModel.getInvitedUsers());
         }
         Map<String, Object> firstUserMap = new HashMap<>();
@@ -264,31 +270,41 @@ public class FirebaseFirestoreService {
         firstUserMap.put(DOCUMENT_USER_LINK_TIKTOK, mainUserProfileModel.getLinkTikTok());
 
         List<Task<Void>> tasks = new ArrayList<>();
-        if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
+        if (eventModel.getAccessType() == AccessType.PUBLIC || eventModel.getAccessType() == AccessType.SELECTIVE) {
             tasks.add(getPublicEventDocument(eventId).set(event));
             tasks.add(getPublicEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap));
             tasks.add(getUserProfileDocument(eventModel.getHostId()).update(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS, FieldValue.arrayUnion(eventId)));
-        } else if (eventAccessType == AccessType.PRIVATE) {
+        } else if (eventModel.getAccessType() == AccessType.PRIVATE) {
             tasks.add(getPrivateEventDocument(eventId).set(event));
             tasks.add(getPrivateEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap));
             tasks.add(getUserProfileDocument(eventModel.getHostId()).update(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS, FieldValue.arrayUnion(eventId)));
         }
         if (eventModel.getInvitedUsers().size() > 0) {
-            Map<String, Object> inviteRequest = new HashMap<>();
-            inviteRequest.put(DOCUMENT_INVITE_REQUEST_EVENT_ID, eventId);
-            inviteRequest.put(DOCUMENT_FRIEND_REQUEST_HOST_ID, eventModel.getHostId());
-            inviteRequest.put(DOCUMENT_EVENT_ACCESS_TYPE, eventAccessType);
-            inviteRequest.put(DOCUMENT_FRIEND_REQUEST_INVITED_USERS_ID, eventModel.getInvitedUsers());
-            tasks.add(getInvitedUserDocument(eventId, eventAccessType).set(inviteRequest));
+            for (String userId : eventModel.getInvitedUsers()) {
+                Map<String, Object> inviteRequest = new HashMap<>();
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_ACTION, "EVENT_INVITE");
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_SENDER_ID, eventModel.getHostId());
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_SENDER_NAME, eventModel.getHostName());
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_SENDER_PROFILE_IMG, eventModel.getHostProfileImg());
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_EVENT_ID, eventId);
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_EVENT_TITLE, eventModel.getEventTitle());
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_EVENT_DESCR, eventModel.getEventDescr());
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_EVENT_LOCATION, eventModel.getEventLocation());
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_EVENT_AVATAR, eventModel.getEventAvatar());
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_EVENT_ACCESS_TYPE, eventModel.getAccessType());
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_RECIPIENT, userId);
+                inviteRequest.put(DOCUMENT_INVITE_REQUEST_CREATE_TS, eventModel.getCreateTS());
+                tasks.add(getUserProfileIncomeRequestDocument(userId, eventId).set(inviteRequest));
+            }
         }
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(tasks);
         allTasks.addOnSuccessListener(querySnapshots -> {
             instanceCreateEvent = false;
-            Log.d("DEBUG", "New event created! EventId: " + finalEventId);
+            Log.d("DEBUG", "New event created! EventId: " + eventId);
             CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.new_event_event_created_notification));
         }).addOnFailureListener(e -> {
             instanceCreateEvent = false;
-            Log.d("DEBUG", "Failed to create new event!");
+            Log.d("DEBUG", "Failed to create new event!" + eventId);
             CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.new_event_event_failed_create_notification));
         });
     }
@@ -433,7 +449,7 @@ public class FirebaseFirestoreService {
 
     public MutableLiveData<List<EventModel>> getEventListMutableLiveData() {
         eventListListener = getPublicEventsCollection().addSnapshotListener((value, error) -> {
-            Log.d("DEBUG", "ADDED SNAPSHOT LISTENER");
+            Log.d("DEBUG", "ADDED PUBLIC EVENT LIST SNAPSHOT LISTENER");
             List<EventModel> eventList = new ArrayList<>();
             for (QueryDocumentSnapshot document : value) {
                 if (document != null) {
@@ -448,8 +464,34 @@ public class FirebaseFirestoreService {
 
     public void removeEventListListener() {
         if (eventListListener != null) {
-            Log.d("DEBUG", "REMOVED SNAPSHOT LISTENER");
+            Log.d("DEBUG", "REMOVED PUBLIC EVENT LIST SNAPSHOT LISTENER");
             eventListListener.remove();
+        }
+    }
+
+    public MutableLiveData<List<Object>> getNotificationsMutableLiveData(String userId) {
+        notificationsListener = getIncomeInvitesCollection(userId).addSnapshotListener((value, error) -> {
+            Log.d("DEBUG", "ADDED INCOME NOTIFICATIONS SNAPSHOT LISTENER");
+            List<Object> notificationsList = new ArrayList<>();
+            if (value != null) {
+                for (QueryDocumentSnapshot document : value) {
+                    if (document != null) {
+                        Object notification = convertNotificationDocumentToModel(document.getData());
+                        if (notification != null) {
+                            notificationsList.add(notification);
+                        }
+                    }
+                }
+            }
+            notificationsMutableLiveData.postValue(notificationsList);
+        });
+        return notificationsMutableLiveData;
+    }
+
+    public void removeNotificationsListener() {
+        if (notificationsListener != null) {
+            Log.d("DEBUG", "REMOVED INCOME NOTIFICATIONS SNAPSHOT LISTENER");
+            notificationsListener.remove();
         }
     }
 
@@ -492,16 +534,21 @@ public class FirebaseFirestoreService {
     }
 
     public void sendFriendRequest(SetUserInteractEventCallback setUserInteractEventCallback,
-                                  String userId, String anotherUserId) {
+                                  MainUserProfileModel currentUserProfile, String anotherUserId) {
         if (instanceFriendRequest) {
             return;
         }
         instanceFriendRequest = true;
+        Timestamp createTS = new Timestamp(new Date());
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put(DOCUMENT_FRIEND_REQUEST_SENDER, userId);
-        requestBody.put(DOCUMENT_FRIEND_REQUEST_RECIPIENT, anotherUserId);
         requestBody.put(DOCUMENT_FRIEND_REQUEST_ACTION, "ADD_FRIEND");
-        Task<Void> task = getUserProfileOutcomeRequestDocument(userId, anotherUserId).set(requestBody);
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_SENDER_ID, currentUserProfile.getUserId());
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_SENDER_NAME, currentUserProfile.getUserFullName());
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_SENDER_PROFILE_IMG, currentUserProfile.getUserProfileImg());
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_RECIPIENT, anotherUserId);
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_CREATE_TS, createTS);
+
+        Task<Void> task = getUserProfileOutcomeRequestDocument(currentUserProfile.getUserId(), anotherUserId).set(requestBody);
         task.addOnSuccessListener(querySnapshots -> {
             instanceFriendRequest = false;
             setUserInteractEventCallback.onResponse(true);
@@ -517,10 +564,12 @@ public class FirebaseFirestoreService {
             return;
         }
         instanceFriendRequest = true;
+        Timestamp createTS = new Timestamp(new Date());
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put(DOCUMENT_FRIEND_REQUEST_SENDER, userId);
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_SENDER_ID, userId);
         requestBody.put(DOCUMENT_FRIEND_REQUEST_RECIPIENT, anotherUserId);
         requestBody.put(DOCUMENT_FRIEND_REQUEST_ACTION, "REMOVE_FRIEND");
+        requestBody.put(DOCUMENT_FRIEND_REQUEST_CREATE_TS, createTS);
         Task<Void> task1 = getUserProfileDocument(userId).update(DOCUMENT_USER_FRIENDS, FieldValue.arrayRemove(anotherUserId));
         Task<Void> task2 = getUserProfileOutcomeRequestDocument(userId, anotherUserId).set(requestBody);
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
@@ -614,6 +663,61 @@ public class FirebaseFirestoreService {
                 ((Timestamp) map.get(DOCUMENT_EVENT_CREATE_TS)), ((Timestamp) map.get(DOCUMENT_EVENT_UPDATE_TS)), null);
     }
 
+    private MainUserProfileModel convertUserProfileDocumentToModel(Map<String, Object> map) {
+        return new MainUserProfileModel(map.get(DOCUMENT_USER_ID).toString(), convertObjectToString(map.get(DOCUMENT_USER_EMAIL)),
+                convertObjectToString(map.get(DOCUMENT_USER_PHONE)), map.get(DOCUMENT_USER_FULL_NAME).toString(),
+                convertObjectToString(map.get(DOCUMENT_USER_PROFILE_IMG)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_PUBLIC_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_PRIVATE_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_LIKED_EVENTS)),
+                convertObjectToString(map.get(DOCUMENT_USER_LINK_TELEGRAM)),
+                convertObjectToString(map.get(DOCUMENT_USER_LINK_TIKTOK)),
+                convertObjectToString(map.get(DOCUMENT_USER_LINK_INSTAGRAM)),
+                convertObjectToString(map.get(DOCUMENT_USER_LINK_FACEBOOK)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_FRIENDS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_BLOCKED_USERS)));
+    }
+
+    private CommonUserModel convertCommonUserProfileDocumentToModel(Map<String, Object> map) {
+        return new CommonUserModel(map.get(DOCUMENT_USER_ID).toString(), map.get(DOCUMENT_USER_FULL_NAME).toString(),
+                convertObjectToString(map.get(DOCUMENT_USER_PROFILE_IMG)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_PUBLIC_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
+                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_LIKED_EVENTS)),
+                convertObjectToString(map.get(DOCUMENT_USER_LINK_TELEGRAM)),
+                convertObjectToString(map.get(DOCUMENT_USER_LINK_TIKTOK)),
+                convertObjectToString(map.get(DOCUMENT_USER_LINK_INSTAGRAM)),
+                convertObjectToString(map.get(DOCUMENT_USER_LINK_FACEBOOK)));
+    }
+
+    private Object convertNotificationDocumentToModel(Map<String, Object> map) {
+        if (map.get("action").toString().equals("ADD_FRIEND")) {
+            return new InviteToFriendsListModel(map.get(DOCUMENT_FRIEND_REQUEST_ACTION).toString(),
+                    map.get(DOCUMENT_FRIEND_REQUEST_SENDER_ID).toString(),
+                    map.get(DOCUMENT_FRIEND_REQUEST_SENDER_NAME).toString(),
+                    convertObjectToString(map.get(DOCUMENT_FRIEND_REQUEST_SENDER_PROFILE_IMG)),
+                    map.get(DOCUMENT_FRIEND_REQUEST_RECIPIENT).toString(),
+                    ((Timestamp) map.get(DOCUMENT_FRIEND_REQUEST_CREATE_TS)));
+        } else if (map.get("action").toString().equals("EVENT_INVITE")) {
+            return new InviteToEventModel(map.get(DOCUMENT_INVITE_REQUEST_ACTION).toString(),
+                    map.get(DOCUMENT_INVITE_REQUEST_SENDER_ID).toString(),
+                    map.get(DOCUMENT_INVITE_REQUEST_SENDER_NAME).toString(),
+                    convertObjectToString(map.get(DOCUMENT_INVITE_REQUEST_SENDER_PROFILE_IMG)),
+                    map.get(DOCUMENT_INVITE_REQUEST_EVENT_ID).toString(),
+                    map.get(DOCUMENT_INVITE_REQUEST_EVENT_TITLE).toString(),
+                    map.get(DOCUMENT_INVITE_REQUEST_EVENT_DESCR).toString(),
+                    map.get(DOCUMENT_INVITE_REQUEST_EVENT_LOCATION).toString(),
+                    convertObjectToString(map.get(DOCUMENT_INVITE_REQUEST_EVENT_AVATAR)),
+                    AccessType.valueOf(map.get(DOCUMENT_INVITE_REQUEST_EVENT_ACCESS_TYPE).toString()),
+                    map.get(DOCUMENT_INVITE_REQUEST_RECIPIENT).toString(),
+                    ((Timestamp) map.get(DOCUMENT_INVITE_REQUEST_CREATE_TS)));
+        } else {
+            return null;
+        }
+    }
+
     private String convertObjectToString(Object object) {
         if (object != null) {
             return object.toString();
@@ -642,35 +746,6 @@ public class FirebaseFirestoreService {
             }
         }
         return convertedEventThemeServices;
-    }
-
-    private MainUserProfileModel convertUserProfileDocumentToModel(Map<String, Object> map) {
-        return new MainUserProfileModel(map.get(DOCUMENT_USER_ID).toString(), convertObjectToString(map.get(DOCUMENT_USER_EMAIL)),
-                convertObjectToString(map.get(DOCUMENT_USER_PHONE)), map.get(DOCUMENT_USER_FULL_NAME).toString(),
-                convertObjectToString(map.get(DOCUMENT_USER_PROFILE_IMG)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_PUBLIC_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_PRIVATE_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PRIVATE_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_LIKED_EVENTS)),
-                convertObjectToString(map.get(DOCUMENT_USER_LINK_TELEGRAM)),
-                convertObjectToString(map.get(DOCUMENT_USER_LINK_TIKTOK)),
-                convertObjectToString(map.get(DOCUMENT_USER_LINK_INSTAGRAM)),
-                convertObjectToString(map.get(DOCUMENT_USER_LINK_FACEBOOK)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_FRIENDS)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_BLOCKED_USERS)));
-    }
-
-    private CommonUserModel convertCommonUserProfileDocumentToModel(Map<String, Object> map) {
-        return new CommonUserModel(map.get(DOCUMENT_USER_ID).toString(), map.get(DOCUMENT_USER_FULL_NAME).toString(),
-                convertObjectToString(map.get(DOCUMENT_USER_PROFILE_IMG)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_JOINED_PUBLIC_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(DOCUMENT_USER_LIKED_EVENTS)),
-                convertObjectToString(map.get(DOCUMENT_USER_LINK_TELEGRAM)),
-                convertObjectToString(map.get(DOCUMENT_USER_LINK_TIKTOK)),
-                convertObjectToString(map.get(DOCUMENT_USER_LINK_INSTAGRAM)),
-                convertObjectToString(map.get(DOCUMENT_USER_LINK_FACEBOOK)));
     }
 
     private List<String> convertToStringList(ArrayList<Object[]> objectList) {
