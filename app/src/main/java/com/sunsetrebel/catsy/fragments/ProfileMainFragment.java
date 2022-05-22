@@ -32,8 +32,9 @@ public class ProfileMainFragment extends Fragment {
     private AppCompatButton logoutButton;
     private static MainUserProfileModel mainUserProfileModel;
     private TabLayout tabLayout;
-    private ImageButton notificationsBtn;
+    private ImageButton notificationsBtn, circleBtn;
     private ProfileViewModel profileViewModel;
+    private boolean isRemoveListener = true;
 
     public ProfileMainFragment() {
         // Required empty public constructor
@@ -43,9 +44,8 @@ public class ProfileMainFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_profile_main, container, false);
-        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+        profileViewModel = new ViewModelProvider(requireActivity()).get(ProfileViewModel.class);
         profileViewModel.init();
-        mainUserProfileModel = profileViewModel.getUserProfile();
 
         profileImage = v.findViewById(R.id.profile_image);
         profileUserName = v.findViewById(R.id.profile_username);
@@ -53,16 +53,20 @@ public class ProfileMainFragment extends Fragment {
         tabLayout = v.findViewById(R.id.tl_profile);
         logoutButton = v.findViewById(R.id.button_logout);
         notificationsBtn = v.findViewById(R.id.ib_profile_notification);
+        circleBtn = v.findViewById(R.id.ib_circle);
 
-        ImageUtils.loadImageView(getContext(), mainUserProfileModel.getUserProfileImg(), profileImage, R.drawable.im_cat_hearts);
-        profileUserName.setText(mainUserProfileModel.getUserFullName());
-        profileId.setText(getContext().getString(R.string.profile_id_placeholder) + mainUserProfileModel.getUserId());
+        ImageUtils.loadImageView(getContext(), profileViewModel.getUserProfile().getUserProfileImg(), profileImage, R.drawable.im_cat_hearts);
+        profileUserName.setText(profileViewModel.getUserProfile().getUserFullName());
+        profileId.setText(getContext().getString(R.string.profile_id_placeholder) + profileViewModel.getUserProfile().getUserId());
         personalInfoFragment = new ProfilePersonalInfoFragment();
         getChildFragmentManager().beginTransaction().replace(R.id.fl_profile, personalInfoFragment).commit();
 
         profileViewModel.getNotificationsLiveData().observe(getViewLifecycleOwner(), notificationList -> {
-            // TO DO: counter of notifications
-            // Log.d("DEBUG", String.valueOf(notificationList.size()));
+            if (notificationList != null && notificationList.size() > 0) {
+                circleBtn.setVisibility(View.VISIBLE);
+            } else {
+                circleBtn.setVisibility(View.INVISIBLE);
+            }
         });
 
         logoutButton.setOnClickListener(v1 -> {
@@ -73,6 +77,7 @@ public class ProfileMainFragment extends Fragment {
         });
 
         notificationsBtn.setOnClickListener(v12 -> {
+            isRemoveListener = false;
             getParentFragmentManager().beginTransaction().addToBackStack("ProfileMainFragment")
                     .replace(R.id.frameLayoutMain, new ProfileNotificationsFragment()).commit();
         });
@@ -99,5 +104,13 @@ public class ProfileMainFragment extends Fragment {
         });
 
         return v;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (isRemoveListener) {
+            profileViewModel.removeNotificationsListener();
+        }
     }
 }

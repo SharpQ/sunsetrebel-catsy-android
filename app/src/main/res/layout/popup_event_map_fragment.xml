@@ -12,7 +12,7 @@
         android:id="@+id/imageViewHostAvatar"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="7dp"
         android:background="@color/primaryLightColor"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,18 +25,19 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageViewEventAvatar"
-        android:layout_width="148dp"
-        android:layout_height="148dp"
+        android:layout_width="145dp"
+        android:layout_height="145dp"
         android:background="@color/primaryLightColor"
         android:scaleType="centerCrop"
         android:clickable="false"
-        android:layout_marginStart="2dp"
-        android:layout_marginBottom="2dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewHostAvatar"
+        app:layout_constraintTop_toBottomOf="@+id/textViewHostName"
         app:layout_constraintVertical_bias="1.0"
         app:shapeAppearanceOverlay="@style/CornerSize10Percent" />
 

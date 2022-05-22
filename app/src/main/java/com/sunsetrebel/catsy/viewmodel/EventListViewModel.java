@@ -1,6 +1,7 @@
 package com.sunsetrebel.catsy.viewmodel;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -8,11 +9,13 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,16 +118,32 @@ public class EventListViewModel extends ViewModel {
         return false;
     }
 
-    public void joinEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel eventModel) {
+    public void joinEvent(SetUserInteractEventCallback setUserInteractEventCallback,
+                          Context context, EventModel eventModel) {
         firebaseFirestoreService.setUserJoinEvent(value -> {
+            if (value) {
+                Log.d("DEBUG", "You joined event: " + eventModel.getEventTitle() + "!");
+                CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.event_detailed_join_success) + eventModel.getEventTitle() + "!");
+            } else {
+                Log.d("DEBUG", "Failed to join event: " + eventModel.getEventTitle() + "!");
+                CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.event_detailed_join_fail) + eventModel.getEventTitle() + "!");
+            }
             setUserInteractEventCallback.onResponse(value);
-        }, context, eventModel, mainUserProfileModel);
+        }, eventModel, mainUserProfileModel);
     }
 
-    public void leaveEvent(SetUserInteractEventCallback setUserInteractEventCallback, Context context, EventModel eventModel) {
+    public void leaveEvent(SetUserInteractEventCallback setUserInteractEventCallback,
+                           Context context, EventModel eventModel) {
         firebaseFirestoreService.setUserLeaveEvent(value -> {
+            if (value) {
+                Log.d("DEBUG", "You left event: " + eventModel.getEventTitle() + "!");
+                CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.event_detailed_leave_success) + eventModel.getEventTitle() + "!");
+            } else {
+                Log.d("DEBUG", "Failed to leave event: " + eventModel.getEventTitle() + "!");
+                CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.event_detailed_leave_fail) + eventModel.getEventTitle() + "!");
+            }
             setUserInteractEventCallback.onResponse(value);
-        }, context, eventModel, mainUserProfileModel);
+        }, eventModel, mainUserProfileModel);
     }
 
     public void likeEvent(SetUserInteractEventCallback setUserInteractEventCallback, String eventId) {

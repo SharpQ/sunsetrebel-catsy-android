@@ -196,13 +196,13 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         }, eventModel.getEventId()));
 
         tvEventParticipants.setOnClickListener(v14 -> {
-            if (eventModel.getJoinedUsersListWithoutHost() != null) {
+            if (eventModel.getJoinedUsersList() != null) {
                 int popupHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 500, getContext().getResources().getDisplayMetrics());
-                if (eventModel.getJoinedUsersListWithoutHost().size() < 3) {
+                if (eventModel.getJoinedUsersList().size() < 3) {
                     popupHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
                 }
                 PopupService.showPopup(new PopupService.PopupBuilder(this,
-                        eventModel.getJoinedUsersListWithoutHost(), PopupType.EVENT_PARTICIPANTS,
+                        eventModel.getJoinedUsersList(), PopupType.EVENT_PARTICIPANTS,
                         ViewGroup.LayoutParams.MATCH_PARENT, popupHeight)
                         .animationStyle(R.style.popup_window_animation)
                         .setFocusable(true)

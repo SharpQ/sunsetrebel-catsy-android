@@ -3,6 +3,8 @@ package com.sunsetrebel.catsy.models;
 import com.google.firebase.Timestamp;
 import com.sunsetrebel.catsy.enums.AccessType;
 
+import java.sql.Time;
+import java.util.Date;
 import java.util.List;
 
 public class InviteToEventModel {
@@ -14,6 +16,7 @@ public class InviteToEventModel {
    private String eventTitle;
    private String eventDescription;
    private String eventLocation;
+   private Date eventStartTime;
    private String eventAvatar;
    private AccessType accessType;
    private String recipientId;
@@ -22,10 +25,10 @@ public class InviteToEventModel {
    public InviteToEventModel() {}
 
    public InviteToEventModel(String action, String senderId, String senderName,
-                                  String senderProfileImg, String eventId, String eventTitle,
-                                  String eventDescription, String eventLocation,
-                                  String eventAvatar, AccessType accessType, String recipientId,
-                                  Timestamp createTS) {
+                             String senderProfileImg, String eventId, String eventTitle,
+                             String eventDescription, String eventLocation,
+                             Date eventStartTime, String eventAvatar, AccessType accessType,
+                             String recipientId, Timestamp createTS) {
        this.action = action;
        this.senderId = senderId;
        this.senderName = senderName;
@@ -34,6 +37,7 @@ public class InviteToEventModel {
        this.eventTitle = eventTitle;
        this.eventDescription = eventDescription;
        this.eventLocation = eventLocation;
+       this.eventStartTime = eventStartTime;
        this.eventAvatar = eventAvatar;
        this.accessType = accessType;
        this.recipientId = recipientId;
@@ -71,6 +75,10 @@ public class InviteToEventModel {
    public String getEventLocation() { return eventLocation; }
 
    public void setEventLocation(String eventLocation) { this.eventLocation = eventLocation; }
+
+   public Date getEventStartTime() { return eventStartTime; }
+
+   public void setEventStartTime(Date eventStartTime) { this.eventStartTime = eventStartTime; }
 
    public String getEventAvatar() { return eventAvatar; }
 

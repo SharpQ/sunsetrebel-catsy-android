@@ -11,8 +11,10 @@
     <color name="black25Transparent">#40000000</color>
     <color name="black70Transparent">#99000000</color>
     <color name="primaryColorTransparent">#996a1b9a</color>
+    <color name="primaryDarkColorTransparent">#9938006b</color>
     <color name="primaryLightColorTransparent">#80C2476E</color>
     <color name="greyBackground">#111111</color>
     <color name="failRedColor">#C60000</color>
     <color name="successGreenColor">#008008</color>
+    <color name="grayTopBar">#B2FFFFFF</color>
 </resources>

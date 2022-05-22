@@ -5,7 +5,7 @@ admin.initializeApp();
 
 exports.publicEventsUsersWriteListener = functions.firestore
   .document('publicEvents/{eventId}/usersJoined/{userId}')
-  .onWrite((change, context) => {
+  .onWrite(async (change, context) => {
 	const eventId = context.params.eventId;
     const docRef = admin.firestore().collection('publicEvents').doc(eventId);
 
@@ -28,7 +28,7 @@ exports.publicEventsUsersWriteListener = functions.firestore
 
 exports.privateEventsUsersWriteListener = functions.firestore
   .document('privateEvents/{eventId}/usersJoined/{userId}')
-  .onWrite((change, context) => {
+  .onWrite(async (change, context) => {
 	const eventId = context.params.eventId;
     const docRef = admin.firestore().collection('privateEvents').doc(eventId);
 
@@ -79,7 +79,7 @@ exports.sendFriendRequest = functions.firestore
 	}
     return;
   });
-  
+
 exports.responseIncomeRequest = functions.firestore
   .document('userProfiles/{userId}/incomeRequests/{requestId}')
   .onDelete(async (snap, context) => {
@@ -98,133 +98,6 @@ exports.responseIncomeRequest = functions.firestore
             }
             return admin.firestore().collection('userProfiles').doc(requestId).collection('outcomeRequests').doc(senderId).delete();
         });
-	} else if (requestType == "EVENT_INVITE") {
-        const eventAccessType = snap.data().eventAccessType;
-        const eventId = snap.data().eventId;
-        var userRef = admin.firestore().collection('userProfiles').doc(senderId);
-        await userRef.get().then(doc => {
-            var userEvents;
-            var eventDocRef;
-            const userFullName = doc.data().userFullName;
-            const userProfileImg = doc.data().userProfileImg;
-            const userLinkFacebook = doc.data().userLinkFacebook;
-            const userLinkInstagram = doc.data().userLinkInstagram;
-            const userLinkTelegram = doc.data().userLinkTelegram;
-            const userLinkTikTok = doc.data().userLinkTikTok;
-
-            if (eventAccessType == "PUBLIC" || eventAccessType == "SELECTIVE") {
-                userEvents = doc.data().joinedPublicEvents;
-                eventDocRef = admin.firestore().collection('publicEvents').doc(eventId).collection('usersJoined').doc(senderId);
-            } else if (eventAccessType == "PRIVATE") {
-                userEvents = doc.data().joinedPrivateEvents;
-                eventDocRef = admin.firestore().collection('privateEvents').doc(eventId).collection('usersJoined').doc(senderId);
-            }
-
-            if (userEvents.includes(eventId)) {
-                var requestObjects = {
-                     userFullName : userFullName,
-                     userId : senderId,
-                     userProfileImg : userProfileImg,
-                     userLinkFacebook : userLinkFacebook,
-                     userLinkInstagram : userLinkInstagram,
-                     userLinkTelegram : userLinkTelegram,
-                     userLinkTikTok : userLinkTikTok,
-                };
-                return eventDocRef.set(requestObjects);
-            }
-        });
 	}
     return;
-  });
-
-exports.publicEventInviteRequest = functions.firestore
-  .document('publicEvents/{eventId}/invites/{inviteId}')
-  .onWrite((change, context) => {
-    if (!change.before.exists || (change.before.exists && change.after.exists)) {
-      // New document Created OR Document updated
-      const inviteId = context.params.inviteId;
-      const senderId = change.after.data().senderId;
-      const senderName = change.after.data().senderName;
-      const senderProfileImg = change.after.data().senderProfileImg;
-      const eventId = change.after.data().eventId;
-      const eventTitle = change.after.data().eventTitle;
-      const eventDescription = change.after.data().eventDescription;
-      const eventLocation = change.after.data().eventLocation;
-      const eventAvatar = change.after.data().eventAvatar;
-      const eventAccessType = change.after.data().eventAccessType;
-      const invitedUsersIdAfter = change.after.data().invitedUsersId.values();
-      const createTS = change.after.data().createTS;
-
-      if (invitedUsersIdAfter.length < 1 || invitedUsersIdAfter == null) {
-              return;
-      }
-
-      for (const userId of invitedUsersIdAfter) {
-          var requestObjects = {
-               action : "EVENT_INVITE",
-               senderId : senderId,
-               senderName: senderName,
-               senderProfileImg: senderProfileImg,
-               eventId : eventId,
-               eventTitle : eventTitle,
-               eventDescription : eventDescription,
-               eventLocation : eventLocation,
-               eventAvatar : eventAvatar,
-               eventAccessType : eventAccessType,
-               recipientId : userId,
-               createTS: createTS
-          };
-          admin.firestore().collection('userProfiles').doc(userId).collection('incomeRequests').doc(inviteId).set(requestObjects);
-      }
-      return;
-    } else if (!change.after.exists) {
-      // Deleting document
-      return;
-    }
-  });
-
-exports.privateEventInviteRequest = functions.firestore
-  .document('privateEvents/{eventId}/invites/{inviteId}')
-  .onWrite((snap, context) => {
-	if (!change.before.exists || (change.before.exists && change.after.exists)) {
-          // New document Created OR Document updated
-          const inviteId = context.params.inviteId;
-          const senderId = change.after.data().senderId;
-          const senderName = change.after.data().senderName;
-          const senderProfileImg = change.after.data().senderProfileImg;
-          const eventId = change.after.data().eventId;
-          const eventTitle = change.after.data().eventTitle;
-          const eventDescription = change.after.data().eventDescription;
-          const eventLocation = change.after.data().eventLocation;
-          const eventAvatar = change.after.data().eventAvatar;
-          const eventAccessType = change.after.data().eventAccessType;
-          const invitedUsersIdAfter = change.after.data().invitedUsersId.values();
-          const createTS = change.after.data().createTS;
-
-          if (invitedUsersIdAfter.length < 1 || invitedUsersIdAfter == null) {
-                  return;
-          }
-
-          for (const userId of invitedUsersIdAfter) {
-              var requestObjects = {
-                   action : "EVENT_INVITE",
-                   senderId : senderId,
-                   senderName: senderName,
-                   senderProfileImg: senderProfileImg,
-                   eventId : eventId,
-                   eventTitle : eventTitle,
-                   eventDescription : eventDescription,
-                   eventLocation : eventLocation,
-                   eventAvatar : eventAvatar,
-                   eventAccessType : eventAccessType,
-                   recipientId : userId,
-                   createTS: createTS
-              };
-              admin.firestore().collection('userProfiles').doc(userId).collection('incomeRequests').doc(inviteId).set(requestObjects);
-          }
-          return;
-        } else if (!change.after.exists) {
-          // Deleting document
-          return;
-        }
   });

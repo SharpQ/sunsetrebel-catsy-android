@@ -15,6 +15,21 @@
         <item name="android:drawableEnd">@drawable/ic_main_button_drawable_scale</item>
     </style>
 
+    <style name="DefaultOutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">55dp</item>
+        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:fontFamily">@font/audiowide</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textSize">14sp</item>
+        <item name="strokeColor">@color/primaryLightColor</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="rippleColor">@color/primaryLightColor</item>
+        <item name="cornerRadius">12dp</item>
+    </style>
+
     <style name="HyperlinkButton">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">45dp</item>
@@ -189,6 +204,10 @@
     <style name="EventListHostAvatar" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="RoundCorner20pers" parent="">
+        <item name="cornerSize">20%</item>
     </style>
 
     <style name="popup_window_animation">

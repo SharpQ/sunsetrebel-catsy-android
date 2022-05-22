@@ -93,10 +93,17 @@
     <string name="profile_info_title_social_networks">Social networks</string>
     <string name="profile_notifications_title">Notifications</string>
     <string name="profile_no_new_notifications_label">No new notifications</string>
+    <string name="notifications_tab_title_all">All</string>
     <string name="notifications_tab_title_events">Events</string>
     <string name="notifications_tab_title_friends">Friends</string>
     <string name="popup_user_add">Add to friends</string>
     <string name="popup_user_block">Block user</string>
+    <string name="notifications_accept_btn">Accept</string>
+    <string name="notifications_decline_btn">Decline</string>
+    <string name="notification_friend_invite_title">\u0020sent you friend request</string>
+    <string name="notification_event_invite_title">\u0020sent you invitation to\u0020</string>
+    <string name="friend_invite_accept_success">\u0020added to friend list!</string>
+    <string name="friend_invite_accept_fail">\u0020error adding user to friend list!</string>
     <string name="event_theme_sport">Sport</string>
     <string name="event_theme_music">Music</string>
     <string name="event_theme_art">Art</string>

@@ -18,7 +18,7 @@ public class UserProfileService {
         fAuth = firebaseAuthService.getFirebaseClient();
         if (mainUserProfileModel == null) {
             executorService = Executors.newSingleThreadScheduledExecutor();
-            executorService.scheduleAtFixedRate(getUserProfileRunnable, 0, 2, TimeUnit.SECONDS);
+            executorService.scheduleAtFixedRate(getUserProfileRunnable, 0, 1, TimeUnit.SECONDS);
         }
     }
 
