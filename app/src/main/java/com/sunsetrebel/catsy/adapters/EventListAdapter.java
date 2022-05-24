@@ -21,11 +21,11 @@ import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.fragments.EventListDetailedFragment;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
+import com.sunsetrebel.catsy.utils.DateUtil;
 import com.sunsetrebel.catsy.utils.EventThemesUtil;
-import com.sunsetrebel.catsy.utils.ImageUtils;
+import com.sunsetrebel.catsy.utils.ImageUtil;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -33,7 +33,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     private List<EventModel> eventList;
     private Context context;
     private Fragment fragment;
-    private SimpleDateFormat simpleDateFormat;
     private EventListViewModel eventListViewModel;
     private EventThemesUtil eventThemesUtil;
 
@@ -42,7 +41,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
         this.eventList = eventList;
         this.context = fragment.getContext();
         this.fragment = fragment;
-        simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
         eventThemesUtil = EventThemesUtil.getInstance(context.getResources());
         eventListViewModel = new ViewModelProvider(fragment.requireActivity()).get(EventListViewModel.class);
     }
@@ -64,12 +62,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             usersCountValue = usersCountValue.concat(" / ").concat(eventMaxPersonString);
         }
         //Set event avatar
-        ImageUtils.loadImageView(context, eventList.get(position).getEventAvatar(), holder.ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
+        ImageUtil.loadImageView(context, eventList.get(position).getEventAvatar(), holder.ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
         //Set host avatar
-        ImageUtils.loadImageView(context, eventList.get(position).getHostProfileImg(), holder.ivHostAvatar, R.drawable.im_cat_hearts);
+        ImageUtil.loadImageView(context, eventList.get(position).getHostProfileImg(), holder.ivHostAvatar, R.drawable.im_cat_hearts);
         holder.tvEventTitle.setText(eventList.get(position).getEventTitle());
         holder.tvHostName.setText(eventList.get(position).getHostName());
-        holder.tvEventStartTime.setText(simpleDateFormat.format(eventList.get(position).getEventStartTime()));
+        holder.tvEventStartTime.setText(DateUtil.dateToString(eventList.get(position).getEventStartTime()));
         holder.tvEventLocation.setText(eventList.get(position).getEventLocation());
         holder.tvEventDescription.setText(eventList.get(position).getEventDescr());
         holder.tvEventParticipants.setText(usersCountValue);

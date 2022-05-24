@@ -2,8 +2,6 @@ package com.sunsetrebel.catsy.adapters;
 
 
 import android.content.Context;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,33 +14,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.enums.PopupType;
-import com.sunsetrebel.catsy.models.CommonUserModel;
-import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.models.InviteToEventModel;
 import com.sunsetrebel.catsy.models.InviteToFriendsListModel;
-import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.ImageUtils;
-import com.sunsetrebel.catsy.utils.PopupService;
+import com.sunsetrebel.catsy.utils.DateUtil;
+import com.sunsetrebel.catsy.utils.ImageUtil;
 import com.sunsetrebel.catsy.viewmodel.ProfileViewModel;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<Object> notificationList;
     private Context context;
     private Fragment fragment;
     private ProfileViewModel profileViewModel;
-    private SimpleDateFormat simpleDateFormat;
 
     public NotificationsAdapter(Fragment fragment, List<Object> notificationList) {
         this.notificationList = notificationList;
         this.context = fragment.getContext();
         this.fragment = fragment;
         profileViewModel = new ViewModelProvider(fragment.requireActivity()).get(ProfileViewModel.class);
-        simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
     }
 
     @Override
@@ -68,9 +58,9 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
             case 1:
                 ViewHolderInviteToFriends viewHolderInviteToFriends = (ViewHolderInviteToFriends) holder;
                 InviteToFriendsListModel inviteToFriends = (InviteToFriendsListModel) notificationList.get(position);
-                ImageUtils.loadImageView(context, inviteToFriends.getSenderProfileImg(),
+                ImageUtil.loadImageView(context, inviteToFriends.getSenderProfileImg(),
                         viewHolderInviteToFriends.ivSenderProfile, R.drawable.im_cat_hearts);
-                viewHolderInviteToFriends.tvTimestamp.setText(simpleDateFormat.format(inviteToFriends.getCreateTS().toDate()));
+                viewHolderInviteToFriends.tvTimestamp.setText(DateUtil.timestampToString(inviteToFriends.getCreateTS()));
                 viewHolderInviteToFriends.tvTitle.setText(inviteToFriends.getSenderName() + context.getResources().getText(R.string.notification_friend_invite_title).toString());
                 viewHolderInviteToFriends.acceptBtn.setOnClickListener(v -> profileViewModel.acceptFriendInvite(context, inviteToFriends));
                 viewHolderInviteToFriends.declineBtn.setOnClickListener(v -> profileViewModel.declineFriendInvite(inviteToFriends));
@@ -78,13 +68,13 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
             case 2:
                 ViewHolderInviteToEvent viewHolderInviteToEvent = (ViewHolderInviteToEvent) holder;
                 InviteToEventModel inviteToEvent = (InviteToEventModel) notificationList.get(position);
-                ImageUtils.loadImageView(context, inviteToEvent.getSenderProfileImg(),
+                ImageUtil.loadImageView(context, inviteToEvent.getSenderProfileImg(),
                         viewHolderInviteToEvent.ivSenderProfile, R.drawable.im_cat_hearts);
-                ImageUtils.loadImageView(context, inviteToEvent.getEventAvatar(),
+                ImageUtil.loadImageView(context, inviteToEvent.getEventAvatar(),
                         viewHolderInviteToEvent.ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
-                viewHolderInviteToEvent.tvTimestamp.setText(simpleDateFormat.format(inviteToEvent.getCreateTS().toDate()));
+                viewHolderInviteToEvent.tvTimestamp.setText(DateUtil.timestampToString(inviteToEvent.getCreateTS()));
                 viewHolderInviteToEvent.tvTitle.setText(inviteToEvent.getSenderName() + context.getResources().getText(R.string.notification_event_invite_title).toString() + inviteToEvent.getEventTitle());
-                viewHolderInviteToEvent.tvStartTime.setText(simpleDateFormat.format(inviteToEvent.getEventStartTime()));
+                viewHolderInviteToEvent.tvStartTime.setText(DateUtil.dateToString(inviteToEvent.getEventStartTime()));
                 viewHolderInviteToEvent.tvLocation.setText(inviteToEvent.getEventLocation());
                 viewHolderInviteToEvent.tvDescription.setText(inviteToEvent.getEventDescription());
                 viewHolderInviteToEvent.acceptBtn.setOnClickListener(v -> profileViewModel.acceptEventInvite(context, inviteToEvent));

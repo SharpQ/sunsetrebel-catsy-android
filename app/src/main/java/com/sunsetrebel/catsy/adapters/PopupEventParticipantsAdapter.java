@@ -11,31 +11,21 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.fragments.EventListDetailedFragment;
 import com.sunsetrebel.catsy.models.CommonUserModel;
-import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.utils.ExternalSocialsUtil;
-import com.sunsetrebel.catsy.utils.ImageUtils;
-import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
+import com.sunsetrebel.catsy.utils.ImageUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 public class PopupEventParticipantsAdapter extends RecyclerView.Adapter<PopupEventParticipantsAdapter.ViewHolder> {
     private List<CommonUserModel> listOfUsers;
@@ -64,7 +54,7 @@ public class PopupEventParticipantsAdapter extends RecyclerView.Adapter<PopupEve
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ImageUtils.loadImageView(context, listOfUsers.get(position).getUserProfileImg(),
+        ImageUtil.loadImageView(context, listOfUsers.get(position).getUserProfileImg(),
                 holder.imageUserProfile, R.drawable.im_cat_hearts);
         holder.tvUsername.setText(listOfUsers.get(position).getUserFullName());
         holder.tvUserId.setText(listOfUsers.get(position).getUserId());

@@ -1,33 +1,13 @@
 package com.sunsetrebel.catsy.utils;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.ImageDecoder;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Geocoder;
-import android.location.Location;
-import android.media.ThumbnailUtils;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.RoundedBitmapDrawable;
-import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory;
-import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.CustomViewTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,8 +16,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.EventModel;
 
@@ -69,10 +47,10 @@ public class GoogleMapService {
         googleMap.getUiSettings().setCompassEnabled(false);
 //        mMap.getUiSettings().setRotateGesturesEnabled(false);
         if (shouldZoomToUser) {
-            if (PermissionUtils.isLocationPermissionEnabled(context)) {
+            if (PermissionUtil.isLocationPermissionEnabled(context)) {
                 zoomToUserLocation(context, googleMap);
             } else {
-                PermissionUtils.requestLocationPermissions(isActivity, screen);
+                PermissionUtil.requestLocationPermissions(isActivity, screen);
             }
         }
     }
@@ -101,7 +79,7 @@ public class GoogleMapService {
 
     public static void setEventMarker(GoogleMap googleMap, EventModel eventModel, Context context) {
         if (context != null) {
-            ImageUtils.loadBitmapMapIcons(scaledBitmap -> {
+            ImageUtil.loadBitmapMapIcons(scaledBitmap -> {
                 googleMap.addMarker(new MarkerOptions().position(eventModel.getEventGeoLocation()).icon(BitmapDescriptorFactory.fromBitmap(scaledBitmap))).setTag(eventModel); //.title(eventModel.getEventTitle()).snippet(context.getString(R.string.event_list_host_placeholder) + eventModel.getHostName())
             }, context, eventModel.getEventAvatar());
         }

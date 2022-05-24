@@ -16,7 +16,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_image_user_item"
-            android:background="@color/primaryLightColor"
+            android:background="@android:color/transparent"
             app:shapeAppearanceOverlay="@style/EventListHostAvatar"
             android:elevation="15dp"
             android:padding="5dp"
@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textColor="@color/primaryTextColor"
-            android:textSize="14sp"
+            android:textSize="@dimen/default_text_size"
             android:textStyle="normal"
             android:textAlignment="center"
             android:longClickable="false"

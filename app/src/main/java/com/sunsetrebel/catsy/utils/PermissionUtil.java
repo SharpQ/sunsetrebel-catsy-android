@@ -6,7 +6,7 @@ import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-public class PermissionUtils extends Fragment {
+public class PermissionUtil extends Fragment {
     private final static int ACCESS_LOCATION_REQUEST_CODE = 10001;
     private final static int ACCESS_GALLERY_REQUEST_CODE = 1001;
 
@@ -42,6 +42,6 @@ public class PermissionUtils extends Fragment {
     }
 
     public static void requestGalleryPermissionsFragment(Fragment fragment) {
-        fragment.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PermissionUtils.getAccessGalleryRequestCode());
+        fragment.requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, PermissionUtil.getAccessGalleryRequestCode());
     }
 }

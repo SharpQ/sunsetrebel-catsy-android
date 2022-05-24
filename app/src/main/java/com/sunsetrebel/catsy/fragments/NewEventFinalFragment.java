@@ -24,14 +24,13 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.InviteFriendsAdapter;
 import com.sunsetrebel.catsy.models.CommonUserModel;
-import com.sunsetrebel.catsy.utils.PermissionUtils;
+import com.sunsetrebel.catsy.utils.PermissionUtil;
 import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -142,10 +141,10 @@ public class NewEventFinalFragment extends Fragment {
         });
 
         mAvatarImageView.setOnClickListener(v17 -> {
-            if (PermissionUtils.isGalleryPermissionEnabled(getContext())) {
+            if (PermissionUtil.isGalleryPermissionEnabled(getContext())) {
                 pickImageFromGallery();
             } else {
-                PermissionUtils.requestGalleryPermissionsFragment(NewEventFinalFragment.this);
+                PermissionUtil.requestGalleryPermissionsFragment(NewEventFinalFragment.this);
             }
         });
         return v;
@@ -188,7 +187,7 @@ public class NewEventFinalFragment extends Fragment {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == PermissionUtils.getAccessGalleryRequestCode()) {
+        if (requestCode == PermissionUtil.getAccessGalleryRequestCode()) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 pickImageFromGallery();
             } else {

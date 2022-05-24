@@ -1,19 +1,12 @@
 package com.sunsetrebel.catsy.adapters;
 
 import android.content.Context;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,12 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.CommonUserModel;
-import com.sunsetrebel.catsy.models.MainUserProfileModel;
-import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
-import com.sunsetrebel.catsy.repositories.UserProfileService;
-import com.sunsetrebel.catsy.utils.CustomToastUtil;
-import com.sunsetrebel.catsy.utils.ExternalSocialsUtil;
-import com.sunsetrebel.catsy.utils.ImageUtils;
+import com.sunsetrebel.catsy.utils.ImageUtil;
 import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
 
 import java.util.List;
@@ -54,7 +42,7 @@ public class InviteFriendsAdapter extends RecyclerView.Adapter<InviteFriendsAdap
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ImageUtils.loadImageView(context, listOfUsers.get(position).getUserProfileImg(),
+        ImageUtil.loadImageView(context, listOfUsers.get(position).getUserProfileImg(),
                 holder.imageUserProfile, R.drawable.im_cat_hearts);
         holder.tvUsername.setText(listOfUsers.get(position).getUserFullName());
         holder.tvUserId.setText(listOfUsers.get(position).getUserId());

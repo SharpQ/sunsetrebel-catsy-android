@@ -23,18 +23,17 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.enums.AccessType;
-import com.sunsetrebel.catsy.utils.CustomToastUtil;
 import com.sunsetrebel.catsy.enums.EventThemes;
+import com.sunsetrebel.catsy.utils.CustomToastUtil;
+import com.sunsetrebel.catsy.utils.DateUtil;
 import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 
@@ -258,8 +257,7 @@ public class NewEventPrimaryFragment extends Fragment {
                             endTimeDate = calendar.getTime();
                         }
 
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
-                        timeEditText.setText(simpleDateFormat.format(calendar.getTime()));
+                        timeEditText.setText(DateUtil.dateToString(calendar.getTime()));
                     }
                 };
                 new TimePickerDialog(getActivity(), R.style.DatePickerDialog, timeSetListener, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE),true).show();

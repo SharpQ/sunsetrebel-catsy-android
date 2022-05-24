@@ -2,7 +2,6 @@ package com.sunsetrebel.catsy.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +17,8 @@ import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.material.tabs.TabLayout;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.activities.LoginActivity;
-import com.sunsetrebel.catsy.adapters.EventListAdapter;
 import com.sunsetrebel.catsy.models.MainUserProfileModel;
-import com.sunsetrebel.catsy.repositories.FirebaseAuthService;
-import com.sunsetrebel.catsy.repositories.UserProfileService;
-import com.sunsetrebel.catsy.utils.ImageUtils;
+import com.sunsetrebel.catsy.utils.ImageUtil;
 import com.sunsetrebel.catsy.viewmodel.ProfileViewModel;
 
 public class ProfileMainFragment extends Fragment {
@@ -55,7 +51,7 @@ public class ProfileMainFragment extends Fragment {
         notificationsBtn = v.findViewById(R.id.ib_profile_notification);
         circleBtn = v.findViewById(R.id.ib_circle);
 
-        ImageUtils.loadImageView(getContext(), profileViewModel.getUserProfile().getUserProfileImg(), profileImage, R.drawable.im_cat_hearts);
+        ImageUtil.loadImageView(getContext(), profileViewModel.getUserProfile().getUserProfileImg(), profileImage, R.drawable.im_cat_hearts);
         profileUserName.setText(profileViewModel.getUserProfile().getUserFullName());
         profileId.setText(getContext().getString(R.string.profile_id_placeholder) + profileViewModel.getUserProfile().getUserId());
         personalInfoFragment = new ProfilePersonalInfoFragment();

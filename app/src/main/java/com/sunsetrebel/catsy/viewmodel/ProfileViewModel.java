@@ -31,10 +31,6 @@ public class ProfileViewModel extends ViewModel {
     private MediatorLiveData<List<Object>> filteredNotificationList = new MediatorLiveData<>();
     private MutableLiveData<Enum<NotificationType>> notificationTypeToDisplay = new MutableLiveData<>();
 
-    public interface FriendRequestCallback {
-        void onResponse(Boolean isResponseSuccessful);
-    }
-
     public void init() {
         firebaseAuthService = FirebaseAuthService.getInstance();
         userProfileService = UserProfileService.getInstance();

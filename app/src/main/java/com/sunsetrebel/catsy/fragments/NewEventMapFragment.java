@@ -1,7 +1,6 @@
 package com.sunsetrebel.catsy.fragments;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -12,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,7 +42,7 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
-import com.sunsetrebel.catsy.utils.PermissionUtils;
+import com.sunsetrebel.catsy.utils.PermissionUtil;
 import com.sunsetrebel.catsy.viewmodel.NewEventViewModel;
 
 import java.io.IOException;
@@ -263,7 +261,7 @@ public class NewEventMapFragment extends Fragment implements OnMapReadyCallback 
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PermissionUtils.getAccessLocationRequestCode()) {
+        if (requestCode == PermissionUtil.getAccessLocationRequestCode()) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 GoogleMapService.zoomToUserLocation(getContext(), mMap);
             } else {

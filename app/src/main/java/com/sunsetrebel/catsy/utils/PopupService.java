@@ -4,7 +4,6 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.sunsetrebel.catsy.R;
-import com.sunsetrebel.catsy.adapters.EventListAdapter;
 import com.sunsetrebel.catsy.adapters.PopupEventParticipantsAdapter;
 import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.CommonUserModel;
@@ -28,7 +26,6 @@ import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.repositories.UserProfileService;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,7 +46,6 @@ public class PopupService {
 
     public static class PopupBuilder
     {
-        private final SimpleDateFormat simpleDateFormat;
         private final EventThemesUtil eventThemesUtil;
         private final Fragment fragment;
         public PopupWindow infoPopup;
@@ -59,7 +55,6 @@ public class PopupService {
         public PopupBuilder(Fragment fragment, Object dataModel, PopupType popupType, int width,
                             int height) {
             this.fragment = fragment;
-            this.simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
             this.eventThemesUtil = EventThemesUtil.getInstance(fragment.getContext().getResources());
 
             switch (popupType) {
@@ -127,12 +122,12 @@ public class PopupService {
             ImageView ivHostAvatar = popupView.findViewById(R.id.imageViewHostAvatar);
 
             //Set event avatar
-            ImageUtils.loadImageView(fragment.getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
+            ImageUtil.loadImageView(fragment.getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
             //Set host avatar
-            ImageUtils.loadImageView(fragment.getContext(), eventModel.getHostProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
+            ImageUtil.loadImageView(fragment.getContext(), eventModel.getHostProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
             tvEventTitle.setText(eventModel.getEventTitle());
             tvHostName.setText(eventModel.getHostName());
-            tvStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
+            tvStartTime.setText(DateUtil.dateToString(eventModel.getEventStartTime()));
             tvEventParticipants.setText(String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants()));
             tvEventDescription.setText(eventModel.getEventDescr());
             tvEventLocation.setText(eventModel.getEventLocation());
@@ -174,7 +169,7 @@ public class PopupService {
 
             tvUserName.setText(userProfile.getUserFullName());
             tvUserId.setText(userProfile.getUserId());
-            ImageUtils.loadImageView(fragment.getContext(), userProfile.getUserProfileImg(), ivUserAvatar, R.drawable.im_cat_hearts);
+            ImageUtil.loadImageView(fragment.getContext(), userProfile.getUserProfileImg(), ivUserAvatar, R.drawable.im_cat_hearts);
 
             btnAddToFriends.setOnClickListener(v -> {
                 firebaseFirestoreService.sendFriendRequest(value -> {

@@ -29,15 +29,15 @@ import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
+import com.sunsetrebel.catsy.utils.DateUtil;
 import com.sunsetrebel.catsy.utils.EventThemesUtil;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
-import com.sunsetrebel.catsy.utils.ImageUtils;
+import com.sunsetrebel.catsy.utils.ImageUtil;
 import com.sunsetrebel.catsy.utils.PopupService;
 import com.sunsetrebel.catsy.viewmodel.EventListViewModel;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 
@@ -46,7 +46,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private EventListViewModel eventListViewModel;
     private EventModel eventModel;
     private GoogleMap mMap;
-    private SimpleDateFormat simpleDateFormat;
     private ImageView backButton, likeButton, shareButton, extraButton;
     private AppCompatButton joinButton;
     private ImageView ivHostAvatar, ivEventAvatar;
@@ -73,7 +72,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         View v = inflater.inflate(R.layout.fragment_event_list_detailed, container, false);
         eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         eventModel = eventListViewModel.getSelectedEvent();
-        simpleDateFormat = new SimpleDateFormat("HH:mm d MMM ''yy", Locale.getDefault());
         eventThemesUtil = EventThemesUtil.getInstance(getContext().getResources());
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragment_event_detailed_map);
@@ -132,13 +130,13 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         //UI setup
         backButton.setOnClickListener(v1 -> getParentFragmentManager().popBackStack());
         //Set event avatar
-        ImageUtils.loadImageView(getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
+        ImageUtil.loadImageView(getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
         //Set host avatar
-        ImageUtils.loadImageView(getContext(), eventModel.getHostProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
+        ImageUtil.loadImageView(getContext(), eventModel.getHostProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
         tvEventTitle.setText(eventModel.getEventTitle());
         tvHostName.setText(eventModel.getHostName());
-        tvEventStartTime.setText(simpleDateFormat.format(eventModel.getEventStartTime()));
-        tvEventEndTime.setText(simpleDateFormat.format(eventModel.getEventEndTime()));
+        tvEventStartTime.setText(DateUtil.dateToString(eventModel.getEventStartTime()));
+        tvEventEndTime.setText(DateUtil.dateToString(eventModel.getEventEndTime()));
         tvEventDescription.setText(eventModel.getEventDescr());
         tvEventParticipants.setText(usersCountSpan);
         tvAgeLimit.setText(eventAgeLimitStr);
@@ -254,7 +252,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         imageButton.setPadding(0,0,0,0);
         imageButton.setBackgroundColor(Color.TRANSPARENT);
         linearLayoutParticipants.addView(imageButton);
-        ImageUtils.loadRoundedImageView(getContext(), userProfile.getUserProfileImg(), imageButton, R.drawable.im_cat_hearts);
+        ImageUtil.loadRoundedImageView(getContext(), userProfile.getUserProfileImg(), imageButton, R.drawable.im_cat_hearts);
 
         imageButton.setOnClickListener(v -> PopupService.showPopup(
                 new PopupService.PopupBuilder(this, userProfile,

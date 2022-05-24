@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -36,7 +35,7 @@ import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.repositories.FirebaseFirestoreService;
 import com.sunsetrebel.catsy.utils.GoogleMapService;
-import com.sunsetrebel.catsy.utils.PermissionUtils;
+import com.sunsetrebel.catsy.utils.PermissionUtil;
 import com.sunsetrebel.catsy.utils.PopupService;
 
 import java.util.ArrayList;
@@ -144,7 +143,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Google
     @SuppressLint("MissingPermission")
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PermissionUtils.getAccessLocationRequestCode()) {
+        if (requestCode == PermissionUtil.getAccessLocationRequestCode()) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 GoogleMapService.zoomToUserLocation(getContext(), mMap);
             } else {

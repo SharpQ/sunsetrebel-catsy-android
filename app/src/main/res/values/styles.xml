@@ -2,28 +2,28 @@
 <resources>
     <!--BUTTONS-->
     <style name="DefaultButton">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">55dp</item>
+        <item name="android:layout_width">@dimen/default_btn_width</item>
+        <item name="android:layout_height">@dimen/default_btn_height</item>
         <item name="android:backgroundTint">@color/primaryColor</item>
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginStart">@dimen/default_side_margin</item>
+        <item name="android:layout_marginEnd">@dimen/default_side_margin</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:drawableStart">@drawable/ic_main_button_drawable_scale</item>
         <item name="android:drawableEnd">@drawable/ic_main_button_drawable_scale</item>
     </style>
 
     <style name="DefaultOutlinedButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">55dp</item>
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_width">@dimen/default_btn_width</item>
+        <item name="android:layout_height">@dimen/default_btn_height</item>
+        <item name="android:layout_marginStart">@dimen/default_side_margin</item>
+        <item name="android:layout_marginEnd">@dimen/default_side_margin</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textAlignment">center</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
         <item name="strokeColor">@color/primaryLightColor</item>
         <item name="strokeWidth">2dp</item>
         <item name="rippleColor">@color/primaryLightColor</item>
@@ -31,11 +31,11 @@
     </style>
 
     <style name="HyperlinkButton">
-        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_width">@dimen/default_btn_width</item>
         <item name="android:layout_height">45dp</item>
         <item name="android:background">@null</item>
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginStart">@dimen/default_side_margin</item>
+        <item name="android:layout_marginEnd">@dimen/default_side_margin</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:textColor">@color/primaryLightColor</item>
         <item name="android:textAlignment">center</item>
@@ -43,11 +43,11 @@
     </style>
 
     <style name="FacebookButton">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">55dp</item>
+        <item name="android:layout_width">@dimen/default_btn_width</item>
+        <item name="android:layout_height">@dimen/default_btn_height</item>
         <item name="android:backgroundTint">@color/facebookBtnColor</item>
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginStart">@dimen/default_side_margin</item>
+        <item name="android:layout_marginEnd">@dimen/default_side_margin</item>
         <item name="android:paddingStart">20dp</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:text">@string/facebook_authentication</item>
@@ -57,11 +57,11 @@
     </style>
 
     <style name="GoogleButton">
-        <item name="android:layout_width">0dp</item>
-        <item name="android:layout_height">55dp</item>
+        <item name="android:layout_width">@dimen/default_btn_width</item>
+        <item name="android:layout_height">@dimen/default_btn_height</item>
         <item name="android:backgroundTint">@color/googleBtnColor</item>
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginStart">@dimen/default_side_margin</item>
+        <item name="android:layout_marginEnd">@dimen/default_side_margin</item>
         <item name="android:paddingStart">20dp</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:text">@string/google_authentication</item>
@@ -73,8 +73,8 @@
     <!--EDIT FIELDS-->
 
     <style name="InitialFlowTextInputLayout">
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginStart">@dimen/default_side_margin</item>
+        <item name="android:layout_marginEnd">@dimen/default_side_margin</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:textAlignment">textStart</item>
         <item name="android:textColor">@color/primaryTextColor</item>
@@ -97,8 +97,8 @@
     </style>
 
     <style name="NewEventTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="android:layout_marginStart">20dp</item>
-        <item name="android:layout_marginEnd">20dp</item>
+        <item name="android:layout_marginStart">@dimen/default_side_margin</item>
+        <item name="android:layout_marginEnd">@dimen/default_side_margin</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorHint">@color/primaryTextColor</item>
         <item name="hintTextColor">@color/primaryTextColor</item>
@@ -124,7 +124,6 @@
     <style name="DialogTheme" parent="android:Theme.Dialog">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <!-- No backgrounds, titles or window float -->
         <item name="android:windowBackground">@color/primaryColor</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">false</item>
@@ -154,9 +153,9 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">30dp</item>
         <item name="android:fontFamily">@font/audiowide</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColor">@color/grayTopBar</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_marginStart">10dp</item>
     </style>
@@ -165,7 +164,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">25dp</item>
         <item name="android:fontFamily">@font/audiowide</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:gravity">center_vertical</item>

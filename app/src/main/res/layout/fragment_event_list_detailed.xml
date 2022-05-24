@@ -15,7 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_header"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/default_top_bar_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,8 +24,8 @@
 
         <ImageButton
             android:id="@+id/ib_back"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="@dimen/default_top_bar_size"
+            android:layout_height="@dimen/default_top_bar_size"
             android:background="?android:selectableItemBackgroundBorderless"
             app:srcCompat="@drawable/ic_baseline_keyboard_arrow_left_45"
             app:layout_constraintBottom_toBottomOf="@id/cl_header"
@@ -37,8 +37,8 @@
 
         <ImageButton
             android:id="@+id/ib_extra"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="@dimen/default_top_bar_size"
+            android:layout_height="@dimen/default_top_bar_size"
             android:background="?android:selectableItemBackgroundBorderless"
             app:layout_constraintBottom_toBottomOf="@id/cl_header"
             app:layout_constraintEnd_toEndOf="@id/cl_header"
@@ -71,7 +71,7 @@
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/primaryLightColor"
+                android:background="@android:color/transparent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
@@ -85,7 +85,7 @@
                 android:layout_width="150dp"
                 android:layout_height="150dp"
                 android:layout_marginTop="10dp"
-                android:background="@color/primaryLightColor"
+                android:background="@android:color/transparent"
                 android:clickable="false"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -148,7 +148,7 @@
                 android:inputType="textVisiblePassword|textNoSuggestions"
                 android:text="[POSTED BY USER]"
                 android:textColor="@color/primaryTextColor"
-                android:textSize="14sp"
+                android:textSize="@dimen/default_text_size"
                 android:longClickable="false"
                 android:clickable="false"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -428,8 +428,8 @@
 
             <ImageButton
                 android:id="@+id/ib_share"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/default_top_bar_size"
+                android:layout_height="@dimen/default_top_bar_size"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
@@ -445,8 +445,8 @@
 
             <ImageButton
                 android:id="@+id/ib_like"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="@dimen/default_top_bar_size"
+                android:layout_height="@dimen/default_top_bar_size"
                 android:padding="5dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
@@ -464,8 +464,7 @@
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button_join"
                 style="@style/DefaultButton"
-                android:layout_height="48dp"
-                android:layout_width="0dp"
+                android:layout_height="@dimen/default_top_bar_size"
                 android:drawablePadding="40dp"
                 android:enabled="false"
                 android:visibility="invisible"
@@ -484,7 +483,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_no_free_slot"
-                android:layout_height="48dp"
+                android:layout_height="@dimen/default_top_bar_size"
                 android:layout_width="0dp"
                 android:drawableEnd="@drawable/ic_draw_max_members_reached"
                 android:scaleType="fitXY"

@@ -9,7 +9,7 @@
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profile_image"
-        android:background="@color/primaryLightColor"
+        android:background="@android:color/transparent"
         app:shapeAppearanceOverlay="@style/EventListHostAvatar"
         android:elevation="15dp"
         android:padding="5dp"
@@ -25,9 +25,8 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/button_logout"
         android:layout_width="100dp"
-        android:layout_height="35dp"
+        android:layout_height="@dimen/default_top_bar_size"
         android:layout_marginTop="5dp"
-        android:layout_marginStart="15dp"
         android:drawableStart="@drawable/ic_baseline_logout_24"
         android:text="@string/profile_button_logout"
         android:textColor="@color/grayTopBar"
@@ -39,36 +38,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0"
-        app:layout_constraintHorizontal_bias="0"/>
-
-    <ImageButton
-        android:id="@+id/ib_profile_edit"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
-        android:background="?android:selectableItemBackgroundBorderless"
-        app:srcCompat="@drawable/ic_baseline_edit_note_35"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/profile_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintVertical_bias="0"/>
+        app:layout_constraintHorizontal_bias="0.5"/>
 
     <ImageButton
         android:id="@+id/ib_profile_notification"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="@dimen/default_top_bar_size"
+        android:layout_height="@dimen/default_top_bar_size"
         android:layout_marginTop="5dp"
-        android:layout_marginEnd="25dp"
         android:background="?android:selectableItemBackgroundBorderless"
         app:srcCompat="@drawable/ic_baseline_circle_notifications_35"
+        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/profile_image"
         app:layout_constraintEnd_toStartOf="@id/ib_profile_edit"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintVertical_bias="0"/>
 
     <ImageButton
@@ -84,6 +68,21 @@
         app:layout_constraintEnd_toEndOf="@id/ib_profile_notification"
         app:layout_constraintTop_toTopOf="@id/ib_profile_notification"
         app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintVertical_bias="0"/>
+
+    <ImageButton
+        android:id="@+id/ib_profile_edit"
+        android:layout_width="@dimen/default_top_bar_size"
+        android:layout_height="@dimen/default_top_bar_size"
+        android:layout_marginTop="5dp"
+        android:background="?android:selectableItemBackgroundBorderless"
+        app:srcCompat="@drawable/ic_baseline_edit_note_35"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/ib_profile_notification"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.75"
         app:layout_constraintVertical_bias="0"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -127,7 +126,7 @@
                 android:layout_marginTop="90dp"
                 android:gravity="center"
                 android:textColor="@color/primaryTextColor"
-                android:textSize="14sp"
+                android:textSize="@dimen/default_text_size"
                 android:textStyle="normal"
                 android:fontFamily="@font/audiowide"/>
 

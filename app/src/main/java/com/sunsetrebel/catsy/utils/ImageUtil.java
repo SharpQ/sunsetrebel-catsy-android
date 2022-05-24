@@ -21,7 +21,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.sunsetrebel.catsy.R;
 
-public class ImageUtils {
+public class ImageUtil {
     public interface IconLoadCallback {
         void onLoad(Bitmap scaledBitmap);
     }
@@ -56,7 +56,7 @@ public class ImageUtils {
                     @Override
                     public void onLoadFailed(@Nullable Drawable errorDrawable) {
                         Bitmap errowDrawable = ((BitmapDrawable) ContextCompat.getDrawable(context, R.drawable.im_event_avatar_placeholder_64)).getBitmap();
-                        errowDrawable = ImageUtils.getCroppedBitmap(errowDrawable);
+                        errowDrawable = ImageUtil.getCroppedBitmap(errowDrawable);
                         Bitmap scaledBitmap = Bitmap.createScaledBitmap(errowDrawable, pixels, pixels, true);
                         iconLoadCallback.onLoad(scaledBitmap);
                     }
