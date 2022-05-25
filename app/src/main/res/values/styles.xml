@@ -8,7 +8,7 @@
         <item name="android:layout_marginStart">@dimen/default_side_margin</item>
         <item name="android:layout_marginEnd">@dimen/default_side_margin</item>
         <item name="android:fontFamily">@font/audiowide</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:drawableStart">@drawable/ic_main_button_drawable_scale</item>
@@ -21,7 +21,7 @@
         <item name="android:layout_marginStart">@dimen/default_side_margin</item>
         <item name="android:layout_marginEnd">@dimen/default_side_margin</item>
         <item name="android:fontFamily">@font/audiowide</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
         <item name="android:textAlignment">center</item>
         <item name="android:textSize">@dimen/default_text_size</item>
         <item name="strokeColor">@color/primaryLightColor</item>
@@ -51,7 +51,7 @@
         <item name="android:paddingStart">20dp</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:text">@string/facebook_authentication</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
         <item name="android:drawableStart">@drawable/com_facebook_button_icon</item>
         <item name="android:textSize">12sp</item>
     </style>
@@ -65,7 +65,7 @@
         <item name="android:paddingStart">20dp</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:text">@string/google_authentication</item>
-        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
         <item name="android:drawableStart">@drawable/ic_google_logo</item>
         <item name="android:textSize">12sp</item>
     </style>
@@ -155,7 +155,7 @@
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/grayTopBar</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:layout_marginStart">10dp</item>
     </style>

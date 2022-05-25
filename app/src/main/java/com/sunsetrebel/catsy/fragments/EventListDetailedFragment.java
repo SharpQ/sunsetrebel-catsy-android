@@ -134,7 +134,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         //Set host avatar
         ImageUtil.loadImageView(getContext(), eventModel.getHostProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
         tvEventTitle.setText(eventModel.getEventTitle());
-        tvHostName.setText(eventModel.getHostName());
+        tvHostName.setText(new StringBuilder(eventModel.getHostName()).append("\u0020\u2022\u0020").append(DateUtil.timestampToString(eventModel.getCreateTS())));
         tvEventStartTime.setText(DateUtil.dateToString(eventModel.getEventStartTime()));
         tvEventEndTime.setText(DateUtil.dateToString(eventModel.getEventEndTime()));
         tvEventDescription.setText(eventModel.getEventDescr());

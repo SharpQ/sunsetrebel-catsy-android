@@ -57,7 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/primaryTextColor"
-            android:textSize="12sp"
+            android:textSize="@dimen/default_text_minor_size"
             android:textStyle="normal"
             android:textAlignment="textStart"
             android:longClickable="false"

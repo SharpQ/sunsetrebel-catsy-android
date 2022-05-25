@@ -4,6 +4,6 @@
     android:padding="14dp"
     android:textColor="@color/primaryTextColor"
     android:textStyle="normal"
-    android:textSize="15sp"
+    android:textSize="@dimen/default_text_size"
     android:fontFamily="@font/audiowide"
     xmlns:android="http://schemas.android.com/apk/res/android"/>

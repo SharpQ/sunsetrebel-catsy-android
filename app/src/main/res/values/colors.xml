@@ -4,6 +4,7 @@
     <color name="primaryLightColor">#C2476E</color>
     <color name="primaryDarkColor">#38006b</color>
     <color name="primaryTextColor">#ffffff</color>
+    <color name="secondaryTextColor">#B2FFFFFF</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFF</color>
     <color name="googleBtnColor">#4286F5</color>
@@ -16,5 +17,4 @@
     <color name="greyBackground">#111111</color>
     <color name="failRedColor">#C60000</color>
     <color name="successGreenColor">#008008</color>
-    <color name="grayTopBar">#B2FFFFFF</color>
 </resources>

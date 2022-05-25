@@ -75,7 +75,7 @@
                 android:alpha="0.9"
                 android:radius="100dip"
                 android:text="@string/new_event_final_avatar_hint"
-                android:textSize="18sp"
+                android:textSize="@dimen/default_page_descr_text_size"
                 android:gravity="center_horizontal|center_vertical"
                 android:textColor="@color/primaryTextColor"
                 app:layout_constraintBottom_toBottomOf="@id/iv_event_avatar"
