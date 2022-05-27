@@ -4,6 +4,7 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,6 +18,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.imageview.ShapeableImageView;
+import com.google.android.material.shape.ShapeAppearanceModel;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.PopupEventParticipantsAdapter;
 import com.sunsetrebel.catsy.enums.PopupType;
@@ -118,9 +121,17 @@ public class PopupService {
             LinearLayout linearLayout = popupView.findViewById(R.id.ll_tags);
             ImageButton likeButton = popupView.findViewById(R.id.imageButtonLike);
             ImageButton shareButton = popupView.findViewById(R.id.imageButtonShare);
-            ImageView ivEventAvatar = popupView.findViewById(R.id.imageViewEventAvatar);
+            ShapeableImageView ivEventAvatar = popupView.findViewById(R.id.imageViewEventAvatar);
             ImageView ivHostAvatar = popupView.findViewById(R.id.imageViewHostAvatar);
 
+            //Event avatar set margin and shape
+            ViewGroup.MarginLayoutParams marginParams = (ViewGroup.MarginLayoutParams) ivEventAvatar.getLayoutParams();
+            int imageSizeDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, fragment.getResources().getDisplayMetrics());
+            marginParams.setMargins(imageSizeDP, imageSizeDP, 0, imageSizeDP);
+            ShapeAppearanceModel shapeAppearanceModel = ShapeAppearanceModel.builder(fragment.getContext(),
+                            R.style.CornerSize10Percent,
+                            R.style.CornerSize10Percent).build();
+            ivEventAvatar.setShapeAppearanceModel(shapeAppearanceModel);
             //Set event avatar
             ImageUtil.loadImageView(fragment.getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
             //Set host avatar
