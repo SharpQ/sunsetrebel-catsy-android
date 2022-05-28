@@ -118,7 +118,7 @@ public class PopupService {
             TextView tvEventLocation = popupView.findViewById(R.id.textViewLocation);
             TextView tvEventDescription = popupView.findViewById(R.id.tiet_event_description);
             TextView tvEventParticipants = popupView.findViewById(R.id.textViewParticipants);
-            LinearLayout linearLayout = popupView.findViewById(R.id.ll_tags);
+            TextView tvEventTags = popupView.findViewById(R.id.tv_event_template_tags);
             ImageButton likeButton = popupView.findViewById(R.id.imageButtonLike);
             ImageButton shareButton = popupView.findViewById(R.id.imageButtonShare);
             ShapeableImageView ivEventAvatar = popupView.findViewById(R.id.imageViewEventAvatar);
@@ -146,7 +146,7 @@ public class PopupService {
             likeButton.setVisibility(View.INVISIBLE);
             shareButton.setEnabled(false);
             shareButton.setVisibility(View.INVISIBLE);
-            eventThemesUtil.setEventThemesUI(eventModel.getEventThemes(), fragment, linearLayout, null);
+            eventThemesUtil.setEventThemesUI(eventModel.getEventThemes(), tvEventTags, fragment);
             return popupView;
         }
 

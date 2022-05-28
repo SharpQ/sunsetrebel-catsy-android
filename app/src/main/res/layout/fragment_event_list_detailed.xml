@@ -321,13 +321,21 @@
                 app:layout_constraintTop_toBottomOf="@+id/iv_event_avatar"
                 app:layout_constraintVertical_bias="0"/>
 
-            <LinearLayout
-                android:id="@+id/ll_event_detailed_tags"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_event_detailed_tags"
                 android:layout_width="0dp"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
+                android:singleLine="true"
+                android:lines="1"
+                android:textSize="@dimen/default_text_size"
+                android:fontFamily="@font/audiowide"
+                android:inputType="textVisiblePassword|textNoSuggestions"
+                android:longClickable="false"
                 android:clickable="false"
+                android:ems="10"
+                android:maxEms="15"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -345,7 +353,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ll_event_detailed_tags"
+                app:layout_constraintTop_toBottomOf="@id/tv_event_detailed_tags"
                 app:layout_constraintVertical_bias="0"
                 tools:context=".fragments.EventListDetailedFragment" />
 

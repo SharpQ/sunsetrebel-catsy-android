@@ -50,8 +50,8 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private AppCompatButton joinButton;
     private ImageView ivHostAvatar, ivEventAvatar;
     private TextView tvEventTitle, tvHostName, tvEventStartTime, tvEventEndTime, tvEventDescription,
-            tvEventParticipants, tvAgeLimit, tvMaxMembersReached;
-    private LinearLayout linearLayoutThemes, linearLayoutParticipants;
+            tvEventParticipants, tvAgeLimit, tvMaxMembersReached, tvEventDetailedThemes;
+    private LinearLayout linearLayoutParticipants;
     private boolean isUserJoinedToEvent;
     private boolean isUserEventHost;
     private int imageSizeUsersProfile;
@@ -93,7 +93,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         tvEventDescription = v.findViewById(R.id.tv_event_description);
         tvEventParticipants = v.findViewById(R.id.tv_event_detailed_participants_value);
         tvAgeLimit = v.findViewById(R.id.tv_event_detailed_age_limit_value);
-        linearLayoutThemes = v.findViewById(R.id.ll_event_detailed_tags);
+        tvEventDetailedThemes = v.findViewById(R.id.tv_event_detailed_tags);
         linearLayoutParticipants = v.findViewById(R.id.ll_event_users);
         tvMaxMembersReached = v.findViewById(R.id.tv_no_free_slot);
 
@@ -217,7 +217,8 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             }
         });
 
-        eventThemesUtil.setEventThemesUI(eventModel.getEventThemes(), this, linearLayoutThemes, null);
+        eventThemesUtil.setEventThemesUI(eventModel.getEventThemes(), tvEventDetailedThemes,
+                this);
         return v;
     }
 

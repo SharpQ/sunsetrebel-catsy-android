@@ -102,7 +102,7 @@
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorHint">@color/primaryTextColor</item>
         <item name="hintTextColor">@color/primaryTextColor</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
         <item name="android:fontFamily">@font/audiowide</item>
         <item name="endIconMode">clear_text</item>
         <item name="boxBackgroundColor">@color/black70Transparent</item>
@@ -116,7 +116,7 @@
         <item name="hintTextColor">@color/primaryTextColor</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorHint">@color/primaryTextColor</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">@dimen/default_text_size</item>
     </style>
 
     <!--DIALOGS-->

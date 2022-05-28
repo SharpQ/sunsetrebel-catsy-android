@@ -79,7 +79,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             holder.likeButton.setEnabled(true);
         }
 
-        eventThemesUtil.setEventThemesUI(eventList.get(position).getEventThemes(), fragment, holder.linearLayout, null);
+        eventThemesUtil.setEventThemesUI(eventList.get(position).getEventThemes(),
+                holder.tvEventTags, fragment);
 
         holder.itemLayout.setOnClickListener(v -> {
             eventListViewModel.setSelectedEvent(eventList.get(position));
@@ -113,9 +114,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private ConstraintLayout itemLayout;
         private TextView tvEventTitle, tvHostName, tvEventStartTime, tvEventLocation,
-                tvEventDescription, tvEventParticipants;
+                tvEventDescription, tvEventParticipants, tvEventTags;
         private ImageView ivHostAvatar, ivEventAvatar;
-        private LinearLayout linearLayout;
         private ImageButton likeButton, shareButton;
 
         public ViewHolder(View itemView) {
@@ -129,7 +129,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
             tvEventParticipants = itemView.findViewById(R.id.textViewParticipants);
             ivHostAvatar = itemView.findViewById(R.id.imageViewHostAvatar);
             ivEventAvatar = itemView.findViewById(R.id.imageViewEventAvatar);
-            linearLayout = itemView.findViewById(R.id.ll_tags);
+            tvEventTags = itemView.findViewById(R.id.tv_event_template_tags);
             likeButton = itemView.findViewById(R.id.imageButtonLike);
             shareButton = itemView.findViewById(R.id.imageButtonShare);
         }

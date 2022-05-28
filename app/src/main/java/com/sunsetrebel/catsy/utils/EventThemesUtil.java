@@ -4,18 +4,28 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.TextUtils;
+import android.text.style.ForegroundColorSpan;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.enums.EventThemes;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -95,39 +105,24 @@ public class EventThemesUtil extends Application {
         return null;
     }
 
-    public void setEventThemesUI(List<EventThemes> eventThemes, Fragment fragment,
-                                 LinearLayout linearLayout, Integer textLimit) {
+    public void setEventThemesUI(List<EventThemes> eventThemes, TextView textView, Fragment fragment) {
         if (eventThemes != null) {
-            Random rand = new Random();
-            int tvCurrentSize = 0;
+            SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder();
             for (EventThemes theme : eventThemes) {
-                tvCurrentSize = tvCurrentSize + theme.toString().length();
-                TextView tv = new TextView(fragment.getContext());
-                tv.setText("#" + eventThemesMap.get(theme));
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT
-                );
-                params.setMargins(0,0,(int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5,
-                        fragment.getContext().getResources().getDisplayMetrics()),0);
-                tv.setLayoutParams(params);
-                tv.setGravity(Gravity.CENTER_HORIZONTAL);
-                tv.setTextSize(14);
-                tv.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-
+                Spannable spanString = new SpannableString(new StringBuilder("#").append(eventThemesMap.get(theme)).append(" "));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    tv.setTextColor(Color.rgb(rand.nextFloat(), rand.nextFloat(), rand.nextFloat()));
+                    spanString.setSpan(new ForegroundColorSpan(Color.rgb(randomColor(0.25f, 1), randomColor(0.25f, 1), randomColor(0.25f, 1))), 0, spanString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 } else {
-                    tv.setTextColor(fragment.getContext().getResources().getColor(R.color.primaryTextColor));
+                    spanString.setSpan(new ForegroundColorSpan(ContextCompat.getColor(fragment.getContext(), R.color.primaryLightColor)), 0, spanString.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
-                Typeface typeface = ResourcesCompat.getFont(fragment.getContext(), R.font.audiowide);
-                tv.setTypeface(typeface);
-                if (textLimit == null) {
-                    linearLayout.addView(tv);
-                } else if (textLimit != null && tvCurrentSize < textLimit) {
-                    linearLayout.addView(tv);
-                }
+                spannableStringBuilder.append(spanString);
             }
+            textView.setSelected(true);
+            textView.setText(spannableStringBuilder);
         }
+    }
+
+    private float randomColor(float min, float max) {
+        return min + new Random().nextFloat() * (max - min);
     }
 }
