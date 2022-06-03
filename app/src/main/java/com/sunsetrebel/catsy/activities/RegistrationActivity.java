@@ -184,7 +184,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 fAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (fAuth.getCurrentUser().isEmailVerified()) {
-                            firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.EMAIL, fullName);
+                            firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.EMAIL, fullName, getApplicationContext());
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                             Animatoo.animateFade(this);  //fire the zoom animation
                             finish();
@@ -283,7 +283,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.GOOGLE, fAuth.getCurrentUser().getDisplayName());
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.GOOGLE, fAuth.getCurrentUser().getDisplayName(), getApplicationContext());
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();
@@ -301,7 +301,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.FACEBOOK, fAuth.getCurrentUser().getDisplayName());
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.FACEBOOK, fAuth.getCurrentUser().getDisplayName(), getApplicationContext());
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();

@@ -1,36 +1,31 @@
 package com.sunsetrebel.catsy.models;
 
-import java.util.List;
+import com.sunsetrebel.catsy.repositories.FirestoreKeys;
+
+import java.util.Map;
 
 public class CommonUserModel {
     private String userId;
     private String userFullName;
     private String userProfileImg;
-    private List<String> joinedPublicEvents;
-    private List<String> hostedPublicEvents;
-    private List<String> likedEvents;
-    private String linkTelegram;
-    private String linkTikTok;
-    private String linkInstagram;
-    private String linkFacebook;
+    private Map<String, Object> socialLinks;
+    private String userStatus;
+    private String dateOfBirth;
+    private String countryISO;
 
     public CommonUserModel() {
     }
 
     public CommonUserModel(String userId, String userFullName, String userProfileImg,
-                           List<String> joinedPublicEvents, List<String> hostedPublicEvents,
-                           List<String> likedEvents, String linkTelegram, String linkTikTok,
-                           String linkInstagram, String linkFacebook) {
+                           Map<String, Object> socialLinks, String userStatus,
+                           String dateOfBirth, String countryISO) {
         this.userId = userId;
         this.userFullName = userFullName;
         this.userProfileImg = userProfileImg;
-        this.joinedPublicEvents = joinedPublicEvents;
-        this.hostedPublicEvents = hostedPublicEvents;
-        this.likedEvents = likedEvents;
-        this.linkTelegram = linkTelegram;
-        this.linkTikTok = linkTikTok;
-        this.linkInstagram = linkInstagram;
-        this.linkFacebook = linkFacebook;
+        this.socialLinks = socialLinks;
+        this.userStatus = userStatus;
+        this.dateOfBirth = dateOfBirth;
+        this.countryISO = countryISO;
     }
 
     public String getUserId() { return userId; }
@@ -45,35 +40,35 @@ public class CommonUserModel {
 
     public void setUserProfileImg(String userProfileImg) { this.userProfileImg = userProfileImg; }
 
-    public List<String> getJoinedPublicEvents() { return joinedPublicEvents; }
+    public Map<String, Object> getSocialLinksMap() { return socialLinks; }
 
-    public void setJoinedPublicEvents(List<String> joinedPublicEvents) { this.joinedPublicEvents = joinedPublicEvents; }
+    public void setSocialLinksMap(Map<String, Object> socialLinks) { this.socialLinks = socialLinks; }
 
-    public List<String> getHostedPublicEvents() { return hostedPublicEvents; }
+    public String getLinkTelegram() { return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_TELEGRAM); }
 
-    public void setHostedPublicEvents(List<String> hostedPublicEvents) { this.hostedPublicEvents = hostedPublicEvents; }
+    public void setLinkTelegram(String linkTelegram) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_TELEGRAM, linkTelegram); }
 
-    public List<String> getLikedEvents() { return likedEvents; }
+    public String getLinkTikTok() { return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_TIKTOK); }
 
-    public void setLikedEvents(List<String> likedEvents) { this.likedEvents = likedEvents; }
+    public void setLinkTikTok(String linkTikTok) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_TIKTOK, linkTikTok); }
 
-    public void addLikedEvents(String eventId) {
-        this.likedEvents.add(eventId);
-    }
+    public String getLinkInstagram() { return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_INSTAGRAM); }
 
-    public String getLinkTelegram() { return linkTelegram; }
+    public void setLinkInstagram(String linkInstagram) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_INSTAGRAM, linkInstagram); }
 
-    public void setLinkTelegram(String linkTelegram) { this.linkTelegram = linkTelegram; }
+    public String getLinkFacebook() { return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_FACEBOOK); }
 
-    public String getLinkTikTok() { return linkTikTok; }
+    public void setLinkFacebook(String linkFacebook) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_FACEBOOK, linkFacebook); }
 
-    public void setLinkTikTok(String linkTikTok) { this.linkTikTok = linkTikTok; }
+    public String getUserStatus() { return userStatus; }
 
-    public String getLinkInstagram() { return linkInstagram; }
+    public void setUserStatus(String userStatus) { this.userStatus = userStatus; }
 
-    public void setLinkInstagram(String linkInstagram) { this.linkInstagram = linkInstagram; }
+    public String getDateOfBirth() { return dateOfBirth; }
 
-    public String getLinkFacebook() { return linkFacebook; }
+    public void setDateOfBirth(String dateOfBirth) { this.dateOfBirth = dateOfBirth; }
 
-    public void setLinkFacebook(String linkFacebook) { this.linkFacebook = linkFacebook; }
+    public String getCountryISO() { return countryISO; }
+
+    public void setCountryISO(String countryISO) { this.countryISO = countryISO; }
 }

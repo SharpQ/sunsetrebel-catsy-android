@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.enums.AccessType;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.models.MainUserProfileModel;
@@ -146,18 +147,18 @@ public class EventListViewModel extends ViewModel {
         }, eventModel, mainUserProfileModel);
     }
 
-    public void likeEvent(SetUserInteractEventCallback setUserInteractEventCallback, String eventId) {
-        firebaseFirestoreService.setEventAsLikedByUser(value -> {
+    public void likeEvent(SetUserInteractEventCallback setUserInteractEventCallback, EventModel event) {
+        firebaseFirestoreService.addToUserLikedEvents(value -> {
             if (value) {
-                mainUserProfileModel.addLikedEvents(eventId);
+                mainUserProfileModel.addLikedEvents(event);
             }
             setUserInteractEventCallback.onResponse(value);
-        }, mainUserProfileModel.getUserId(), eventId);
+        }, mainUserProfileModel.getUserId(), event);
     }
 
     public boolean isEventLikedByUser(String eventId) {
-        List<String> likedEvents = mainUserProfileModel.getLikedEvents();
-        if (likedEvents.size() > 0) {
+        List<String> likedEvents = mainUserProfileModel.getLikedEvents(AccessType.PUBLIC);
+        if (likedEvents != null && likedEvents.size() > 0) {
             for (String user : likedEvents) {
                 if (eventId.equals(user)) {
                     return true;

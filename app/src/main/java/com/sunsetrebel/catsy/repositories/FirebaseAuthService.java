@@ -2,6 +2,7 @@ package com.sunsetrebel.catsy.repositories;
 
 import android.content.Context;
 import android.content.Intent;
+import android.telephony.TelephonyManager;
 
 import com.facebook.FacebookSdk;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -46,8 +47,10 @@ public class FirebaseAuthService {
         return RC_SIGN_IN;
     }
 
-    public void setFirebaseUser(FirebaseUser user, LoginType loginType, String userName) {
+    public void setFirebaseUser(FirebaseUser user, LoginType loginType, String userName, Context context) {
         this.user = user;
+        TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        String countryCodeValue = tm.getNetworkCountryIso().toUpperCase();
         FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
         firebaseFirestoreService.isUserRegistered(value -> {
             if(!value) {
@@ -57,18 +60,18 @@ public class FirebaseAuthService {
                         photoUrl = fAuth.getCurrentUser().getPhotoUrl().toString();
                     }
                     firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), userName, fAuth.getCurrentUser().getEmail(),
-                            fAuth.getCurrentUser().getPhoneNumber(), photoUrl);
+                            fAuth.getCurrentUser().getPhoneNumber(), photoUrl, countryCodeValue);
                 } else if (loginType == LoginType.FACEBOOK) {
                     String photoUrl = null;
                     if (fAuth.getCurrentUser().getPhotoUrl() != null) {
                         photoUrl = fAuth.getCurrentUser().getPhotoUrl().toString();
                     }
                     firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), userName, fAuth.getCurrentUser().getEmail(),
-                            fAuth.getCurrentUser().getPhoneNumber(), photoUrl);
+                            fAuth.getCurrentUser().getPhoneNumber(), photoUrl, countryCodeValue);
                 } else if (loginType == LoginType.PHONE) {
-                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), userName, null, fAuth.getCurrentUser().getPhoneNumber(), null);
+                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), userName, null, fAuth.getCurrentUser().getPhoneNumber(), null, countryCodeValue);
                 } else if (loginType == LoginType.EMAIL) {
-                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), userName, fAuth.getCurrentUser().getEmail(), null, null);
+                    firebaseFirestoreService.createNewUser(fAuth.getCurrentUser().getUid(), userName, fAuth.getCurrentUser().getEmail(), null, null, countryCodeValue);
                 }
             }
         }, fAuth.getCurrentUser().getUid());

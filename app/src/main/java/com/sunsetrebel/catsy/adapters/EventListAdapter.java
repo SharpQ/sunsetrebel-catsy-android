@@ -99,7 +99,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                 CustomToastUtil.showFailToast(context, context.getResources().getText(R.string.event_liked_fail).toString() + eventList.get(position).getEventTitle());
                 Log.d("DEBUG", "Failed to like event: " + eventList.get(position).getEventId());
             }
-        }, eventList.get(position).getEventId()));
+        }, eventList.get(position)));
     }
 
     @Override

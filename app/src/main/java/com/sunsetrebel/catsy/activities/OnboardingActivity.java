@@ -134,7 +134,7 @@ public class OnboardingActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.GOOGLE, fAuth.getCurrentUser().getDisplayName());
+                        firebaseAuthService.setFirebaseUser(fAuth.getCurrentUser(), LoginType.GOOGLE, fAuth.getCurrentUser().getDisplayName(), getApplicationContext());
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         Animatoo.animateFade(this);  //fire the zoom animation
                         finish();

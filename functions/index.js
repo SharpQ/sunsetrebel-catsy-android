@@ -71,7 +71,7 @@ exports.sendFriendRequest = functions.firestore
 		
 		return admin.firestore().collection('userProfiles').doc(recipientId).collection('incomeRequests').doc(senderId).set(requestObject);
 	} else if (action == "REMOVE_FRIEND") {
-		admin.firestore().collection('userProfiles').doc(recipientId).update({ 
+		admin.firestore().collection('userProfiles').doc(recipientId).collection('detailedInfo').doc(recipientId).update({
 			userFriends: fieldValue.arrayRemove(senderId) 
 		});
 		
@@ -88,11 +88,11 @@ exports.responseIncomeRequest = functions.firestore
 	const requestId = context.params.requestId;
 
 	if (requestType == "ADD_FRIEND") {
-        var userRef = admin.firestore().collection('userProfiles').doc(senderId);
+        var userRef = admin.firestore().collection('userProfiles').doc(senderId).collection('detailedInfo').doc(senderId);
         await userRef.get().then(doc => {
             const userFriend = doc.data().userFriends;
             if (userFriend.includes(requestId)) {
-                admin.firestore().collection('userProfiles').doc(requestId).update({
+                admin.firestore().collection('userProfiles').doc(requestId).collection('detailedInfo').doc(requestId).update({
                     userFriends: fieldValue.arrayUnion(senderId)
                 });
             }

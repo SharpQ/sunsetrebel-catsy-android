@@ -11,6 +11,7 @@ import com.sunsetrebel.catsy.models.InviteToFriendsListModel;
 import com.sunsetrebel.catsy.models.MainUserProfileModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,35 +40,30 @@ public class FirestoreToModelConverter {
     }
 
     public static MainUserProfileModel convertUserProfileDocumentToModel(Map<String, Object> map) {
-        return new MainUserProfileModel(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_ID).toString(),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_EMAIL)),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_PHONE)),
-                map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_FULL_NAME).toString(),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_PROFILE_IMG)),
-                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_JOINED_PUBLIC_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_JOINED_PRIVATE_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_HOSTED_PRIVATE_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_LIKED_EVENTS)),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_LINK_TELEGRAM)),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_LINK_TIKTOK)),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_LINK_INSTAGRAM)),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_LINK_FACEBOOK)),
-                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_FRIENDS)),
-                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_BLOCKED_USERS)));
+        return new MainUserProfileModel(map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_ID).toString(),
+                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_EMAIL)),
+                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_PHONE)),
+                map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_FULL_NAME).toString(),
+                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_PROFILE_IMG)),
+                convertToMapList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_JOINED_EVENTS)),
+                convertToMapList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_HOSTED_EVENTS)),
+                convertToMapList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_LIKED_EVENTS)),
+                (Map<String, Object>) map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_SOCIAL_LINKS),
+                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_FRIENDS)),
+                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_BLOCKED_USERS)),
+                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_STATUS)),
+                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_DOB)),
+                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_COUNTRY_ISO)));
     }
 
     public static CommonUserModel convertCommonUserProfileDocumentToModel(Map<String, Object> map) {
         return new CommonUserModel(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_ID).toString(),
                 map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_FULL_NAME).toString(),
                 convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_PROFILE_IMG)),
-                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_JOINED_PUBLIC_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_HOSTED_PUBLIC_EVENTS)),
-                convertToStringList((ArrayList<Object[]>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_LIKED_EVENTS)),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_LINK_TELEGRAM)),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_LINK_TIKTOK)),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_LINK_INSTAGRAM)),
-                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_LINK_FACEBOOK)));
+                (Map<String, Object>) map.get(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_SOCIAL_LINKS),
+                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_STATUS)),
+                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_DOB)),
+                convertObjectToString(map.get(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_COUNTRY_ISO)));
     }
 
     public static Object convertNotificationDocumentToModel(Map<String, Object> map) {
@@ -135,5 +131,15 @@ public class FirestoreToModelConverter {
             }
         }
         return stringList;
+    }
+
+    private static List<Map<String, Object>> convertToMapList(ArrayList<Object[]> objectList) {
+        List<Map<String, Object>> mapList = new ArrayList<>();
+        if (objectList != null) {
+            for (Object object : objectList) {
+                mapList.add((Map<String, Object>) object);
+            }
+        }
+        return mapList;
     }
 }

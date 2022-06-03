@@ -191,7 +191,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
                 CustomToastUtil.showFailToast(getContext(), getContext().getResources().getText(R.string.event_liked_fail).toString() + eventModel.getEventTitle());
                 Log.d("DEBUG", "Failed to like event: " + eventModel.getEventId());
             }
-        }, eventModel.getEventId()));
+        }, eventModel));
 
         tvEventParticipants.setOnClickListener(v14 -> {
             if (eventModel.getJoinedUsersList() != null) {
