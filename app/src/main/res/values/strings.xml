@@ -104,6 +104,7 @@
     <string name="notification_event_invite_title">\u0020sent you invitation to\u0020</string>
     <string name="friend_invite_accept_success">\u0020added to friend list!</string>
     <string name="friend_invite_accept_fail">\u0020error adding user to friend list!</string>
+    <string name="profile_status_default">Hello, My Name Is… &#128570;</string>
     <string name="event_theme_sport">Sport</string>
     <string name="event_theme_music">Music</string>
     <string name="event_theme_art">Art</string>

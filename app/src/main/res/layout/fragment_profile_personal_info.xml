@@ -13,8 +13,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <include layout="@layout/item_profile_phone" />
-        <include layout="@layout/item_profile_email" />
-        <include layout="@layout/item_profile_social_networks" />
+        <include
+            android:id="@+id/layout_profile_phone"
+            layout="@layout/item_profile_phone" />
+        <include
+            android:id="@+id/layout_profile_email"
+            layout="@layout/item_profile_email" />
+        <include
+            android:id="@+id/layout_profile_social_networks"
+            layout="@layout/item_profile_social_networks" />
     </LinearLayout>
 </ScrollView>

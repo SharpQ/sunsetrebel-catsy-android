@@ -61,7 +61,7 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ImageUtil.loadImageView(context, inviteToFriends.getSenderProfileImg(),
                         viewHolderInviteToFriends.ivSenderProfile, R.drawable.im_cat_hearts);
                 viewHolderInviteToFriends.tvTimestamp.setText(DateUtil.timestampToString(inviteToFriends.getCreateTS()));
-                viewHolderInviteToFriends.tvTitle.setText(inviteToFriends.getSenderName() + context.getResources().getText(R.string.notification_friend_invite_title).toString());
+                viewHolderInviteToFriends.tvTitle.setText(new StringBuilder(inviteToFriends.getSenderName()).append(context.getResources().getText(R.string.notification_friend_invite_title).toString()));
                 viewHolderInviteToFriends.acceptBtn.setOnClickListener(v -> profileViewModel.acceptFriendInvite(context, inviteToFriends));
                 viewHolderInviteToFriends.declineBtn.setOnClickListener(v -> profileViewModel.declineFriendInvite(inviteToFriends));
                 break;
@@ -73,7 +73,8 @@ public class NotificationsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 ImageUtil.loadImageView(context, inviteToEvent.getEventAvatar(),
                         viewHolderInviteToEvent.ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
                 viewHolderInviteToEvent.tvTimestamp.setText(DateUtil.timestampToString(inviteToEvent.getCreateTS()));
-                viewHolderInviteToEvent.tvTitle.setText(inviteToEvent.getSenderName() + context.getResources().getText(R.string.notification_event_invite_title).toString() + inviteToEvent.getEventTitle());
+                viewHolderInviteToEvent.tvTitle.setText(new StringBuilder(inviteToEvent.getSenderName())
+                        .append(context.getResources().getText(R.string.notification_event_invite_title).toString()).append(inviteToEvent.getEventTitle()));
                 viewHolderInviteToEvent.tvStartTime.setText(DateUtil.dateToString(inviteToEvent.getEventStartTime()));
                 viewHolderInviteToEvent.tvLocation.setText(inviteToEvent.getEventLocation());
                 viewHolderInviteToEvent.tvDescription.setText(inviteToEvent.getEventDescription());

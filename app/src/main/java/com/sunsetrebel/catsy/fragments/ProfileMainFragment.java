@@ -1,6 +1,7 @@
 package com.sunsetrebel.catsy.fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,18 +16,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.google.android.material.tabs.TabLayout;
+import com.jwang123.flagkit.FlagKit;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.activities.LoginActivity;
-import com.sunsetrebel.catsy.models.MainUserProfileModel;
 import com.sunsetrebel.catsy.utils.ImageUtil;
 import com.sunsetrebel.catsy.viewmodel.ProfileViewModel;
 
 public class ProfileMainFragment extends Fragment {
     private Fragment personalInfoFragment;
-    private ImageView profileImage;
-    private TextView profileId, profileUserName;
+    private ImageView profileImage, countryFlagImage;
+    private TextView profileStatus, profileUserName;
     private AppCompatButton logoutButton;
-    private static MainUserProfileModel mainUserProfileModel;
     private TabLayout tabLayout;
     private ImageButton notificationsBtn, circleBtn;
     private ProfileViewModel profileViewModel;
@@ -45,15 +45,29 @@ public class ProfileMainFragment extends Fragment {
 
         profileImage = v.findViewById(R.id.profile_image);
         profileUserName = v.findViewById(R.id.profile_username);
-        profileId = v.findViewById(R.id.profile_userid);
+        profileStatus = v.findViewById(R.id.profile_user_status);
         tabLayout = v.findViewById(R.id.tl_profile);
         logoutButton = v.findViewById(R.id.button_logout);
         notificationsBtn = v.findViewById(R.id.ib_profile_notification);
         circleBtn = v.findViewById(R.id.ib_circle);
+        countryFlagImage = v.findViewById(R.id.iv_country_flag);
 
         ImageUtil.loadImageView(getContext(), profileViewModel.getUserProfile().getUserProfileImg(), profileImage, R.drawable.im_cat_hearts);
         profileUserName.setText(profileViewModel.getUserProfile().getUserFullName());
-        profileId.setText(getContext().getString(R.string.profile_id_placeholder) + profileViewModel.getUserProfile().getUserId());
+        if (profileViewModel.getUserProfile().getCountryISO() != null && !profileViewModel.getUserProfile().getCountryISO().isEmpty()) {
+            Drawable countryFlag = FlagKit.drawableWithFlag(getContext(), profileViewModel.getUserProfile().getCountryISO().toLowerCase());
+            if (countryFlag != null) {
+                countryFlagImage.setVisibility(View.VISIBLE);
+                countryFlagImage.setImageDrawable(countryFlag);
+            }
+        } else {
+            countryFlagImage.setVisibility(View.GONE);
+        }
+        if (profileViewModel.getUserProfile().getUserStatus() != null && !profileViewModel.getUserProfile().getUserStatus().isEmpty()) {
+            profileStatus.setText(profileViewModel.getUserProfile().getUserStatus());
+        } else {
+            profileStatus.setText(getContext().getString(R.string.profile_status_default));
+        }
         personalInfoFragment = new ProfilePersonalInfoFragment();
         getChildFragmentManager().beginTransaction().replace(R.id.fl_profile, personalInfoFragment).commit();
 

@@ -13,7 +13,6 @@
         app:shapeAppearanceOverlay="@style/EventListHostAvatar"
         android:elevation="15dp"
         android:padding="5dp"
-        android:layout_centerHorizontal="true"
         android:layout_width="98dp"
         android:layout_height="98dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -109,58 +108,89 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1">
 
-            <TextView
-                android:id="@+id/profile_username"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="60dp"
-                android:layout_marginStart="@dimen/default_side_minor_margin"
-                android:layout_marginEnd="@dimen/default_side_minor_margin"
-                android:gravity="center"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="@dimen/default_page_title_minor_text_size"
-                android:textStyle="bold"
-                android:fontFamily="@font/audiowide"/>
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/profile_userid"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginTop="95dp"
-                android:layout_marginStart="@dimen/default_side_minor_margin"
-                android:layout_marginEnd="@dimen/default_side_minor_margin"
-                android:gravity="center"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="@dimen/default_text_size"
-                android:textStyle="normal"
-                android:fontFamily="@font/audiowide"/>
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tl_profile"
-                android:layout_height="50dp"
-                android:layout_width="match_parent"
-                android:layout_marginTop="130dp"
-                android:background="@color/primaryDarkColor"
-                app:tabTextColor="@color/primaryTextColor"
-                app:tabSelectedTextColor="@color/primaryLightColor"
-                app:tabIndicatorColor="@color/primaryLightColor">
-
-                <com.google.android.material.tabs.TabItem
-                    android:layout_height="50dp"
+                <TextView
+                    android:id="@+id/profile_username"
                     android:layout_width="wrap_content"
-                    android:text="@string/profile_tab_title_main"/>
+                    android:layout_height="30dp"
+                    android:layout_marginTop="60dp"
+                    android:layout_marginStart="@dimen/default_side_minor_margin"
+                    android:layout_marginEnd="@dimen/default_side_minor_margin"
+                    android:gravity="center"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="@dimen/default_page_title_minor_text_size"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/audiowide"
+                    app:layout_constraintHorizontal_chainStyle="packed"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/iv_country_flag"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0"/>
 
-                <com.google.android.material.tabs.TabItem
+                <ImageView
+                    android:id="@+id/iv_country_flag"
+                    android:visibility="gone"
+                    android:layout_width="30dp"
+                    android:layout_height="25dp"
+                    android:layout_marginEnd="@dimen/default_side_minor_margin"
+                    app:layout_constraintBottom_toBottomOf="@id/profile_username"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/profile_username"
+                    app:layout_constraintTop_toTopOf="@id/profile_username"/>
+
+                <TextView
+                    android:id="@+id/profile_user_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginStart="@dimen/default_side_minor_margin"
+                    android:layout_marginEnd="@dimen/default_side_minor_margin"
+                    android:gravity="center"
+                    android:textColor="@color/primaryTextColor"
+                    android:textSize="@dimen/default_text_size"
+                    android:textStyle="normal"
+                    android:fontFamily="@font/audiowide"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/profile_username"
+                    app:layout_constraintVertical_bias="0"/>
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_profile"
                     android:layout_height="50dp"
-                    android:layout_width="wrap_content"
-                    android:text="@string/profile_tab_title_events"/>
+                    android:layout_width="match_parent"
+                    android:background="@color/primaryDarkColor"
+                    app:tabTextColor="@color/primaryTextColor"
+                    app:tabSelectedTextColor="@color/primaryLightColor"
+                    app:tabIndicatorColor="@color/primaryLightColor"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/profile_user_status"
+                    app:layout_constraintVertical_bias="1">
 
-                <com.google.android.material.tabs.TabItem
-                    android:layout_height="50dp"
-                    android:layout_width="wrap_content"
-                    android:text="@string/profile_tab_title_friends"/>
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_height="50dp"
+                        android:layout_width="wrap_content"
+                        android:text="@string/profile_tab_title_main"/>
 
-            </com.google.android.material.tabs.TabLayout>
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_height="50dp"
+                        android:layout_width="wrap_content"
+                        android:text="@string/profile_tab_title_events"/>
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_height="50dp"
+                        android:layout_width="wrap_content"
+                        android:text="@string/profile_tab_title_friends"/>
+
+                </com.google.android.material.tabs.TabLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

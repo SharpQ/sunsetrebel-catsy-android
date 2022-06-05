@@ -149,36 +149,36 @@ public class FirebaseFirestoreService {
             fullName = "userName";
         }
         Map<String, Object> userSocialLinks = new HashMap<>();
-        userSocialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_TELEGRAM, null);
-        userSocialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_TIKTOK, null);
-        userSocialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_INSTAGRAM, null);
-        userSocialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_FACEBOOK, null);
+        userSocialLinks.put(FirestoreKeys.Documents.UserSocialLinks.LINK_TELEGRAM, null);
+        userSocialLinks.put(FirestoreKeys.Documents.UserSocialLinks.LINK_TIKTOK, null);
+        userSocialLinks.put(FirestoreKeys.Documents.UserSocialLinks.LINK_INSTAGRAM, null);
+        userSocialLinks.put(FirestoreKeys.Documents.UserSocialLinks.LINK_FACEBOOK, null);
 
         Map<String, Object> userPrivateInfo = new HashMap<>();
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_ID, userId);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_FULL_NAME, fullName);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_PROFILE_IMG, profileUrl);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_DOB, null);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_COUNTRY_ISO, countryCodeValue);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_STATUS, null);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_EMAIL, email);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_PHONE, phone);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_FRIENDS, null);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_BLOCKED_USERS, null);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_JOINED_EVENTS, null);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_LIKED_EVENTS, null);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_HOSTED_EVENTS, null);
-        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_SOCIAL_LINKS, userSocialLinks);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_ID, userId);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_FULL_NAME, fullName);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_PROFILE_IMG, profileUrl);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_DOB, null);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_COUNTRY_ISO, countryCodeValue);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_STATUS, null);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_EMAIL, email);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_PHONE, phone);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_FRIENDS, null);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.BLOCKED_USERS, null);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_JOINED_EVENTS, null);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_LIKED_EVENTS, null);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_HOSTED_EVENTS, null);
+        userPrivateInfo.put(FirestoreKeys.Documents.UserProfileDetailed.USER_SOCIAL_LINKS, userSocialLinks);
 
         Map<String, Object> userPublicInfo = new HashMap<>();
-        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_ID, userId);
-        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_FULL_NAME, fullName);
-        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_PROFILE_IMG, profileUrl);
-        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_FRIENDS, null);
-        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_DOB, null);
-        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_COUNTRY_ISO, countryCodeValue);
-        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_STATUS, null);
-        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_SOCIAL_LINKS, userSocialLinks);
+        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.USER_ID, userId);
+        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.USER_FULL_NAME, fullName);
+        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.USER_PROFILE_IMG, profileUrl);
+        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.USER_FRIENDS, null);
+        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.USER_DOB, null);
+        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.USER_COUNTRY_ISO, countryCodeValue);
+        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.USER_STATUS, null);
+        userPublicInfo.put(FirestoreKeys.Documents.UserProfile.USER_SOCIAL_LINKS, userSocialLinks);
 
         Task<Void> task1 = getUserDetailedProfileDocument(userId).set(userPrivateInfo);
         Task<Void> task2 = getUserProfileDocument(userId).set(userPublicInfo);
@@ -202,38 +202,42 @@ public class FirebaseFirestoreService {
         eventModel.setUpdateTS(createTS);
         String eventId = getIdForEventDocument(eventModel.getAccessType());
         Map<String, Object> event = new HashMap<>();
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_ID, eventId);
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_TITLE, eventModel.getEventTitle());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_LOCATION, eventModel.getEventLocation());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_GEOLOCATION, eventModel.getEventGeoLocation());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_START_TIME, eventModel.getEventStartTime());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_END_TIME, eventModel.getEventEndTime());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_ACCESS_TYPE, eventModel.getAccessType());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_DESCRIPTION, eventModel.getEventDescr());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_MIN_AGE, eventModel.getEventMinAge());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_MAX_AGE, eventModel.getEventMaxAge());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_MAX_PERSON, eventModel.getEventMaxPerson());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_AVATAR, eventModel.getEventAvatar());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_THEMES, eventModel.getEventThemes());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_PARTICIPANTS, 0);
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_HOST_ID, eventModel.getHostId());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_HOST_NAME, eventModel.getHostName());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_HOST_PROFILE_IMG, eventModel.getHostProfileImg());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_CREATE_TS, eventModel.getCreateTS());
-        event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_UPDATE_TS, eventModel.getUpdateTS());
+        event.put(FirestoreKeys.Documents.Event.EVENT_ID, eventId);
+        event.put(FirestoreKeys.Documents.Event.EVENT_TITLE, eventModel.getEventTitle());
+        event.put(FirestoreKeys.Documents.Event.EVENT_LOCATION, eventModel.getEventLocation());
+        event.put(FirestoreKeys.Documents.Event.EVENT_GEOLOCATION, eventModel.getEventGeoLocation());
+        event.put(FirestoreKeys.Documents.Event.EVENT_START_TIME, eventModel.getEventStartTime());
+        event.put(FirestoreKeys.Documents.Event.EVENT_END_TIME, eventModel.getEventEndTime());
+        event.put(FirestoreKeys.Documents.Event.EVENT_ACCESS_TYPE, eventModel.getAccessType());
+        event.put(FirestoreKeys.Documents.Event.EVENT_DESCRIPTION, eventModel.getEventDescr());
+        event.put(FirestoreKeys.Documents.Event.EVENT_MIN_AGE, eventModel.getEventMinAge());
+        event.put(FirestoreKeys.Documents.Event.EVENT_MAX_AGE, eventModel.getEventMaxAge());
+        event.put(FirestoreKeys.Documents.Event.EVENT_MAX_PERSON, eventModel.getEventMaxPerson());
+        event.put(FirestoreKeys.Documents.Event.EVENT_AVATAR, eventModel.getEventAvatar());
+        event.put(FirestoreKeys.Documents.Event.EVENT_THEMES, eventModel.getEventThemes());
+        event.put(FirestoreKeys.Documents.Event.EVENT_PARTICIPANTS, 0);
+        event.put(FirestoreKeys.Documents.Event.EVENT_HOST_ID, eventModel.getHostId());
+        event.put(FirestoreKeys.Documents.Event.EVENT_HOST_NAME, eventModel.getHostName());
+        event.put(FirestoreKeys.Documents.Event.EVENT_HOST_PROFILE_IMG, eventModel.getHostProfileImg());
+        event.put(FirestoreKeys.Documents.Event.EVENT_CREATE_TS, eventModel.getCreateTS());
+        event.put(FirestoreKeys.Documents.Event.EVENT_UPDATE_TS, eventModel.getUpdateTS());
         if (eventModel.getAccessType() == AccessType.PRIVATE) {
-            event.put(FirestoreKeys.Documents.Event.DOCUMENT_EVENT_INVITED_USERS, eventModel.getInvitedUsers());
+            event.put(FirestoreKeys.Documents.Event.EVENT_INVITED_USERS, eventModel.getInvitedUsers());
         }
 
         Map<String, Object> firstUserMap = new HashMap<>();
-        firstUserMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_ID, eventModel.getHostId());
-        firstUserMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_FULL_NAME, eventModel.getHostName());
-        firstUserMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_PROFILE_IMG, eventModel.getHostProfileImg());
-        firstUserMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_SOCIAL_LINKS, mainUserProfileModel.getSocialLinksMap());
+        firstUserMap.put(FirestoreKeys.Documents.UserProfile.USER_ID, mainUserProfileModel.getUserId());
+        firstUserMap.put(FirestoreKeys.Documents.UserProfile.USER_FULL_NAME, mainUserProfileModel.getUserFullName());
+        firstUserMap.put(FirestoreKeys.Documents.UserProfile.USER_PROFILE_IMG, mainUserProfileModel.getUserProfileImg());
+        firstUserMap.put(FirestoreKeys.Documents.UserProfile.USER_FRIENDS, mainUserProfileModel.getUserFriends());
+        firstUserMap.put(FirestoreKeys.Documents.UserProfile.USER_DOB, mainUserProfileModel.getDateOfBirth());
+        firstUserMap.put(FirestoreKeys.Documents.UserProfile.USER_COUNTRY_ISO, mainUserProfileModel.getCountryISO());
+        firstUserMap.put(FirestoreKeys.Documents.UserProfile.USER_STATUS, mainUserProfileModel.getUserStatus());
+        firstUserMap.put(FirestoreKeys.Documents.UserProfile.USER_SOCIAL_LINKS, mainUserProfileModel.getSocialLinksMap());
 
         Map<String, Object> profileHostedEventMap = new HashMap<>();
-        firstUserMap.put(FirestoreKeys.Documents.UserHostedEvents.DOCUMENT_HOSTED_EVENT_ID, eventModel.getHostId());
-        firstUserMap.put(FirestoreKeys.Documents.UserHostedEvents.DOCUMENT_HOSTED_ACCESS_TYPE, eventModel.getAccessType());
+        profileHostedEventMap.put(FirestoreKeys.Documents.UserHostedEvents.EVENT_ID, eventModel.getEventId());
+        profileHostedEventMap.put(FirestoreKeys.Documents.UserHostedEvents.EVENT_ACCESS_TYPE, eventModel.getAccessType());
 
         List<Task<Void>> tasks = new ArrayList<>();
         if (eventModel.getAccessType() == AccessType.PUBLIC || eventModel.getAccessType() == AccessType.SELECTIVE) {
@@ -243,24 +247,24 @@ public class FirebaseFirestoreService {
             tasks.add(getPrivateEventDocument(eventId).set(event));
             tasks.add(getPrivateEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap));
         }
-        tasks.add(getUserDetailedProfileDocument(eventModel.getHostId()).update(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_HOSTED_EVENTS, FieldValue.arrayUnion(profileHostedEventMap)));
+        tasks.add(getUserDetailedProfileDocument(eventModel.getHostId()).update(FirestoreKeys.Documents.UserProfileDetailed.USER_HOSTED_EVENTS, FieldValue.arrayUnion(profileHostedEventMap)));
 
         if (eventModel.getInvitedUsers().size() > 0) {
             for (String userId : eventModel.getInvitedUsers()) {
                 Map<String, Object> inviteRequest = new HashMap<>();
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_ACTION, "EVENT_INVITE");
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_SENDER_ID, eventModel.getHostId());
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_SENDER_NAME, eventModel.getHostName());
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_SENDER_PROFILE_IMG, eventModel.getHostProfileImg());
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_EVENT_ID, eventId);
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_EVENT_TITLE, eventModel.getEventTitle());
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_EVENT_DESCR, eventModel.getEventDescr());
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_EVENT_LOCATION, eventModel.getEventLocation());
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_EVENT_START_TIME, eventModel.getEventStartTime());
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_EVENT_AVATAR, eventModel.getEventAvatar());
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_EVENT_ACCESS_TYPE, eventModel.getAccessType());
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_RECIPIENT, userId);
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.DOCUMENT_INVITE_REQUEST_CREATE_TS, eventModel.getCreateTS());
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.ACTION_TYPE, "EVENT_INVITE");
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.SENDER_ID, eventModel.getHostId());
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.SENDER_NAME, eventModel.getHostName());
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.SENDER_PROFILE_IMG, eventModel.getHostProfileImg());
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_ID, eventId);
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_TITLE, eventModel.getEventTitle());
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_DESCR, eventModel.getEventDescr());
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_LOCATION, eventModel.getEventLocation());
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_START_TIME, eventModel.getEventStartTime());
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_AVATAR, eventModel.getEventAvatar());
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_ACCESS_TYPE, eventModel.getAccessType());
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.RECIPIENT_ID, userId);
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.CREATE_TS, eventModel.getCreateTS());
                 tasks.add(getUserProfileIncomeRequestDocument(userId, eventId).set(inviteRequest));
             }
         }
@@ -284,20 +288,21 @@ public class FirebaseFirestoreService {
         instanceJoinLeave = true;
         String eventId = event.getEventId();
         String userId = mainUserProfileModel.getUserId();
-        String userFullName = mainUserProfileModel.getUserFullName();
-        String userProfileImg = mainUserProfileModel.getUserProfileImg();
         AccessType accessType = event.getAccessType();
 
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_ID, userId);
-        userMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_FULL_NAME, userFullName);
-        userMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_PROFILE_IMG, userProfileImg);
-        userMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_SOCIAL_LINKS,
-                mainUserProfileModel.getSocialLinksMap());
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_ID, userId);
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_FULL_NAME, mainUserProfileModel.getUserFullName());
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_PROFILE_IMG, mainUserProfileModel.getUserProfileImg());
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_FRIENDS, mainUserProfileModel.getUserFriends());
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_DOB, mainUserProfileModel.getDateOfBirth());
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_COUNTRY_ISO, mainUserProfileModel.getCountryISO());
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_STATUS, mainUserProfileModel.getUserStatus());
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_SOCIAL_LINKS, mainUserProfileModel.getSocialLinksMap());
 
         Map<String, Object> profileJoinedEventMap = new HashMap<>();
-        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.DOCUMENT_JOINED_EVENT_ID, eventId);
-        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.DOCUMENT_JOINED_ACCESS_TYPE, event.getAccessType());
+        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.EVENT_ID, eventId);
+        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.EVENT_ACCESS_TYPE, event.getAccessType());
 
         Task<Void> task1 = null, task2 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
@@ -305,7 +310,7 @@ public class FirebaseFirestoreService {
         } else if (accessType == AccessType.PRIVATE) {
             task1 = getPrivateEventJoinedUserDocument(eventId, userId).set(userMap);
         }
-        task2 = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayUnion(profileJoinedEventMap));
+        task2 = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.USER_JOINED_EVENTS, FieldValue.arrayUnion(profileJoinedEventMap));
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
         allTasks.addOnSuccessListener(querySnapshots -> {
             instanceJoinLeave = false;
@@ -327,8 +332,8 @@ public class FirebaseFirestoreService {
         AccessType accessType = event.getAccessType();
 
         Map<String, Object> profileJoinedEventMap = new HashMap<>();
-        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.DOCUMENT_JOINED_EVENT_ID, eventId);
-        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.DOCUMENT_JOINED_ACCESS_TYPE, event.getAccessType());
+        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.EVENT_ID, eventId);
+        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.EVENT_ACCESS_TYPE, event.getAccessType());
 
         Task<Void> task1 = null, task2 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
@@ -336,7 +341,7 @@ public class FirebaseFirestoreService {
         } else if (accessType == AccessType.PRIVATE) {
             task1 = getPrivateEventJoinedUserDocument(eventId, userId).delete();
         }
-        task2 = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayRemove(profileJoinedEventMap));
+        task2 = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.USER_JOINED_EVENTS, FieldValue.arrayRemove(profileJoinedEventMap));
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
         allTasks.addOnSuccessListener(querySnapshots -> {
             instanceJoinLeave = false;
@@ -472,10 +477,10 @@ public class FirebaseFirestoreService {
         instanceLike = true;
 
         Map<String, Object> profileLikedEventMap = new HashMap<>();
-        profileLikedEventMap.put(FirestoreKeys.Documents.UserLikedEvents.DOCUMENT_LIKED_EVENT_ID, event.getEventId());
-        profileLikedEventMap.put(FirestoreKeys.Documents.UserLikedEvents.DOCUMENT_LIKED_ACCESS_TYPE, event.getAccessType());
+        profileLikedEventMap.put(FirestoreKeys.Documents.UserLikedEvents.EVENT_ID, event.getEventId());
+        profileLikedEventMap.put(FirestoreKeys.Documents.UserLikedEvents.EVENT_ACCESS_TYPE, event.getAccessType());
 
-        Task<Void> task1 = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_LIKED_EVENTS, FieldValue.arrayUnion(profileLikedEventMap));
+        Task<Void> task1 = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.USER_LIKED_EVENTS, FieldValue.arrayUnion(profileLikedEventMap));
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1);
         allTasks.addOnSuccessListener(querySnapshots -> {
             instanceLike = false;
@@ -494,12 +499,12 @@ public class FirebaseFirestoreService {
         instanceFriendRequest = true;
         Timestamp createTS = new Timestamp(new Date());
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put(FirestoreKeys.Documents.FriendInvite.DOCUMENT_FRIEND_REQUEST_ACTION, "ADD_FRIEND");
-        requestBody.put(FirestoreKeys.Documents.FriendInvite.DOCUMENT_FRIEND_REQUEST_SENDER_ID, currentUserProfile.getUserId());
-        requestBody.put(FirestoreKeys.Documents.FriendInvite.DOCUMENT_FRIEND_REQUEST_SENDER_NAME, currentUserProfile.getUserFullName());
-        requestBody.put(FirestoreKeys.Documents.FriendInvite.DOCUMENT_FRIEND_REQUEST_SENDER_PROFILE_IMG, currentUserProfile.getUserProfileImg());
-        requestBody.put(FirestoreKeys.Documents.FriendInvite.DOCUMENT_FRIEND_REQUEST_RECIPIENT, anotherUserId);
-        requestBody.put(FirestoreKeys.Documents.FriendInvite.DOCUMENT_FRIEND_REQUEST_CREATE_TS, createTS);
+        requestBody.put(FirestoreKeys.Documents.FriendInvite.ACTION_TYPE, "ADD_FRIEND");
+        requestBody.put(FirestoreKeys.Documents.FriendInvite.SENDER_ID, currentUserProfile.getUserId());
+        requestBody.put(FirestoreKeys.Documents.FriendInvite.SENDER_NAME, currentUserProfile.getUserFullName());
+        requestBody.put(FirestoreKeys.Documents.FriendInvite.SENDER_PROFILE_IMG, currentUserProfile.getUserProfileImg());
+        requestBody.put(FirestoreKeys.Documents.FriendInvite.RECIPIENT_ID, anotherUserId);
+        requestBody.put(FirestoreKeys.Documents.FriendInvite.CREATE_TS, createTS);
 
         Task<Void> task = getUserProfileOutcomeRequestDocument(currentUserProfile.getUserId(), anotherUserId).set(requestBody);
         task.addOnSuccessListener(querySnapshots -> {
@@ -519,11 +524,11 @@ public class FirebaseFirestoreService {
         instanceFriendRequest = true;
         Timestamp createTS = new Timestamp(new Date());
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put(FirestoreKeys.Documents.FriendInvite.DOCUMENT_FRIEND_REQUEST_SENDER_ID, userId);
-        requestBody.put(FirestoreKeys.Documents.FriendInvite.DOCUMENT_FRIEND_REQUEST_RECIPIENT, anotherUserId);
-        requestBody.put(FirestoreKeys.Documents.FriendInvite.DOCUMENT_FRIEND_REQUEST_ACTION, "REMOVE_FRIEND");
-        requestBody.put(FirestoreKeys.Documents.FriendInvite.DOCUMENT_FRIEND_REQUEST_CREATE_TS, createTS);
-        Task<Void> task1 = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_FRIENDS, FieldValue.arrayRemove(anotherUserId));
+        requestBody.put(FirestoreKeys.Documents.FriendInvite.SENDER_ID, userId);
+        requestBody.put(FirestoreKeys.Documents.FriendInvite.RECIPIENT_ID, anotherUserId);
+        requestBody.put(FirestoreKeys.Documents.FriendInvite.ACTION_TYPE, "REMOVE_FRIEND");
+        requestBody.put(FirestoreKeys.Documents.FriendInvite.CREATE_TS, createTS);
+        Task<Void> task1 = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.USER_FRIENDS, FieldValue.arrayRemove(anotherUserId));
         Task<Void> task2 = getUserProfileOutcomeRequestDocument(userId, anotherUserId).set(requestBody);
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
         allTasks.addOnSuccessListener(querySnapshots -> {
@@ -543,7 +548,7 @@ public class FirebaseFirestoreService {
         instanceFriendRequest = true;
         String senderId = inviteToFriendsList.getSenderId();
         String recipientId = inviteToFriendsList.getRecipientId();
-        Task<Void> task1 = getUserDetailedProfileDocument(recipientId).update(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_FRIENDS, FieldValue.arrayUnion(senderId));
+        Task<Void> task1 = getUserDetailedProfileDocument(recipientId).update(FirestoreKeys.Documents.UserProfileDetailed.USER_FRIENDS, FieldValue.arrayUnion(senderId));
         Task<Void> task2 = getUserProfileIncomeRequestDocument(recipientId, senderId).delete();
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2);
         allTasks.addOnSuccessListener(querySnapshots -> {
@@ -588,15 +593,15 @@ public class FirebaseFirestoreService {
         AccessType accessType = inviteToEventModel.getAccessType();
 
         Map<String, Object> userMap = new HashMap<>();
-        userMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_ID, userId);
-        userMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_FULL_NAME, userFullName);
-        userMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_PROFILE_IMG, userProfileImg);
-        userMap.put(FirestoreKeys.Documents.UserProfile.DOCUMENT_USER_SOCIAL_LINKS,
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_ID, userId);
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_FULL_NAME, userFullName);
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_PROFILE_IMG, userProfileImg);
+        userMap.put(FirestoreKeys.Documents.UserProfile.USER_SOCIAL_LINKS,
                 mainUserProfileModel.getSocialLinksMap());
 
         Map<String, Object> profileJoinedEventMap = new HashMap<>();
-        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.DOCUMENT_JOINED_EVENT_ID, eventId);
-        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.DOCUMENT_JOINED_ACCESS_TYPE, inviteToEventModel.getAccessType());
+        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.EVENT_ID, eventId);
+        profileJoinedEventMap.put(FirestoreKeys.Documents.UserJoinedEvents.EVENT_ACCESS_TYPE, inviteToEventModel.getAccessType());
 
         Task<Void> task1 = null, task2 = null, task3 = null;
         if (accessType == AccessType.PUBLIC || accessType == AccessType.SELECTIVE) {
@@ -604,7 +609,7 @@ public class FirebaseFirestoreService {
         } else if (accessType == AccessType.PRIVATE) {
             task1 = getPrivateEventJoinedUserDocument(eventId, userId).set(userMap);
         }
-        task2 = getUserProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_JOINED_EVENTS, FieldValue.arrayUnion(profileJoinedEventMap));
+        task2 = getUserProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.USER_JOINED_EVENTS, FieldValue.arrayUnion(profileJoinedEventMap));
         task3 = getUserProfileIncomeRequestDocument(userId, eventId).delete();
 
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(task1, task2, task3);
@@ -642,7 +647,7 @@ public class FirebaseFirestoreService {
             return;
         }
         instanceBlockUser = true;
-        Task<Void> task = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_BLOCKED_USERS,
+        Task<Void> task = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.BLOCKED_USERS,
                 FieldValue.arrayUnion(userBlockedId));
         task.addOnSuccessListener(querySnapshots -> {
             instanceBlockUser = false;
@@ -658,7 +663,7 @@ public class FirebaseFirestoreService {
             return;
         }
         instanceBlockUser = true;
-        Task<Void> task = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.DOCUMENT_USER_BLOCKED_USERS,
+        Task<Void> task = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.BLOCKED_USERS,
                 FieldValue.arrayRemove(userBlockedId));
         task.addOnSuccessListener(querySnapshots -> {
             instanceBlockUser = false;

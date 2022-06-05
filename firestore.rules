@@ -5,6 +5,10 @@ service cloud.firestore {
     	return get(/databases/$(database)/documents/$(eventType)/$(eventId)).data;
     }
     
+    function isUserExists(userId) {
+    	return exists(get(/databases/$(database)/documents/userProfiles/$(userId)).data);
+    }
+    
     function isFreeSlot(eventType, eventId) {
     	let eventDoc = getEventDoc(eventType, eventId);
       let eventMaxUsers = eventDoc.eventMaxPerson;
@@ -44,7 +48,7 @@ service cloud.firestore {
       allow delete: if false;
       
       match /incomeRequests/{friendId} {
-      	allow create, update: if request.auth != null && request.resource.data.senderId == request.auth.uid;
+      	allow create, update: if request.auth != null && request.resource.data.senderId == request.auth.uid && isUserExists(userId);
         allow read, delete: if request.auth.uid == userId;
     	}
       

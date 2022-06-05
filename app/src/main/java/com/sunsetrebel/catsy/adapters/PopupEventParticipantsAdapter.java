@@ -1,6 +1,7 @@
 package com.sunsetrebel.catsy.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
+import com.jwang123.flagkit.FlagKit;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.MainUserProfileModel;
@@ -57,7 +59,20 @@ public class PopupEventParticipantsAdapter extends RecyclerView.Adapter<PopupEve
         ImageUtil.loadImageView(context, listOfUsers.get(position).getUserProfileImg(),
                 holder.imageUserProfile, R.drawable.im_cat_hearts);
         holder.tvUsername.setText(listOfUsers.get(position).getUserFullName());
-        holder.tvUserId.setText(listOfUsers.get(position).getUserId());
+        if (listOfUsers.get(position).getCountryISO() != null && !listOfUsers.get(position).getCountryISO().isEmpty()) {
+            Drawable countryFlag = FlagKit.drawableWithFlag(fragment.getContext(), listOfUsers.get(position).getCountryISO().toLowerCase());
+            if (countryFlag != null) {
+                holder.ivCountryFlag.setVisibility(View.VISIBLE);
+                holder.ivCountryFlag.setImageDrawable(countryFlag);
+            }
+        } else {
+            holder.ivCountryFlag.setVisibility(View.GONE);
+        }
+        if (listOfUsers.get(position).getUserStatus() != null && !listOfUsers.get(position).getUserStatus().isEmpty()) {
+            holder.tvUserStatus.setText(listOfUsers.get(position).getUserStatus());
+        } else {
+            holder.tvUserStatus.setText(fragment.getContext().getString(R.string.profile_status_default));
+        }
 
         if (mainUserProfileModel.getUserFriends().contains(listOfUsers.get(position).getUserId())
                 || mainUserProfileModel.getUserId().equals(listOfUsers.get(position).getUserId())) {
@@ -141,7 +156,8 @@ public class PopupEventParticipantsAdapter extends RecyclerView.Adapter<PopupEve
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private ShapeableImageView imageUserProfile;
-        private TextView tvUsername, tvUserId;
+        private ImageView ivCountryFlag;
+        private TextView tvUsername, tvUserStatus;
         private LinearLayout llSocialLinks;
         private AppCompatButton buttonAddFriend, buttonBlockUser;
 
@@ -149,10 +165,11 @@ public class PopupEventParticipantsAdapter extends RecyclerView.Adapter<PopupEve
             super(itemView);
             imageUserProfile = itemView.findViewById(R.id.profile_image_user_item);
             tvUsername = itemView.findViewById(R.id.profile_username_item);
-            tvUserId = itemView.findViewById(R.id.profile_userid_item);
+            tvUserStatus = itemView.findViewById(R.id.profile_user_status_item);
             llSocialLinks = itemView.findViewById(R.id.ll_user_socials_item);
             buttonAddFriend = itemView.findViewById(R.id.button_add_friend_item);
             buttonBlockUser = itemView.findViewById(R.id.button_block_user_item);
+            ivCountryFlag = itemView.findViewById(R.id.iv_country_flag);
         }
     }
 

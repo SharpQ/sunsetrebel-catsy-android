@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
@@ -22,6 +23,7 @@ import com.sunsetrebel.catsy.utils.ExternalSocialsUtil;
 public class ProfilePersonalInfoFragment extends Fragment {
     private TextView profileEmail, profilePhone;
     private LinearLayout linearLayout;
+    private CardView layoutPhone, layoutEmail, layoutSocials;
     private static MainUserProfileModel mainUserProfileModel;
     private LinearLayout linearLayoutExtra;
     private ConstraintLayout rootConstraintLayout;
@@ -40,6 +42,9 @@ public class ProfilePersonalInfoFragment extends Fragment {
         profileEmail = v.findViewById(R.id.tv_email_value);
         profilePhone = v.findViewById(R.id.tv_phone_value);
         linearLayout = v.findViewById(R.id.ll_socials);
+        layoutPhone = v.findViewById(R.id.layout_profile_phone);
+        layoutEmail = v.findViewById(R.id.layout_profile_email);
+        layoutSocials = v.findViewById(R.id.layout_profile_social_networks);
 
         UserProfileService userProfileService = UserProfileService.getInstance();
         mainUserProfileModel = userProfileService.getUserProfile();
@@ -50,29 +55,45 @@ public class ProfilePersonalInfoFragment extends Fragment {
         String userIdInstagram = mainUserProfileModel.getLinkInstagram();
         String userIdTikTok = mainUserProfileModel.getLinkTikTok();
         String userIdTelegram = mainUserProfileModel.getLinkTelegram();
-        setTextViewInfo(userEmail, profileEmail);
-        setTextViewInfo(userPhone, profilePhone);
-        imageSizeDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55, getResources().getDisplayMetrics());
 
-        if (userIdFacebook != null) {
-            setSocialImageButton(R.drawable.im_facebook_link_profile, userIdFacebook, ExternalSocialsUtil.facebookPackageName,
-                    ExternalSocialsUtil.defaultFacebookWeb, ExternalSocialsUtil.defaultFacebookMobile);
+        if (userEmail != null && !userEmail.isEmpty()) {
+            setTextViewInfo(userEmail, profileEmail);
+        } else {
+            layoutEmail.setVisibility(View.GONE);
         }
 
-        if (userIdInstagram != null) {
-            setSocialImageButton(R.drawable.im_instagram_link_profile, userIdInstagram, ExternalSocialsUtil.instagramPackageName,
-                    ExternalSocialsUtil.defaultInstagramWeb, ExternalSocialsUtil.defaultInstagramMobile);
+        if (userPhone != null && !userPhone.isEmpty()) {
+            setTextViewInfo(userPhone, profilePhone);
+        } else {
+            layoutPhone.setVisibility(View.GONE);
         }
 
-        if (userIdTikTok != null) {
-            setSocialImageButton(R.drawable.im_tiktok_link_profile, userIdTikTok, ExternalSocialsUtil.tikTokPackageName,
-                    ExternalSocialsUtil.defaultTikTokWeb, ExternalSocialsUtil.defaultTikTokMobile);
+        if (userIdFacebook != null || userIdInstagram != null || userIdTikTok != null
+                || userIdTelegram != null) {
+            imageSizeDP = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55, getResources().getDisplayMetrics());
+            if (userIdFacebook != null) {
+                setSocialImageButton(R.drawable.im_facebook_link_profile, userIdFacebook, ExternalSocialsUtil.facebookPackageName,
+                        ExternalSocialsUtil.defaultFacebookWeb, ExternalSocialsUtil.defaultFacebookMobile);
+            }
+
+            if (userIdInstagram != null) {
+                setSocialImageButton(R.drawable.im_instagram_link_profile, userIdInstagram, ExternalSocialsUtil.instagramPackageName,
+                        ExternalSocialsUtil.defaultInstagramWeb, ExternalSocialsUtil.defaultInstagramMobile);
+            }
+
+            if (userIdTikTok != null) {
+                setSocialImageButton(R.drawable.im_tiktok_link_profile, userIdTikTok, ExternalSocialsUtil.tikTokPackageName,
+                        ExternalSocialsUtil.defaultTikTokWeb, ExternalSocialsUtil.defaultTikTokMobile);
+            }
+
+            if (userIdTelegram != null) {
+                setSocialImageButton(R.drawable.im_telegram_link_profile, userIdTelegram, ExternalSocialsUtil.telegramPackageName,
+                        ExternalSocialsUtil.defaultTelegramWeb, ExternalSocialsUtil.defaultTelegramMobile);
+            }
+        } else {
+            layoutSocials.setVisibility(View.GONE);
         }
 
-        if (userIdTelegram != null) {
-            setSocialImageButton(R.drawable.im_telegram_link_profile, userIdTelegram, ExternalSocialsUtil.telegramPackageName,
-                    ExternalSocialsUtil.defaultTelegramWeb, ExternalSocialsUtil.defaultTelegramMobile);
-        }
         return v;
     }
 

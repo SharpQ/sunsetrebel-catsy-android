@@ -1,5 +1,6 @@
 package com.sunsetrebel.catsy.utils;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.shape.ShapeAppearanceModel;
+import com.jwang123.flagkit.FlagKit;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.PopupEventParticipantsAdapter;
 import com.sunsetrebel.catsy.enums.PopupType;
@@ -153,10 +155,11 @@ public class PopupService {
         private View setupViewUserEventDetailed(Fragment fragment, CommonUserModel userProfile) {
             View popupView = LayoutInflater.from(fragment.getContext()).inflate(R.layout.popup_common_user, null, false);
             TextView tvUserName = popupView.findViewById(R.id.profile_username);
-            TextView tvUserId = popupView.findViewById(R.id.profile_userid);
+            TextView tvUserStatus = popupView.findViewById(R.id.profile_user_status);
             AppCompatButton btnAddToFriends = popupView.findViewById(R.id.button_add_friend);
             AppCompatButton btnBlockUser = popupView.findViewById(R.id.button_block_user);
             ImageView ivUserAvatar = popupView.findViewById(R.id.profile_image_user);
+            ImageView ivCountryFlag = popupView.findViewById(R.id.iv_country_flag);
             LinearLayout linearUserSocials = popupView.findViewById(R.id.ll_user_socials);
             FirebaseFirestoreService firebaseFirestoreService = FirebaseFirestoreService.getInstance();
             UserProfileService userProfileService = UserProfileService.getInstance();
@@ -179,7 +182,21 @@ public class PopupService {
             }
 
             tvUserName.setText(userProfile.getUserFullName());
-            tvUserId.setText(userProfile.getUserId());
+            if (userProfile.getCountryISO() != null && !userProfile.getCountryISO().isEmpty()) {
+                Drawable countryFlag = FlagKit.drawableWithFlag(fragment.getContext(),
+                        userProfile.getCountryISO().toLowerCase());
+                if (countryFlag != null) {
+                    ivCountryFlag.setVisibility(View.VISIBLE);
+                    ivCountryFlag.setImageDrawable(countryFlag);
+                }
+            } else {
+                ivCountryFlag.setVisibility(View.GONE);
+            }
+            if (userProfile.getUserStatus() != null && !userProfile.getUserStatus().isEmpty()) {
+                tvUserStatus.setText(userProfile.getUserStatus());
+            } else {
+                tvUserStatus.setText(fragment.getContext().getString(R.string.profile_status_default));
+            }
             ImageUtil.loadImageView(fragment.getContext(), userProfile.getUserProfileImg(), ivUserAvatar, R.drawable.im_cat_hearts);
 
             btnAddToFriends.setOnClickListener(v -> {

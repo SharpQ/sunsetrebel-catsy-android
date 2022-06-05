@@ -44,21 +44,41 @@ public class CommonUserModel {
 
     public void setSocialLinksMap(Map<String, Object> socialLinks) { this.socialLinks = socialLinks; }
 
-    public String getLinkTelegram() { return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_TELEGRAM); }
+    public String getLinkTelegram() {
+        if (socialLinks != null) {
+            return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.LINK_TELEGRAM);
+        }
+        return null;
+    }
 
-    public void setLinkTelegram(String linkTelegram) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_TELEGRAM, linkTelegram); }
+    public void setLinkTelegram(String linkTelegram) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.LINK_TELEGRAM, linkTelegram); }
 
-    public String getLinkTikTok() { return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_TIKTOK); }
+    public String getLinkTikTok() {
+        if (socialLinks != null) {
+            return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.LINK_TIKTOK);
+        }
+        return null;
+    }
 
-    public void setLinkTikTok(String linkTikTok) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_TIKTOK, linkTikTok); }
+    public void setLinkTikTok(String linkTikTok) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.LINK_TIKTOK, linkTikTok); }
 
-    public String getLinkInstagram() { return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_INSTAGRAM); }
+    public String getLinkInstagram() {
+        if (socialLinks != null) {
+            return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.LINK_INSTAGRAM);
+        }
+        return null;
+    }
 
-    public void setLinkInstagram(String linkInstagram) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_INSTAGRAM, linkInstagram); }
+    public void setLinkInstagram(String linkInstagram) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.LINK_INSTAGRAM, linkInstagram); }
 
-    public String getLinkFacebook() { return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_FACEBOOK); }
+    public String getLinkFacebook() {
+        if (socialLinks != null) {
+            return (String) socialLinks.get(FirestoreKeys.Documents.UserSocialLinks.LINK_FACEBOOK);
+        }
+        return null;
+    }
 
-    public void setLinkFacebook(String linkFacebook) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.DOCUMENT_USER_LINK_FACEBOOK, linkFacebook); }
+    public void setLinkFacebook(String linkFacebook) { socialLinks.put(FirestoreKeys.Documents.UserSocialLinks.LINK_FACEBOOK, linkFacebook); }
 
     public String getUserStatus() { return userStatus; }
 
