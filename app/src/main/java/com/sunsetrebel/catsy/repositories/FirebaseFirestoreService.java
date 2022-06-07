@@ -134,7 +134,7 @@ public class FirebaseFirestoreService {
         return getPrivateEventParticipantsCollection(eventId).document(userId);
     }
 
-    private String getIdForEventDocument(AccessType eventAccessType) {
+    public String getIdForEventDocument(AccessType eventAccessType) {
         if (eventAccessType == AccessType.PUBLIC || eventAccessType == AccessType.SELECTIVE) {
             return fStore.collection(FirestoreKeys.Collections.COLLECTION_PUBLIC_EVENTS).document().getId();
         } else {
@@ -200,9 +200,8 @@ public class FirebaseFirestoreService {
         Timestamp createTS = new Timestamp(new Date());
         eventModel.setCreateTS(createTS);
         eventModel.setUpdateTS(createTS);
-        String eventId = getIdForEventDocument(eventModel.getAccessType());
         Map<String, Object> event = new HashMap<>();
-        event.put(FirestoreKeys.Documents.Event.EVENT_ID, eventId);
+        event.put(FirestoreKeys.Documents.Event.EVENT_ID, eventModel.getEventId());
         event.put(FirestoreKeys.Documents.Event.EVENT_TITLE, eventModel.getEventTitle());
         event.put(FirestoreKeys.Documents.Event.EVENT_LOCATION, eventModel.getEventLocation());
         event.put(FirestoreKeys.Documents.Event.EVENT_GEOLOCATION, eventModel.getEventGeoLocation());
@@ -241,11 +240,11 @@ public class FirebaseFirestoreService {
 
         List<Task<Void>> tasks = new ArrayList<>();
         if (eventModel.getAccessType() == AccessType.PUBLIC || eventModel.getAccessType() == AccessType.SELECTIVE) {
-            tasks.add(getPublicEventDocument(eventId).set(event));
-            tasks.add(getPublicEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap));
+            tasks.add(getPublicEventDocument(eventModel.getEventId()).set(event));
+            tasks.add(getPublicEventJoinedUserDocument(eventModel.getEventId(), eventModel.getHostId()).set(firstUserMap));
         } else if (eventModel.getAccessType() == AccessType.PRIVATE) {
-            tasks.add(getPrivateEventDocument(eventId).set(event));
-            tasks.add(getPrivateEventJoinedUserDocument(eventId, eventModel.getHostId()).set(firstUserMap));
+            tasks.add(getPrivateEventDocument(eventModel.getEventId()).set(event));
+            tasks.add(getPrivateEventJoinedUserDocument(eventModel.getEventId(), eventModel.getHostId()).set(firstUserMap));
         }
         tasks.add(getUserDetailedProfileDocument(eventModel.getHostId()).update(FirestoreKeys.Documents.UserProfileDetailed.USER_HOSTED_EVENTS, FieldValue.arrayUnion(profileHostedEventMap)));
 
@@ -256,7 +255,7 @@ public class FirebaseFirestoreService {
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.SENDER_ID, eventModel.getHostId());
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.SENDER_NAME, eventModel.getHostName());
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.SENDER_PROFILE_IMG, eventModel.getHostProfileImg());
-                inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_ID, eventId);
+                inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_ID, eventModel.getEventId());
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_TITLE, eventModel.getEventTitle());
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_DESCR, eventModel.getEventDescr());
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_LOCATION, eventModel.getEventLocation());
@@ -265,17 +264,17 @@ public class FirebaseFirestoreService {
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_ACCESS_TYPE, eventModel.getAccessType());
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.RECIPIENT_ID, userId);
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.CREATE_TS, eventModel.getCreateTS());
-                tasks.add(getUserProfileIncomeRequestDocument(userId, eventId).set(inviteRequest));
+                tasks.add(getUserProfileIncomeRequestDocument(userId, eventModel.getEventId()).set(inviteRequest));
             }
         }
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(tasks);
         allTasks.addOnSuccessListener(querySnapshots -> {
             instanceCreateEvent = false;
-            Log.d("DEBUG", "New event created! EventId: " + eventId);
+            Log.d("DEBUG", "New event created! EventId: " + eventModel.getEventId());
             CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.new_event_event_created_notification));
         }).addOnFailureListener(e -> {
             instanceCreateEvent = false;
-            Log.d("DEBUG", "Failed to create new event!" + eventId);
+            Log.d("DEBUG", "Failed to create new event!" + eventModel.getEventId());
             CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.new_event_event_failed_create_notification));
         });
     }

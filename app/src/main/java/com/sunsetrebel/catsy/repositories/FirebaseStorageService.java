@@ -35,16 +35,22 @@ public class FirebaseStorageService {
         void onResponse(String downloadUrl);
     }
 
+    private StorageReference getEventAvatarStorageRef(String hostId, String eventId) {
+        if (hostId != null && eventId != null && !hostId.isEmpty() && !eventId.isEmpty()) {
+            return fStorage.getReference("userProfiles/" + hostId + "/" + eventId + "/" + "main_avatar.jpg");
+        }
+        return null;
+    }
+
     public void loadEventAvatar(LoadEventAvatarCallback loadEventAvatarCallback, EventModel eventModel, Uri uri) {
         fStorage = getFirebaseStorageClient();
-        StorageReference storageReference = fStorage.getReference("userProfiles/" + eventModel.getHostId() + "/" + UUID.randomUUID().toString() + ".jpg");
-        storageReference.putFile(uri).addOnSuccessListener(taskSnapshot -> {
-            storageReference.getDownloadUrl().addOnSuccessListener(uri1 -> {
+        StorageReference avatarStorageRef = getEventAvatarStorageRef(eventModel.getHostId(), eventModel.getEventId());
+        avatarStorageRef.putFile(uri).addOnSuccessListener(taskSnapshot -> {
+            avatarStorageRef.getDownloadUrl().addOnSuccessListener(uri1 -> {
                 String downloadUrl = uri1.toString();
                 loadEventAvatarCallback.onResponse(downloadUrl);
             });
-            storageReference.getDownloadUrl().addOnFailureListener(e -> loadEventAvatarCallback.onResponse(null));
-        });
-        storageReference.putFile(uri).addOnFailureListener(e -> loadEventAvatarCallback.onResponse(null));
+            avatarStorageRef.getDownloadUrl().addOnFailureListener(e -> loadEventAvatarCallback.onResponse(null));
+        }).addOnFailureListener(e -> loadEventAvatarCallback.onResponse(null));
     }
 }

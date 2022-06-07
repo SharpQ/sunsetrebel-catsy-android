@@ -62,6 +62,7 @@ public class NewEventViewModel extends ViewModel {
     public void completeNewEventInfo(Context context, String eventDescrValue, Uri eventAvatarURI,
                                      Integer eventMinAgeValue, Integer eventMaxAgeValue,
                                      Integer eventMaxPeopleValue) {
+        eventModel.setEventId(firebaseFirestoreService.getIdForEventDocument(eventModel.getAccessType()));
         eventModel.setEventDescr(eventDescrValue);
         eventModel.setEventMinAge(eventMinAgeValue);
         eventModel.setEventMaxAge(eventMaxAgeValue);
