@@ -49,7 +49,7 @@ public class EventListFragment extends Fragment {
                 layoutManager.getOrientation());
         eventRecycler.addItemDecoration(dividerItemDecoration);
         //Init viewmodel
-        eventListViewModel = new ViewModelProvider(this).get(EventListViewModel.class);
+        eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         eventListViewModel.init();
         //Get event list through viewmodel
         eventListViewModel.getLiveEventListData().observe(getViewLifecycleOwner(), eventList -> {
@@ -90,6 +90,9 @@ public class EventListFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        eventListViewModel.removeEventListListener();
+        if (eventListViewModel.isRemoveListener()) {
+            eventListViewModel.removeEventListListener();
+        }
+        eventListViewModel.setRemoveListener(true);
     }
 }

@@ -83,6 +83,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.View
                 holder.tvEventTags, fragment);
 
         holder.itemLayout.setOnClickListener(v -> {
+            eventListViewModel.setRemoveListener(false);
             eventListViewModel.setSelectedEvent(eventList.get(position));
             FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
             manager.beginTransaction().addToBackStack("EventListFragment")

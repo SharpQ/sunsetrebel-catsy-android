@@ -28,6 +28,7 @@ public class EventListViewModel extends ViewModel {
     private static FirebaseFirestoreService firebaseFirestoreService;
     private EventModel selectedEvent;
     private static MainUserProfileModel mainUserProfileModel;
+    private boolean isRemoveListener = true;
 
     public interface SetUserInteractEventCallback {
         void onResponse(Boolean isResponseSuccessful);
@@ -41,20 +42,22 @@ public class EventListViewModel extends ViewModel {
         UserProfileService userProfileService = UserProfileService.getInstance();
         mainUserProfileModel = userProfileService.getUserProfile();
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
-        initialEventList = firebaseFirestoreService.getEventListMutableLiveData();
-        filteredEventList.addSource(initialEventList, new Observer<List<EventModel>>() {
-            @Override
-            public void onChanged(List<EventModel> eventModels) {
-                combine(eventModels, searchRequest.getValue());
-            }
-        });
+        if (initialEventList == null) {
+            initialEventList = firebaseFirestoreService.getEventListMutableLiveData();
+            filteredEventList.addSource(initialEventList, new Observer<List<EventModel>>() {
+                @Override
+                public void onChanged(List<EventModel> eventModels) {
+                    combine(eventModels, searchRequest.getValue());
+                }
+            });
 
-        filteredEventList.addSource(searchRequest, new Observer<String>() {
-            @Override
-            public void onChanged(String search) {
-                combine(initialEventList.getValue(), search);
-            }
-        });
+            filteredEventList.addSource(searchRequest, new Observer<String>() {
+                @Override
+                public void onChanged(String search) {
+                    combine(initialEventList.getValue(), search);
+                }
+            });
+        }
     }
 
     public void setSearchMutableLiveData(String search) {
@@ -92,10 +95,19 @@ public class EventListViewModel extends ViewModel {
         this.selectedEvent = selectedEvent;
     }
 
+    public boolean isRemoveListener() {
+        return isRemoveListener;
+    }
+
+    public void setRemoveListener(boolean val) {
+        isRemoveListener = val;
+    }
+
     public void removeEventListListener() {
         firebaseFirestoreService.removeEventListListener();
         filteredEventList.removeSource(initialEventList);
         filteredEventList.removeSource(searchRequest);
+        initialEventList = null;
     }
 
     public boolean isUserEventHost(EventModel event) {

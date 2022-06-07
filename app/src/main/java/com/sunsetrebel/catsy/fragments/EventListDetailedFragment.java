@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.adapters.EventListAdapter;
 import com.sunsetrebel.catsy.enums.PopupType;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
@@ -54,8 +57,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private LinearLayout linearLayoutParticipants;
     private boolean isUserJoinedToEvent;
     private boolean isUserEventHost;
-    private int imageSizeUsersProfile;
-    private int imageMarginUsersProfile;
     private final int maxUsersToDisplayInLinear = 5;
     private EventThemesUtil eventThemesUtil;
 
@@ -76,8 +77,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.fragment_event_detailed_map);
         mapFragment.getMapAsync(this);
-        imageSizeUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35, getResources().getDisplayMetrics());
-        imageMarginUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
 
         backButton = v.findViewById(R.id.ib_back);
         likeButton = v.findViewById(R.id.ib_like);
@@ -97,72 +96,19 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         linearLayoutParticipants = v.findViewById(R.id.ll_event_users);
         tvMaxMembersReached = v.findViewById(R.id.tv_no_free_slot);
 
-        //Set tv joined users
-        String usersCountValue = String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants());
-        Integer eventMaxPersonInt = eventModel.getEventMaxPerson();
-        if (eventMaxPersonInt != null) {
-            String eventMaxPersonString = String.format(Locale.getDefault(), "%d", eventMaxPersonInt);
-            usersCountValue = usersCountValue.concat(" / ").concat(eventMaxPersonString);
-        }
-        SpannableString usersCountSpan = new SpannableString(usersCountValue);
-        usersCountSpan.setSpan(new UnderlineSpan(), 0, usersCountSpan.length(), 0);
-        //Set tv age limit
-        Integer eventMinAgeInt = eventModel.getEventMinAge();
-        Integer eventMaxAgeInt = eventModel.getEventMaxAge();
-        String eventAgeLimitStr = "", eventMinAgeStr, eventMaxAgeStr;
-        if (eventMinAgeInt != null && eventMaxAgeInt != null) {
-            eventMinAgeStr = String.format(Locale.getDefault(), "%d", eventMinAgeInt);
-            eventMaxAgeStr = String.format(Locale.getDefault(), "%d", eventMaxAgeInt);
-            eventAgeLimitStr = eventAgeLimitStr.concat(eventMinAgeStr).concat(" - ").concat(eventMaxAgeStr)
-                    .concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_years).toString());
-        } else if (eventMinAgeInt == null && eventMaxAgeInt == null) {
-            eventAgeLimitStr = "N/A";
-        } else if (eventMinAgeInt != null && eventMaxAgeInt == null) {
-            eventMinAgeStr = String.format(Locale.getDefault(), "%d", eventMinAgeInt);
-            eventAgeLimitStr = eventAgeLimitStr.concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_more).toString())
-                    .concat(eventMinAgeStr).concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_years).toString());
-        } else if (eventMinAgeInt == null && eventMaxAgeInt != null) {
-            eventMaxAgeStr = String.format(Locale.getDefault(), "%d", eventMaxAgeInt);
-            eventAgeLimitStr = eventAgeLimitStr.concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_less).toString())
-                    .concat(eventMaxAgeStr).concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_years).toString());
-        }
-
-        //UI setup
-        backButton.setOnClickListener(v1 -> getParentFragmentManager().popBackStack());
-        //Set event avatar
-        ImageUtil.loadImageView(getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
-        //Set host avatar
-        ImageUtil.loadImageView(getContext(), eventModel.getHostProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
-        tvEventTitle.setText(eventModel.getEventTitle());
-        tvHostName.setText(new StringBuilder(eventModel.getHostName()).append("\u0020\u2022\u0020").append(DateUtil.timestampToString(eventModel.getCreateTS())));
-        tvEventStartTime.setText(DateUtil.dateToString(eventModel.getEventStartTime()));
-        tvEventEndTime.setText(DateUtil.dateToString(eventModel.getEventEndTime()));
-        tvEventDescription.setText(eventModel.getEventDescr());
-        tvEventParticipants.setText(usersCountSpan);
-        tvAgeLimit.setText(eventAgeLimitStr);
-        if (eventListViewModel.isEventLikedByUser(eventModel.getEventId())) {
-            likeButton.setVisibility(View.INVISIBLE);
-            likeButton.setEnabled(false);
-        } else {
-            likeButton.setVisibility(View.VISIBLE);
-            likeButton.setEnabled(true);
-        }
-
-        isUserEventHost = eventListViewModel.isUserEventHost(eventModel);
-
-        if (isUserEventHost) {
-            setJoinButtonAsHost();
-        }
-
-        eventListViewModel.getEventParticipants(value -> {
-            boolean isUserJoinedToEvent = eventListViewModel.isUserJoinedToEvent(value);
-            if (!isUserEventHost && isUserJoinedToEvent) {
-                setJoinButtonAsJoined();
-            } else if (!isUserEventHost && !isUserJoinedToEvent) {
-                setJoinButtonAsGuest();
+        eventListViewModel.getLiveEventListData().observe(getViewLifecycleOwner(), eventList -> {
+            for (EventModel event : eventList) {
+                if (event.getEventId().equals(eventModel.getEventId())) {
+                    eventModel = event;
+                    updateEventInfo();
+                }
             }
-            setEventUsers(eventModel.getJoinedUsersListWithoutHost());
-        }, eventModel);
+        });
+
+        backButton.setOnClickListener(v1 -> {
+            eventListViewModel.setRemoveListener(false);
+            getParentFragmentManager().popBackStack();
+        });
 
         joinButton.setOnClickListener(v12 -> {
             joinButton.setEnabled(false);
@@ -216,9 +162,6 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
                                 .animationStyle(R.style.popup_window_animation).setFocusable(true).setForeground().build(), this, Gravity.CENTER);
             }
         });
-
-        eventThemesUtil.setEventThemesUI(eventModel.getEventThemes(), tvEventDetailedThemes,
-                this);
         return v;
     }
 
@@ -226,9 +169,88 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     public void onStop() {
         super.onStop();
         PopupService.closePopup();
+        if (eventListViewModel.isRemoveListener()) {
+            eventListViewModel.removeEventListListener();
+        }
+        eventListViewModel.setRemoveListener(true);
+    }
+
+    private void updateEventInfo() {
+        //Set tv joined users
+        String usersCountValue = String.format(Locale.getDefault(), "%d", eventModel.getEventParticipants());
+        Integer eventMaxPersonInt = eventModel.getEventMaxPerson();
+        if (eventMaxPersonInt != null) {
+            String eventMaxPersonString = String.format(Locale.getDefault(), "%d", eventMaxPersonInt);
+            usersCountValue = usersCountValue.concat(" / ").concat(eventMaxPersonString);
+        }
+        SpannableString usersCountSpan = new SpannableString(usersCountValue);
+        usersCountSpan.setSpan(new UnderlineSpan(), 0, usersCountSpan.length(), 0);
+        //Set tv age limit
+        Integer eventMinAgeInt = eventModel.getEventMinAge();
+        Integer eventMaxAgeInt = eventModel.getEventMaxAge();
+        String eventAgeLimitStr = "", eventMinAgeStr, eventMaxAgeStr;
+        if (eventMinAgeInt != null && eventMaxAgeInt != null) {
+            eventMinAgeStr = String.format(Locale.getDefault(), "%d", eventMinAgeInt);
+            eventMaxAgeStr = String.format(Locale.getDefault(), "%d", eventMaxAgeInt);
+            eventAgeLimitStr = eventAgeLimitStr.concat(eventMinAgeStr).concat(" - ").concat(eventMaxAgeStr)
+                    .concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_years).toString());
+        } else if (eventMinAgeInt == null && eventMaxAgeInt == null) {
+            eventAgeLimitStr = "N/A";
+        } else if (eventMinAgeInt != null && eventMaxAgeInt == null) {
+            eventMinAgeStr = String.format(Locale.getDefault(), "%d", eventMinAgeInt);
+            eventAgeLimitStr = eventAgeLimitStr.concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_more).toString())
+                    .concat(eventMinAgeStr).concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_years).toString());
+        } else if (eventMinAgeInt == null && eventMaxAgeInt != null) {
+            eventMaxAgeStr = String.format(Locale.getDefault(), "%d", eventMaxAgeInt);
+            eventAgeLimitStr = eventAgeLimitStr.concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_less).toString())
+                    .concat(eventMaxAgeStr).concat(getContext().getResources().getText(R.string.event_detailed_age_limit_placeholder_years).toString());
+        }
+
+        //Set event avatar
+        ImageUtil.loadImageView(getContext(), eventModel.getEventAvatar(), ivEventAvatar, R.drawable.im_event_avatar_placeholder_64);
+        //Set host avatar
+        ImageUtil.loadImageView(getContext(), eventModel.getHostProfileImg(), ivHostAvatar, R.drawable.im_cat_hearts);
+        tvEventTitle.setText(eventModel.getEventTitle());
+        tvHostName.setText(new StringBuilder(eventModel.getHostName()).append("\u0020\u2022\u0020").append(DateUtil.timestampToString(eventModel.getCreateTS())));
+        tvEventStartTime.setText(DateUtil.dateToString(eventModel.getEventStartTime()));
+        tvEventEndTime.setText(DateUtil.dateToString(eventModel.getEventEndTime()));
+        tvEventDescription.setText(eventModel.getEventDescr());
+        tvEventParticipants.setText(usersCountSpan);
+        tvAgeLimit.setText(eventAgeLimitStr);
+        if (eventListViewModel.isEventLikedByUser(eventModel.getEventId())) {
+            likeButton.setVisibility(View.INVISIBLE);
+            likeButton.setEnabled(false);
+        } else {
+            likeButton.setVisibility(View.VISIBLE);
+            likeButton.setEnabled(true);
+        }
+
+        eventThemesUtil.setEventThemesUI(eventModel.getEventThemes(), tvEventDetailedThemes,
+                this);
+
+        if (mMap != null) {
+            GoogleMapService.clearAndSetMarker(mMap, eventModel.getEventGeoLocation(), 12, eventModel.getEventLocation(), getContext());
+        }
+        
+        isUserEventHost = eventListViewModel.isUserEventHost(eventModel);
+
+        if (isUserEventHost) {
+            setJoinButtonAsHost();
+        }
+
+        eventListViewModel.getEventParticipants(value -> {
+            boolean isUserJoinedToEvent = eventListViewModel.isUserJoinedToEvent(value);
+            if (!isUserEventHost && isUserJoinedToEvent) {
+                setJoinButtonAsJoined();
+            } else if (!isUserEventHost && !isUserJoinedToEvent) {
+                setJoinButtonAsGuest();
+            }
+            setEventUsers(eventModel.getJoinedUsersListWithoutHost());
+        }, eventModel);
     }
 
     private void setEventUsers(List<CommonUserModel> eventParticipants) {
+        linearLayoutParticipants.removeAllViews();
         if (eventParticipants.size() > 0) {
             if (eventParticipants.size() <= maxUsersToDisplayInLinear) {
                 for (CommonUserModel userProfile : eventParticipants) {
@@ -245,6 +267,8 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private void setParticipantsImageButton(Context context, CommonUserModel userProfile) {
         ImageButton imageButton = new ImageButton(context);
         imageButton.setBackgroundColor(getResources().getColor(R.color.primaryDarkColor));
+        int imageSizeUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 35, getResources().getDisplayMetrics());
+        int imageMarginUsersProfile = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(imageSizeUsersProfile, imageSizeUsersProfile);
         params.setMargins(imageMarginUsersProfile,0,imageMarginUsersProfile,0);
         imageButton.setLayoutParams(params);
