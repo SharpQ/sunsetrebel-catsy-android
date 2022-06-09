@@ -46,12 +46,14 @@ public class GoogleMapService {
         googleMap.getUiSettings().setMapToolbarEnabled(false);
         googleMap.getUiSettings().setCompassEnabled(false);
 //        mMap.getUiSettings().setRotateGesturesEnabled(false);
-        if (shouldZoomToUser) {
-            if (PermissionUtil.isLocationPermissionEnabled(context)) {
+
+        if (PermissionUtil.isLocationPermissionEnabled(context)) {
+            googleMap.setMyLocationEnabled(true);
+            if (shouldZoomToUser) {
                 zoomToUserLocation(context, googleMap);
-            } else {
-                PermissionUtil.requestLocationPermissions(isActivity, screen);
             }
+        } else {
+            PermissionUtil.requestLocationPermissions(isActivity, screen);
         }
     }
 

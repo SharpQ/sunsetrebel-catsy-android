@@ -3,13 +3,13 @@ const admin = require('firebase-admin');
 const fieldValue = admin.firestore.FieldValue; 
 admin.initializeApp();
 
-exports.publicEventsUsersWriteListener = functions.firestore
+exports.publicEventUsers = functions.firestore
   .document('publicEvents/{eventId}/usersJoined/{userId}')
   .onWrite(async (change, context) => {
 	const eventId = context.params.eventId;
-    const docRef = admin.firestore().collection('publicEvents').doc(eventId);
+    var docRef = admin.firestore().collection('publicEvents').doc(eventId);
 
-	admin.firestore().collection('publicEvents').doc(eventId).get().then(function(doc) {
+	await docRef.get().then(doc => {
 		if (doc.exists) {
 			 if (!change.before.exists) {
 			  // New document Created : add one to count
@@ -21,18 +21,17 @@ exports.publicEventsUsersWriteListener = functions.firestore
 			  return docRef.update({ eventParticipants: fieldValue.increment(-1) });
 			}
 		}
+		return;
 	});
-   
-    return;
   });
 
-exports.privateEventsUsersWriteListener = functions.firestore
+exports.privateEventUsers = functions.firestore
   .document('privateEvents/{eventId}/usersJoined/{userId}')
   .onWrite(async (change, context) => {
 	const eventId = context.params.eventId;
-    const docRef = admin.firestore().collection('privateEvents').doc(eventId);
+    var docRef = admin.firestore().collection('privateEvents').doc(eventId);
 
-    admin.firestore().collection('privateEvents').doc(eventId).get().then(function(doc) {
+    docRef.get().then(doc => {
 		if (doc.exists) {
 			 if (!change.before.exists) {
 			  // New document Created : add one to count
@@ -44,12 +43,11 @@ exports.privateEventsUsersWriteListener = functions.firestore
 			  return docRef.update({ eventParticipants: fieldValue.increment(-1) });
 			}
 		}
+		return;
 	});
-
-    return;
   });
   
-exports.sendFriendRequest = functions.firestore
+exports.outcomeRequest = functions.firestore
   .document('userProfiles/{userId}/outcomeRequests/{anotherUserId}')
   .onCreate((snap, context) => {
     const action = snap.data().action;
@@ -80,7 +78,7 @@ exports.sendFriendRequest = functions.firestore
     return;
   });
 
-exports.responseIncomeRequest = functions.firestore
+exports.incomeRequest = functions.firestore
   .document('userProfiles/{userId}/incomeRequests/{requestId}')
   .onDelete(async (snap, context) => {
     const requestType = snap.data().action;
@@ -99,5 +97,41 @@ exports.responseIncomeRequest = functions.firestore
             return admin.firestore().collection('userProfiles').doc(requestId).collection('outcomeRequests').doc(senderId).delete();
         });
 	}
+    return;
+  });
+
+exports.publicEventDeletion = functions.firestore
+  .document('publicEvents/{eventId}')
+  .onDelete(async (snap, context) => {
+	const eventId = context.params.eventId;
+	const hostId = snap.data().hostId;
+	const eventAvatar = snap.data().eventAvatar;
+
+	//Event avatar deletion
+	if (eventAvatar != null) {
+	    const bucket = admin.storage().bucket("catsy-28b85.appspot.com");
+        const event_folder = "userProfiles/"+hostId+"/"+eventId;
+        bucket.deleteFiles({
+            prefix: event_folder
+        });
+	}
+    return;
+  });
+
+exports.privateEventDeletion = functions.firestore
+  .document('privateEvents/{eventId}')
+  .onDelete(async (snap, context) => {
+	const eventId = context.params.eventId;
+	const hostId = snap.data().hostId;
+	const eventAvatar = snap.data().eventAvatar;
+
+	//Event avatar deletion
+	if (eventAvatar != null) {
+        const bucket = admin.storage().bucket("catsy-28b85.appspot.com");
+        const event_folder = "userProfiles/"+hostId+"/"+eventId;
+        bucket.deleteFiles({
+            prefix: event_folder
+        });
+    }
     return;
   });

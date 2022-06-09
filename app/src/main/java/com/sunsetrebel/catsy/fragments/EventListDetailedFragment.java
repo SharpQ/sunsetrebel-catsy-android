@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
 import com.sunsetrebel.catsy.R;
 import com.sunsetrebel.catsy.adapters.EventListAdapter;
 import com.sunsetrebel.catsy.enums.PopupType;
@@ -51,6 +52,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private GoogleMap mMap;
     private ImageView backButton, likeButton, shareButton, extraButton;
     private AppCompatButton joinButton;
+    private View mainLayout, mapLayout;
     private ImageView ivHostAvatar, ivEventAvatar;
     private TextView tvEventTitle, tvHostName, tvEventStartTime, tvEventEndTime, tvEventDescription,
             tvEventParticipants, tvAgeLimit, tvMaxMembersReached, tvEventDetailedThemes;
@@ -59,6 +61,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
     private boolean isUserEventHost;
     private final int maxUsersToDisplayInLinear = 5;
     private EventThemesUtil eventThemesUtil;
+    private boolean isMapMaximized = false;
 
     public EventListDetailedFragment() {
         // Required empty public constructor
@@ -74,9 +77,7 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         eventListViewModel = new ViewModelProvider(requireActivity()).get(EventListViewModel.class);
         eventModel = eventListViewModel.getSelectedEvent();
         eventThemesUtil = EventThemesUtil.getInstance(getContext().getResources());
-        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
-                .findFragmentById(R.id.fragment_event_detailed_map);
-        mapFragment.getMapAsync(this);
+        initMap(true);
 
         backButton = v.findViewById(R.id.ib_back);
         likeButton = v.findViewById(R.id.ib_like);
@@ -95,6 +96,8 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         tvEventDetailedThemes = v.findViewById(R.id.tv_event_detailed_tags);
         linearLayoutParticipants = v.findViewById(R.id.ll_event_users);
         tvMaxMembersReached = v.findViewById(R.id.tv_no_free_slot);
+        mainLayout = v.findViewById(R.id.event_detailed_main);
+        mapLayout = v.findViewById(R.id.event_detailed_map);
 
         eventListViewModel.getLiveEventListData().observe(getViewLifecycleOwner(), eventList -> {
             for (EventModel event : eventList) {
@@ -173,6 +176,16 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
             eventListViewModel.removeEventListListener();
         }
         eventListViewModel.setRemoveListener(true);
+    }
+
+    private void initMap(boolean isDefaultMap) {
+        int map = R.id.fragment_event_detailed_map;
+        if (!isDefaultMap) {
+            map = R.id.item_event_detailed_maximized_map;
+        }
+        SupportMapFragment mapFragment = (SupportMapFragment) this.getChildFragmentManager()
+                .findFragmentById(map);
+        mapFragment.getMapAsync(this);
     }
 
     private void updateEventInfo() {
@@ -326,5 +339,19 @@ public class EventListDetailedFragment extends Fragment implements OnMapReadyCal
         mMap = googleMap;
         GoogleMapService.setupMap(googleMap, getContext(), false, false, EventListDetailedFragment.this);
         GoogleMapService.clearAndSetMarker(mMap, eventModel.getEventGeoLocation(), 12, eventModel.getEventLocation(), getContext());
+
+        mMap.setOnMapClickListener(latLng -> {
+            if (isMapMaximized) {
+                mainLayout.setVisibility(View.VISIBLE);
+                mapLayout.setVisibility(View.GONE);
+                initMap(true);
+                isMapMaximized = false;
+            } else {
+                mainLayout.setVisibility(View.GONE);
+                mapLayout.setVisibility(View.VISIBLE);
+                initMap(false);
+                isMapMaximized = true;
+            }
+        });
     }
 }
