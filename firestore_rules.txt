@@ -5,8 +5,17 @@ service cloud.firestore {
     	return get(/databases/$(database)/documents/$(eventType)/$(eventId)).data;
     }
     
+    function getUserDetailedDoc(userId) { 
+    	return get(/databases/$(database)/documents/userProfiles/$(userId)/detailedInfo/$(userId)).data;
+    }
+    
     function isUserExists(userId) {
     	return exists(get(/databases/$(database)/documents/userProfiles/$(userId)).data);
+    }
+    
+    function isNotInBlockList(senderId, recipientId, action) {
+    	let recipientDoc = getUserDetailedDoc(recipientId);
+      return !(senderId in recipientDoc.blockedUsers) || (action == "REMOVE_FRIEND");
     }
     
     function isFreeSlot(eventType, eventId) {
@@ -48,12 +57,12 @@ service cloud.firestore {
       allow delete: if false;
       
       match /incomeRequests/{friendId} {
-      	allow create, update: if request.auth != null && request.resource.data.senderId == request.auth.uid && isUserExists(userId);
+      	allow create, update: if request.auth != null && request.resource.data.senderId == request.auth.uid && isUserExists(userId) && isNotInBlockList(request.auth.uid, userId, request.resource.data.action);
         allow read, delete: if request.auth.uid == userId;
     	}
       
       match /outcomeRequests/{friendId} {
-        allow read, write: if request.auth.uid == userId;
+        allow read, write: if request.auth.uid == userId && isNotInBlockList(request.auth.uid, friendId, request.resource.data.action);
     	}
       
       match /detailedInfo/{userId} {

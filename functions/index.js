@@ -49,7 +49,7 @@ exports.privateEventUsers = functions.firestore
   
 exports.outcomeRequest = functions.firestore
   .document('userProfiles/{userId}/outcomeRequests/{anotherUserId}')
-  .onCreate((snap, context) => {
+  .onCreate(async (snap, context) => {
     const action = snap.data().action;
 	const senderId = context.params.userId;
 	const senderName = snap.data().senderName;
@@ -58,16 +58,23 @@ exports.outcomeRequest = functions.firestore
 	const createTS = snap.data().createTS;
 	
 	if (action == "ADD_FRIEND") {
-		var requestObject = {
-             action : action,
-             senderId : senderId,
-             senderName: senderName,
-             senderProfileImg: senderProfileImg,
-             recipientId : recipientId,
-             createTS: createTS
-		};
-		
-		return admin.firestore().collection('userProfiles').doc(recipientId).collection('incomeRequests').doc(senderId).set(requestObject);
+		var userDocRef = admin.firestore().collection('userProfiles').doc(recipientId).collection('detailedInfo').doc(recipientId);
+		await userDocRef.get().then(doc => {
+		    const recipientBlockedList = doc.data().blockedUsers;
+		    if (!recipientBlockedList.includes(senderId)) {
+		        var requestObject = {
+                     action : action,
+                     senderId : senderId,
+                     senderName: senderName,
+                     senderProfileImg: senderProfileImg,
+                     recipientId : recipientId,
+                     createTS: createTS
+            	};
+                return admin.firestore().collection('userProfiles').doc(recipientId).collection('incomeRequests').doc(senderId).set(requestObject);
+		    } else {
+		        return admin.firestore().collection('userProfiles').doc(senderId).collection('outcomeRequests').doc(recipientId).delete();
+		    }
+		});
 	} else if (action == "REMOVE_FRIEND") {
 		admin.firestore().collection('userProfiles').doc(recipientId).collection('detailedInfo').doc(recipientId).update({
 			userFriends: fieldValue.arrayRemove(senderId) 
@@ -75,7 +82,6 @@ exports.outcomeRequest = functions.firestore
 		
 		return admin.firestore().collection('userProfiles').doc(senderId).collection('outcomeRequests').doc(recipientId).delete();
 	}
-    return;
   });
 
 exports.incomeRequest = functions.firestore
@@ -97,7 +103,6 @@ exports.incomeRequest = functions.firestore
             return admin.firestore().collection('userProfiles').doc(requestId).collection('outcomeRequests').doc(senderId).delete();
         });
 	}
-    return;
   });
 
 exports.publicEventDeletion = functions.firestore

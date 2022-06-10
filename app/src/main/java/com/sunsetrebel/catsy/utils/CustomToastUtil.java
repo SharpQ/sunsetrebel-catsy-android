@@ -19,7 +19,7 @@ public class CustomToastUtil {
                 .tintIcon(false)
                 .setToastTypeface(typeface)
                 .setTextSize(12)
-                .allowQueue(false)
+                .allowQueue(true)
                 .apply();
     }
 

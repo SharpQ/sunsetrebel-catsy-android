@@ -209,7 +209,7 @@ public class PopupService {
                     } else {
                         btnAddToFriends.setEnabled(true);
                         btnAddToFriends.setVisibility(View.VISIBLE);
-                        CustomToastUtil.showSuccessToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_friend_request_fail).toString() + userProfile.getUserId());
+                        CustomToastUtil.showFailToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_friend_request_fail).toString() + userProfile.getUserId());
                         Log.d("DEBUG", "Failed to send friend request: " + userProfile.getUserId());
                     }
                 }, mainUserProfileModel, userProfile.getUserId());

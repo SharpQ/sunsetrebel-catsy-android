@@ -55,6 +55,8 @@
     <string name="event_theme_dialog_notification">Please choose no more than 3 themes</string>
     <string name="new_event_event_created_notification">New event successfully created!</string>
     <string name="new_event_event_failed_create_notification">Failed to create new event!</string>
+    <string name="new_event_event_success_sent_event_notifications">All event invites successfully sent!</string>
+    <string name="new_event_event_failed_sent_notifications">Failed to sent event invites!</string>
     <string name="new_event_fill_mandatory_field_error">Mandatory field</string>
     <string name="new_event_next_btn">Next</string>
     <string name="new_event_final_avatar_hint">Add\n image</string>

@@ -239,6 +239,7 @@ public class FirebaseFirestoreService {
         profileHostedEventMap.put(FirestoreKeys.Documents.UserHostedEvents.EVENT_ACCESS_TYPE, eventModel.getAccessType());
 
         List<Task<Void>> tasks = new ArrayList<>();
+        List<Task<Void>> tasksFriendInvite = new ArrayList<>();
         if (eventModel.getAccessType() == AccessType.PUBLIC || eventModel.getAccessType() == AccessType.SELECTIVE) {
             tasks.add(getPublicEventDocument(eventModel.getEventId()).set(event));
             tasks.add(getPublicEventJoinedUserDocument(eventModel.getEventId(), eventModel.getHostId()).set(firstUserMap));
@@ -264,17 +265,30 @@ public class FirebaseFirestoreService {
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.EVENT_ACCESS_TYPE, eventModel.getAccessType());
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.RECIPIENT_ID, userId);
                 inviteRequest.put(FirestoreKeys.Documents.EventInvite.CREATE_TS, eventModel.getCreateTS());
-                tasks.add(getUserProfileIncomeRequestDocument(userId, eventModel.getEventId()).set(inviteRequest));
+                tasksFriendInvite.add(getUserProfileIncomeRequestDocument(userId, eventModel.getEventId()).set(inviteRequest));
             }
         }
         Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(tasks);
+        Task<List<QuerySnapshot>> inviteTasks = Tasks.whenAllSuccess(tasksFriendInvite);
         allTasks.addOnSuccessListener(querySnapshots -> {
-            instanceCreateEvent = false;
             Log.d("DEBUG", "New event created! EventId: " + eventModel.getEventId());
             CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.new_event_event_created_notification));
+            if (tasksFriendInvite != null && tasksFriendInvite.size() > 0) {
+                inviteTasks.addOnSuccessListener(querySnapshots1 -> {
+                    instanceCreateEvent = false;
+                    CustomToastUtil.showSuccessToast(context, context.getResources().getString(R.string.new_event_event_success_sent_event_notifications));
+                    Log.d("DEBUG", "All event invites successfully sent! EventId: " + eventModel.getEventId());
+                }).addOnFailureListener(error -> {
+                    instanceCreateEvent = false;
+                    CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.new_event_event_failed_sent_notifications));
+                    Log.d("DEBUG", "Failed to sent event invites! EventId: " + error.toString());
+                });
+            } else {
+                instanceCreateEvent = false;
+            }
         }).addOnFailureListener(e -> {
             instanceCreateEvent = false;
-            Log.d("DEBUG", "Failed to create new event!" + eventModel.getEventId());
+            Log.d("DEBUG", "Failed to create new event!" + e.toString());
             CustomToastUtil.showFailToast(context, context.getResources().getString(R.string.new_event_event_failed_create_notification));
         });
     }
