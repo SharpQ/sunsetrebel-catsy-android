@@ -23,7 +23,7 @@ import com.sunsetrebel.catsy.utils.ImageUtil;
 import com.sunsetrebel.catsy.viewmodel.ProfileViewModel;
 
 public class ProfileMainFragment extends Fragment {
-    private Fragment personalInfoFragment;
+    private Fragment personalTabFragment;
     private ImageView profileImage, countryFlagImage;
     private TextView profileStatus, profileUserName;
     private AppCompatButton logoutButton;
@@ -68,8 +68,8 @@ public class ProfileMainFragment extends Fragment {
         } else {
             profileStatus.setText(getContext().getString(R.string.profile_status_default));
         }
-        personalInfoFragment = new ProfilePersonalInfoFragment();
-        getChildFragmentManager().beginTransaction().replace(R.id.fl_profile, personalInfoFragment).commit();
+        personalTabFragment = new ProfilePersonalInfoFragment();
+        getChildFragmentManager().beginTransaction().replace(R.id.fl_profile, personalTabFragment).commit();
 
         profileViewModel.getNotificationsLiveData().observe(getViewLifecycleOwner(), notificationList -> {
             if (notificationList != null && notificationList.size() > 0) {
@@ -97,13 +97,15 @@ public class ProfileMainFragment extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        getChildFragmentManager().beginTransaction().replace(R.id.fl_profile, personalInfoFragment).commit();
+                        personalTabFragment = new ProfilePersonalInfoFragment();
                         break;
                     case 1:
                         break;
                     case 2:
+                        personalTabFragment = new ProfileFriendListFragment();
                         break;
                 }
+                getChildFragmentManager().beginTransaction().replace(R.id.fl_profile, personalTabFragment).commit();
             }
 
             @Override
@@ -120,7 +122,7 @@ public class ProfileMainFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (isRemoveListener) {
-            profileViewModel.removeNotificationsListener();
+            profileViewModel.removeProfileListeners();
         }
     }
 }

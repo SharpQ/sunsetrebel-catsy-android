@@ -83,10 +83,12 @@
     <string name="event_detailed_no_free_slot">Maximum limit of members reached!</string>
     <string name="event_liked_success">You liked event:\u0020</string>
     <string name="event_liked_fail">Failed to like event:\u0020</string>
-    <string name="user_blocked_success">User blocked:\u0020</string>
-    <string name="user_blocked_fail">Fail block user:\u0020</string>
+    <string name="user_blocked_success">User added to block list:\u0020</string>
+    <string name="user_blocked_fail">Fail to add user to block list:\u0020</string>
     <string name="user_friend_request_success">Friend request sent to user:\u0020</string>
     <string name="user_friend_request_fail">Failed to send friend request:\u0020</string>
+    <string name="profile_remove_friend_success">User is removed from friend list:\u0020</string>
+    <string name="profile_remove_friend_fail">Failed to remove user from friend list:\u0020</string>
     <string name="profile_id_placeholder">ID:\u0020</string>
     <string name="profile_tab_title_main">Personal Info</string>
     <string name="profile_tab_title_events">Events</string>
@@ -100,6 +102,7 @@
     <string name="notifications_tab_title_friends">Friends</string>
     <string name="popup_user_add">Add to friends</string>
     <string name="popup_user_block">Block user</string>
+    <string name="popup_user_remove_friend">Remove friend</string>
     <string name="notifications_accept_btn">Accept</string>
     <string name="notifications_decline_btn">Decline</string>
     <string name="notification_friend_invite_title">\u0020sent you friend request</string>

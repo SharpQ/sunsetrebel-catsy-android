@@ -228,7 +228,7 @@ public class PopupService {
                         CustomToastUtil.showFailToast(fragment.getContext(), fragment.getContext().getResources().getText(R.string.user_blocked_fail).toString() + userProfile.getUserId());
                         Log.d("DEBUG", "Fail block user: " + userProfile.getUserId());
                     }
-                }, mainUserProfileModel.getUserId(), userProfile.getUserId());
+                }, mainUserProfileModel, userProfile.getUserId());
             });
 
             if (userProfile.getLinkFacebook() != null) {

@@ -18,12 +18,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.Source;
 import com.sunsetrebel.catsy.R;
+import com.sunsetrebel.catsy.enums.AccessType;
 import com.sunsetrebel.catsy.models.CommonUserModel;
 import com.sunsetrebel.catsy.models.EventModel;
 import com.sunsetrebel.catsy.models.InviteToEventModel;
 import com.sunsetrebel.catsy.models.InviteToFriendsListModel;
 import com.sunsetrebel.catsy.models.MainUserProfileModel;
-import com.sunsetrebel.catsy.enums.AccessType;
 import com.sunsetrebel.catsy.utils.CustomToastUtil;
 
 import java.util.ArrayList;
@@ -39,6 +39,10 @@ public class FirebaseFirestoreService {
     private ListenerRegistration eventListListener = null;
     private static MutableLiveData<List<Object>> notificationsMutableLiveData = new MutableLiveData<>();
     private ListenerRegistration notificationsListener = null;
+    private static MutableLiveData<List<CommonUserModel>> friendListMutableLiveData = new MutableLiveData<>();
+    private ListenerRegistration friendListListener = null;
+    private static MutableLiveData<MainUserProfileModel> mainUserProfileMutableLiveData = new MutableLiveData<>();
+    private ListenerRegistration mainUserProfileListener = null;
     private static boolean instanceJoinLeave = false;
     private static boolean instanceLike = false;
     private static boolean instanceCreateEvent = false;
@@ -81,6 +85,16 @@ public class FirebaseFirestoreService {
     //COLLECTION REFS
     private CollectionReference getPublicEventsCollection() {
         return fStore.collection(FirestoreKeys.Collections.COLLECTION_PUBLIC_EVENTS);
+    }
+
+    private CollectionReference getUserProfilesCollection() {
+        return fStore.collection(FirestoreKeys.Collections.COLLECTION_USER_PROFILES);
+    }
+
+    private CollectionReference getUserProfileInfoDetailedCollection(String mainUserId) {
+        return fStore.collection(FirestoreKeys.Collections.COLLECTION_USER_PROFILES)
+                .document(mainUserId)
+                .collection(FirestoreKeys.Collections.COLLECTION_USER_DETAILED_INFO);
     }
 
     private CollectionReference getPublicEventParticipantsCollection(String eventId) {
@@ -428,12 +442,6 @@ public class FirebaseFirestoreService {
         return eventListMutableLiveData;
     }
 
-    public void removeEventListListener() {
-        if (eventListListener != null) {
-            Log.d("DEBUG", "Removed public event list snapshot listener");
-            eventListListener.remove();
-        }
-    }
 
     public MutableLiveData<List<Object>> getNotificationsMutableLiveData(String userId) {
         notificationsListener = getIncomeInvitesCollection(userId).addSnapshotListener((value, error) -> {
@@ -454,10 +462,66 @@ public class FirebaseFirestoreService {
         return notificationsMutableLiveData;
     }
 
+    public MutableLiveData<List<CommonUserModel>> getFriendListMutableLiveData(List<String> friendsIds) {
+        if (friendsIds != null && friendsIds.size() > 0) {
+            friendListListener = getUserProfilesCollection()
+                    .whereIn(FirestoreKeys.Documents.UserProfile.USER_ID, friendsIds)
+                    .addSnapshotListener((value, error) -> {
+                        Log.d("DEBUG", "Added friend list snapshot listener");
+                        List<CommonUserModel> friendList = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : value) {
+                            if (document != null) {
+                                CommonUserModel userProfile = FirestoreToModelConverter.convertCommonUserProfileDocumentToModel(document.getData());
+                                friendList.add(userProfile);
+                            }
+                        }
+                        friendListMutableLiveData.postValue(friendList);
+                    });
+        } else {
+            friendListMutableLiveData.postValue(null);
+        }
+        return friendListMutableLiveData;
+    }
+
+    public MutableLiveData<MainUserProfileModel> getMainUserProfileMutableLiveData(String mainUserId) {
+        friendListListener = getUserProfileInfoDetailedCollection(mainUserId)
+                .addSnapshotListener((value, error) -> {
+                    MainUserProfileModel mainUserProfileModel = null;
+                    if (value != null && value.getDocuments().size() > 0 && value.getDocuments().get(0) != null && !value.getDocuments().get(0).getData().isEmpty()) {
+                        mainUserProfileModel = FirestoreToModelConverter.convertUserProfileDocumentToModel(value.getDocuments().get(0).getData());
+                    }
+                    mainUserProfileMutableLiveData.postValue(mainUserProfileModel);
+                });
+        return mainUserProfileMutableLiveData;
+    }
+
+    public void removeEventListListener() {
+        if (eventListListener != null) {
+            Log.d("DEBUG", "Removed public event list snapshot listener");
+            eventListListener.remove();
+        }
+    }
+
     public void removeNotificationsListener() {
         if (notificationsListener != null) {
             Log.d("DEBUG", "Removed income notifications listener");
             notificationsListener.remove();
+        }
+    }
+
+    public void removeFriendListListener() {
+        if (friendListListener != null) {
+            Log.d("DEBUG", "Removed friend list listener");
+            friendListListener.remove();
+            friendListMutableLiveData = new MutableLiveData<>();
+        }
+    }
+
+    public void removeMainUserProfileListener() {
+        if (mainUserProfileListener != null) {
+            Log.d("DEBUG", "Removed main user profile listener");
+            mainUserProfileListener.remove();
+            mainUserProfileMutableLiveData = new MutableLiveData<>();
         }
     }
 
@@ -529,8 +593,8 @@ public class FirebaseFirestoreService {
         });
     }
 
-    public void removeFriendRequest(SetUserInteractEventCallback setUserInteractEventCallback,
-                                  String userId, String anotherUserId) {
+    public void removeFriend(SetUserInteractEventCallback setUserInteractEventCallback,
+                             String userId, String anotherUserId) {
         if (instanceFriendRequest) {
             return;
         }
@@ -549,6 +613,37 @@ public class FirebaseFirestoreService {
             setUserInteractEventCallback.onResponse(true);
         }).addOnFailureListener(e -> {
             instanceFriendRequest = false;
+            setUserInteractEventCallback.onResponse(false);
+        });
+    }
+
+    public void setUserToBlocked(SetUserInteractEventCallback setUserInteractEventCallback,
+                                 MainUserProfileModel mainUserProfileModel, String userBlockedId) {
+        if (instanceBlockUser) {
+            return;
+        }
+        instanceBlockUser = true;
+        List<Task<Void>> tasks = new ArrayList<>();
+        tasks.add(getUserDetailedProfileDocument(mainUserProfileModel.getUserId()).update(FirestoreKeys.Documents.UserProfileDetailed.BLOCKED_USERS,
+                FieldValue.arrayUnion(userBlockedId)));
+        if (mainUserProfileModel.getUserFriends().contains(userBlockedId)) {
+            Timestamp createTS = new Timestamp(new Date());
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put(FirestoreKeys.Documents.FriendInvite.SENDER_ID, mainUserProfileModel.getUserId());
+            requestBody.put(FirestoreKeys.Documents.FriendInvite.RECIPIENT_ID, userBlockedId);
+            requestBody.put(FirestoreKeys.Documents.FriendInvite.ACTION_TYPE, "REMOVE_FRIEND");
+            requestBody.put(FirestoreKeys.Documents.FriendInvite.CREATE_TS, createTS);
+
+            tasks.add(getUserDetailedProfileDocument(mainUserProfileModel.getUserId())
+                    .update(FirestoreKeys.Documents.UserProfileDetailed.USER_FRIENDS, FieldValue.arrayRemove(userBlockedId)));
+            tasks.add(getUserProfileOutcomeRequestDocument(mainUserProfileModel.getUserId(), userBlockedId).set(requestBody));
+        }
+        Task<List<QuerySnapshot>> allTasks = Tasks.whenAllSuccess(tasks);
+        allTasks.addOnSuccessListener(querySnapshots -> {
+            instanceBlockUser = false;
+            setUserInteractEventCallback.onResponse(true);
+        }).addOnFailureListener(e -> {
+            instanceBlockUser = false;
             setUserInteractEventCallback.onResponse(false);
         });
     }
@@ -651,22 +746,6 @@ public class FirebaseFirestoreService {
             setUserInteractEventCallback.onResponse(true);
         }).addOnFailureListener(e -> {
             instanceJoinLeave = false;
-            setUserInteractEventCallback.onResponse(false);
-        });
-    }
-
-    public void setUserToBlocked(SetUserInteractEventCallback setUserInteractEventCallback, String userId, String userBlockedId) {
-        if (instanceBlockUser) {
-            return;
-        }
-        instanceBlockUser = true;
-        Task<Void> task = getUserDetailedProfileDocument(userId).update(FirestoreKeys.Documents.UserProfileDetailed.BLOCKED_USERS,
-                FieldValue.arrayUnion(userBlockedId));
-        task.addOnSuccessListener(querySnapshots -> {
-            instanceBlockUser = false;
-            setUserInteractEventCallback.onResponse(true);
-        }).addOnFailureListener(e -> {
-            instanceBlockUser = false;
             setUserInteractEventCallback.onResponse(false);
         });
     }
