@@ -14,11 +14,19 @@
       },
       "oauth_client": [
         {
-          "client_id": "795332692275-0b8ofhena3m75369q7d3uohn9jgo6pl9.apps.googleusercontent.com",
+          "client_id": "795332692275-40nuh8kt11r8d2plk57k78a19d1jp21b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.sunsetrebel.catsy",
-            "certificate_hash": "da6254a564f4306dd6c11708ca3f0977deefa0a7"
+            "certificate_hash": "68f2430868f4decc561cc9b95ffc5695bba2d474"
+          }
+        },
+        {
+          "client_id": "795332692275-v6s5b76jfjh63hpoqbe5i948jt2le5qp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sunsetrebel.catsy",
+            "certificate_hash": "7901a4d59e0799b019842ce2dfcac85fcdb4e526"
           }
         },
         {
