@@ -124,5 +124,6 @@ public class ProfileMainFragment extends Fragment {
         if (isRemoveListener) {
             profileViewModel.removeProfileListeners();
         }
+        profileViewModel.removeFriendListener();
     }
 }

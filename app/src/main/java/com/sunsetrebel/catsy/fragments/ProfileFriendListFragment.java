@@ -36,7 +36,8 @@ public class ProfileFriendListFragment extends Fragment {
         recyclerFriendList.addItemDecoration(dividerItemDecoration);
 
         profileViewModel.getFriendListLiveData().observe(getViewLifecycleOwner(), friendList -> {
-//            if (notificationList.size() == 0) {
+//TO DO: add label for no friends list
+//            if (friendList.size() == 0) {
 //                tvNoNotifications.setVisibility(View.VISIBLE);
 //                tvNoNotifications.setEnabled(true);
 //            } else {

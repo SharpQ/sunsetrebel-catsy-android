@@ -87,10 +87,7 @@ public class FirebaseAuthService {
 
     public boolean isUserLoggedIn() {
         user = fAuth.getCurrentUser();
-        if (user != null) {
-            return true;
-        }
-        return false;
+        return user != null;
     }
 
     public void createGoogleAuthRequestGetInstance(android.content.Context context) {

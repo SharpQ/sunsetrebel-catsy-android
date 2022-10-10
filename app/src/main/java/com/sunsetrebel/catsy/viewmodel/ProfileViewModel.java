@@ -38,6 +38,7 @@ public class ProfileViewModel extends ViewModel {
         userProfileLiveData = userProfileService.getUserProfileModelLiveData();
         firebaseFirestoreService = FirebaseFirestoreService.getInstance();
         notificationTypeToDisplay.setValue(NotificationType.ALL);
+
         if (initialNotificationList == null) {
             initialNotificationList = firebaseFirestoreService.getNotificationsMutableLiveData(userProfileLiveData.getValue().getUserId());
             filteredNotificationList.addSource(initialNotificationList, new Observer<List<Object>>() {
@@ -54,6 +55,7 @@ public class ProfileViewModel extends ViewModel {
                 }
             });
         }
+
         if (initialUserFriendList == null) {
             initialUserFriendList = firebaseFirestoreService.getFriendListMutableLiveData(userProfileLiveData.getValue().getUserFriends());
 
@@ -64,8 +66,6 @@ public class ProfileViewModel extends ViewModel {
                         currentFriendList = userProfileLiveData.getValue().getUserFriends();
                     }
                     filteredFriendList.setValue(friendList);
-
-//                    combineFriendList(friendList, userProfileLiveData.getValue());
                 }
             });
 
@@ -75,10 +75,10 @@ public class ProfileViewModel extends ViewModel {
                     if (currentFriendList == null) {
                         currentFriendList = mainUserProfileModel.getUserFriends();
                         filteredFriendList.setValue(initialUserFriendList.getValue());
-                    } else if (currentFriendList != null && currentFriendList.equals(mainUserProfileModel.getUserFriends())) {
+                    } else if (currentFriendList.equals(mainUserProfileModel.getUserFriends())) {
                         //if lists equal - return old list
                         filteredFriendList.setValue(initialUserFriendList.getValue());
-                    } else if (currentFriendList != null && !currentFriendList.equals(mainUserProfileModel.getUserFriends())) {
+                    } else if (!currentFriendList.equals(mainUserProfileModel.getUserFriends())) {
                         //if lists not equal - recreate listeners
                         currentFriendList = mainUserProfileModel.getUserFriends();
                         firebaseFirestoreService.removeFriendListListener();
@@ -98,7 +98,6 @@ public class ProfileViewModel extends ViewModel {
                             filteredFriendList.setValue(null);
                         }
                     }
-//                    combineFriendList(initialUserFriendList.getValue(), mainUserProfileModel);
                 }
             });
         }
@@ -126,35 +125,9 @@ public class ProfileViewModel extends ViewModel {
         }
     }
 
-    private void combineFriendList(List<CommonUserModel> friendList,
-                                   MainUserProfileModel mainUserProfileModel) {
-        if (currentFriendList == null) {
-            currentFriendList = mainUserProfileModel.getUserFriends();
-            filteredFriendList.setValue(friendList);
-        } else if (currentFriendList != null && currentFriendList.equals(mainUserProfileModel.getUserFriends())) {
-            //if lists equal - return old list
-            filteredFriendList.setValue(friendList);
-        } else if (currentFriendList != null && !currentFriendList.equals(mainUserProfileModel.getUserFriends())) {
-            //if lists not equal - recreate listeners
-            currentFriendList = mainUserProfileModel.getUserFriends();
-            firebaseFirestoreService.removeFriendListListener();
-            filteredFriendList.removeSource(initialUserFriendList);
-            initialUserFriendList = firebaseFirestoreService.getFriendListMutableLiveData(mainUserProfileModel.getUserFriends());
-            filteredFriendList.addSource(initialUserFriendList, new Observer<List<CommonUserModel>>() {
-                @Override
-                public void onChanged(List<CommonUserModel> friendList) {
-                    combineFriendList(friendList, userProfileLiveData.getValue());
-                }
-            });
-
-            if (currentFriendList.isEmpty()) {
-                filteredFriendList.setValue(null);
-            }
-        }
-    }
-
     public void logoutUser() {
         removeProfileListeners();
+        removeFriendListener();
         userProfileService.removeInstance();
     }
 
@@ -175,6 +148,9 @@ public class ProfileViewModel extends ViewModel {
         filteredNotificationList.removeSource(initialNotificationList);
         filteredNotificationList.removeSource(notificationTypeToDisplay);
         initialNotificationList = null;
+    }
+
+    public void removeFriendListener() {
         firebaseFirestoreService.removeFriendListListener();
         filteredFriendList.removeSource(initialUserFriendList);
         filteredFriendList.removeSource(userProfileLiveData);

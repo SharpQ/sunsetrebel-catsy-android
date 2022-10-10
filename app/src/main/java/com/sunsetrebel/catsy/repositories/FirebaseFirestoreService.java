@@ -513,7 +513,6 @@ public class FirebaseFirestoreService {
         if (friendListListener != null) {
             Log.d("DEBUG", "Removed friend list listener");
             friendListListener.remove();
-            friendListMutableLiveData = new MutableLiveData<>();
         }
     }
 
@@ -521,7 +520,6 @@ public class FirebaseFirestoreService {
         if (mainUserProfileListener != null) {
             Log.d("DEBUG", "Removed main user profile listener");
             mainUserProfileListener.remove();
-            mainUserProfileMutableLiveData = new MutableLiveData<>();
         }
     }
 
