@@ -126,7 +126,7 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void logoutUser() {
-        removeProfileListeners();
+        removeNotificationListener();
         removeFriendListener();
         userProfileService.removeInstance();
     }
@@ -143,7 +143,7 @@ public class ProfileViewModel extends ViewModel {
         return filteredFriendList;
     }
 
-    public void removeProfileListeners() {
+    public void removeNotificationListener() {
         firebaseFirestoreService.removeNotificationsListener();
         filteredNotificationList.removeSource(initialNotificationList);
         filteredNotificationList.removeSource(notificationTypeToDisplay);

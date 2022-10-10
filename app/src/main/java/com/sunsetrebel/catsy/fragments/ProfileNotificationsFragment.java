@@ -101,7 +101,7 @@ public class ProfileNotificationsFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (isRemoveListener) {
-            profileViewModel.removeProfileListeners();
+            profileViewModel.removeNotificationListener();
         }
     }
 }

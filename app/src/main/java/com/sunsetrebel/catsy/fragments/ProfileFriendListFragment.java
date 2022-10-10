@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
@@ -18,6 +19,7 @@ import com.sunsetrebel.catsy.viewmodel.ProfileViewModel;
 public class ProfileFriendListFragment extends Fragment {
     private ProfileViewModel profileViewModel;
     private FriendListAdapter notificationsAdapter;
+    private AppCompatTextView tvNoFriends;
 
     public ProfileFriendListFragment() {
         // Required empty public constructor
@@ -29,6 +31,7 @@ public class ProfileFriendListFragment extends Fragment {
         View v = inflater.inflate(R.layout.item_profile_friend_list, container, false);
         profileViewModel = new ViewModelProvider(requireActivity()).get(ProfileViewModel.class);
         RecyclerView recyclerFriendList = v.findViewById(R.id.recycler_friend_list);
+        tvNoFriends = v.findViewById(R.id.tv_no_friends_notifications);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerFriendList.setLayoutManager(layoutManager);
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerFriendList.getContext(),
@@ -36,14 +39,13 @@ public class ProfileFriendListFragment extends Fragment {
         recyclerFriendList.addItemDecoration(dividerItemDecoration);
 
         profileViewModel.getFriendListLiveData().observe(getViewLifecycleOwner(), friendList -> {
-//TO DO: add label for no friends list
-//            if (friendList.size() == 0) {
-//                tvNoNotifications.setVisibility(View.VISIBLE);
-//                tvNoNotifications.setEnabled(true);
-//            } else {
-//                tvNoNotifications.setVisibility(View.INVISIBLE);
-//                tvNoNotifications.setEnabled(false);
-//            }
+            if (friendList == null) {
+                tvNoFriends.setVisibility(View.VISIBLE);
+                tvNoFriends.setEnabled(true);
+            } else {
+                tvNoFriends.setVisibility(View.INVISIBLE);
+                tvNoFriends.setEnabled(false);
+            }
             notificationsAdapter = new FriendListAdapter(this, friendList);
             recyclerFriendList.setAdapter(notificationsAdapter);
             notificationsAdapter.notifyDataSetChanged();

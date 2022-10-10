@@ -97,6 +97,7 @@
     <string name="profile_info_title_social_networks">Social networks</string>
     <string name="profile_notifications_title">Notifications</string>
     <string name="profile_no_new_notifications_label">No new notifications</string>
+    <string name="profile_no_friends_label">No friends added yet</string>
     <string name="notifications_tab_title_all">All</string>
     <string name="notifications_tab_title_events">Events</string>
     <string name="notifications_tab_title_friends">Friends</string>

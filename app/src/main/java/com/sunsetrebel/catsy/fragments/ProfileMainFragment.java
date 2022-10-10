@@ -122,7 +122,7 @@ public class ProfileMainFragment extends Fragment {
     public void onStop() {
         super.onStop();
         if (isRemoveListener) {
-            profileViewModel.removeProfileListeners();
+            profileViewModel.removeNotificationListener();
         }
         profileViewModel.removeFriendListener();
     }

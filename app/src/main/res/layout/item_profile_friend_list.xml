@@ -14,17 +14,39 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_friend_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/primaryDarkColor"
-        android:scrollbars="vertical"
-        android:fadeScrollbars="true"
-        android:overScrollMode="never"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_friend_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/primaryDarkColor"
+            android:scrollbars="vertical"
+            android:fadeScrollbars="true"
+            android:overScrollMode="never"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_no_friends_notifications"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:enabled="false"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/audiowide"
+            android:gravity="center"
+            android:drawableStart="@drawable/im_kitty_no_notifications_64"
+            android:text="@string/profile_no_friends_label"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="@dimen/default_page_descr_text_size"
+            android:drawablePadding="20dp"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
