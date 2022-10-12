@@ -61,6 +61,9 @@ exports.outcomeRequest = functions.firestore
 		var userDocRef = admin.firestore().collection('userProfiles').doc(recipientId).collection('detailedInfo').doc(recipientId);
 		await userDocRef.get().then(doc => {
 		    const recipientBlockedList = doc.data().blockedUsers;
+			if (!recipientBlockedList) {
+				recipientBlockedList = []
+			}
 		    if (!recipientBlockedList.includes(senderId)) {
 		        var requestObject = {
                      action : action,
@@ -95,6 +98,9 @@ exports.incomeRequest = functions.firestore
         var userRef = admin.firestore().collection('userProfiles').doc(senderId).collection('detailedInfo').doc(senderId);
         await userRef.get().then(doc => {
             const userFriend = doc.data().userFriends;
+			if (!userFriend) {
+				userFriend = []
+			}
             if (userFriend.includes(requestId)) {
                 admin.firestore().collection('userProfiles').doc(requestId).collection('detailedInfo').doc(requestId).update({
                     userFriends: fieldValue.arrayUnion(senderId)
