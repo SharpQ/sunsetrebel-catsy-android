@@ -39,7 +39,7 @@ public class ProfileFriendListFragment extends Fragment {
         recyclerFriendList.addItemDecoration(dividerItemDecoration);
 
         profileViewModel.getFriendListLiveData().observe(getViewLifecycleOwner(), friendList -> {
-            if (friendList == null) {
+            if (friendList.isEmpty()) {
                 tvNoFriends.setVisibility(View.VISIBLE);
                 tvNoFriends.setEnabled(true);
             } else {

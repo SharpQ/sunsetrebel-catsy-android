@@ -26,12 +26,12 @@ public class ProfileViewModel extends ViewModel {
     private UserProfileService userProfileService;
     private static FirebaseFirestoreService firebaseFirestoreService;
     private LiveData<List<Object>> initialNotificationList;
-    private LiveData<List<CommonUserModel>> initialUserFriendList;
     private LiveData<MainUserProfileModel> userProfileLiveData;
     private MediatorLiveData<List<Object>> filteredNotificationList = new MediatorLiveData<>();
     private MediatorLiveData<List<CommonUserModel>> filteredFriendList = new MediatorLiveData<>();
     private MutableLiveData<Enum<NotificationType>> notificationTypeToDisplay = new MutableLiveData<>();
     private List<String> currentFriendList = null;
+    private List<CommonUserModel> currentFriendListModels = null;
 
     public void init() {
         userProfileService = UserProfileService.getInstance();
@@ -41,66 +41,28 @@ public class ProfileViewModel extends ViewModel {
 
         if (initialNotificationList == null) {
             initialNotificationList = firebaseFirestoreService.getNotificationsMutableLiveData(userProfileLiveData.getValue().getUserId());
-            filteredNotificationList.addSource(initialNotificationList, new Observer<List<Object>>() {
-                @Override
-                public void onChanged(List<Object> notificationList) {
-                    combine(notificationList, notificationTypeToDisplay.getValue());
-                }
+            filteredNotificationList.addSource(initialNotificationList, notificationList -> {
+                combine(notificationList, notificationTypeToDisplay.getValue());
             });
 
-            filteredNotificationList.addSource(notificationTypeToDisplay, new Observer<Enum<NotificationType>>() {
-                @Override
-                public void onChanged(Enum<NotificationType> notificationTypeToDisplay) {
-                    combine(initialNotificationList.getValue(), notificationTypeToDisplay);
-                }
+            filteredNotificationList.addSource(notificationTypeToDisplay, notificationTypeToDisplay -> {
+                combine(initialNotificationList.getValue(), notificationTypeToDisplay);
             });
         }
 
-        if (initialUserFriendList == null) {
-            initialUserFriendList = firebaseFirestoreService.getFriendListMutableLiveData(userProfileLiveData.getValue().getUserFriends());
-
-            filteredFriendList.addSource(initialUserFriendList, new Observer<List<CommonUserModel>>() {
-                @Override
-                public void onChanged(List<CommonUserModel> friendList) {
-                    if (currentFriendList == null) {
-                        currentFriendList = userProfileLiveData.getValue().getUserFriends();
-                    }
-                    filteredFriendList.setValue(friendList);
-                }
-            });
-
-            filteredFriendList.addSource(userProfileLiveData, new Observer<MainUserProfileModel>() {
-                @Override
-                public void onChanged(MainUserProfileModel mainUserProfileModel) {
-                    if (currentFriendList == null) {
-                        currentFriendList = mainUserProfileModel.getUserFriends();
-                        filteredFriendList.setValue(initialUserFriendList.getValue());
-                    } else if (currentFriendList.equals(mainUserProfileModel.getUserFriends())) {
-                        //if lists equal - return old list
-                        filteredFriendList.setValue(initialUserFriendList.getValue());
-                    } else if (!currentFriendList.equals(mainUserProfileModel.getUserFriends())) {
-                        //if lists not equal - recreate listeners
-                        currentFriendList = mainUserProfileModel.getUserFriends();
-                        firebaseFirestoreService.removeFriendListListener();
-                        filteredFriendList.removeSource(initialUserFriendList);
-                        initialUserFriendList = firebaseFirestoreService.getFriendListMutableLiveData(mainUserProfileModel.getUserFriends());
-                        filteredFriendList.addSource(initialUserFriendList, new Observer<List<CommonUserModel>>() {
-                            @Override
-                            public void onChanged(List<CommonUserModel> friendList) {
-                                if (currentFriendList == null) {
-                                    currentFriendList = userProfileLiveData.getValue().getUserFriends();
-                                }
-                                filteredFriendList.setValue(friendList);
-                            }
-                        });
-
-                        if (currentFriendList.isEmpty()) {
-                            filteredFriendList.setValue(null);
-                        }
-                    }
-                }
-            });
-        }
+        filteredFriendList.addSource(userProfileLiveData, mainUserProfileModel -> {
+            if (currentFriendListModels == null || !currentFriendList.equals(mainUserProfileModel.getUserFriends())) {
+                //if lists not equal or null - get new list
+                currentFriendList = mainUserProfileModel.getUserFriends();
+                firebaseFirestoreService.getMultipleUsersProfile(profiles -> {
+                    currentFriendListModels = profiles;
+                    filteredFriendList.setValue(currentFriendListModels);
+                }, currentFriendList);
+            } else if (currentFriendList.equals(mainUserProfileModel.getUserFriends())) {
+                //if lists equal - return old list
+                filteredFriendList.setValue(currentFriendListModels);
+            }
+        });
     }
 
     private void combine(List<Object> inviteList, Enum<NotificationType> notificationTypeToDisplay) {
@@ -151,11 +113,9 @@ public class ProfileViewModel extends ViewModel {
     }
 
     public void removeFriendListener() {
-        firebaseFirestoreService.removeFriendListListener();
-        filteredFriendList.removeSource(initialUserFriendList);
         filteredFriendList.removeSource(userProfileLiveData);
-        initialUserFriendList = null;
         currentFriendList = null;
+        currentFriendListModels = null;
     }
 
     public void setNotificationTypeToDisplay(NotificationType notificationType) {

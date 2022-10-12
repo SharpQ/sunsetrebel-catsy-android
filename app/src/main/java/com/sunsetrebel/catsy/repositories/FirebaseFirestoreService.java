@@ -398,20 +398,24 @@ public class FirebaseFirestoreService {
 
     public void getMultipleUsersProfile(GetEventParticipantsCallback getEventParticipantsCallback,
                                         List<String> multipleUserId) {
-        List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
-        for (String userId : multipleUserId) {
-            tasks.add(getUserProfileDocument(userId).get());
-        }
-        Task<List<DocumentSnapshot>> allTasks = Tasks.whenAllSuccess(tasks);
-        allTasks.addOnSuccessListener(documentSnapshots -> {
-            List<CommonUserModel> usersList = new ArrayList<>();
-            for (DocumentSnapshot document : documentSnapshots) {
-                if (document.getData() != null) {
-                    usersList.add(FirestoreToModelConverter.convertCommonUserProfileDocumentToModel(document.getData()));
-                }
-            }
+        List<CommonUserModel> usersList = new ArrayList<>();
+        if (multipleUserId == null || multipleUserId.isEmpty()) {
             getEventParticipantsCallback.onResponse(usersList);
-        }).addOnFailureListener(e -> getEventParticipantsCallback.onResponse(null));
+        } else {
+            List<Task<DocumentSnapshot>> tasks = new ArrayList<>();
+            for (String userId : multipleUserId) {
+                tasks.add(getUserProfileDocument(userId).get());
+            }
+            Task<List<DocumentSnapshot>> allTasks = Tasks.whenAllSuccess(tasks);
+            allTasks.addOnSuccessListener(documentSnapshots -> {
+                for (DocumentSnapshot document : documentSnapshots) {
+                    if (document.getData() != null) {
+                        usersList.add(FirestoreToModelConverter.convertCommonUserProfileDocumentToModel(document.getData()));
+                    }
+                }
+                getEventParticipantsCallback.onResponse(usersList);
+            }).addOnFailureListener(e -> getEventParticipantsCallback.onResponse(usersList));
+        }
     }
 
     public void getEventList(GetEventListCallback getEventListCallback) {
@@ -462,32 +466,32 @@ public class FirebaseFirestoreService {
         return notificationsMutableLiveData;
     }
 
-    public MutableLiveData<List<CommonUserModel>> getFriendListMutableLiveData(List<String> friendsIds) {
-        if (friendsIds != null && friendsIds.size() > 0) {
-            friendListListener = getUserProfilesCollection()
-                    .whereIn(FirestoreKeys.Documents.UserProfile.USER_ID, friendsIds)
-                    .addSnapshotListener((value, error) -> {
-                        Log.d("DEBUG", "Added friend list snapshot listener");
-                        List<CommonUserModel> friendList = new ArrayList<>();
-                        for (QueryDocumentSnapshot document : value) {
-                            if (document != null) {
-                                CommonUserModel userProfile = FirestoreToModelConverter.convertCommonUserProfileDocumentToModel(document.getData());
-                                friendList.add(userProfile);
-                            }
-                        }
-                        friendListMutableLiveData.postValue(friendList);
-                    });
-        } else {
-            friendListMutableLiveData.postValue(null);
-        }
-        return friendListMutableLiveData;
-    }
+//    public MutableLiveData<List<CommonUserModel>> getFriendListMutableLiveData(List<String> friendsIds) {
+//        if (friendsIds != null && friendsIds.size() > 0) {
+//            friendListListener = getUserProfilesCollection()
+//                    .whereIn(FirestoreKeys.Documents.UserProfile.USER_ID, friendsIds)
+//                    .addSnapshotListener((value, error) -> {
+//                        Log.d("DEBUG", "Added friend list snapshot listener");
+//                        List<CommonUserModel> friendList = new ArrayList<>();
+//                        for (QueryDocumentSnapshot document : value) {
+//                            if (document != null) {
+//                                CommonUserModel userProfile = FirestoreToModelConverter.convertCommonUserProfileDocumentToModel(document.getData());
+//                                friendList.add(userProfile);
+//                            }
+//                        }
+//                        friendListMutableLiveData.postValue(friendList);
+//                    });
+//        } else {
+//            friendListMutableLiveData.postValue(null);
+//        }
+//        return friendListMutableLiveData;
+//    }
 
     public MutableLiveData<MainUserProfileModel> getMainUserProfileMutableLiveData(String mainUserId) {
         friendListListener = getUserProfileInfoDetailedCollection(mainUserId)
                 .addSnapshotListener((value, error) -> {
                     MainUserProfileModel mainUserProfileModel = null;
-                    if (value != null && value.getDocuments().size() > 0 && value.getDocuments().get(0) != null && !value.getDocuments().get(0).getData().isEmpty()) {
+                    if (value != null && !value.getDocuments().isEmpty() && value.getDocuments().get(0) != null && !value.getDocuments().get(0).getData().isEmpty()) {
                         mainUserProfileModel = FirestoreToModelConverter.convertUserProfileDocumentToModel(value.getDocuments().get(0).getData());
                     }
                     mainUserProfileMutableLiveData.postValue(mainUserProfileModel);
@@ -506,13 +510,6 @@ public class FirebaseFirestoreService {
         if (notificationsListener != null) {
             Log.d("DEBUG", "Removed income notifications listener");
             notificationsListener.remove();
-        }
-    }
-
-    public void removeFriendListListener() {
-        if (friendListListener != null) {
-            Log.d("DEBUG", "Removed friend list listener");
-            friendListListener.remove();
         }
     }
 
